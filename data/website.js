@@ -6,7 +6,7 @@ module.exports = {
     keywords:
       'byurhan, beyzat, byurhanbeyzat, computer, engineering, student, front-end, javascript, js, web, developer, freelancer',
     siteUrl: 'https://byurhanbeyzat.com/',
-    image: '',
+    image: '/favicon/favicon.png',
     author: '@byurhanbeyzat',
   },
   siteManifest: {
@@ -16,5 +16,6 @@ module.exports = {
     background_color: '#663399',
     theme_color: '#663399',
     display: 'minimal-ui',
+    icon: './static/favicon/favicon.png',
   },
 }
