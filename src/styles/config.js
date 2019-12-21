@@ -22,73 +22,18 @@ export const config = css`
 
     --red: hsl(6, 78%, 57%);
 
-    /* Typography */
-    --font-mono: 'Space Mono', 'SF Mono', Menlo, monospace;
-    --font-sans: -apple-system, Roboto, 'Open Sans', Arial, sans-serif;
+    /* Spaces */
 
-    /* set base values */
-    --text-base-size: 1em;
-    --text-scale-ratio: 1.2;
-
-    /* type scale */
-    --text-sm: calc(1em / var(--text-scale-ratio));
-    --text-md: calc(1em * var(--text-scale-ratio));
-    --text-lg: calc(var(--text-md) * var(--text-scale-ratio));
-    --text-xl: calc(var(--text-lg) * var(--text-scale-ratio));
-    --text-xxl: calc(var(--text-xl) * var(--text-scale-ratio));
-
-    /* line-height */
-    --heading-line-height: 1.25;
-    --body-line-height: 1.55;
-  }
-
-  @media screen and (min-width: 1170px) {
-    :root {
-      --text-base-size: 1.22em;
-      --text-scale-ratio: 1.22;
-    }
-  }
-
-  @media screen and (min-width: 1280px) {
-    :root {
-      --text-base-size: 1.24em;
-      --text-scale-ratio: 1.24;
-    }
-  }
-
-  body {
-    font-family: var(--font-mono);
-    font-size: var(--text-base-size);
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    line-height: var(--heading-line-height);
-  }
-
-  h1 {
-    font-size: var(--text-xxl);
-  }
-
-  h2 {
-    font-size: var(--text-xl);
-  }
-
-  h3 {
-    font-size: var(--text-lg);
-  }
-
-  h4 {
-    font-size: var(--text-md);
-  }
-
-  small {
-    font-size: var(--text-sm);
-  }
-
-  p {
-    line-height: var(--body-line-height);
+    --space: 10px;
+    --space-xxs: calc(var(--space));
+    --space-xs: calc(var(--space) * 2);
+    --space-sm: calc(var(--space) * 3);
+    --space-md: calc(var(--space) * 4);
+    --space-lg: calc(var(--space) * 5);
+    --space-xl: calc(var(--space) * 6);
+    --space-xxl: calc(var(--space) * 7);
+    --space-xxxl: calc(var(--space) * 8);
+    --space-xxxxl: calc(var(--space) * 9);
+    --space-xxxxxl: calc(var(--space) * 10);
   }
 `

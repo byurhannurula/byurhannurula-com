@@ -6,7 +6,7 @@ import { FooterWrapper, Copyright } from './styles'
 const Footer = () => (
   <FooterWrapper as="footer">
     <Copyright>
-      &copy; {new Date().getFullYear()} &mdash; Byurhan Beyzat
+      <span>&copy;</span> {new Date().getFullYear()} &mdash; Byurhan Beyzat
       <br />
       Built using{' '}
       <a href="https://gatsbyjs.org" target="_blank" rel="noopener noreferrer">

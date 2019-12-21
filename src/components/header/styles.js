@@ -1,16 +1,13 @@
 import styled from 'styled-components'
 
 export const HeaderWrapper = styled.header`
-  width: 100%;
-  padding-top: 72px;
-  padding-bottom: 72px;
+  padding-bottom: var(--space-xxxl);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   @media screen and (max-width: 700px) {
-    padding-top: 44px;
     display: block;
 
     div {

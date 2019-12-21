@@ -13,7 +13,9 @@ const Layout = ({ children }) => (
     <GlobalStyles />
     <SEO />
     <Header links={navLinks} />
-    <main role="main">{children}</main>
+    <main role="main" style={{ flexGrow: 1 }}>
+      {children}
+    </main>
     <Footer />
   </Container>
 )
