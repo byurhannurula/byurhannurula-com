@@ -20,6 +20,8 @@ export const config = css`
     --primary: hsl(230, 80%, 50%);
     --secondary: hsl(216, 100%, 50%);
 
+    --red: hsl(6, 78%, 57%);
+
     /* Typography */
     --font-mono: 'Space Mono', 'SF Mono', Menlo, monospace;
     --font-sans: -apple-system, Roboto, 'Open Sans', Arial, sans-serif;

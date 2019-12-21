@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const HeaderWrapper = styled.header`
   width: 100%;
-  padding-top: 64px;
+  padding-top: 72px;
   padding-bottom: 72px;
 
   display: flex;

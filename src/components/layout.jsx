@@ -4,6 +4,7 @@ import { GlobalStyles, Container } from 'styles'
 
 import SEO from 'components/seo'
 import Header from 'components/header'
+import Footer from 'components/footer'
 
 import { navLinks } from '../../data'
 
@@ -13,6 +14,7 @@ const Layout = ({ children }) => (
     <SEO />
     <Header links={navLinks} />
     <main role="main">{children}</main>
+    <Footer />
   </Container>
 )
 
