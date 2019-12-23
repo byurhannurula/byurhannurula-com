@@ -10,11 +10,6 @@ export const navLinks = [
     url: '/about',
   },
   {
-    id: 3,
-    label: 'Journal',
-    url: '/journal',
-  },
-  {
     id: 2,
     label: 'Contact',
     url: '/contact',
