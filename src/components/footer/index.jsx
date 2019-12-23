@@ -1,5 +1,5 @@
 import React from 'react'
-import { GatsbyIcon, GithubIcon, ZeitIcon } from 'components/icons'
+import { GatsbyIcon, GithubIcon, NetlifyIcon } from 'components/icons'
 
 import { FooterWrapper, Copyright } from './styles'
 
@@ -22,11 +22,11 @@ const Footer = () => (
       </a>{' '}
       and deployed on{' '}
       <a
-        href="https://zeit.co/?ref=byurhanbeyzat.com"
+        href="https://netlify.com/?ref=byurhanbeyzat.com"
         rel="noopener noreferrer"
         target="_blank"
       >
-        <ZeitIcon />
+        <NetlifyIcon />
       </a>
       .
     </Copyright>
