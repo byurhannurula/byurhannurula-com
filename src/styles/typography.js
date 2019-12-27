@@ -7,8 +7,8 @@ export const typography = css`
     --font-sans: -apple-system, Roboto, 'Open Sans', Arial, sans-serif;
 
     /* Line height */
-    --body-line-height: 1.6;
-    --heading-line-height: 1.3;
+    --body-line-height: 1.55;
+    --heading-line-height: 1.2;
   }
 
   body {
@@ -26,19 +26,19 @@ export const typography = css`
   }
 
   h1 {
-    font-size: calc(1em + 2.25vw);
+    font-size: 2.488em;
   }
 
   h2 {
-    font-size: calc(1em + 1.75vw);
+    font-size: 2.074em;
   }
 
   h3 {
-    font-size: calc(1em + 1.45vw);
+    font-size: 1.728em;
   }
 
   h4 {
-    font-size: calc(1em + 1.25vw);
+    font-size: 1.44em;
   }
 
   p {
