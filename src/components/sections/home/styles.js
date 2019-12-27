@@ -13,6 +13,5 @@ export const Title = styled.h1`
 `
 
 export const Text = styled.p`
-  margin-top: 0;
   color: var(--grey500);
 `

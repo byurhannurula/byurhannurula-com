@@ -28,7 +28,6 @@ const Footer = () => (
       >
         <NetlifyIcon />
       </a>
-      .
     </Copyright>
   </FooterWrapper>
 )

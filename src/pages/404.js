@@ -8,19 +8,16 @@ import SEO from 'components/seo'
 const Wrapper = styled.div`
   text-align: center;
 
-  h1 {
+  h1,
+  h3 {
     color: var(--grey700);
-    font-size: var(--text-xxxl);
   }
 
   h3 {
-    color: var(--grey700);
-    font-size: var(--text-xl);
     margin-bottom: var(--space-xl);
   }
 
   a {
-    font-size: 18px;
     color: var(--dark);
     text-transform: lowercase;
     text-decoration: underline;

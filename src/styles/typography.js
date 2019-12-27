@@ -26,19 +26,19 @@ export const typography = css`
   }
 
   h1 {
-    font-size: calc(1em + 2.35vw);
+    font-size: calc(1em + 2.25vw);
   }
 
   h2 {
-    font-size: calc(1em + 1.85vw);
+    font-size: calc(1em + 1.75vw);
   }
 
   h3 {
-    font-size: calc(1em + 1.55vw);
+    font-size: calc(1em + 1.45vw);
   }
 
   h4 {
-    font-size: calc(1em + 1.35vw);
+    font-size: calc(1em + 1.25vw);
   }
 
   p {
