@@ -1,10 +1,12 @@
 import React from 'react'
 
+import Layout from 'components/layout'
+
 import { Link } from 'styles/common'
 import { Heading, Title, Text } from './styles'
 
 const Home = () => (
-  <>
+  <Layout>
     <Heading>
       Hi there!{' '}
       <span role="img" aria-label="Hi">
@@ -37,7 +39,7 @@ const Home = () => (
       if you have any web development needs, to build something cool or just to
       say hi.
     </Text>
-  </>
+  </Layout>
 )
 
 export { Home }
