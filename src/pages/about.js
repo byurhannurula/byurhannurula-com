@@ -1,11 +1,7 @@
 import React from 'react'
 
-import Layout from 'components/layout'
+import { About } from 'components/sections'
 
-const AboutPage = () => (
-  <Layout>
-    <h1>About page</h1>
-  </Layout>
-)
+const AboutPage = () => <About />
 
 export default AboutPage

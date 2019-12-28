@@ -2,7 +2,7 @@ import React from 'react'
 
 import Layout from 'components/layout'
 
-import { Link } from 'styles/common'
+import { ExternalLink } from 'styles/common'
 import { Heading, Title, Text } from './styles'
 
 const Home = () => (
@@ -29,13 +29,9 @@ const Home = () => (
     </Text>
     <Text>
       Feel free to{' '}
-      <Link
-        target="blank"
-        rel="noopener noreferrer"
-        href="mailto:byurhanbeyzat@gmail.com"
-      >
+      <ExternalLink url="mailto:byurhanbeyzat@gmail.com">
         contact me
-      </Link>{' '}
+      </ExternalLink>{' '}
       if you have any web development needs, to build something cool or just to
       say hi.
     </Text>
