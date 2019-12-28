@@ -1,9 +1,19 @@
-import styled from 'styled-components'
+import React from 'react'
+import { Link } from 'gatsby'
 
-export const Link = styled.a`
-  color: var(--primary);
+export const ExternalLink = ({ url, children }) => (
+  <a
+    style={{ color: 'var(--primary)' }}
+    href={url}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {children}
+  </a>
+)
 
-  &:hover {
-    text-decoration: underline;
-  }
-`
+export const InternalLink = ({ url, children }) => (
+  <Link style={{ color: 'var(--primary)' }} to={url}>
+    {children}
+  </Link>
+)

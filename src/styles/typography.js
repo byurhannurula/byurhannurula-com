@@ -42,7 +42,7 @@ export const typography = css`
   }
 
   p {
-    font-size: calc(1em + 0.25vw);
+    font-size: calc(1em + 0.1vw);
     line-height: var(--body-line-height);
   }
 `
