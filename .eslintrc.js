@@ -18,8 +18,13 @@ module.exports = {
     browser: true,
   },
   rules: {
+    // GENERAL
+    'no-alert': 0,
+    'no-console': 0,
+
     // REACT
     'react/prop-types': 0,
+    'react/jsx-props-no-spreading': 0,
     'react/jsx-one-expression-per-line': 0,
     'react/prefer-stateless-function': 0,
     'react/jsx-filename-extension': [
