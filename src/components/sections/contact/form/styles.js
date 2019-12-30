@@ -36,13 +36,15 @@ export const Group = styled.div`
 `
 
 export const Input = styled.input`
-  border: 0;
+  border: none;
+  border-radius: 0;
   outline: none;
   padding: 0.7em;
   padding-left: 0;
   font-size: 0.95em;
   color: var(--dark);
   line-height: 1.25;
+  font-family: var(--font-sans);
   margin-bottom: var(--space-xxs);
   background-color: transparent;
   border-bottom: 1px solid var(--grey400);
@@ -74,17 +76,34 @@ export const Input = styled.input`
 	`}
 `
 
-export const Error = styled.div`
-  font-size: 0.8em;
-  color: var(--red);
-`
-
 export const Button = styled.button`
-  font-size: 0.9em;
-  padding: 1em 4.5em;
+  font-size: 0.8em;
+  font-weight: 700;
+  padding: 0.8em 4.5em;
+  letter-spacing: 3px;
+  color: var(--primary);
+  text-transform: uppercase;
   border: 1px solid var(--secondary);
 
   &:hover {
+    color: #fff;
+    transition: all 200ms ease-in-out;
+    background-color: var(--primary);
     border-color: var(--primary);
+
+    svg path {
+      stroke: #fff;
+    }
   }
+
+  svg {
+    width: 3.1em;
+    height: 1.7em;
+    margin-left: 1.55em;
+  }
+`
+
+export const Error = styled.div`
+  font-size: 0.8em;
+  color: var(--red);
 `

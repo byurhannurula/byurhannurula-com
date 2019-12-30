@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { Formik, Form } from 'formik'
+import { Icon } from 'components/common'
 
 import { InputField } from './inputField'
 import { validationSchema } from './schema'
@@ -73,6 +74,7 @@ const ContactForm = () => (
         </Row>
         <Button type="submit" disabled={isSubmitting}>
           Send
+          <Icon icon="ArrowRight" />
         </Button>
       </Form>
     )}
