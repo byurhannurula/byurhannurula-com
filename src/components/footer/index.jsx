@@ -1,5 +1,5 @@
 import React from 'react'
-import { GatsbyIcon, GithubIcon, NetlifyIcon } from 'components/icons'
+import { Icon } from 'components/common'
 
 import { FooterWrapper, Copyright } from './styles'
 
@@ -10,7 +10,7 @@ const Footer = () => (
       <br />
       Built using{' '}
       <a href="https://gatsbyjs.org" target="_blank" rel="noopener noreferrer">
-        <GatsbyIcon />
+        <Icon icon="Gatsby" />
       </a>
       , hosted on{' '}
       <a
@@ -18,7 +18,7 @@ const Footer = () => (
         rel="noopener noreferrer"
         target="_blank"
       >
-        <GithubIcon />
+        <Icon icon="Github" />
       </a>{' '}
       and deployed on{' '}
       <a
@@ -26,7 +26,7 @@ const Footer = () => (
         rel="noopener noreferrer"
         target="_blank"
       >
-        <NetlifyIcon />
+        <Icon icon="Netlify" />
       </a>
     </Copyright>
   </FooterWrapper>
