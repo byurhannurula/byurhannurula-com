@@ -20,9 +20,9 @@ const ContactForm = () => (
     onSubmit={async (data, { setSubmitting, resetForm }) => {
       try {
         await axios({
-          url: `https://formspree.io/mnqjggkl`,
-          method: 'POST',
           data,
+          method: 'POST',
+          url: `${process.env.GATSBY_EMAIL_ENDPOINT}`,
           headers: {
             'Content-Type': 'application/json',
           },
