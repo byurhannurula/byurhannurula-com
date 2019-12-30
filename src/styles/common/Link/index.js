@@ -1,19 +1,30 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import styled from 'styled-components'
 
-export const ExternalLink = ({ url, children }) => (
-  <a
-    style={{ color: 'var(--primary)' }}
+export const ExternalLink = ({ url, children, ...props }) => (
+  <LinkStyles
+    as="a"
     href={url}
     target="_blank"
     rel="noopener noreferrer"
+    {...props}
   >
     {children}
-  </a>
+  </LinkStyles>
 )
 
-export const InternalLink = ({ url, children }) => (
-  <Link style={{ color: 'var(--primary)' }} to={url}>
+export const InternalLink = ({ url, children, ...props }) => (
+  <LinkStyles as={Link} to={url} {...props}>
     {children}
-  </Link>
+  </LinkStyles>
 )
+
+const LinkStyles = styled.a`
+  color: var(--dark);
+  transition: color 200ms ease;
+
+  &:hover {
+    color: var(--primary);
+  }
+`
