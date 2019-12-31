@@ -25,6 +25,14 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        head: true,
+        cookieDomain: 'byurhanbeyzat.com',
+        trackingId: process.env.GATSBY_GA_ID,
+      },
+    },
+    {
       resolve: `gatsby-plugin-manifest`,
       options: site.siteManifest,
     },
