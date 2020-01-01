@@ -7,7 +7,7 @@ import { useSiteMetadata } from 'hooks'
 const SEO = ({ lang, title, keywords, description, postImage }) => {
   const seo = useSiteMetadata()
 
-  const siteTitle = title || seo.title
+  const siteTitle = title ? `${title} — ${seo.title}` : seo.title
   const siteKeywords = keywords ? keywords.concat(seo.keywords) : seo.keywords
   const siteDescription = description || seo.description
   const siteImage = postImage || seo.image

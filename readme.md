@@ -1,5 +1,3 @@
-<h1 align="center">
-  <a href="https://byurhanbeyzat.com/">
-    byurhanbeyzat-com
-  </a>  
-</h1>
+# byurhanbeyzat-com | [![Netlify Status](https://api.netlify.com/api/v1/badges/13d25937-0bde-4bf4-b6c3-3555fe36288f/deploy-status)](https://app.netlify.com/sites/byurhanbeyzat/deploys)
+
+> **[https://byurhanbeyzat.com](https://byurhanbeyzat.com/) &ndash; My personal website built with [Gatsby.js](https://www.gatsbyjs.org/), [Styled-Components](https://www.styled-components.com/), [Formik](https://jaredpalmer.com/formik/), etc..**

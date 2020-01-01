@@ -8,10 +8,10 @@ import Footer from 'components/footer'
 
 import { navLinks } from '../../data'
 
-const Layout = ({ children }) => (
+const Layout = ({ title, children }) => (
   <Container>
     <GlobalStyles />
-    <SEO />
+    <SEO title={title} />
     <Header links={navLinks} />
     <main role="main" style={{ flexGrow: 1 }}>
       {children}

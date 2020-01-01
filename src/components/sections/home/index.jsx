@@ -2,8 +2,8 @@ import React from 'react'
 
 import Layout from 'components/layout'
 
-import { ExternalLink } from 'styles/common'
-import { Heading, Title, Text } from './styles'
+import { Title, Text, ExternalLink } from 'styles/common'
+import { Heading } from './styles'
 
 const Home = () => (
   <Layout>
@@ -13,7 +13,9 @@ const Home = () => (
         👋
       </span>
     </Heading>
-    <Title>I&apos;m Byurhan, a front-end developer from Bulgaria.</Title>
+    <Title style={{ letterSpacing: '-2px' }}>
+      I&apos;m Byurhan, a front-end developer from Bulgaria.
+    </Title>
     <Text>
       I&apos;m a front-end developer &amp; M.Sc. Computer Engineering student
       living in Ruse, Bulgaria{' '}

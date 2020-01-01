@@ -2,14 +2,14 @@ import React from 'react'
 
 import Layout from 'components/layout'
 import { Icon } from 'components/common'
-import { ExternalLink } from 'styles/common'
+import { Title, Text, ExternalLink } from 'styles/common'
 import { socialMedia } from '../../../../data/links'
 
 import ContactForm from './form'
-import { Title, Text, IconsWrapper, IconsList, IconsItem } from './styles'
+import { IconsWrapper, IconsList, IconsItem } from './styles'
 
 const Contact = () => (
-  <Layout>
+  <Layout titlle="Contact">
     <Title>Contact</Title>
     <Text>
       My preferred way of contact is via{' '}

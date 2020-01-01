@@ -1,6 +1,7 @@
 import React from 'react'
 import { Icon } from 'components/common'
 
+import { ExternalLink } from 'styles/common'
 import { FooterWrapper, Copyright } from './styles'
 
 const Footer = () => (
@@ -9,25 +10,26 @@ const Footer = () => (
       <span>&copy;</span> {new Date().getFullYear()} &mdash; Byurhan Beyzat
       <br />
       Built using{' '}
-      <a href="https://gatsbyjs.org" target="_blank" rel="noopener noreferrer">
+      <ExternalLink
+        url="https://gatsbyjs.org"
+        aria-label="Gatsby.js - Official Website"
+      >
         <Icon icon="Gatsby" />
-      </a>
+      </ExternalLink>
       , hosted on{' '}
-      <a
-        href="https://github.com/byurhanbeyzat/byurhanbeyzat-com"
-        rel="noopener noreferrer"
-        target="_blank"
+      <ExternalLink
+        url="https://github.com/"
+        aria-label="Github - Official Website"
       >
         <Icon icon="Github" />
-      </a>{' '}
+      </ExternalLink>{' '}
       and deployed on{' '}
-      <a
-        href="https://netlify.com/?ref=byurhanbeyzat.com"
-        rel="noopener noreferrer"
-        target="_blank"
+      <ExternalLink
+        url="https://netlify.com/?ref=byurhanbeyzat.com"
+        aria-label="Netlify - Official Website"
       >
         <Icon icon="Netlify" />
-      </a>
+      </ExternalLink>
     </Copyright>
   </FooterWrapper>
 )

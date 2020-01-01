@@ -1,11 +1,11 @@
 import React from 'react'
 
 import Layout from 'components/layout'
-import { InternalLink } from 'styles/common'
-import { Title, Text, Internship } from './styles'
+import { Title, Text, InternalLink } from 'styles/common'
+import { Internship } from './styles'
 
 const About = () => (
-  <Layout>
+  <Layout title="About">
     <Title>Who am I?</Title>
     <Text>
       Hello,{' '}
