@@ -24,11 +24,15 @@ export const IconsList = styled.ul`
 export const IconsItem = styled.li`
   &:not(:last-child) {
     margin-right: var(--space-lg);
+
+    @media screen and (max-width: 400px) {
+      margin-right: var(--space-md);
+    }
   }
 
   a {
-    color: var(--dark);
     cursor: pointer;
+    color: var(--dark);
     transition: all 200ms ease;
 
     &:hover {
