@@ -9,7 +9,7 @@ import ContactForm from './form'
 import { IconsWrapper, IconsList, IconsItem } from './styles'
 
 const Contact = () => (
-  <Layout titlle="Contact">
+  <Layout title="Contact">
     <Title>Contact</Title>
     <Text>
       My preferred way of contact is via{' '}
