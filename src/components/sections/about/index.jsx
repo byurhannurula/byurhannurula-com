@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Layout from 'components/layout'
-import { Title, Text } from 'styles/common'
+import { Title, Text, InternalLink } from 'styles/common'
 
 const About = () => (
   <Layout title="About">
@@ -39,6 +39,10 @@ const About = () => (
       web technologies. Currently I&apos;m learning technologies like{' '}
       <strong>React.js</strong>, <strong>Gatsby.js</strong>,{' '}
       <strong>Next.js</strong>, <strong>CSS in JS</strong> and others...
+    </Text>
+    <Text>
+      If you came here to find out what theme, app or desk chair that I use,
+      check out my <InternalLink url="/uses">uses</InternalLink> page.
     </Text>
   </Layout>
 )
