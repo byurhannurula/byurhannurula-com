@@ -56,4 +56,12 @@ export const reset = css`
     color: inherit;
     text-decoration: none;
   }
+
+  blockquote {
+    margin-left: 0;
+    margin-right: 0;
+    font-style: italic;
+    border-left: 5px solid #ccc;
+    padding-left: var(--space-xs);
+  }
 `
