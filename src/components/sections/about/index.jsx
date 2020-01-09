@@ -1,8 +1,7 @@
 import React from 'react'
 
 import Layout from 'components/layout'
-import { Title, Text, InternalLink } from 'styles/common'
-import { Internship } from './styles'
+import { Title, Text } from 'styles/common'
 
 const About = () => (
   <Layout title="About">
@@ -41,14 +40,6 @@ const About = () => (
       <strong>React.js</strong>, <strong>Gatsby.js</strong>,{' '}
       <strong>Next.js</strong>, <strong>CSS in JS</strong> and others...
     </Text>
-    <InternalLink url="/contact">
-      <Internship>
-        <Text>
-          → I&apos;m looking for internship as a front-end/web developer in
-          Ruse, Bulgaria. ←
-        </Text>
-      </Internship>
-    </InternalLink>
   </Layout>
 )
 

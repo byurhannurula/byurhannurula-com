@@ -13,12 +13,11 @@ export const Copyright = styled.p`
   }
 
   a {
-    color: var(--primary);
-    text-decoration: underline;
-  }
+    background: none;
 
-  svg {
-    width: 1em;
-    height: 1em;
+    svg {
+      width: 1em;
+      height: 1em;
+    }
   }
 `

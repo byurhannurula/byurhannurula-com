@@ -19,6 +19,7 @@ export const config = css`
 
     --primary: hsl(230, 80%, 50%);
     --secondary: hsl(216, 100%, 50%);
+    --secondary-light: hsl(216, 100%, 70%);
 
     --red: hsl(6, 78%, 57%);
 

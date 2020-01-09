@@ -24,6 +24,7 @@ export const IconsItem = styled.li`
     cursor: pointer;
     color: var(--dark);
     transition: all 200ms ease;
+    background: none;
 
     &:hover {
       color: var(--dark);
