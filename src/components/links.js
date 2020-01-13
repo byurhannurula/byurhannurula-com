@@ -11,11 +11,16 @@ const navLinks = [
   },
   {
     id: 2,
+    label: 'Blog',
+    url: '/blog',
+  },
+  {
+    id: 3,
     label: 'Support',
     url: '/supporters',
   },
   {
-    id: 3,
+    id: 4,
     label: 'Contact',
     url: '/contact',
   },
