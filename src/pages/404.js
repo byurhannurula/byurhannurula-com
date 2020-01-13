@@ -5,6 +5,19 @@ import styled from 'styled-components'
 import Layout from 'components/layout'
 import SEO from 'components/seo'
 
+const NotFoundPage = () => (
+  <Layout>
+    <SEO title="404 - Not found" />
+    <Wrapper>
+      <h1>404</h1>
+      <h3>Page Not Found</h3>
+      <Link to="/">Go Home</Link>
+    </Wrapper>
+  </Layout>
+)
+
+export default NotFoundPage
+
 const Wrapper = styled.div`
   text-align: center;
 
@@ -27,16 +40,3 @@ const Wrapper = styled.div`
     }
   }
 `
-
-const NotFoundPage = () => (
-  <Layout>
-    <SEO title="404 - Not found" />
-    <Wrapper>
-      <h1>404</h1>
-      <h3>Page Not Found</h3>
-      <Link to="/">Go Home</Link>
-    </Wrapper>
-  </Layout>
-)
-
-export default NotFoundPage
