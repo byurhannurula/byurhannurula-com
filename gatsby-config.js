@@ -1,11 +1,9 @@
-const site = require('./data/website')
-
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
 module.exports = {
-  siteMetadata: site.siteMetadata,
+  siteMetadata: {},
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-transformer-sharp`,
@@ -34,7 +32,15 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-manifest`,
-      options: site.siteManifest,
+      options: {
+        start_url: '/',
+        short_name: 'Byurhan Beyzat',
+        name: 'Byurhan Beyzat – Front-End Developer',
+        background_color: 'hsl(230, 80%, 50%)',
+        theme_color: 'hsl(230, 80%, 50%)',
+        display: 'minimal-ui',
+        icon: './static/favicon/favicon.png',
+      },
     },
   ],
 }
