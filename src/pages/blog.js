@@ -5,7 +5,7 @@ import Layout from 'components/layout'
 
 const IndexPage = ({ data }) => {
   const { edges: posts } = data.allMdx
-  console.log(posts)
+
   return (
     <Layout>
       <ul>
