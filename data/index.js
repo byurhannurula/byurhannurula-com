@@ -11,6 +11,11 @@ export const navLinks = [
   },
   {
     id: 2,
+    label: 'Support',
+    url: '/supporters',
+  },
+  {
+    id: 3,
     label: 'Contact',
     url: '/contact',
   },
