@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'gatsby'
 import styled from 'styled-components'
 
 import Layout from 'components/layout'
 import SEO from 'components/seo'
+import { InternalLink } from 'styles/common'
 
 const NotFoundPage = () => (
   <Layout>
@@ -11,7 +11,7 @@ const NotFoundPage = () => (
     <Wrapper>
       <h1>404</h1>
       <h3>Page Not Found</h3>
-      <Link to="/">Go Home</Link>
+      <InternalLink to="/">Go Home</InternalLink>
     </Wrapper>
   </Layout>
 )
@@ -28,15 +28,5 @@ const Wrapper = styled.div`
 
   h3 {
     margin-bottom: var(--space-xl);
-  }
-
-  a {
-    color: var(--dark);
-    text-transform: lowercase;
-    text-decoration: underline;
-
-    &:hover {
-      color: var(--primary);
-    }
   }
 `

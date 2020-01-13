@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import { navigate } from 'gatsby'
 import { Formik, Form } from 'formik'
 import { Icon } from 'components/common'
 
@@ -30,6 +31,7 @@ const ContactForm = () => (
         })
         setSubmitting(false)
         resetForm()
+        navigate('/thanks')
       } catch (error) {
         setSubmitting(false)
         alert(error)
