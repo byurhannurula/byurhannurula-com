@@ -1,4 +1,4 @@
-export const navLinks = [
+const navLinks = [
   {
     id: 0,
     label: 'Home',
@@ -21,7 +21,7 @@ export const navLinks = [
   },
 ]
 
-export const socialMedia = [
+const socialLinks = [
   {
     id: 0,
     name: 'Twitter',
@@ -48,3 +48,5 @@ export const socialMedia = [
     link: 'https://linkedin.com/in/byurhanbeyzat/',
   },
 ]
+
+export { navLinks, socialLinks }

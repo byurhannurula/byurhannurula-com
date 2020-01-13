@@ -5,7 +5,7 @@ import Layout from 'components/layout'
 import { ContactForm, Icon } from 'components/common'
 import { Title, Text, ExternalLink } from 'styles/common'
 
-import { socialMedia } from '../../data'
+import { socialLinks } from 'components/links'
 
 const ContactPage = () => (
   <Layout title="Contact">
@@ -24,8 +24,8 @@ const ContactPage = () => (
     </Text>
     <IconsWrapper>
       <IconsList>
-        {socialMedia &&
-          socialMedia.map(({ id, link, name }) => (
+        {socialLinks &&
+          socialLinks.map(({ id, link, name }) => (
             <IconsItem key={id}>
               <ExternalLink
                 url={link}
