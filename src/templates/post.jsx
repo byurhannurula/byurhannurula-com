@@ -10,7 +10,6 @@ import 'styles/prismjs.css'
 
 const PostTemplate = ({ data, pageContext }) => {
   const post = data.mdx
-  const { frontmatter } = post
 
   const next = pageContext.next
     ? {
@@ -28,9 +27,9 @@ const PostTemplate = ({ data, pageContext }) => {
   return (
     <Layout>
       <SEO
-        title={frontmatter.title}
-        keywords={frontmatter.categories || ''}
-        description={frontmatter.description || ''}
+        title={post.frontmatter.title}
+        keywords={post.frontmatter.categories || ''}
+        description={post.frontmatter.description || ''}
       />
       <div>
         <h1>{post.frontmatter.title}</h1>
@@ -62,7 +61,7 @@ export const postQuery = graphql`
     mdx(fields: { path: { eq: $path } }) {
       body
       frontmatter {
-        date
+        # date(formatString: "MMM DD, YYYY")
         title
       }
     }
