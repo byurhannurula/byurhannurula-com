@@ -2,9 +2,10 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 
-import { InternalLink } from 'components/common'
 import Layout from 'components/layout'
 import SEO from 'components/seo'
+
+import { PostWrapper, PostHeader, PostFooter, Button } from './styles'
 
 import 'styles/prismjs.css'
 
@@ -31,25 +32,32 @@ const PostTemplate = ({ data, pageContext }) => {
         keywords={post.frontmatter.categories || ''}
         description={post.frontmatter.description || ''}
       />
-      <div>
-        <h1>{post.frontmatter.title}</h1>
+      <PostWrapper>
+        <PostHeader>
+          <h2>{post.frontmatter.title}</h2>
+          <p>
+            {post.frontmatter.date} &middot; {post.timeToRead} min read
+          </p>
+        </PostHeader>
+
         <MDXRenderer>{post.body}</MDXRenderer>
 
-        <span>
+        <PostFooter>
           {previous && (
-            <InternalLink url={previous.url}>
+            <Button to={previous.url}>
               <span>Previous</span>
-              <h3>{previous.title}</h3>
-            </InternalLink>
+              <h4>{previous.title}</h4>
+            </Button>
           )}
+
           {next && (
-            <InternalLink url={next.url}>
+            <Button to={next.url}>
               <span>Next</span>
-              <h3>{next.title}</h3>
-            </InternalLink>
+              <h4>{next.title}</h4>
+            </Button>
           )}
-        </span>
-      </div>
+        </PostFooter>
+      </PostWrapper>
     </Layout>
   )
 }
@@ -60,9 +68,12 @@ export const postQuery = graphql`
   query PostByPath($path: String!) {
     mdx(fields: { path: { eq: $path } }) {
       body
+      timeToRead
       frontmatter {
-        # date(formatString: "MMM DD, YYYY")
+        date(formatString: "MMMM DD, YYYY")
         title
+        thumbnail
+        tags
       }
     }
   }
