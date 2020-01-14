@@ -1,32 +1,23 @@
 import React from 'react'
-import { Link, graphql } from 'gatsby'
+import { graphql } from 'gatsby'
+import styled from 'styled-components'
 
 import Layout from 'components/layout'
-import { Title, Text } from 'components/common'
+import { Title, PostLink } from 'components/common'
 
 const IndexPage = ({ data }) => {
   const { edges: posts } = data.allMdx
 
   return (
     <Layout>
-      <div style={{ textAlign: 'center' }}>
-        <Title>Recently Posted</Title>
-        <Text>
-          Notes on building software in modern times. Searching for the
-          challenges I don&apos;t know yet. Design, Linux, Emacs and infrequent
-          travels.
-        </Text>
-      </div>
-      <ul>
-        {posts.map(({ node: post }) => (
-          <li key={post.id}>
-            <Link to={post.fields.path}>
-              <h3>{post.frontmatter.title}</h3>
-              <p>{post.frontmatter.date}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <Title style={{ textAlign: 'center' }}>Recent Posts</Title>
+      <CardContainer>
+        {posts ? (
+          posts.map(post => <PostLink data={post} key={post.node.id} />)
+        ) : (
+          <p>No posts yet.</p>
+        )}
+      </CardContainer>
     </Layout>
   )
 }
@@ -38,6 +29,7 @@ export const pageQuery = graphql`
     allMdx(sort: { fields: frontmatter___date, order: DESC }) {
       edges {
         node {
+          id
           fields {
             path
           }
@@ -45,9 +37,18 @@ export const pageQuery = graphql`
             date(formatString: "MMM DD, YYYY")
             title
             excerpt
+            thumbnail
           }
         }
       }
     }
   }
+`
+
+const CardContainer = styled.div`
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  flex-direction: column;
+  max-width: 650px;
 `
