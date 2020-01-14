@@ -46,7 +46,7 @@ export const NavItem = styled.li`
   }
 
   a {
-    color: var(--grey400);
+    color: var(--gray);
     font-size: 18px;
     letter-spacing: -0.6px;
     text-transform: lowercase;

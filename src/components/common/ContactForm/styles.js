@@ -25,7 +25,7 @@ export const Group = styled.div`
   flex-direction: column;
 
   label {
-    color: var(--grey400);
+    color: var(--gray);
     font-size: 0.8em;
   }
 
@@ -47,7 +47,7 @@ export const Input = styled.input`
   font-family: var(--font-sans);
   margin-bottom: var(--space-xxs);
   background-color: transparent;
-  border-bottom: 1px solid var(--grey400);
+  border-bottom: 1px solid var(--gray);
 
   &:focus {
     border-color: var(--primary);
@@ -59,7 +59,7 @@ export const Input = styled.input`
   }
 
   &::placeholder {
-    color: var(--grey400);
+    color: var(--gray);
   }
 
   ${({ error }) =>

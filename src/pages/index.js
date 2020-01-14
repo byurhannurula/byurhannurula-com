@@ -1,20 +1,17 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import Layout from 'components/layout'
-import { Title, Text, ExternalLink } from 'components/common'
+import { SmallHeading, Title, Text, ExternalLink } from 'components/common'
 
 const IndexPage = () => (
   <Layout>
-    <Heading>
+    <SmallHeading>
       Hi there!{' '}
       <span role="img" aria-label="Hi">
         👋
       </span>
-    </Heading>
-    <Title style={{ letterSpacing: '-2px' }}>
-      I&apos;m Byurhan, a front-end developer from Bulgaria.
-    </Title>
+    </SmallHeading>
+    <Title>I&apos;m Byurhan, a front-end developer from Bulgaria.</Title>
     <Text>
       I&apos;m a front-end developer &amp; M.Sc. Computer Engineering student
       living in Ruse, Bulgaria{' '}
@@ -40,9 +37,3 @@ const IndexPage = () => (
 )
 
 export default IndexPage
-
-const Heading = styled.h3`
-  letter-spacing: -2px;
-  color: var(--grey700);
-  margin-bottom: var(--space-xxs);
-`
