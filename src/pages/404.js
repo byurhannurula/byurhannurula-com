@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import Layout from 'components/layout'
 import SEO from 'components/seo'
-import { InternalLink } from 'styles/common'
+import { InternalLink } from 'components/common'
 
 const NotFoundPage = () => (
   <Layout>

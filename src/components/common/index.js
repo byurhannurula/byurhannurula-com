@@ -1,2 +1,5 @@
-export * from './icon'
-export * from './form'
+export * from './Icon'
+export * from './Link'
+export * from './Container'
+export * from './Typography'
+export * from './ContactForm'

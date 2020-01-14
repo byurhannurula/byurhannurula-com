@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Layout from 'components/layout'
-import { Title, Text, ExternalLink } from 'styles/common'
+import { Title, Text, ExternalLink } from 'components/common'
 
 const IndexPage = () => (
   <Layout>

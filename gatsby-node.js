@@ -9,7 +9,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       allMdx(sort: { fields: [frontmatter___date], order: DESC }, limit: 1000) {
         edges {
           node {
-            id
             fields {
               path
             }

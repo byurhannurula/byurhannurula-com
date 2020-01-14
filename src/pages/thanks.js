@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Layout from 'components/layout'
-import { Title, Text, InternalLink } from 'styles/common'
+import { Title, Text, InternalLink } from 'components/common'
 
 const ThanksPage = () => (
   <Layout title="Thanks!">
