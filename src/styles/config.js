@@ -3,19 +3,16 @@ import { css } from 'styled-components'
 export const config = css`
   :root {
     /* Colors */
+    --black: hsl(0, 0%, 0%);
     --white: hsl(0, 0%, 100%);
     --light: hsl(0, 0%, 95%);
-
-    --black: hsl(0, 0%, 0%);
     --dark: hsl(0, 0%, 8%);
 
-    --grey100: hsl(0, 0%, 85%);
-    --grey200: hsl(0, 0%, 65%);
-    --grey300: hsl(0, 0%, 55%);
-    --grey400: hsl(0, 0%, 45%);
-    --grey500: hsl(0, 0%, 35%);
-    --grey600: hsl(0, 0%, 25%);
-    --grey700: hsl(0, 0%, 15%);
+    --gray-light: hsl(0, 0%, 55%);
+    --gray: hsl(0, 0%, 45%);
+    --gray-dark: hsl(0, 0%, 35%);
+    --gray-darker: hsl(0, 0%, 25%);
+    --gray-darkest: hsl(0, 0%, 15%);
 
     --primary: hsl(230, 80%, 50%);
     --secondary: hsl(216, 100%, 50%);

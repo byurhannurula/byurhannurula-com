@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Layout from 'components/layout'
-import { Title, Text, InternalLink } from 'styles/common'
+import { Title, Text, InternalLink } from 'components/common'
 
 const AboutPage = () => (
   <Layout title="About">

@@ -11,5 +11,4 @@ const GlobalStyles = createGlobalStyle`
   ${typography}
 `
 
-export * from './common'
-export { config, GlobalStyles }
+export { GlobalStyles }

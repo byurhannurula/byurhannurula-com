@@ -1,7 +1,6 @@
 import React from 'react'
-import { Icon } from 'components/common'
+import { Icon, ExternalLink } from 'components/common'
 
-import { ExternalLink } from 'styles/common'
 import { FooterWrapper, Copyright } from './styles'
 
 const Footer = () => (

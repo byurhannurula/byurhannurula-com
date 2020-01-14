@@ -1,12 +1,11 @@
 import React from 'react'
 import axios from 'axios'
+import * as Yup from 'yup'
 import { navigate } from 'gatsby'
 import { Formik, Form } from 'formik'
 import { Icon } from 'components/common'
 
 import { InputField } from './inputField'
-import { validationSchema } from './schema'
-
 import { Row, Group, Button } from './styles'
 
 const ContactForm = () => (
@@ -18,7 +17,13 @@ const ContactForm = () => (
       message: '',
     }}
     validateOnChange
-    validationSchema={validationSchema}
+    validationSchema={Yup.object().shape({
+      name: Yup.string().required('Name is required!'),
+      email: Yup.string()
+        .email('Please enter a valid Email!')
+        .required('Email is required!'),
+      message: Yup.string().required('Message is required!'),
+    })}
     onSubmit={async (data, { setSubmitting, resetForm }) => {
       try {
         await axios({

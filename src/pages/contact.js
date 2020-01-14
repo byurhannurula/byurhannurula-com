@@ -2,8 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Layout from 'components/layout'
-import { ContactForm, Icon } from 'components/common'
-import { Title, Text, ExternalLink } from 'styles/common'
+import { Icon, Title, Text, ExternalLink, ContactForm } from 'components/common'
 
 import { socialLinks } from 'components/links'
 
