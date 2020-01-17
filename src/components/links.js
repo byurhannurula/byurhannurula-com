@@ -11,7 +11,7 @@ const navLinks = [
   },
   {
     id: 2,
-    label: 'Blog',
+    label: 'Articles',
     url: '/blog',
   },
   {

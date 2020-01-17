@@ -1,60 +1,72 @@
 import styled from 'styled-components'
 
 export const HeaderWrapper = styled.header`
-  padding-bottom: var(--space-xxxl);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  background-color: var(--white);
+  margin-bottom: var(--space-xxxxl);
+  display: flex;
+  align-items: center;
+`
 
+export const HeaderInner = styled.div`
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  @media screen and (max-width: 700px) {
-    display: block;
-
-    div {
-      margin-bottom: 18px;
-    }
-  }
+  padding: var(--space-xs);
 `
 
 export const Logo = styled.div`
-  a {
-    font-family: var(--font-mono);
-    color: var(--primary);
-    align-self: center;
-    font-size: 32px;
-    font-weight: 600;
-    letter-spacing: -1.5px;
+  z-index: 11;
+  color: var(--white);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -1.3px;
+  mix-blend-mode: difference;
+`
 
-    &:before,
+export const NavButton = styled.button`
+  padding: 14px 0 14px 16px;
+  outline: 0;
+  z-index: 20;
+  cursor: pointer;
+  mix-blend-mode: difference;
+  background-color: rgba(var(--white), 0);
+
+  &:before,
+  &:after {
+    display: block;
+    content: '';
+    width: 22px;
+    height: 2px;
+    background-color: var(--white);
+    transition: all 200ms ease-in;
+  }
+
+  &:before {
+    transform: rotate(0deg) translate(0, -3px);
+  }
+
+  &:after {
+    transform: rotate(0deg) translate(0, 3px);
+  }
+
+  ${({ active }) =>
+    active &&
+    `
+    &:before {
+      transform: rotate(45deg) translate(2px, 0px);
+    }
+
     &:after {
-      content: '/';
-      color: var(--dark);
+      transform: rotate(-45deg) translate(1px, 0px);
     }
-  }
-`
-
-export const Nav = styled.nav``
-
-export const NavList = styled.ul`
-  display: flex;
-  align-items: center;
-`
-
-export const NavItem = styled.li`
-  &:not(:last-child) {
-    margin-right: 32px;
-  }
-
-  a {
-    color: var(--gray);
-    font-size: 18px;
-    letter-spacing: -0.6px;
-    text-transform: lowercase;
-
-    &:hover,
-    &[aria-current='page'] {
-      color: var(--dark);
-      transition: color 250ms;
-    }
-  }
+  `}
 `

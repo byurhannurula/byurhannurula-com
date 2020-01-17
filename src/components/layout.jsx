@@ -9,15 +9,17 @@ import Header from 'components/header'
 import Footer from 'components/footer'
 
 const Layout = ({ title, children }) => (
-  <Container>
+  <>
     <GlobalStyles />
     <SEO title={title} />
     <Header />
-    <main role="main" style={{ flexGrow: 1 }}>
-      {children}
-    </main>
+    <Container>
+      <main role="main" style={{ flexGrow: 1 }}>
+        {children}
+      </main>
+    </Container>
     <Footer />
-  </Container>
+  </>
 )
 
 Layout.propTypes = {
