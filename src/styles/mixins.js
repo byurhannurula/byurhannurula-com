@@ -19,7 +19,7 @@ export const mixins = {
   `,
 
   defaultLink: css`
-    color: var(--gray);
+    color: var(--gray-light);
     font-weight: 400;
     background: none;
     &:hover {

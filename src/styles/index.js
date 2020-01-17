@@ -12,6 +12,10 @@ const GlobalStyles = createGlobalStyle`
   ${config}
   ${typeface}
   ${typography}
+
+  main {
+    margin-top: 8rem;
+  }
 `
 
 export { GlobalStyles, media, mixins }

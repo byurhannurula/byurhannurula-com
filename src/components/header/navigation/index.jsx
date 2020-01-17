@@ -1,24 +1,31 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import { ExternalLink } from 'components/common'
+import { ExternalLink, Icon, Container } from 'components/common'
 import { navLinks } from 'components/links'
 
-import { Nav, NavInner, Menu, Contact, NavList, NavItem } from './styles'
+import {
+  Nav,
+  Menu,
+  Contact,
+  ContactDetails,
+  NavList,
+  NavItem,
+  SmallTitle,
+} from './styles'
 
-export const Navigation = ({ active }) => (
-  <Nav active={active}>
-    <NavInner>
+export const Navigation = ({ isActive }) => (
+  <Nav isActive={isActive}>
+    <Container>
       <Contact>
-        <h4>Contact Details</h4>
-        <ExternalLink url="mailto:byurhanbeyzat@gmail.com">
-          byurhanbeyzat@gmail.com
-        </ExternalLink>
-        <ExternalLink url="tel:+359 87 6129 065">+359 87 6129 065</ExternalLink>
-
-        <h4>Avaliable</h4>
-        <p className="avaliable">
-          <span className="dot" /> &nbsp; Available for new projects
-        </p>
+        <ContactDetails>
+          <SmallTitle>Contact Details</SmallTitle>
+          <ExternalLink url="mailto:byurhanbeyzat@gmail.com">
+            byurhanbeyzat@gmail.com
+          </ExternalLink>
+          <ExternalLink url="tel:+359 87 6129 065">
+            +359 87 6129 065
+          </ExternalLink>
+        </ContactDetails>
       </Contact>
       <Menu>
         <NavList>
@@ -29,6 +36,6 @@ export const Navigation = ({ active }) => (
           ))}
         </NavList>
       </Menu>
-    </NavInner>
+    </Container>
   </Nav>
 )

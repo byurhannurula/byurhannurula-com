@@ -1,14 +1,5 @@
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { media, mixins } from 'styles'
-
-const pulse = keyframes`
-  0% {
-    box-shadow: 0 0 0 0px rgba(106, 229, 169, 1);
-  }
-  100% {
-    box-shadow: 0 0 0 15px rgba(106, 229, 169, 0.0);
-  }
-`
 
 export const Nav = styled.nav`
   position: fixed;
@@ -21,8 +12,27 @@ export const Nav = styled.nav`
   background-color: var(--dark);
   color: var(--white);
 
-  ${({ active }) =>
-    active &&
+  & > div {
+    width: 100%;
+    max-width: 968px;
+    position: relative;
+    height: calc(100% - 30%);
+    padding-left: var(--space-sm);
+    padding-right: var(--space-sm);
+    ${mixins.flexBetween};
+
+    ${media.max('sm')`
+      padding-right: var(--space-sm);
+    `}
+
+    ${media.max('md')`
+      padding-right: var(--space-sm);
+      justify-content: flex-end;
+    `}
+  }
+
+  ${({ isActive }) =>
+    isActive &&
     `
     height: 100vh;
 
@@ -30,26 +40,6 @@ export const Nav = styled.nav`
       opacity: 1;
       transform: translateY(0);
     }
-    `}
-`
-
-export const NavInner = styled.div`
-  width: 100%;
-  margin: 0 auto;
-  max-width: 968px;
-  position: relative;
-  height: calc(100% - 30%);
-  padding-left: var(--space-sm);
-  padding-right: var(--space-sm);
-  ${mixins.flexBetween};
-
-  ${media.max('sm')`
-    padding-right: var(--space-sm);
-  `}
-
-  ${media.max('md')`
-    padding-right: var(--space-md);
-    justify-content: flex-end;
   `}
 `
 
@@ -58,36 +48,28 @@ export const Contact = styled.div`
   transform: translateY(-250px);
   transition: all 300ms cubic-bezier(0.52, 0.16, 0.24, 1);
 
-  ${media.max('md')`display: none;`}
+  ${media.max('md')`
+    display: none;
+  `}
+`
 
-  h4 {
-    margin-top: var(--space-md);
-    margin-bottom: var(--space-xxs);
-    color: var(--light);
-    font-size: 1.2rem;
-  }
+export const SmallTitle = styled.h4`
+  margin-bottom: var(--space-xs);
+  color: var(--light);
+  font-size: 1rem;
+  text-transform: uppercase;
+`
+
+export const ContactDetails = styled.div`
+  margin-bottom: var(--space-xl);
 
   a {
-    ${mixins.defaultLink};
-  }
-
-  a,
-  p {
     display: block;
-    color: var(--gray);
-  }
+    font-size: 1rem;
+    ${mixins.defaultLink};
 
-  .avaliable {
-    margin: 0;
-    ${mixins.flexAlignCenter};
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      display: flex;
-      border-radius: 4px;
-      background-color: #38ed94;
-      animation: ${pulse} 1.5s infinite ease-in-out;
+    &:not(:last-child) {
+      margin-bottom: calc(var(--space-xxs) - 6px);
     }
   }
 `
@@ -108,7 +90,7 @@ export const NavItem = styled.li`
   }
 
   a {
-    color: #fff;
+    color: var(--light);
     font-size: 2rem;
     font-weight: 700;
 

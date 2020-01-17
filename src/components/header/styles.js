@@ -10,15 +10,12 @@ export const HeaderWrapper = styled.header`
   background-color: var(--white);
   margin-bottom: var(--space-xxxxl);
   ${mixins.flexAlignCenter};
-`
 
-export const HeaderInner = styled.div`
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  ${mixins.flexBetween};
-
-  padding: var(--space-xs);
+  & > div {
+    max-width: 1280px;
+    ${mixins.flexBetween};
+    padding: var(--space-xs) var(--space-sm);
+  }
 `
 
 export const Logo = styled.div`
@@ -56,8 +53,8 @@ export const NavButton = styled.button`
     transform: rotate(0deg) translate(0, 3px);
   }
 
-  ${({ active }) =>
-    active &&
+  ${({ isActive }) =>
+    isActive &&
     `
     &:before {
       transform: rotate(45deg) translate(2px, 0px);

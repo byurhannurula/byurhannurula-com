@@ -1,27 +1,29 @@
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
 
+import { Container } from 'components/common'
+import { HeaderWrapper, Logo, NavButton } from './styles'
+
 import { Navigation } from './navigation'
-import { HeaderWrapper, HeaderInner, Logo, NavButton } from './styles'
 
 const Header = () => {
   const [active, setActive] = useState(false)
 
   return (
     <HeaderWrapper role="banner">
-      <HeaderInner>
+      <Container>
         <Logo>
           <Link to="/">byurhan.</Link>
         </Logo>
 
         <NavButton
           type="button"
-          active={active}
+          isActive={active}
           onClick={() => setActive(!active)}
         />
 
-        <Navigation active={active} />
-      </HeaderInner>
+        <Navigation isActive={active} />
+      </Container>
     </HeaderWrapper>
   )
 }

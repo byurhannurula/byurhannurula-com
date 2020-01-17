@@ -13,11 +13,7 @@ const Layout = ({ title, children }) => (
     <GlobalStyles />
     <SEO title={title} />
     <Header />
-    <Container>
-      <main role="main" style={{ flexGrow: 1 }}>
-        {children}
-      </main>
-    </Container>
+    <main role="main">{children}</main>
     <Footer />
   </>
 )
