@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { mixins } from 'styles'
 
 export const HeaderWrapper = styled.header`
   position: fixed;
@@ -8,17 +9,14 @@ export const HeaderWrapper = styled.header`
   width: 100%;
   background-color: var(--white);
   margin-bottom: var(--space-xxxxl);
-  display: flex;
-  align-items: center;
+  ${mixins.flexAlignCenter};
 `
 
 export const HeaderInner = styled.div`
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  ${mixins.flexBetween};
 
   padding: var(--space-xs);
 `

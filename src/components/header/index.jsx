@@ -8,7 +8,7 @@ const Header = () => {
   const [active, setActive] = useState(false)
 
   return (
-    <HeaderWrapper>
+    <HeaderWrapper role="banner">
       <HeaderInner>
         <Logo>
           <Link to="/">byurhan.</Link>
@@ -18,9 +18,7 @@ const Header = () => {
           type="button"
           active={active}
           onClick={() => setActive(!active)}
-        >
-          &shy;
-        </NavButton>
+        />
 
         <Navigation active={active} />
       </HeaderInner>

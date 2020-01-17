@@ -4,6 +4,9 @@ import { config } from './config'
 import { typeface } from './typeface'
 import { typography } from './typography'
 
+import { mixins } from './mixins'
+import { media } from './media'
+
 const GlobalStyles = createGlobalStyle`
   ${reset}
   ${config}
@@ -11,4 +14,4 @@ const GlobalStyles = createGlobalStyle`
   ${typography}
 `
 
-export { GlobalStyles }
+export { GlobalStyles, media, mixins }

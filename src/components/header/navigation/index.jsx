@@ -10,12 +10,10 @@ export const Navigation = ({ active }) => (
     <NavInner>
       <Contact>
         <h4>Contact Details</h4>
-        <ExternalLink href="mailto:byurhanbeyzat@gmail.com">
+        <ExternalLink url="mailto:byurhanbeyzat@gmail.com">
           byurhanbeyzat@gmail.com
         </ExternalLink>
-        <ExternalLink href="tel:+359 87 6129 065">
-          +359 87 6129 065
-        </ExternalLink>
+        <ExternalLink url="tel:+359 87 6129 065">+359 87 6129 065</ExternalLink>
 
         <h4>Avaliable</h4>
         <p className="avaliable">

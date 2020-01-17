@@ -6,7 +6,7 @@ const navLinks = [
   },
   {
     id: 1,
-    label: 'About',
+    label: 'About me',
     url: '/about',
   },
   {

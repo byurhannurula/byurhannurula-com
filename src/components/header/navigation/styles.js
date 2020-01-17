@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components'
+import { media, mixins } from 'styles'
 
 const pulse = keyframes`
   0% {
@@ -15,10 +16,9 @@ export const Nav = styled.nav`
   left: 0;
   height: 0;
   width: 100%;
-  display: flex;
-  align-items: center;
+  ${mixins.flexAlignCenter};
   transition: all 250ms cubic-bezier(0.52, 0.16, 0.24, 1);
-  background-color: var(--gray-darkest);
+  background-color: var(--dark);
   color: var(--white);
 
   ${({ active }) =>
@@ -37,24 +37,20 @@ export const NavInner = styled.div`
   width: 100%;
   margin: 0 auto;
   max-width: 968px;
-  padding-left: var(--space-sm);
-  padding-right: var(--space-sm);
   position: relative;
   height: calc(100% - 30%);
-  padding-left: var(--space-sm) * 3;
-  padding-right: var(--space-sm) * 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding-left: var(--space-sm);
+  padding-right: var(--space-sm);
+  ${mixins.flexBetween};
 
-  /* @include max($md) {
-    padding-right: $space-3 * 4;
+  ${media.max('sm')`
+    padding-right: var(--space-sm);
+  `}
+
+  ${media.max('md')`
+    padding-right: var(--space-md);
     justify-content: flex-end;
-  }
-
-  @include max($sm) {
-    padding-right: $space-2 * 4;
-  } */
+  `}
 `
 
 export const Contact = styled.div`
@@ -62,11 +58,17 @@ export const Contact = styled.div`
   transform: translateY(-250px);
   transition: all 300ms cubic-bezier(0.52, 0.16, 0.24, 1);
 
+  ${media.max('md')`display: none;`}
+
   h4 {
     margin-top: var(--space-md);
     margin-bottom: var(--space-xxs);
     color: var(--light);
     font-size: 1.2rem;
+  }
+
+  a {
+    ${mixins.defaultLink};
   }
 
   a,
@@ -77,8 +79,7 @@ export const Contact = styled.div`
 
   .avaliable {
     margin: 0;
-    display: flex;
-    align-items: center;
+    ${mixins.flexAlignCenter};
 
     .dot {
       width: 8px;
