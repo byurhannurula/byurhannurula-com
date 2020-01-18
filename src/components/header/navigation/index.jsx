@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import { ExternalLink, Icon, Container } from 'components/common'
+import { ExternalLink, Container } from 'components/common'
 import { navLinks } from 'components/links'
 
 import {
@@ -8,6 +8,8 @@ import {
   Menu,
   Contact,
   ContactDetails,
+  CopyrightText,
+  Avaliable,
   NavList,
   NavItem,
   SmallTitle,
@@ -26,6 +28,18 @@ export const Navigation = ({ isActive }) => (
             +359 87 6129 065
           </ExternalLink>
         </ContactDetails>
+
+        <Avaliable>
+          <SmallTitle>Avaliable</SmallTitle>
+          <p>
+            <span />
+            Avaliable for new projects
+          </p>
+        </Avaliable>
+
+        <CopyrightText>
+          <span>&copy;</span> {new Date().getFullYear()} &mdash; Byurhan Beyzat
+        </CopyrightText>
       </Contact>
       <Menu>
         <NavList>

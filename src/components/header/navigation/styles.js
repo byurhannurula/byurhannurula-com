@@ -1,5 +1,14 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { media, mixins } from 'styles'
+
+const pulseAnimation = keyframes`
+  0% {
+    box-shadow: 0 0 0 0px rgba(106, 229, 169, 1);
+  }
+  100% {
+    box-shadow: 0 0 0 15px rgba(106, 229, 169, 0.0);
+  }
+`
 
 export const Nav = styled.nav`
   position: fixed;
@@ -54,7 +63,7 @@ export const Contact = styled.div`
 `
 
 export const SmallTitle = styled.h4`
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-xxs);
   color: var(--light);
   font-size: 1rem;
   text-transform: uppercase;
@@ -72,6 +81,36 @@ export const ContactDetails = styled.div`
       margin-bottom: calc(var(--space-xxs) - 6px);
     }
   }
+`
+
+export const Avaliable = styled.div`
+  p {
+    color: var(--gray);
+    margin-top: 0;
+    margin-bottom: var(--space-md);
+    ${mixins.flexAlignCenter};
+
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      display: block;
+      border-radius: 4px;
+      background-color: #38ed94;
+      margin-right: var(--space-xs);
+      animation: ${pulseAnimation} 1.2s infinite ease-in-out;
+    }
+  }
+`
+
+export const CopyrightText = styled.p`
+  span {
+    font-family: var(--font-sans);
+  }
+
+  font-size: 1rem;
+  margin-bottom: 0;
+  color: var(--gray);
 `
 
 export const Menu = styled.div`

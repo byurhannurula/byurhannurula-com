@@ -8,7 +8,6 @@ export const HeaderWrapper = styled.header`
   z-index: 5;
   width: 100%;
   background-color: var(--white);
-  margin-bottom: var(--space-xxxxl);
   ${mixins.flexAlignCenter};
 
   & > div {
@@ -21,7 +20,7 @@ export const HeaderWrapper = styled.header`
 export const Logo = styled.div`
   z-index: 11;
   color: var(--white);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: -1.3px;
   mix-blend-mode: difference;
