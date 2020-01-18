@@ -86,6 +86,7 @@ export const ContactDetails = styled.div`
 export const Avaliable = styled.div`
   p {
     color: var(--gray);
+    font-size: 1rem;
     margin-top: 0;
     margin-bottom: var(--space-md);
     ${mixins.flexAlignCenter};
@@ -104,10 +105,6 @@ export const Avaliable = styled.div`
 `
 
 export const CopyrightText = styled.p`
-  span {
-    font-family: var(--font-sans);
-  }
-
   font-size: 1rem;
   margin-bottom: 0;
   color: var(--gray);

@@ -38,7 +38,7 @@ export const Navigation = ({ isActive }) => (
         </Avaliable>
 
         <CopyrightText>
-          <span>&copy;</span> {new Date().getFullYear()} &mdash; Byurhan Beyzat
+          &copy; {new Date().getFullYear()} &mdash; Byurhan Beyzat
         </CopyrightText>
       </Contact>
       <Menu>

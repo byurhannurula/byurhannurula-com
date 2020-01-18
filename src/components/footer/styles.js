@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 export const FooterWrapper = styled.footer`
-  padding-top: var(--space-xxxl);
+  /* padding-top: var(--space-xxxl); */
+  padding-bottom: var(--space-lg);
   text-align: center;
 `
 

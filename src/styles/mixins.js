@@ -28,11 +28,6 @@ export const mixins = {
   `,
 
   boxShadow: css`
-    transition: var(--transition);
-    box-shadow: 0 10px 30px -15px var(--shadowNavy);
-    &:hover,
-    &:focus {
-      box-shadow: 0 20px 30px -15px var(--shadowNavy);
-    }
+    box-shadow: 0 10px 30px -15px rgba(20, 20, 20, 0.05);
   `,
 }
