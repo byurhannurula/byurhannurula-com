@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { mixins, media } from 'styles'
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.section`
   & > h1 {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
   }
 
   & > p {

@@ -7,9 +7,9 @@ const SkillsSection = () => (
   <SectionContainer as={Wrapper}>
     <Title>My Skills</Title>
     <p>
-      In addition from the courses included in my degree, I&apos;ve taken a
-      couple of online courses such as Beginner JavaScript, Javascript 30,
-      Advanced CSS & Sass, etc..
+      In addition to the courses included in my degree, I&apos;ve taken a couple
+      of online courses such as Beginner JavaScript, Javascript 30, Advanced CSS
+      & Sass, etc..
     </p>
 
     <SkillsSet>

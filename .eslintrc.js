@@ -21,6 +21,7 @@ module.exports = {
     // GENERAL
     'no-alert': 0,
     'no-console': 0,
+    'no-use-before-define': 0,
 
     // REACT
     'react/prop-types': 0,

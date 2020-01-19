@@ -10,15 +10,17 @@ export const Watermark = styled.span`
   color: rgb(0, 0, 0, 0.04);
   position: relative;
   right: 75px;
+  top: 20px;
 
-  ${media.max('sm')` display: none; `}
+  ${media.max('sm')`
+    display: none;
+  `}
 `
 
 export const Wrapper = styled.div`
-  margin-top: calc(var(--space-xl) * 3);
-  margin-bottom: calc(var(--space-xl) * 4);
-
-  ${media.min('sm')` margin-top: -112px; `}
+  ${media.min('sm')`
+    margin-top: -70px;
+  `}
 
   h1 {
     font-size: 2.89em;
