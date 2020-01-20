@@ -20,7 +20,7 @@ const HeroSection = () => (
         I&apos;m a front-end developer &amp; M.Sc. Computer Engineering student
         living in Ruse, Bulgaria. Don&apos;t hesitate to{' '}
         <ExternalLink url="mailto:byurhanbeyzat@gmail.com">
-          contct me
+          contact me
         </ExternalLink>
         , as I love building cool things or just to say hi.
       </Text>
