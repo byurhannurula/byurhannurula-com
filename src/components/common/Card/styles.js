@@ -10,31 +10,34 @@ export const CardLink = styled(ExternalLink)`
 export const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 180px;
   padding: var(--space-xs);
+  min-height: 180px;
   border-radius: 3px;
+  transition: box-shadow 300ms ease-in-out;
+  border: 1px solid rgba(20, 20, 20, 0.02);
   box-shadow: 0 6px 13px 0 rgba(20, 20, 20, 0.05);
 
   &:hover {
-    color: var(--dark);
-    transition: all 200ms ease-in;
-    box-shadow: 0 6px 20px 0 rgba(20, 20, 20, 0.07);
+    box-shadow: 0 12px 26px 0 rgba(20, 20, 20, 0.09);
   }
 `
 
 export const CardTitle = styled.h4`
   font-size: 1.2em;
   font-weight: 600;
+  color: var(--gray-darkest);
 `
 
 export const CardDescription = styled.p`
   font-size: 0.9em;
   margin-bottom: 0;
+  color: var(--gray);
 `
 
 export const CardDetails = styled.div`
   ${mixins.flexBetween};
   margin-top: auto;
+  color: var(--dark);
 
   p {
     font-size: 0.9em;

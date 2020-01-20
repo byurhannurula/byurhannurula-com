@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { SectionContainer, Title } from 'components/common'
-import { Wrapper, Row, SkillsSet } from './styles'
+import { Wrapper, SkillsSet } from './styles'
 
 const SkillsSection = () => (
   <SectionContainer as={Wrapper}>
@@ -13,22 +13,22 @@ const SkillsSection = () => (
     </p>
 
     <SkillsSet>
-      <Row>
+      <div>
         <p>HTML5/CSS3</p>
         <p>JavaScript ES6</p>
-      </Row>
-      <Row>
+      </div>
+      <div>
         <p>Node.js</p>
         <p>React.js</p>
-      </Row>
-      <Row>
+      </div>
+      <div>
         <p>Next.js</p>
         <p>Gatsby.js</p>
-      </Row>
-      <Row>
+      </div>
+      <div>
         <p>CSS in JS</p>
         <p>Git/GitHub</p>
-      </Row>
+      </div>
     </SkillsSet>
   </SectionContainer>
 )

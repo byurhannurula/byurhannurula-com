@@ -24,10 +24,16 @@ const GithubCard = ({ data }) => (
           <p>{data.primaryLanguage && data.primaryLanguage.name}</p>
         </div>
         <span>
-          <p>
+          <p
+            title={`${data.forkCount} Forks`}
+            aria-label={`${data.forkCount} Forks`}
+          >
             <Icon icon="Fork" /> {data.forkCount}
           </p>
-          <p>
+          <p
+            title={`${data.stargazers.totalCount} Stars`}
+            aria-label={`${data.stargazers.totalCount} Stars`}
+          >
             <Icon icon="Star" />
             {data.stargazers.totalCount}
           </p>

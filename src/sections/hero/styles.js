@@ -22,6 +22,10 @@ export const Wrapper = styled.div`
     margin-top: -70px;
   `}
 
+  ${media.max('sm')`
+    margin-top:calc(var(--space-xl) * 3);
+  `}
+
   h1 {
     font-size: 2.89em;
 
