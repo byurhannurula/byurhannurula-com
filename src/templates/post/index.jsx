@@ -4,7 +4,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 
 import Layout from 'components/layout'
 import SEO from 'components/seo'
-
+import { Container } from 'components/common'
 import { PostWrapper, PostHeader, PostFooter, Button } from './styles'
 
 import 'styles/prismjs.css'
@@ -27,37 +27,39 @@ const PostTemplate = ({ data, pageContext }) => {
 
   return (
     <Layout>
-      <SEO
-        title={post.frontmatter.title}
-        keywords={post.frontmatter.categories || ''}
-        description={post.frontmatter.description || ''}
-      />
-      <PostWrapper>
-        <PostHeader>
-          <h2>{post.frontmatter.title}</h2>
-          <p>
-            {post.frontmatter.date} &middot; {post.timeToRead} min read
-          </p>
-        </PostHeader>
+      <Container small>
+        <SEO
+          title={post.frontmatter.title}
+          keywords={post.frontmatter.categories || ''}
+          description={post.frontmatter.description || ''}
+        />
+        <PostWrapper>
+          <PostHeader>
+            <h2>{post.frontmatter.title}</h2>
+            <p>
+              {post.frontmatter.date} &middot; {post.timeToRead} min read
+            </p>
+          </PostHeader>
 
-        <MDXRenderer>{post.body}</MDXRenderer>
+          <MDXRenderer>{post.body}</MDXRenderer>
 
-        <PostFooter>
-          {previous && (
-            <Button to={previous.url}>
-              <span>Previous</span>
-              <h4>{previous.title}</h4>
-            </Button>
-          )}
+          <PostFooter>
+            {previous && (
+              <Button to={previous.url}>
+                <span>Previous</span>
+                <h4>{previous.title}</h4>
+              </Button>
+            )}
 
-          {next && (
-            <Button to={next.url}>
-              <span>Next</span>
-              <h4>{next.title}</h4>
-            </Button>
-          )}
-        </PostFooter>
-      </PostWrapper>
+            {next && (
+              <Button to={next.url}>
+                <span>Next</span>
+                <h4>{next.title}</h4>
+              </Button>
+            )}
+          </PostFooter>
+        </PostWrapper>
+      </Container>
     </Layout>
   )
 }

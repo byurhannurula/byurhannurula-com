@@ -1,6 +1,8 @@
 import React from 'react'
 
 import {
+  ForkIcon,
+  StarIcon,
   ArrowRightIcon,
   GatsbyIcon,
   NetlifyIcon,
@@ -32,6 +34,10 @@ export function Icon({ icon, ...props }) {
       return <NetlifyIcon {...props} />
     case 'ArrowRight':
       return <ArrowRightIcon {...props} />
+    case 'Fork':
+      return <ForkIcon {...props} />
+    case 'Star':
+      return <StarIcon {...props} />
     default:
       return <></>
   }

@@ -1,24 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'gatsby'
-import { navLinks } from 'components/links'
-import { HeaderWrapper, Logo, Nav, NavList, NavItem } from './styles'
 
-const Header = () => (
-  <HeaderWrapper as="header">
-    <Logo>
-      <Link to="/">byurhan</Link>
-    </Logo>
-    <Nav>
-      <NavList>
-        {navLinks &&
-          navLinks.map(({ id, label, url }) => (
-            <NavItem key={id}>
-              <Link to={url}>{label}</Link>
-            </NavItem>
-          ))}
-      </NavList>
-    </Nav>
-  </HeaderWrapper>
-)
+import { Container } from 'components/common'
+import { HeaderWrapper, Logo, NavButton } from './styles'
+
+import { Navigation } from './navigation'
+
+const Header = () => {
+  const [active, setActive] = useState(false)
+
+  return (
+    <HeaderWrapper role="banner">
+      <Container>
+        <Logo>
+          <Link to="/">byurhan.</Link>
+        </Logo>
+
+        <NavButton
+          type="button"
+          isActive={active}
+          onClick={() => setActive(!active)}
+        />
+
+        <Navigation isActive={active} />
+      </Container>
+    </HeaderWrapper>
+  )
+}
 
 export default Header

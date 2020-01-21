@@ -2,6 +2,9 @@ import { css } from 'styled-components'
 
 export const config = css`
   :root {
+    /* General */
+    --transition: 200ms;
+
     /* Colors */
     --black: hsl(0, 0%, 0%);
     --white: hsl(0, 0%, 100%);
