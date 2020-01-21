@@ -4,15 +4,16 @@ export const typography = css`
   :root {
     /* Font family */
     --font-mono: 'Space Mono', 'SF Mono', Menlo, monospace;
-    --font-sans: -apple-system, Roboto, 'Open Sans', Arial, sans-serif;
+    --font-sans: 'Poppins', -apple-system, Roboto, 'Open Sans', Arial,
+      sans-serif;
 
     /* Line height */
-    --body-line-height: 1.55;
-    --heading-line-height: 1.2;
+    --body-line-height: 1.6;
+    --heading-line-height: 1.3;
   }
 
   body {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: calc(14px + 0.25vw);
     line-height: var(--body-line-height);
   }
@@ -42,7 +43,7 @@ export const typography = css`
   }
 
   p {
-    font-size: calc(1em + 0.1vw);
+    font-size: calc(1em + 0.25vw);
     line-height: var(--body-line-height);
   }
 `

@@ -6,12 +6,12 @@ const navLinks = [
   },
   {
     id: 1,
-    label: 'About',
+    label: 'About me',
     url: '/about',
   },
   {
     id: 2,
-    label: 'Blog',
+    label: 'Articles',
     url: '/blog',
   },
   {

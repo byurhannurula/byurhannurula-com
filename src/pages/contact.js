@@ -2,42 +2,51 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Layout from 'components/layout'
-import { Icon, Title, Text, ExternalLink, ContactForm } from 'components/common'
+import {
+  Icon,
+  Title,
+  Text,
+  ExternalLink,
+  ContactForm,
+  Container,
+} from 'components/common'
 
 import { socialLinks } from 'components/links'
 
 const ContactPage = () => (
   <Layout title="Contact">
-    <Title>Contact</Title>
-    <Text>
-      My preferred way of contact is via{' '}
-      <ExternalLink url="https://twitter.com/byurhanbeyzat">
-        Twitter
-      </ExternalLink>{' '}
-      or <ExternalLink url="mailto:imbyurhan@gmail.com">Email</ExternalLink>.
-      Feel free to contact me via{' '}
-      <ExternalLink url="mailto:imbyurhan@gmail.com">
-        imbyurhan@gmail.com
-      </ExternalLink>{' '}
-      or fill the form below.
-    </Text>
-    <IconsWrapper>
-      <IconsList>
-        {socialLinks &&
-          socialLinks.map(({ id, link, name }) => (
-            <IconsItem key={id}>
-              <ExternalLink
-                url={link}
-                title={`Byurhan Beyzat on ${name}`}
-                aria-label={`Byurhan Beyzat on ${name}`}
-              >
-                <Icon icon={name} width="32px" height="32px" />
-              </ExternalLink>
-            </IconsItem>
-          ))}
-      </IconsList>
-    </IconsWrapper>
-    <ContactForm />
+    <Container small>
+      <Title>Contact</Title>
+      <Text>
+        My preferred way of contact is via{' '}
+        <ExternalLink url="https://twitter.com/byurhanbeyzat">
+          Twitter
+        </ExternalLink>{' '}
+        or <ExternalLink url="mailto:imbyurhan@gmail.com">Email</ExternalLink>.
+        Feel free to contact me via{' '}
+        <ExternalLink url="mailto:imbyurhan@gmail.com">
+          imbyurhan@gmail.com
+        </ExternalLink>{' '}
+        or fill the form below.
+      </Text>
+      <IconsWrapper>
+        <IconsList>
+          {socialLinks &&
+            socialLinks.map(({ id, link, name }) => (
+              <IconsItem key={id}>
+                <ExternalLink
+                  url={link}
+                  title={`Byurhan Beyzat on ${name}`}
+                  aria-label={`Byurhan Beyzat on ${name}`}
+                >
+                  <Icon icon={name} width="32px" height="32px" />
+                </ExternalLink>
+              </IconsItem>
+            ))}
+        </IconsList>
+      </IconsWrapper>
+      <ContactForm />
+    </Container>
   </Layout>
 )
 
