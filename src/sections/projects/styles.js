@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { mixins } from 'styles'
+import { media, mixins } from 'styles'
 
 export const SectionHeader = styled.div`
   ${mixins.flexBetween};
@@ -13,4 +13,8 @@ export const SectionContent = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 32px;
+
+  ${media.max('xs')`
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  `}
 `
