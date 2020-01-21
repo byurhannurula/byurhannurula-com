@@ -8,7 +8,7 @@ export const Wrapper = styled.section`
 
   & > p {
     width: 70%;
-    color: vaR(--gray-dark);
+    color: var(--gray-dark);
     margin-bottom: var(--space-md);
 
     ${media.max('md')`
