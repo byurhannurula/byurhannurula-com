@@ -2,15 +2,15 @@ import styled from 'styled-components'
 import { media, mixins } from 'styles'
 
 export const FooterWrapper = styled.footer`
-  padding-top: var(--space-xxxl);
-  padding-bottom: var(--space-xxxl);
+  padding: var(--space-xxxl) var(--space-xs);
+  margin-top: var(--space-xl);
   background-color: hsl(0, 0%, 98%);
 `
 
 export const Contact = styled.div`
   p {
     width: 60%;
-    color: var(--gray-dark);
+    margin-bottom: var(--space-xs);
 
     ${media.max('md')`
       width: 100%;
@@ -35,7 +35,7 @@ export const IconsItem = styled.li`
   a {
     cursor: pointer;
     color: var(--dark);
-    transition: all 200ms ease;
+    transition: all 200ms ease-in;
     background: none;
 
     &:hover {
@@ -44,10 +44,9 @@ export const IconsItem = styled.li`
 
     svg {
       fill: currentColor;
-      transition: all 200ms ease;
+      transition: all 200ms ease-in;
 
       &:hover {
-        transition: all 200ms ease;
         transform: scale(1.2);
       }
     }
@@ -55,19 +54,13 @@ export const IconsItem = styled.li`
 `
 
 export const Copyright = styled.div`
-  margin-top: calc(var(--space-lg) * 3);
+  margin-top: calc(var(--space-lg) * 2);
   ${mixins.flexBetween};
 
   ${media.max('sm')`
     flex-direction: column;
     align-items:flex-start;
   `}
-
-  p {
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: 0.8em;
-  }
 
   a {
     background: none;

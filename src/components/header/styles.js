@@ -13,7 +13,7 @@ export const HeaderWrapper = styled.header`
   & > div {
     max-width: 1280px;
     ${mixins.flexBetween};
-    padding: var(--space-xs) var(--space-sm);
+    padding: var(--space-xs);
   }
 `
 

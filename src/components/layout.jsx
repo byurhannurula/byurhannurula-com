@@ -1,3 +1,4 @@
+import 'typeface-poppins'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { GlobalStyles } from 'styles'
@@ -8,8 +9,8 @@ import Footer from 'components/footer'
 
 const Layout = ({ title, children }) => (
   <>
-    <GlobalStyles />
     <SEO title={title} />
+    <GlobalStyles />
     <Header />
     <main role="main">{children}</main>
     <Footer />

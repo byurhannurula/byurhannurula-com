@@ -1,13 +1,13 @@
 import React from 'react'
 
-import { Title, Text, SectionContainer, ExternalLink } from 'components/common'
+import { Text, SectionContainer, ExternalLink } from 'components/common'
 import { Wrapper, Watermark } from './styles'
 
 const HeroSection = () => (
   <>
     <Watermark>Welcome</Watermark>
     <SectionContainer small as={Wrapper}>
-      <Title>
+      <Text as="h1" display>
         Hi there,{' '}
         <span role="img" aria-label="">
           👋
@@ -15,7 +15,7 @@ const HeroSection = () => (
         &nbsp; I&apos;m Byurhan.
         <br />
         Front&ndash;End Developer &amp; Student
-      </Title>
+      </Text>
       <Text>
         I&apos;m a front-end developer &amp; M.Sc. Computer Engineering student
         living in Ruse, Bulgaria. Don&apos;t hesitate to{' '}

@@ -4623,6 +4623,22 @@ eslint-config-airbnb@^18.0.1:
     object.assign "^4.1.0"
     object.entries "^1.1.0"
 
+eslint-config-byurhan@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/eslint-config-byurhan/-/eslint-config-byurhan-0.0.5.tgz#57fbd170a81e26a8ff44bb80103ec14a5a2c0a3b"
+  integrity sha512-CGJjg3ZT9HUxIR2dlmkwNn4k/+xc6/tW9VeP3dCXmX/tMYPYu2pUGcJSmqa6Pg3Zi7aEcaO/qaekk3UIx3h1Xg==
+  dependencies:
+    babel-eslint "^10.0.3"
+    eslint "^6.8.0"
+    eslint-config-airbnb "^18.0.1"
+    eslint-config-prettier "^6.9.0"
+    eslint-plugin-import "^2.20.0"
+    eslint-plugin-jsx-a11y "^6.2.3"
+    eslint-plugin-prettier "^3.1.2"
+    eslint-plugin-react "^7.17.0"
+    eslint-plugin-react-hooks "^2.3.0"
+    prettier "^1.19.1"
+
 eslint-config-prettier@^6.9.0:
   version "6.9.0"
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-6.9.0.tgz#430d24822e82f7deb1e22a435bfa3999fae4ad64"
@@ -12725,6 +12741,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typeface-poppins@^0.0.72:
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/typeface-poppins/-/typeface-poppins-0.0.72.tgz#3262d6533dea2e99a5cafb3be7d8fa876e105206"
+  integrity sha512-FgzdU4XfGYc4aTq6WZD9FC+le4Foz6cyzjdjDvVnQePTQSUD0dkrXiVaTK/cyNVXQrEl2ykV39PxeKeFqqkrTA==
 
 ua-parser-js@^0.7.18:
   version "0.7.21"

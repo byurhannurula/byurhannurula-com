@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { socialLinks } from 'components/links'
-import { Container, Icon, Title, ExternalLink } from 'components/common'
+import { Container, Icon, Text, ExternalLink } from 'components/common'
 import {
   FooterWrapper,
   Contact,
@@ -15,11 +15,13 @@ const Footer = () => (
   <FooterWrapper as="footer">
     <Container>
       <Contact>
-        <Title>Let&apos;s Build Something Together</Title>
-        <p>
+        <Text as="h1" heading>
+          Let&apos;s Build Something Together
+        </Text>
+        <Text subtitle>
           Feel free to reach out if you&apos;re looking for a developer, have a
           question, or just want to connect.
-        </p>
+        </Text>
         <ExternalLink url="mailto:byurhanbeyzat@gmail.com">
           byurhanbeyzat@gmail.com
         </ExternalLink>
@@ -41,8 +43,10 @@ const Footer = () => (
         </IconsWrapper>
       </Contact>
       <Copyright>
-        <p>&copy; {new Date().getFullYear()} &mdash; Byurhan Beyzat</p>
-        <p>
+        <Text smallText>
+          &copy; {new Date().getFullYear()} &mdash; Byurhan Beyzat
+        </Text>
+        <Text smallText>
           Built using{' '}
           <ExternalLink
             url="https://gatsbyjs.org"
@@ -64,7 +68,7 @@ const Footer = () => (
           >
             <Icon icon="Netlify" />
           </ExternalLink>
-        </p>
+        </Text>
       </Copyright>
     </Container>
   </FooterWrapper>

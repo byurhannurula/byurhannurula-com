@@ -4,7 +4,7 @@ import { media } from 'styles'
 export const Watermark = styled.span`
   font-family: var(--font-sans);
   line-height: 1;
-  font-size: 264px;
+  font-size: 15em;
   font-weight: 800;
   letter-spacing: 8px;
   color: rgb(0, 0, 0, 0.04);
@@ -25,10 +25,4 @@ export const Wrapper = styled.div`
   ${media.max('sm')`
     margin-top:calc(var(--space-xl) * 3);
   `}
-
-  h1 {
-    font-size: 2.89em;
-
-    ${media.max('sm')` font-size: 2.25rem; `}
-  }
 `

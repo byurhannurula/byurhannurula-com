@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon } from 'components/common'
+import { Icon, Text } from 'components/common'
 import {
   CardLink,
   CardWrapper,

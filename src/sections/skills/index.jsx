@@ -1,16 +1,18 @@
 import React from 'react'
 
-import { SectionContainer, Title } from 'components/common'
+import { SectionContainer, Text } from 'components/common'
 import { Wrapper, SkillsSet } from './styles'
 
 const SkillsSection = () => (
   <SectionContainer as={Wrapper}>
-    <Title>My Skills</Title>
-    <p>
+    <Text as="h2" heading>
+      My Skills
+    </Text>
+    <Text subtitle>
       In addition to the courses included in my degree, I&apos;ve taken a couple
       of online courses such as Beginner JavaScript, Javascript 30, Advanced CSS
       & Sass, etc..
-    </p>
+    </Text>
 
     <SkillsSet>
       <div>

@@ -30,6 +30,10 @@ export const SkillsSet = styled.div`
     text-align: left;
     ${mixins.flexAlignCenter};
 
+    ${media.max('md')`
+      min-width: 160px;
+    `}
+
     ${media.min('lg')`
       min-width: unset;
     `}

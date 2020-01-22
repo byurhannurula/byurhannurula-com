@@ -2,7 +2,7 @@ import React from 'react'
 
 import {
   SectionContainer,
-  Title,
+  Text,
   ExternalLink,
   GithubCard,
 } from 'components/common'
@@ -14,7 +14,9 @@ const ProjectsSection = ({ data }) => {
   return (
     <SectionContainer as="section">
       <SectionHeader>
-        <Title>Open Source</Title>
+        <Text as="h2" heading>
+          Open Source
+        </Text>
         <ExternalLink url="https://github.com/byurhanbeyzat?tab=repositories">
           View all
         </ExternalLink>
