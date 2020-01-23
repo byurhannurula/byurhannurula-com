@@ -1,6 +1,7 @@
 module.exports = {
   extends: ['byurhan'],
   rules: {
+    'no-use-before-define': 0,
     'prettier/prettier': [
       'error',
       {
