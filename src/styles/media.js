@@ -13,11 +13,10 @@ const breakpoints = {
 
 /**
  * All breakpoints can be found inside of theme.breakpoints.
- *
  * @example
  *
- *    ${media.min('mobileMin')` background: red; `};
- *    ${media.max('tabletMin')` background: black; `};
+ *    ${media.min('lg')` background: red; `};
+ *    ${media.max('md')` background: black; `};
  */
 
 const getSize = (breakpointValue, breakpointsObject) => {

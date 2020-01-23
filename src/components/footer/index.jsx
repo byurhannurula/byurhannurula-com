@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { socialLinks } from 'components/links'
-import { Container, Icon, Title, ExternalLink } from 'components/common'
+import { socialLinks, about } from '@content/data'
+import { Container, Icon, Text, ExternalLink } from 'components/common'
 import {
   FooterWrapper,
   Contact,
@@ -15,14 +15,14 @@ const Footer = () => (
   <FooterWrapper as="footer">
     <Container>
       <Contact>
-        <Title>Let&apos;s Build Something Together</Title>
-        <p>
+        <Text as="h1" heading>
+          Let&apos;s Build Something Together
+        </Text>
+        <Text subtitle>
           Feel free to reach out if you&apos;re looking for a developer, have a
           question, or just want to connect.
-        </p>
-        <ExternalLink url="mailto:byurhanbeyzat@gmail.com">
-          byurhanbeyzat@gmail.com
-        </ExternalLink>
+        </Text>
+        <ExternalLink url={`mailto:${about.email}`}>{about.email}</ExternalLink>
         <IconsWrapper>
           <IconsList>
             {socialLinks &&
@@ -41,18 +41,20 @@ const Footer = () => (
         </IconsWrapper>
       </Contact>
       <Copyright>
-        <p>&copy; {new Date().getFullYear()} &mdash; Byurhan Beyzat</p>
-        <p>
+        <Text smallText>
+          &copy; {new Date().getFullYear()} &mdash; Byurhan Beyzat
+        </Text>
+        <Text smallText>
           Built using{' '}
           <ExternalLink
-            url="https://gatsbyjs.org"
+            url="https://gatsbyjs.org/?ref=byurhanbeyzat.com"
             aria-label="Gatsby.js - Official Website"
           >
             <Icon icon="Gatsby" />
           </ExternalLink>
           , hosted on{' '}
           <ExternalLink
-            url="https://github.com/"
+            url="https://github.com/?ref=byurhanbeyzat.com"
             aria-label="Github - Official Website"
           >
             <Icon icon="Github" />
@@ -64,7 +66,7 @@ const Footer = () => (
           >
             <Icon icon="Netlify" />
           </ExternalLink>
-        </p>
+        </Text>
       </Copyright>
     </Container>
   </FooterWrapper>

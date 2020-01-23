@@ -1,16 +1,15 @@
 import React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 import Layout from 'components/layout'
-import { HeroSection, SkillsSection, ProjectsSection } from 'sections'
+
+import Landing from 'scenes/landing'
 
 const IndexPage = () => {
   const { github } = useStaticQuery(pageQuery)
 
   return (
     <Layout>
-      <HeroSection />
-      <SkillsSection />
-      <ProjectsSection data={github} />
+      <Landing data={github} />
     </Layout>
   )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { ExternalLink, Container } from 'components/common'
-import { navLinks } from 'components/links'
+import { navLinks, about } from '@content/data'
 
 import {
   Nav,
@@ -21,22 +21,17 @@ export const Navigation = ({ isActive }) => (
       <Contact>
         <ContactDetails>
           <SmallTitle>Contact Details</SmallTitle>
-          <ExternalLink url="mailto:byurhanbeyzat@gmail.com">
-            byurhanbeyzat@gmail.com
+          <ExternalLink url={`mailto:${about.email}`}>
+            {about.email}
           </ExternalLink>
-          <ExternalLink url="tel:+359 87 6129 065">
-            +359 87 6129 065
-          </ExternalLink>
+          <ExternalLink url={`tel:${about.phone}`}>{about.phone}</ExternalLink>
         </ContactDetails>
-
-        <Avaliable>
+        <Avaliable isAvaliable={about.isAvaliable}>
           <SmallTitle>Avaliable</SmallTitle>
           <p>
-            <span />
-            Avaliable for new projects
+            {about.isAvaliable ? 'Avaliable for new projects' : 'Not avaliable'}
           </p>
         </Avaliable>
-
         <CopyrightText>
           &copy; {new Date().getFullYear()} &mdash; Byurhan Beyzat
         </CopyrightText>

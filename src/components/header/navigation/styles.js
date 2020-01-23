@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import { media, mixins } from 'styles'
 
 const pulseAnimation = keyframes`
@@ -42,14 +42,14 @@ export const Nav = styled.nav`
 
   ${({ isActive }) =>
     isActive &&
-    `
-    height: 100vh;
+    css`
+      height: 100vh;
 
-    & > div > div {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  `}
+      & > div > div {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    `}
 `
 
 export const Contact = styled.div`
@@ -91,17 +91,25 @@ export const Avaliable = styled.div`
     margin-bottom: var(--space-md);
     ${mixins.flexAlignCenter};
 
-    &::before {
+    &:before {
       content: '';
       width: 8px;
       height: 8px;
       display: block;
       border-radius: 4px;
-      background-color: #38ed94;
+      background-color: var(--red);
       margin-right: var(--space-xs);
-      animation: ${pulseAnimation} 1.2s infinite ease-in-out;
     }
   }
+
+  ${({ isAvaliable }) =>
+    isAvaliable &&
+    css`
+      p:before {
+        background-color: #38ed94;
+        animation: ${pulseAnimation} 1.2s infinite ease-in-out;
+      }
+    `}
 `
 
 export const CopyrightText = styled.p`

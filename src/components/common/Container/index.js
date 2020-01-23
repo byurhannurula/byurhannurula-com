@@ -6,8 +6,6 @@ export const Container = styled.div`
   max-width: 1070px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: var(--space-xs);
-  padding-right: var(--space-xs);
 
   ${({ small }) =>
     small &&
