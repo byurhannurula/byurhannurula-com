@@ -1,4 +1,4 @@
-const navLinks = [
+export const navLinks = [
   {
     id: 0,
     label: 'Home',
@@ -6,27 +6,22 @@ const navLinks = [
   },
   {
     id: 1,
-    label: 'About me',
-    url: '/about',
-  },
-  {
-    id: 2,
     label: 'Articles',
     url: '/blog',
   },
   {
-    id: 3,
-    label: 'Support',
+    id: 2,
+    label: 'Supporters',
     url: '/supporters',
   },
   {
-    id: 4,
+    id: 3,
     label: 'Contact',
     url: '/contact',
   },
 ]
 
-const socialLinks = [
+export const socialLinks = [
   {
     id: 0,
     name: 'Twitter',
@@ -53,5 +48,3 @@ const socialLinks = [
     link: 'https://linkedin.com/in/byurhanbeyzat/',
   },
 ]
-
-export { navLinks, socialLinks }

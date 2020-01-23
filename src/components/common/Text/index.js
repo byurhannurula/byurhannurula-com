@@ -1,15 +1,4 @@
-import styled from 'styled-components'
-import { media } from 'styles'
-
-export const Title = styled.h1`
-  color: var(--dark);
-  margin-bottom: var(--space-sm);
-`
-
-export const SmallHeading = styled.h3`
-  color: var(--gray-darkest);
-  margin-bottom: var(--space-xxs);
-`
+import styled, { css } from 'styled-components'
 
 export const Text = styled('p')`
   color: var(--gray);
@@ -18,7 +7,7 @@ export const Text = styled('p')`
 
   ${({ display }) =>
     display &&
-    `
+    css`
       margin-bottom: var(--space-sm);
       color: var(--dark);
       font-size: 2.75em;
@@ -26,34 +15,42 @@ export const Text = styled('p')`
       @media (max-width: 568px) {
         font-size: 2.4em;
       }
-  `}
+    `}
 
   ${({ heading }) =>
     heading &&
-    `
+    css`
       color: var(--dark);
       font-size: 2.074em;
-      
-  `}
+    `}
 
   ${({ subtitle }) =>
     subtitle &&
-    `
+    css`
+      margin-bottom: var(--space-xs);
       margin-top: var(--space-xs);
       color: var(--gray-dark);
       font-size: 1.15em;
       font-weight: 400;
-  `}
+    `}
 
   ${({ body }) =>
     body &&
-    `
+    css`
       font-size: calc(1em + 0.09vw);
-  `}
+    `}
+
+  ${({ listTitle }) =>
+    listTitle &&
+    css`
+      color: var(--gray-darkest);
+      margin-top: var(--space-xxs);
+      margin-bottom: var(--space-xs);
+    `}
 
   ${({ smallText }) =>
     smallText &&
-    `
+    css`
       font-size: calc(0.9em + 0.08vw);
-  `}
+    `}
 `

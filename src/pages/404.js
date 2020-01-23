@@ -3,15 +3,19 @@ import styled from 'styled-components'
 
 import Layout from 'components/layout'
 import SEO from 'components/seo'
-import { Title, SmallHeading, InternalLink } from 'components/common'
+import { Text, InternalLink } from 'components/common'
 
 const NotFoundPage = () => (
   <Layout>
     <SEO title="404 - Not found" />
     <Wrapper>
-      <Title>404</Title>
-      <SmallHeading>Page Not Found</SmallHeading>
-      <InternalLink to="/">Go Home</InternalLink>
+      <Text as="h1" display>
+        404
+      </Text>
+      <Text as="h3" heading>
+        Page Not Found
+      </Text>
+      <InternalLink url="/">Go Home</InternalLink>
     </Wrapper>
   </Layout>
 )

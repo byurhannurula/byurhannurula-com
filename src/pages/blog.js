@@ -1,30 +1,16 @@
 import React from 'react'
 import { graphql } from 'gatsby'
-import styled from 'styled-components'
 
 import Layout from 'components/layout'
-import { Title, PostLink, Container } from 'components/common'
+import Articles from 'scenes/articles'
 
-const IndexPage = ({ data }) => {
-  const { edges: posts } = data.allMdx
+const BlogPage = ({ data }) => (
+  <Layout>
+    <Articles data={data} />
+  </Layout>
+)
 
-  return (
-    <Layout>
-      <Container small>
-        <Title style={{ textAlign: 'center' }}>Recent Posts</Title>
-        <CardContainer>
-          {posts ? (
-            posts.map(post => <PostLink data={post} key={post.node.id} />)
-          ) : (
-            <p>No posts yet.</p>
-          )}
-        </CardContainer>
-      </Container>
-    </Layout>
-  )
-}
-
-export default IndexPage
+export default BlogPage
 
 export const pageQuery = graphql`
   query blogIndex {
@@ -45,12 +31,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
-
-const CardContainer = styled.div`
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  flex-direction: column;
-  max-width: 650px;
 `

@@ -121,7 +121,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   main {
-    margin-top: 8rem;
+    margin-top: 9em;
     padding-left: var(--space-xs);
     padding-right: var(--space-xs);
   }

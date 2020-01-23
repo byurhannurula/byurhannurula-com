@@ -9,6 +9,7 @@ export const HeaderWrapper = styled.header`
   width: 100%;
   background-color: var(--white);
   ${mixins.flexAlignCenter};
+  ${mixins.boxShadow};
 
   & > div {
     max-width: 1280px;

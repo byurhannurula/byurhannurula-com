@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { socialLinks } from 'components/links'
+import { socialLinks, about } from '@content/data'
 import { Container, Icon, Text, ExternalLink } from 'components/common'
 import {
   FooterWrapper,
@@ -22,9 +22,7 @@ const Footer = () => (
           Feel free to reach out if you&apos;re looking for a developer, have a
           question, or just want to connect.
         </Text>
-        <ExternalLink url="mailto:byurhanbeyzat@gmail.com">
-          byurhanbeyzat@gmail.com
-        </ExternalLink>
+        <ExternalLink url={`mailto:${about.email}`}>{about.email}</ExternalLink>
         <IconsWrapper>
           <IconsList>
             {socialLinks &&
@@ -49,14 +47,14 @@ const Footer = () => (
         <Text smallText>
           Built using{' '}
           <ExternalLink
-            url="https://gatsbyjs.org"
+            url="https://gatsbyjs.org/?ref=byurhanbeyzat.com"
             aria-label="Gatsby.js - Official Website"
           >
             <Icon icon="Gatsby" />
           </ExternalLink>
           , hosted on{' '}
           <ExternalLink
-            url="https://github.com/"
+            url="https://github.com/?ref=byurhanbeyzat.com"
             aria-label="Github - Official Website"
           >
             <Icon icon="Github" />

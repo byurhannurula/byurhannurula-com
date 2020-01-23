@@ -10,7 +10,6 @@ export const FooterWrapper = styled.footer`
 export const Contact = styled.div`
   p {
     width: 60%;
-    margin-bottom: var(--space-xs);
 
     ${media.max('md')`
       width: 100%;

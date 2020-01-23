@@ -2,15 +2,13 @@ import styled from 'styled-components'
 import { media, mixins } from 'styles'
 
 export const Watermark = styled.span`
-  font-family: var(--font-sans);
   line-height: 1;
   font-size: 15em;
   font-weight: 800;
-  letter-spacing: 8px;
+  letter-spacing: 6px;
   color: rgb(0, 0, 0, 0.04);
   position: relative;
   right: 75px;
-  top: 20px;
 
   ${media.max('sm')`
     display: none;
@@ -19,11 +17,11 @@ export const Watermark = styled.span`
 
 export const HeroWrapper = styled.section`
   ${media.min('sm')`
-    margin-top: -70px;
+    margin-top: -100px;
   `}
 
   ${media.max('sm')`
-    margin-top:calc(var(--space-xl) * 3);
+    margin-top: calc(var(--space-xl) * 3);
   `}
 `
 

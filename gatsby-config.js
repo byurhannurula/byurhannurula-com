@@ -20,7 +20,7 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `posts`,
-        path: `${__dirname}/posts`,
+        path: `${__dirname}/content/posts`,
       },
     },
     {
@@ -54,7 +54,6 @@ module.exports = {
         headers: {
           Authorization: `bearer ${process.env.GATSBY_GITHUB_TOKEN}`,
         },
-        fetchOptions: {},
       },
     },
     {
