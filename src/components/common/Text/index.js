@@ -10,10 +10,14 @@ export const Text = styled('p')`
     css`
       margin-bottom: var(--space-sm);
       color: var(--dark);
-      font-size: 2.75em;
+      font-size: 3em;
 
       @media (max-width: 568px) {
-        font-size: 2.4em;
+        font-size: 2.35em;
+      }
+
+      @media (max-width: 380px) {
+        font-size: 2.15em;
       }
     `}
 

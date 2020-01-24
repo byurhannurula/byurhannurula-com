@@ -10,19 +10,19 @@ export const Watermark = styled.span`
   position: relative;
   right: 75px;
 
-  ${media.max('sm')`
+  @media (max-width: 640px) {
     display: none;
-  `}
+  }
 `
 
 export const HeroWrapper = styled.section`
-  ${media.min('sm')`
+  @media (min-width: 640px) {
     margin-top: -100px;
-  `}
+  }
 
-  ${media.max('sm')`
+  @media (max-width: 640px) {
     margin-top: calc(var(--space-xl) * 3);
-  `}
+  }
 `
 
 export const SkillsWrapper = styled.section`

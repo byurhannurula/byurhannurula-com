@@ -27,7 +27,7 @@ export const mixins = {
     }
   `,
 
-  boxShadow: css`
-    box-shadow: 0 10px 30px -15px rgba(20, 20, 20, 0.05);
+  boxShadow: `
+    0 10px 30px -15px rgba(20, 20, 20, 0.08);
   `,
 }

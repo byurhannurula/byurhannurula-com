@@ -9,12 +9,23 @@ export const HeaderWrapper = styled.header`
   width: 100%;
   background-color: var(--white);
   ${mixins.flexAlignCenter};
-  ${mixins.boxShadow};
+
+  transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+  height: ${p =>
+    p.scrollDirection === 'none'
+      ? 'var(--nav-height)'
+      : 'var(--nav-scroll-height)'};
+  box-shadow: ${p =>
+    p.scrollDirection === 'up' ? `${mixins.boxShadow}` : 'none'};
+  transform: translateY(
+    ${p =>
+      p.isNavActive === false && p.scrollDirection === 'down' ? '-80px' : '0px'}
+  );
 
   & > div {
     max-width: 1280px;
     ${mixins.flexBetween};
-    padding: var(--space-xs);
+    padding: 0 var(--space-xs);
   }
 `
 

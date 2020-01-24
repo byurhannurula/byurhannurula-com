@@ -6,7 +6,9 @@ import { media } from './media'
 const variables = css`
   :root {
     /* General */
-    --transition: 200ms;
+    --transition: all 250ms cubic-bezier(0.645, 0.045, 0.355, 1);
+    --nav-height: 90px;
+    --nav-scroll-height: 70px;
 
     /* Colors */
     --black: hsl(0, 0%, 0%);
