@@ -16,7 +16,7 @@ module.exports = {
     name: 'Byurhan Beyzat – Front-End Developer',
     background_color: 'hsl(230, 80%, 50%)',
     theme_color: 'hsl(230, 80%, 50%)',
-    display: 'minimal-ui',
+    display: 'standalone',
     icon: './static/favicon/favicon.png',
   },
 }
