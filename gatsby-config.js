@@ -1,9 +1,11 @@
+const config = require('./content/data/config')
+
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
 module.exports = {
-  siteMetadata: {},
+  siteMetadata: config.siteMetadata,
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-transformer-sharp`,
@@ -46,13 +48,25 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-feed`,
+      options: {
+        feeds: [
+          generateBlogFeed({
+            filePathRegex: `//content/posts//`,
+            title: 'Byurhan Beyzat Blog RSS Feed',
+            output: '/rss.xml',
+          }),
+        ],
+      },
+    },
+    {
       resolve: `gatsby-source-graphql`,
       options: {
         typeName: 'GitHub',
         fieldName: 'github',
         url: 'https://api.github.com/graphql',
         headers: {
-          Authorization: `bearer ${process.env.GATSBY_GITHUB_TOKEN}`,
+          Authorization: `Bearer ${process.env.GATSBY_GITHUB_TOKEN}`,
         },
       },
     },
@@ -72,15 +86,54 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-manifest`,
-      options: {
-        start_url: '/',
-        short_name: 'Byurhan Beyzat',
-        name: 'Byurhan Beyzat – Front-End Developer',
-        background_color: 'hsl(230, 80%, 50%)',
-        theme_color: 'hsl(230, 80%, 50%)',
-        display: 'minimal-ui',
-        icon: './static/favicon/favicon.png',
-      },
+      options: config.siteManifest,
     },
   ],
+}
+
+function generateBlogFeed({ filePathRegex, ...overrides }) {
+  return {
+    serialize: ({ query: { site, allMdx } }) => {
+      const siteData = site.siteMetadata
+      return allMdx.edges.map(edge => {
+        return {
+          ...edge.node.frontmatter,
+          description: edge.node.excerpt,
+          date: edge.node.frontmatter.date,
+          url: siteData.siteUrl + edge.node.fields.path,
+          guid: siteData.siteUrl + edge.node.fields.path,
+        }
+      })
+    },
+    query: `
+      query {
+        site {
+          siteMetadata {
+            siteUrl
+            title
+            description
+          }
+        }
+        allMdx(
+          limit: 1000, 
+          sort: { order: DESC, fields: [frontmatter___date] }, 
+          filter: { fileAbsolutePath: { regex: "${filePathRegex}" } }) {
+          edges {
+            node {
+              excerpt(pruneLength: 250)
+              body
+              fields {
+                path
+              }
+              frontmatter {
+                title
+                date
+              }
+            }
+          }
+        }
+      }
+    `,
+    ...overrides,
+  }
 }
