@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {
+  ZeitIcon,
   ForkIcon,
   StarIcon,
   ArrowRightIcon,
@@ -38,6 +39,8 @@ export function Icon({ icon, ...props }) {
       return <ForkIcon {...props} />
     case 'Star':
       return <StarIcon {...props} />
+    case 'Zeit':
+      return <ZeitIcon {...props} />
     default:
       return <></>
   }

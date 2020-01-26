@@ -61,10 +61,10 @@ const Footer = () => (
           </ExternalLink>{' '}
           and deployed on{' '}
           <ExternalLink
-            url="https://netlify.com/?ref=byurhanbeyzat.com"
-            aria-label="Netlify - Official Website"
+            url="https://zeit.co/?ref=byurhanbeyzat.com"
+            aria-label="Zeit - Official Website"
           >
-            <Icon icon="Netlify" />
+            <Icon icon="Zeit" />
           </ExternalLink>
         </Text>
       </Copyright>

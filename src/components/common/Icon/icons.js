@@ -52,6 +52,30 @@ export const GatsbyIcon = ({ width = '24px', height = '24px', ...props }) => (
   </svg>
 )
 
+export const ZeitIcon = ({ width = '24px', height = '24px', ...props }) => (
+  <svg
+    {...props}
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <linearGradient
+        id="a"
+        x1="100.929941%"
+        x2="41.768783%"
+        y1="181.283245%"
+        y2="100%"
+      >
+        <stop offset="0%" stopColor="#FFF" />
+        <stop offset="100%" />
+      </linearGradient>
+    </defs>
+    <path fill="url(#a)" d="M24 22.525H0l12-21.05 12 21.05z" />
+  </svg>
+)
+
 export const NetlifyIcon = ({ width = '24px', height = '24px', ...props }) => (
   <svg
     {...props}
