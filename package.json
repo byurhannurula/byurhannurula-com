@@ -23,6 +23,7 @@
     "gatsby-plugin-react-helmet": "^3.1.21",
     "gatsby-plugin-sharp": "^2.3.13",
     "gatsby-plugin-styled-components": "^3.1.17",
+    "gatsby-plugin-zeit-now": "^0.2.0",
     "gatsby-remark-copy-linked-files": "^2.1.36",
     "gatsby-remark-images": "^3.1.42",
     "gatsby-remark-prismjs": "^3.3.30",

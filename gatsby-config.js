@@ -11,6 +11,7 @@ module.exports = {
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-offline`,
+    `gatsby-plugin-zeit-now`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
