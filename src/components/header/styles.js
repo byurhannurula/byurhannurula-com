@@ -12,11 +12,13 @@ export const HeaderWrapper = styled.header`
 
   transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
   height: ${p =>
-    p.scrollDirection === 'none'
+    p.isNavActive === false && p.scrollDirection === 'none'
       ? 'var(--nav-height)'
       : 'var(--nav-scroll-height)'};
   box-shadow: ${p =>
-    p.scrollDirection === 'up' ? `${mixins.boxShadow}` : 'none'};
+    p.isNavActive === false && p.scrollDirection === 'up'
+      ? `${mixins.boxShadow}`
+      : 'none'};
   transform: translateY(
     ${p =>
       p.isNavActive === false && p.scrollDirection === 'down' ? '-80px' : '0px'}
