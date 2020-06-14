@@ -1,7 +1,7 @@
 exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
     resolve: {
-      modules: [`${__dirname}/src`, "node_modules"],
+      modules: [`${__dirname}/src`, 'node_modules'],
     },
-  });
-};
+  })
+}
