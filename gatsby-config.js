@@ -5,10 +5,12 @@ module.exports = {
     title: 'Byurhan Beyzat – Front-End Developer',
     description:
       "Hi, I'm Byurhan Beyzat, a front-end developer based in Ruse, Bulgaria.",
+    keywords: '',
+    siteImage: '',
     siteUrl: 'https://byurhanbeyzat.com',
     author: {
       name: 'Byurhan Beyzat',
-      twitter: '@byurhanbeyzat',
+      handle: '@byurhanbeyzat',
     },
   },
   plugins: [
