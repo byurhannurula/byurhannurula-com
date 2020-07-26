@@ -1,17 +1,34 @@
 import React from 'react'
 import Helmet from 'react-helmet'
 import PropTypes from 'prop-types'
-
+import { graphql, useStaticQuery } from 'gatsby'
 import Card from '../images/card.png'
 
+const seoQuery = graphql`
+  query {
+    site {
+      siteMetadata {
+        title
+        keywords
+        description
+        siteImage
+        siteUrl
+        author {
+          name
+          handle
+        }
+      }
+    }
+  }
+`
+
 const SEO = ({ lang, title, description, postImage }) => {
-  const siteUrl = 'https://byurhanbeyzat.com'
-  const siteTitle = title
-    ? `${title} — Byurhan Beyzat – Front-End Developer`
-    : `Byurhan Beyzat – Front-End Developer`
-  const siteDescription =
-    description ||
-    "Hi, I'm Byurhan Beyzat, a front-end developer based in Ruse, Bulgaria."
+  let { site } = useStaticQuery(seoQuery)
+  site = site.siteMetadata
+
+  const siteUrl = site.siteUrl || 'https://byurhanbeyzat.com'
+  const siteTitle = title ? `${title} — ${site.title}` : site.title
+  const siteDescription = description || site.description
   const siteImage = `${siteUrl}${postImage || Card}`
 
   return (
@@ -29,7 +46,7 @@ const SEO = ({ lang, title, description, postImage }) => {
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={siteTitle} />
       <meta name="twitter:image" content={siteImage} />
-      <meta name="twitter:creator" content="@byurhanbeyzat" />
+      <meta name="twitter:creator" content={site.author.handle} />
       <meta name="twitter:description" content={siteDescription} />
     </Helmet>
   )
