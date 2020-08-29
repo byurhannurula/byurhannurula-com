@@ -8,6 +8,10 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     margin: 0;
     overflow-x: hidden;
@@ -52,6 +56,15 @@ const GlobalStyles = createGlobalStyle`
     &:hover {
       text-decoration: none;
     }
+  }
+
+  .icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
   }
 
   ${Typography}

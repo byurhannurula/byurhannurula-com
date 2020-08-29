@@ -20,13 +20,18 @@ const lightTheme = {
   bp,
   bodySizes,
   colors: {
-    white: '#ffffff',
-    black: '#000000',
+    white: 'rgb(255,255,255)',
+    black: 'rgb(0,0,0)',
 
-    bg: '#fafafa',
-    text: '#141414',
-    textLight: '#444444',
-    primary: '#061bff',
+    bg: 'rgb(255,255,255)',
+    text: 'rgb(20,20,20)',
+    textLight: 'rgb(45,55,72)',
+
+    gray: 'rgb(218,222,223)',
+    grayLight: 'rgb(242,243,244)',
+    grayDark: 'rgb(193,199,201)',
+
+    primary: 'rgb(6,27,255)',
   },
   font,
 }
@@ -35,13 +40,18 @@ const darkTheme = {
   bp,
   bodySizes,
   colors: {
-    white: '#ffffff',
-    black: '#000000',
+    white: 'rgb(255,255,255)',
+    black: 'rgb(0,0,0)',
 
-    bg: '#fafafa',
-    text: '#141414',
-    textLight: '#444444',
-    primary: '#061bff',
+    bg: 'rgb(23,25,35)',
+    text: 'rgb(255,255,255)',
+    textLight: 'rgb(160,174,192)',
+
+    gray: 'rgb(218,222,223)',
+    grayLight: 'rgb(242,243,244)',
+    grayDark: 'rgb(193,199,201)',
+
+    primary: 'rgb(6,27,255)',
   },
   font,
 }

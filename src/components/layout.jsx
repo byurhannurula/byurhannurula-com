@@ -4,12 +4,14 @@ import { ThemeProvider } from 'styled-components'
 
 import { GlobalStyles, theme, Container } from 'styles'
 
-import { useColorMode } from 'hooks'
+import { useResize, useColorMode } from 'hooks'
 
 import SEO from './seo'
+import Header from './header'
 
 const Layout = ({ title, children }) => {
-  const [currentTheme] = useColorMode()
+  const { isMobile } = useResize()
+  const [currentTheme, toggleTheme] = useColorMode()
 
   return (
     <ThemeProvider
@@ -17,7 +19,12 @@ const Layout = ({ title, children }) => {
     >
       <GlobalStyles />
       <SEO title={title} />
-      <Container style={{ marginTop: '6rem' }} as="main" role="main">
+      <Header
+        isMobile={isMobile}
+        toggleTheme={toggleTheme}
+        currentTheme={currentTheme}
+      />
+      <Container style={{ marginTop: '7rem' }} as="main" id="main" role="main">
         {children}
       </Container>
     </ThemeProvider>

@@ -30,6 +30,8 @@ const mixins = {
     display: flex;
     justify-content: ${justify};
   `,
+
+  boxShadow: `0 0 20px 10px rgba(14, 14, 14, 0.05)`,
 }
 
 export { mixins }
