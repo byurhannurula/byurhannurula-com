@@ -1,31 +1,13 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
 
-import Layout from 'components/layout'
-import SEO from 'components/seo'
-import { Text, InternalLink } from 'components/common'
+import Layout from "components/layout";
+import SEO from "components/seo";
 
 const NotFoundPage = () => (
   <Layout>
     <SEO title="404 - Not found" />
-    <Wrapper>
-      <Text as="h1" display>
-        404
-      </Text>
-      <Text as="h3" heading>
-        Page Not Found
-      </Text>
-      <InternalLink url="/">Go Home</InternalLink>
-    </Wrapper>
+    <h1>Page is not found...</h1>
   </Layout>
-)
+);
 
-export default NotFoundPage
-
-const Wrapper = styled.div`
-  text-align: center;
-
-  h3 {
-    margin-bottom: var(--space-xl);
-  }
-`
+export default NotFoundPage;
