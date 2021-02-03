@@ -9,7 +9,7 @@
   "dependencies": {
     "@mdx-js/mdx": "^1.5.3",
     "@mdx-js/react": "^1.5.3",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "babel-plugin-styled-components": "^1.10.6",
     "dotenv": "^8.2.0",
     "formik": "^2.1.2",
