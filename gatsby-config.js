@@ -77,14 +77,14 @@ module.exports = {
         displayName: false,
       },
     },
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        head: true,
-        cookieDomain: 'byurhanbeyzat.com',
-        trackingId: process.env.GATSBY_GA_ID,
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-google-analytics`,
+    //   options: {
+    //     head: true,
+    //     cookieDomain: 'byurhanbeyzat.com',
+    //     trackingId: process.env.GATSBY_GA_ID,
+    //   },
+    // },
     {
       resolve: `gatsby-plugin-manifest`,
       options: config.siteManifest,
