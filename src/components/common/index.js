@@ -1,5 +1,0 @@
-export * from './Icon'
-export * from './Link'
-export * from './List'
-export * from './Text'
-export * from './Container'
