@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  a, button {
+    @apply transition;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply max-w-3xl mx-auto px-4;
+  }
+}
+
+.btn {
+  @apply
+  w-auto
+  inline-flex
+  items-center
+  justify-center
+  px-5
+  py-2
+  border
+  text-sm
+  border-transparent
+  rounded-lg
+  capitalize
+  text-white
+  focus:outline-none
+  disabled:opacity-50
+  disabled:cursor-not-allowed
+  transition;
+}
