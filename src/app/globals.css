@@ -11,7 +11,7 @@
 
 @layer utilities {
   .container {
-    @apply max-w-3xl mx-auto px-4;
+    @apply max-w-[732px] mx-auto px-4;
   }
 }
 

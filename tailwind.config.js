@@ -7,10 +7,13 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-poppins)', ...fontFamily.sans],
-        mono: ['var(--font-spaceMono)', ...fontFamily.mono],
+        sans: ['var(--font-main)', ...fontFamily.sans],
+        mono: ['var(--font-mono)', ...fontFamily.mono],
       },
     },
+  },
+  future: {
+    hoverOnlyWhenSupported: true,
   },
   plugins: [],
 };

@@ -1,7 +1,10 @@
-export * from './nav';
-
-export const username = 'byurhannurula';
+export const domain = 'https://byurhannurula.com';
 export const email = 'byurhan+website@pm.me';
+export const username = 'byurhannurula';
+
+export const name = 'Byurhan Nurula';
+export const description =
+  'Software engineer and IT enthusiast from Bulgaria, with a passion for front-end development';
 
 export const SOCIALS = [
   {
