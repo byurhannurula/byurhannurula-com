@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:tailwindcss/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["tailwindcss", "prettier"],
+  "rules": {
+    // PRETTIER
+    "prettier/prettier": "error",
+
+    // TAILWIND CSS
+    "tailwindcss/classnames-order": "off",
+    "tailwindcss/no-custom-classname": "off",
+    "tailwindcss/no-contradicting-classname": "off",
+    "tailwindcss/enforces-shorthand": "off"
+  },
+  "settings": {
+    "tailwindcss": {
+      "config": "./tailwind.config.ts"
+    }
+  }
+}

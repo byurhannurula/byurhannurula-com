@@ -19,12 +19,17 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   const [activeTab, setActiveTab] = useState<"overview" | "features" | "tech">("overview")
 
   return (
-    <div className="pt-24 pb-16">
+    <div className="pb-16 pt-24">
       <div className="mx-auto max-w-screen-md px-6">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }} className="mb-8">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="mb-8"
+        >
           <Link
             href="/projects"
-            className="group inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-foreground font-mono"
+            className="group inline-flex items-center gap-1 font-mono text-xs font-medium uppercase tracking-wider text-foreground"
           >
             <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
             Back to projects
@@ -37,12 +42,17 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-medium md:text-4xl font-mono">{project.title}</h1>
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground">{project.description}</p>
+          <h1 className="font-mono text-3xl font-medium md:text-4xl">{project.title}</h1>
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            {project.description}
+          </p>
 
           <div className="mt-6 flex flex-wrap gap-2">
             {project.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
+              <span
+                key={tag}
+                className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground"
+              >
                 {tag}
               </span>
             ))}
@@ -54,7 +64,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 font-mono"
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 font-mono text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
                 Live Demo
@@ -65,7 +75,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted/80 font-mono"
+                className="inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 font-mono text-xs font-medium text-foreground transition-colors hover:bg-muted/80"
               >
                 <Github className="h-3.5 w-3.5" />
                 View Code
@@ -155,7 +165,11 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             )}
 
             {activeTab === "features" && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
                 <ul className="space-y-3 text-base leading-relaxed">
                   {project.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-2">
@@ -176,10 +190,15 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
               >
                 {project.techStack.map((category) => (
                   <div key={category.name}>
-                    <h3 className="text-sm font-medium uppercase tracking-wider font-mono">{category.name}</h3>
+                    <h3 className="font-mono text-sm font-medium uppercase tracking-wider">
+                      {category.name}
+                    </h3>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {category.items.map((item) => (
-                        <span key={item} className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">
+                        <span
+                          key={item}
+                          className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground"
+                        >
                           {item}
                         </span>
                       ))}
@@ -198,8 +217,10 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             transition={{ duration: 0.8, delay: 0.5 }}
             className="mb-8"
           >
-            <h3 className="mb-4 text-sm font-medium uppercase tracking-wider font-mono">Project Gallery</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <h3 className="mb-4 font-mono text-sm font-medium uppercase tracking-wider">
+              Project Gallery
+            </h3>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {project.images.map((image, index) => (
                 <div key={index} className="overflow-hidden rounded-lg bg-muted">
                   <Image
@@ -221,16 +242,22 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-12"
         >
-          <h3 className="mb-4 text-sm font-medium uppercase tracking-wider font-mono">Other Projects</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <h3 className="mb-4 font-mono text-sm font-medium uppercase tracking-wider">
+            Other Projects
+          </h3>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {projects
               .filter((p) => p.id !== params.id)
               .slice(0, 2)
               .map((project, index) => (
                 <Link key={project.id} href={`/projects/${project.id}`} className="group block">
                   <div className="rounded-lg border bg-card p-4 transition-colors hover:border-primary">
-                    <h4 className="text-base font-medium group-hover:text-primary">{project.title}</h4>
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+                    <h4 className="text-base font-medium group-hover:text-primary">
+                      {project.title}
+                    </h4>
+                    <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                      {project.description}
+                    </p>
                   </div>
                 </Link>
               ))}
@@ -290,7 +317,8 @@ const projects = [
   {
     id: "ecommerce-system",
     title: "E-commerce System",
-    description: "A full-featured e-commerce platform with payment processing and inventory management.",
+    description:
+      "A full-featured e-commerce platform with payment processing and inventory management.",
     tags: ["Next.js", "TypeScript", "MongoDB", "Stripe", "TailwindCSS"],
     image: "/placeholder.svg?height=400&width=600",
     liveUrl: "https://example.com/ecommerce",

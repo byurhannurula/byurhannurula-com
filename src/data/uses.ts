@@ -1,14 +1,14 @@
 export interface UseItem {
-  name: string;
-  description: string;
-  image?: string;
-  url?: string;
+  name: string
+  description: string
+  image?: string
+  url?: string
 }
 
 export interface UseCategory {
-  title: string;
-  type?: "list" | "grid";
-  items: UseItem[];
+  title: string
+  type?: "list" | "grid"
+  items: UseItem[]
 }
 
 export const usesData: UseCategory[] = [
@@ -135,25 +135,21 @@ export const usesData: UseCategory[] = [
     items: [
       {
         name: "f.lux",
-        description:
-          "Adjusts the color temperature of your screen based on the time of day",
+        description: "Adjusts the color temperature of your screen based on the time of day",
       },
       {
         name: "MonitorControl",
-        description:
-          "Adjusts the color temperature of your screen based on the time of day",
+        description: "Adjusts the color temperature of your screen based on the time of day",
         url: "https://github.com/MonitorControl/MonitorControl#readme",
       },
       {
         name: "Hidden Bar",
-        description:
-          "Adjusts the color temperature of your screen based on the time of day",
+        description: "Adjusts the color temperature of your screen based on the time of day",
         url: "https://github.com/dwarvesf/hidden",
       },
       {
         name: "Stats",
-        description:
-          "Adjusts the color temperature of your screen based on the time of day",
+        description: "Adjusts the color temperature of your screen based on the time of day",
         url: "https://github.com/exelban/stats",
       },
       {
@@ -206,7 +202,6 @@ export const usesData: UseCategory[] = [
         description: "Screenshot utility",
         url: "https://shottr.cc/",
       },
-
     ],
   },
   {
@@ -290,6 +285,6 @@ export const usesData: UseCategory[] = [
       },
     ],
   },
-];
+]
 
-export const USES_LAST_UPDATED = "October 2024";
+export const USES_LAST_UPDATED = "October 2024"

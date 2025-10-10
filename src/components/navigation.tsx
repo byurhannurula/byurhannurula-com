@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+
 import { ThemeToggle } from "@/components/theme-toggle"
 import { NAVIGATION_ITEMS, SITE_CONFIG } from "@/lib/constants"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib"
 
 export function Navigation() {
   const pathname = usePathname()
@@ -24,7 +25,10 @@ export function Navigation() {
       setScrolled(currentScrollY > 10)
 
       // Hide/show navbar logic
-      if (currentScrollY > lastScrollY && currentScrollY > 70) {
+      if (currentScrollY <= 10) {
+        // Always show navbar when near the top
+        setHidden(false)
+      } else if (currentScrollY > lastScrollY && currentScrollY > 70) {
         // Scrolling down and past 70px - hide navbar
         setHidden(true)
       } else if (currentScrollY < lastScrollY - 10) {
@@ -41,22 +45,24 @@ export function Navigation() {
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full transition-all duration-300 ${scrolled ? "bg-background/60 backdrop-blur-md border-b" : ""
-        } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
+      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+        scrolled ? "border-b bg-background/60 backdrop-blur-md" : ""
+      } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <div className="mx-auto flex h-16 max-w-screen-md items-center justify-between px-6">
         <Link href="/" className="text-lg font-bold text-foreground">
-          {SITE_CONFIG.name}
+          {SITE_CONFIG.logo}
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden items-center gap-8 md:flex">
           <ul className="flex gap-8">
             {NAVIGATION_ITEMS.map((item) => (
               <li key={item.path}>
                 <Link
                   href={item.path}
-                  className={cn('relative text-xs font-semibold uppercase tracking-wider transition-colors hover:text-primary',
+                  className={cn(
+                    "relative text-xs font-semibold uppercase tracking-wider transition-colors hover:text-primary",
                     pathname === item.path ? "text-primary" : "text-muted-foreground"
                   )}
                 >
@@ -95,17 +101,18 @@ export function Navigation() {
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.2 }}
-          className="md:hidden bg-background border-b"
+          className="border-b bg-background md:hidden"
         >
-          <nav className="mx-auto max-w-screen-md flex flex-col py-6 px-6">
+          <nav className="mx-auto flex max-w-screen-md flex-col px-6 py-6">
             <ul className="flex flex-col gap-6">
               {NAVIGATION_ITEMS.map((item) => (
                 <li key={item.path}>
                   <Link
                     href={item.path}
                     onClick={() => setIsOpen(false)}
-                    className={`block text-xs font-medium uppercase tracking-wider transition-colors hover:text-primary ${pathname === item.path ? "text-primary" : "text-muted-foreground"
-                      }`}
+                    className={`block text-xs font-medium uppercase tracking-wider transition-colors hover:text-primary ${
+                      pathname === item.path ? "text-primary" : "text-muted-foreground"
+                    }`}
                   >
                     {item.name}
                   </Link>

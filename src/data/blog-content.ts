@@ -426,31 +426,31 @@ At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praese
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ![Results](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop)
-`
+`,
 }
 
 // Function to assign content based on post topic/tags
 export const getContentForPost = (slug: string, tags: string[]): string => {
-  if (tags.includes('Review') || tags.includes('Hardware') || tags.includes('Camera')) {
+  if (tags.includes("Review") || tags.includes("Hardware") || tags.includes("Camera")) {
     return blogContentTemplates.tech_review
   }
-  
-  if (tags.includes('Homelab') || tags.includes('Networking') || tags.includes('Self-hosting')) {
+
+  if (tags.includes("Homelab") || tags.includes("Networking") || tags.includes("Self-hosting")) {
     return blogContentTemplates.homelab_guide
   }
-  
-  if (tags.includes('Design') || tags.includes('3D Printing') || tags.includes('Keyboard')) {
+
+  if (tags.includes("Design") || tags.includes("3D Printing") || tags.includes("Keyboard")) {
     return blogContentTemplates.design_process
   }
-  
-  if (tags.includes('Travel') || tags.includes('LEGO') || tags.includes('Germany')) {
+
+  if (tags.includes("Travel") || tags.includes("LEGO") || tags.includes("Germany")) {
     return blogContentTemplates.travel_experience
   }
-  
-  if (tags.includes('Productivity') || tags.includes('Workflow') || tags.includes('Philosophy')) {
+
+  if (tags.includes("Productivity") || tags.includes("Workflow") || tags.includes("Philosophy")) {
     return blogContentTemplates.productivity_tips
   }
-  
+
   // Default to tech review template
   return blogContentTemplates.tech_review
 }
