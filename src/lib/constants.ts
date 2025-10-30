@@ -1,3 +1,5 @@
+import { SkillCategory } from "./types"
+
 export const SITE_CONFIG = {
   logo: "byurhan.",
   name: "Byurhan",
@@ -10,6 +12,7 @@ export const SITE_CONFIG = {
     email: "hello@byurhannurula.com",
     twitter: "@byurhannurula",
     github: "byurhannurula",
+    mastodon: "@byurhannurula",
   },
   keywords: [
     "software engineer",
@@ -28,22 +31,17 @@ export const SITE_CONFIG = {
     github: "https://github.com/byurhannurula", // Update with your actual URLs
     twitter: "https://twitter.com/byurhannurula",
     linkedin: "https://linkedin.com/in/byurhannurula",
+    mastodon: "https://mastodon.social/@byurhannurula",
     email: "mailto:hello@byurhannurula.com",
   },
 } as const
 
 export const NAVIGATION_ITEMS = [
   { name: "index", path: "/" },
-  { name: "thoughts", path: "/blog" },
-  { name: "uses", path: "/uses" },
-  { name: "about", path: "/about" },
+  // { name: "thoughts", path: "/blog" },
+  // { name: "uses", path: "/uses" },
+  // { name: "about", path: "/about" },
 ] as const
-
-// Skills data - can be easily replaced with remote data from Notion/Airtable
-export interface SkillCategory {
-  title: string
-  skills: string[]
-}
 
 export const SKILLS_DATA: SkillCategory[] = [
   {

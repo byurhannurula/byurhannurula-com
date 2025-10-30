@@ -1,15 +1,13 @@
 "use client"
 
-import { motion } from "framer-motion"
-
 import { PageWrapper } from "@/components/page-wrapper"
 import { SkillItem } from "@/components/skill-item"
-import { pageAnimations, SKILLS_DATA } from "@/lib"
+import { SKILLS_DATA } from "@/lib"
 
 export default function AboutPage() {
   return (
     <PageWrapper>
-      <motion.div {...pageAnimations.container} className="mb-12">
+      <div className="animate-fade-in mb-12">
         <div className="mb-4 flex items-center gap-2">
           <h2 className="font-mono text-xs font-medium uppercase tracking-wider text-muted-foreground">
             About
@@ -19,12 +17,9 @@ export default function AboutPage() {
           Hey, I&apos;m <span className="text-primary">Byurhan</span>.{" "}
           <span className="text-2xl">👋</span>
         </h1>
-      </motion.div>
+      </div>
 
-      <motion.div
-        {...pageAnimations.staggerContainer}
-        className="mb-12 space-y-4 text-sm leading-relaxed"
-      >
+      <div className="stagger-children mb-12 space-y-4 text-sm leading-relaxed">
         <p className="text-base">
           Software engineer with 5 years of experience building web applications.
         </p>
@@ -37,9 +32,9 @@ export default function AboutPage() {
           with the simplest solution possible, avoiding unnecessary complexity. I&apos;m always
           eager to learn new technologies and improve my skills.
         </p>
-      </motion.div>
+      </div>
 
-      <motion.div {...pageAnimations.itemWithDelay(0.2)} className="mb-12">
+      <div className="animate-fade-in mb-12" style={{ animationDelay: "0.2s" }}>
         <div className="mb-6 flex items-center gap-2">
           <h2 className="font-mono text-xs font-medium uppercase tracking-wider text-muted-foreground">
             Skills
@@ -64,7 +59,7 @@ export default function AboutPage() {
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </PageWrapper>
   )
 }

@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -68,11 +67,7 @@ export function Navigation() {
                 >
                   {item.name}
                   {pathname === item.path && (
-                    <motion.span
-                      layoutId="dot"
-                      className="absolute -bottom-1 left-1/2 block h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-primary"
-                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                    />
+                    <span className="absolute -bottom-1 left-1/2 block h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-primary" />
                   )}
                 </Link>
               </li>
@@ -96,13 +91,7 @@ export function Navigation() {
 
       {/* Mobile Navigation Menu */}
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.2 }}
-          className="border-b bg-background md:hidden"
-        >
+        <div className="animate-fade-in border-b bg-background md:hidden">
           <nav className="mx-auto flex max-w-screen-md flex-col px-6 py-6">
             <ul className="flex flex-col gap-6">
               {NAVIGATION_ITEMS.map((item) => (
@@ -120,7 +109,7 @@ export function Navigation() {
               ))}
             </ul>
           </nav>
-        </motion.div>
+        </div>
       )}
     </header>
   )

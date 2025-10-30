@@ -1,7 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
-
 interface SkillItemProps {
   name: string
   delay?: number
@@ -9,13 +7,11 @@ interface SkillItemProps {
 
 export function SkillItem({ name, delay = 0 }: SkillItemProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay }}
-      className="flex items-center gap-3"
+    <div
+      className="animate-fade-in flex items-center gap-3"
+      style={{ animationDelay: `${delay}s` }}
     >
       <span className="text-sm text-muted-foreground">{name}</span>
-    </motion.div>
+    </div>
   )
 }

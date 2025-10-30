@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { useState, useRef, type MouseEvent } from "react"
-import { motion } from "framer-motion"
 import { Send } from "lucide-react"
 
 export function NewsletterForm() {
@@ -68,13 +67,9 @@ export function NewsletterForm() {
       </p>
 
       {isSuccess ? (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-4 rounded-md bg-primary/10 p-3 text-center text-sm text-primary"
-        >
+        <div className="animate-fade-in mt-4 rounded-md bg-primary/10 p-3 text-center text-sm text-primary">
           Thanks for subscribing! Please check your email to confirm.
-        </motion.div>
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="mt-4">
           <div className="flex gap-2">
@@ -92,12 +87,9 @@ export function NewsletterForm() {
               disabled={isSubmitting}
             >
               {isSubmitting ? (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                >
+                <div className="animate-spin">
                   <Send className="h-4 w-4" />
-                </motion.div>
+                </div>
               ) : (
                 <Send className="h-4 w-4" />
               )}

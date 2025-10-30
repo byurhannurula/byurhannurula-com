@@ -16,24 +16,30 @@ export const usesData: UseCategory[] = [
     title: "Workstation",
     items: [
       {
-        name: 'MacBook Pro M1 Pro 14"',
-        description: "16GB RAM, 512GB SSD - My daily driver for development",
-        image: "/placeholder.svg",
+        name: 'MacBook Pro 14" M1 Pro',
+        description:
+          "Base model 16GB RAM, 512GB SSD - My daily driver for development still going strong",
+        image: "/assets/images/macbook-pro-14.jpg",
       },
       {
         name: "Sony WH-1000XM4",
         description: "Wireless noise-canceling headphones for focus",
-        image: "/placeholder.svg",
+        image: "/assets/images/sony-wh1000xm4.jpg",
       },
       {
         name: "iPhone 13",
         description: "Daily phone with focus on privacy and security",
-        image: "/placeholder.svg",
+        image: "/assets/images/iphone-13.jpg",
+      },
+      {
+        name: "Wireless Keyboard 84 Keys",
+        description: "Unnamed 84 keys wireless low profile mechanical keyboard for daily use",
+        image: "/assets/images/keyboard.jpg",
       },
       {
         name: "Trust Ozaa Mouse",
         description: "Reliable wireless mouse for daily use",
-        image: "/placeholder.svg",
+        image: "/assets/images/trust-ozaa.jpg",
       },
     ],
   },
@@ -43,7 +49,7 @@ export const usesData: UseCategory[] = [
       {
         name: "UniFi UCG Ultra",
         description: "Gateway router for network management and security",
-        image: "/assets/images/ucg-ultra.png",
+        image: "/assets/images/unifi-ucg-ultra.jpg",
       },
       {
         name: "UniFi U6+ Access Point",
@@ -58,12 +64,17 @@ export const usesData: UseCategory[] = [
       {
         name: "Raspberry Pi 3B+",
         description: "Secondary server for monitoring services and DNS server",
-        image: "/assets/images/raspberry-pi-3b-plus.png",
+        image: "/assets/images/raspberry-pi-3b.jpg",
+      },
+      {
+        name: "Sonoff Zigbee Dongle",
+        description: "Zigbee dongle for home automation",
+        image: "/assets/images/sonoff-zigbee-dongle.jpg",
       },
       {
         name: 'DeskPi T0 4U 10" Server Rack',
         description: "Compact server rack for organizing homelab equipment",
-        image: "/assets/images/deskpi-t0-4u-10-server-rack.png",
+        image: "/assets/images/deskpi-rackmate-t0.jpg",
       },
     ],
   },
@@ -71,9 +82,19 @@ export const usesData: UseCategory[] = [
     title: "3D Printing",
     items: [
       {
+        name: "Creality Ender 3 V2",
+        description: "Currently not in active use but was a great start to 3D printing",
+        image: "/assets/images/creality-ender-3-v2.jpg",
+      },
+      {
         name: "Bambu Lab A1 Combo",
         description: "Reliable 3D printer with AMS for multi-color printing",
         image: "/assets/images/bambu-lab-a1-combo.png",
+      },
+      {
+        name: "Creality SpacePi Plus",
+        description: "Filament dryer for 2 rolls of filament",
+        image: "/assets/images/creality-spacepi-plus.jpg",
       },
     ],
   },
@@ -84,28 +105,23 @@ export const usesData: UseCategory[] = [
     items: [
       {
         name: "VS Code",
-        description: "Primary code editor with privacy-focused extensions",
+        description: "Primary code editor",
         url: "https://code.visualstudio.com/",
       },
       {
         name: "Cursor",
-        description: "Primary code editor with privacy-focused extensions",
+        description: "Primary AI code editor",
         url: "https://www.cursor.com/",
       },
       {
-        name: "iTerm2",
-        description: "Terminal emulator with Oh My Zsh configuration",
+        name: "Windsurf",
+        description: "Another AI agentic code editor - Currently testing",
+        url: "https://windsurf.com/",
+      },
+      {
+        name: "iTerm2 w/ ZSH & Oh My Zsh",
+        description: "Main terminal with ZSH and Oh My Zsh",
         url: "https://iterm2.com/",
-      },
-      {
-        name: "ZSH",
-        description: "Terminal emulator with Oh My Zsh configuration",
-        url: "https://zsh.sourceforge.io/",
-      },
-      {
-        name: "Oh My Zsh",
-        description: "Terminal emulator with Oh My Zsh configuration",
-        url: "https://ohmyz.sh/",
       },
       {
         name: "Orbstack",
@@ -114,12 +130,12 @@ export const usesData: UseCategory[] = [
       },
       {
         name: "Docker Desktop",
-        description: "Productivity launcher and workflow automation",
+        description: "Containerization platform",
         url: "https://www.docker.com/products/docker-desktop/",
       },
       {
         name: "TablePlus",
-        description: "Package manager for macOS",
+        description: "Database management tool",
         url: "https://tableplus.com/",
       },
       {
@@ -139,17 +155,17 @@ export const usesData: UseCategory[] = [
       },
       {
         name: "MonitorControl",
-        description: "Adjusts the color temperature of your screen based on the time of day",
+        description: "Adjusts the brightness of your screens",
         url: "https://github.com/MonitorControl/MonitorControl#readme",
       },
       {
         name: "Hidden Bar",
-        description: "Adjusts the color temperature of your screen based on the time of day",
+        description: "Hide the menu bar icons",
         url: "https://github.com/dwarvesf/hidden",
       },
       {
         name: "Stats",
-        description: "Adjusts the color temperature of your screen based on the time of day",
+        description: "Monitor your system resources",
         url: "https://github.com/exelban/stats",
       },
       {
@@ -164,7 +180,7 @@ export const usesData: UseCategory[] = [
       },
       {
         name: "Zen Browser",
-        description: "Privacy-focused web browser for daily browsing",
+        description: "Another privacy-focused web browser currently testing",
         url: "https://www.zen.com/",
       },
       {
@@ -179,28 +195,28 @@ export const usesData: UseCategory[] = [
       },
       {
         name: "Notion",
-        description: "Productivity launcher and workflow automation",
+        description: "Productivity notes, tasks, and knowledge base",
         url: "https://www.notion.com/",
       },
       {
         name: "Obsidian",
-        description: "Productivity launcher and workflow automation",
+        description: "Another productivity notes, tasks, and knowledge base",
         url: "https://www.obsidian.md/",
       },
       {
         name: "AppCleaner",
-        description: "Productivity launcher and workflow automation",
+        description: "Uninstall applications and their associated files easily",
         url: "https://freemacsoft.net/appcleaner/",
       },
       {
         name: "Tiles",
-        description: "Productivity launcher and workflow automation",
+        description: "MacOS missing window management",
         url: "https://www.sempliva.com/tiles/",
       },
       {
-        name: "Shottr",
+        name: "Flameshot",
         description: "Screenshot utility",
-        url: "https://shottr.cc/",
+        url: "https://flameshot.org/",
       },
     ],
   },

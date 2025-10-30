@@ -255,5 +255,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+
+content/*
+
 memory-bank/
 .cursorrules

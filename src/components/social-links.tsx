@@ -1,5 +1,5 @@
 import { SITE_CONFIG } from "@/lib/constants"
-import { Github, Mail } from "lucide-react"
+import { Github, AtSign } from "lucide-react"
 import Link from "next/link"
 
 export function SocialLinks({ className = "" }: { className?: string }) {
@@ -19,7 +19,7 @@ export function SocialLinks({ className = "" }: { className?: string }) {
         className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-primary/80 hover:text-primary-foreground"
         aria-label="Email"
       >
-        <Mail className="size-5" />
+        <AtSign className="size-5" />
       </Link>
     </div>
   )
