@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { ThemeToggle } from "@/components/theme-toggle"
+import { GlobalSearch } from "@/components/global-search"
 import { NAVIGATION_ITEMS, SITE_CONFIG } from "@/lib/constants"
 import { cn } from "@/lib"
 
@@ -61,18 +62,23 @@ export function Navigation() {
                 <Link
                   href={item.path}
                   className={cn(
-                    "relative text-xs font-semibold uppercase tracking-wider transition-colors hover:text-primary",
+                    "group relative text-xs font-semibold uppercase tracking-wider transition-colors hover:text-primary",
                     pathname === item.path ? "text-primary" : "text-muted-foreground"
                   )}
                 >
                   {item.name}
-                  {pathname === item.path && (
-                    <span className="absolute -bottom-1 left-1/2 block h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-primary" />
-                  )}
+                  {/* Animated underline */}
+                  <span
+                    className={cn(
+                      "absolute -bottom-1 left-0 h-px bg-primary transition-all duration-300",
+                      pathname === item.path ? "w-full" : "w-0 group-hover:w-full"
+                    )}
+                  />
                 </Link>
               </li>
             ))}
           </ul>
+          <GlobalSearch />
           <ThemeToggle />
         </nav>
 

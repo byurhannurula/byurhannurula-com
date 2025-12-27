@@ -176,34 +176,3 @@
 * {
   @apply transition-colors duration-200;
 }
-
-/* Code block styling for rehype-pretty-code */
-pre {
-  @apply overflow-x-auto p-4;
-}
-
-pre > code {
-  @apply grid text-sm;
-}
-
-code[data-line-numbers] {
-  counter-reset: line;
-}
-
-code[data-line-numbers] > [data-line]::before {
-  counter-increment: line;
-  content: counter(line);
-  @apply mr-4 inline-block w-4 text-right text-muted-foreground/50;
-}
-
-code > [data-line] {
-  @apply border-l-2 border-l-transparent px-2;
-}
-
-code[data-line-numbers-max-digits="2"] > [data-line]::before {
-  width: 2rem;
-}
-
-code[data-line-numbers-max-digits="3"] > [data-line]::before {
-  width: 3rem;
-}

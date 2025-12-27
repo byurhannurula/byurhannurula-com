@@ -17,6 +17,7 @@ export interface BlogPost {
     coverImage?: string
     tags?: string[]
     toc?: boolean // Table of contents flag
+    tocStyle?: "inline" | "sidebar" // TOC display style
     [key: string]: any
   }
 }

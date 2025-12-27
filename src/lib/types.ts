@@ -1,4 +1,4 @@
 export interface SkillCategory {
   title: string
-  skills: string[]
+  skills: Array<{ name: string; logo: string | null }>
 }

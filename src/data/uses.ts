@@ -33,7 +33,7 @@ export const usesData: UseCategory[] = [
       },
       {
         name: "Wireless Keyboard 84 Keys",
-        description: "Unnamed 84 keys wireless low profile mechanical keyboard for daily use",
+        description: "84-key wireless low-profile mechanical keyboard for daily use",
         image: "/assets/images/keyboard.jpg",
       },
       {
@@ -109,14 +109,14 @@ export const usesData: UseCategory[] = [
         url: "https://code.visualstudio.com/",
       },
       {
-        name: "Cursor",
-        description: "Primary AI code editor",
-        url: "https://www.cursor.com/",
+        name: "Windsurf",
+        description: "Primary AI agentic code editor",
+        url: "https://windsurf.com/",
       },
       {
-        name: "Windsurf",
-        description: "Another AI agentic code editor - Currently testing",
-        url: "https://windsurf.com/",
+        name: "Cursor",
+        description: "Secondary AI code editor",
+        url: "https://www.cursor.com/",
       },
       {
         name: "iTerm2 w/ ZSH & Oh My Zsh",
@@ -125,7 +125,7 @@ export const usesData: UseCategory[] = [
       },
       {
         name: "Orbstack",
-        description: "Productivity launcher and workflow automation",
+        description: "Docker Desktop alternative with better performance and integration",
         url: "https://www.orbstack.dev/",
       },
       {
@@ -153,11 +153,11 @@ export const usesData: UseCategory[] = [
         name: "f.lux",
         description: "Adjusts the color temperature of your screen based on the time of day",
       },
-      {
-        name: "MonitorControl",
-        description: "Adjusts the brightness of your screens",
-        url: "https://github.com/MonitorControl/MonitorControl#readme",
-      },
+      // {
+      //   name: "MonitorControl",
+      //   description: "Adjusts the brightness of your screens",
+      //   url: "https://github.com/MonitorControl/MonitorControl#readme",
+      // },
       {
         name: "Hidden Bar",
         description: "Hide the menu bar icons",
@@ -178,11 +178,11 @@ export const usesData: UseCategory[] = [
         description: "Privacy-focused web browser for daily browsing",
         url: "https://www.brave.com/",
       },
-      {
-        name: "Zen Browser",
-        description: "Another privacy-focused web browser currently testing",
-        url: "https://www.zen.com/",
-      },
+      // {
+      //   name: "Zen Browser",
+      //   description: "Another privacy-focused web browser currently testing",
+      //   url: "https://www.zen.com/",
+      // },
       {
         name: "Bitwarden",
         description: "Password manager for secure credential storage",
@@ -221,7 +221,44 @@ export const usesData: UseCategory[] = [
     ],
   },
   {
-    title: "Other Apps or Self-Hosted Services",
+    title: "Self-Hosted Services - Infrastructure",
+    type: "list",
+    items: [
+      {
+        name: "Proxmox",
+        description: "Virtualization platform for running virtual machines and containers",
+        url: "https://www.proxmox.com/",
+      },
+      {
+        name: "Nginx Proxy Manager",
+        description: "Reverse proxy with SSL certificate management",
+        url: "https://nginxproxymanager.com/",
+      },
+      {
+        name: "AdGuard Home",
+        description: "Network-wide ad and tracker blocking",
+        url: "https://adguard.com/en/adguard-home/overview.html",
+      },
+      {
+        name: "Cloudflare Tunnel",
+        description: "Secure remote access without port forwarding",
+        url: "https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/",
+      },
+      {
+        name: "Tailscale",
+        description: "Secure VPN for remote access to homelab",
+        url: "https://tailscale.com/",
+      },
+      {
+        name: "PocketID",
+        description:
+          "Self-hosted simple and easy-to-use OIDC provider that allows to authenticate with passkeys",
+        url: "https://pocket-id.org/",
+      },
+    ],
+  },
+  {
+    title: "Self-Hosted Services - Core",
     type: "list",
     items: [
       {
@@ -230,24 +267,14 @@ export const usesData: UseCategory[] = [
         url: "https://www.home-assistant.io/",
       },
       {
-        name: "FreshRSS",
-        description: "Self-hosted RSS reader - remove social media algorithms",
-        url: "https://freshrss.org/",
-      },
-      {
         name: "Immich",
         description: "Self-hosted photo and video backup solution",
         url: "https://immich.app/",
       },
       {
         name: "Vaultwarden",
-        description: "Self-hosted password manager - backup to Bitwarden",
+        description: "Self-hosted Bitwarden-compatible password manager",
         url: "https://vaultwarden.org/",
-      },
-      {
-        name: "Cloudflare Tunnel",
-        description: "Secure remote access without port forwarding",
-        url: "https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/",
       },
       {
         name: "Navidrome",
@@ -255,34 +282,30 @@ export const usesData: UseCategory[] = [
         url: "https://navidrome.org/",
       },
       {
-        name: "AdGuard Home",
-        description: "Network-wide ad and tracker blocking",
-        url: "https://adguard.com/en/adguard-home/overview.html",
-      },
-      {
-        name: "Nginx Proxy Manager",
-        description: "Reverse proxy with SSL certificate management",
-        url: "https://nginxproxymanager.com/",
-      },
-      {
-        name: "Tailscale",
-        description: "Secure VPN for remote access to homelab",
-        url: "https://tailscale.com/",
+        name: "FreshRSS",
+        description: "Self-hosted RSS reader to escape social media algorithms",
+        url: "https://freshrss.org/",
       },
       {
         name: "Baikal",
-        description: "CalDAV and CardDAV server for calendar/contacts",
+        description: "CalDAV and CardDAV server for calendars and contacts",
         url: "https://sabre.io/baikal/",
       },
       {
-        name: "Paperless-ngx",
-        description: "Document management and OCR system",
-        url: "https://docs.paperless-ngx.com/",
+        name: "Papra",
+        description: "Open Source simple and lightweight document management platform",
+        url: "https://papra.app/",
       },
+    ],
+  },
+  {
+    title: "Self-Hosted Services - Monitoring",
+    type: "list",
+    items: [
       {
         name: "Glance Dashboard",
         description: "Personal dashboard for monitoring services",
-        url: "https://github.com/look-at-the-glance/dashboard",
+        url: "https://github.com/glanceapp/glance",
       },
       {
         name: "Uptime Kuma",
@@ -294,13 +317,8 @@ export const usesData: UseCategory[] = [
         description: "Self-hosted simple, lightweight server monitoring",
         url: "https://www.beszel.dev/",
       },
-      {
-        name: "Scrutiny",
-        description: "Self-hosted monitoring tool for HDD/SSD disk health",
-        url: "https://github.com/AnalogJ/scrutiny",
-      },
     ],
   },
 ]
 
-export const USES_LAST_UPDATED = "October 2024"
+export const USES_LAST_UPDATED = "December 2025"

@@ -9,6 +9,8 @@ export interface PostFrontmatter {
   coverImage?: string
   tags: string[]
   toc?: boolean
+  tocStyle?: "inline" | "sidebar"
+  featured?: boolean
 }
 
 export interface Post {
@@ -71,6 +73,11 @@ export function getAllPosts(): Omit<Post, "content">[] {
   return posts
 }
 
+export function getFeaturedPost(): Omit<Post, "content"> | null {
+  const posts = getAllPosts()
+  return posts.find((post) => post.frontmatter.featured) || null
+}
+
 export interface GroupedPosts {
   year: number
   months: {
@@ -79,12 +86,20 @@ export interface GroupedPosts {
   }[]
 }
 
-export function getPostsGroupedByDate(): GroupedPosts[] {
+export function getAllTags(): string[] {
   const posts = getAllPosts()
+  const allTags = posts.flatMap((post) => post.frontmatter.tags)
+  return Array.from(new Set(allTags)).sort()
+}
+
+export function getPostsGroupedByDate(tag?: string): GroupedPosts[] {
+  const posts = getAllPosts()
+
+  const filteredPosts = tag ? posts.filter((post) => post.frontmatter.tags.includes(tag)) : posts
 
   const grouped: { [year: number]: { [month: string]: Omit<Post, "content">[] } } = {}
 
-  posts.forEach((post) => {
+  filteredPosts.forEach((post) => {
     const date = new Date(post.frontmatter.date)
     const year = date.getFullYear()
     const month = date.toLocaleString("default", { month: "long" }).toUpperCase()

@@ -10,7 +10,7 @@ interface BlogPostItemProps {
 export function BlogPostItem({ post }: BlogPostItemProps) {
   return (
     <article className="relative overflow-hidden">
-      <Link href={`/blog/${post.slug}`} className="group block">
+      <Link href={`/notes/${post.slug}`} className="group block">
         <div className="flex items-center justify-between">
           <h3 className="text-lg text-foreground/90 transition-colors duration-300 ease-in-out group-hover:text-primary">
             {post.frontmatter.title}

@@ -8,11 +8,9 @@ interface MDXRendererProps {
 }
 
 const rehypePrettyCodeOptions = {
-  theme: {
-    dark: "github-dark-dimmed",
-    light: "github-light",
-  },
-  keepBackground: false,
+  theme: "one-dark-pro",
+  keepBackground: true,
+  defaultLang: "plaintext",
 }
 
 export async function MDXRenderer({ source }: MDXRendererProps) {

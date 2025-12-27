@@ -29,7 +29,7 @@
 /* Enhanced table styles */
 .prose table {
   @apply w-full border-collapse border border-border bg-card text-sm;
-  margin: 2rem 0;
+  margin: 0 0;
 }
 
 .prose th {
@@ -61,7 +61,12 @@
 /* Enhanced code block styles */
 .prose pre {
   @apply rounded-lg border bg-muted p-4 text-sm;
-  margin: 2rem 0;
+  margin: 0;
+}
+
+/* Remove prose margins from code blocks only */
+.prose .not-prose.code-block-wrapper {
+  margin: 0 !important;
 }
 
 .prose code {

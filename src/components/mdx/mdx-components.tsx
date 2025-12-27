@@ -1,29 +1,48 @@
-import { MDXImage } from "./image"
+import { MDXImage, ImageGrid, GridImage } from "./image"
 import { CodeBlock } from "./code-block"
 import { MDXLink } from "./link"
 import { Callout } from "./callout"
 import { Table, TableHead, TableBody, TableRow, TableHeader, TableCell } from "./table"
+import { cn } from "@/lib"
 
-// MDX component overrides
+const createHeading =
+  (Tag: "h1" | "h2" | "h3" | "h4", symbol = "#", symbolSize = "text-base") =>
+  ({ children, ...props }: any) => {
+    const id = typeof children === "string" ? children.toLowerCase().replace(/\s+/g, "-") : ""
+
+    return (
+      <Tag id={id} {...props} className="group relative scroll-mt-24">
+        <a href={`#${id}`} aria-label={`Link to ${children}`} className="block pr-6 no-underline">
+          <span className="text-foreground">{children}</span>
+          <span
+            className={cn(
+              `absolute top-1/2 -translate-y-1/2 translate-x-3 ${symbolSize} text-muted-foreground opacity-0 transition group-focus-within:opacity-100 group-hover:text-primary group-hover:opacity-100`
+            )}
+          >
+            {symbol}
+          </span>
+        </a>
+      </Tag>
+    )
+  }
+
 export const mdxComponents = {
-  img: ({ src, alt, caption, ...props }: any) => (
-    <MDXImage src={src} alt={alt} caption={caption} {...props} />
+  img: ({ src, alt, caption, size, ...props }: any) => (
+    <MDXImage src={src} alt={alt} caption={caption} size={size} {...props} />
   ),
 
-  // Custom components
   Callout,
+  ImageGrid,
+  GridImage,
+  MDXImage,
 
-  // Code blocks - rehype-pretty-code handles syntax highlighting
-  pre: ({ children, raw, ...props }: any) => {
-    return (
-      <CodeBlock raw={raw} {...props}>
-        {children}
-      </CodeBlock>
-    )
-  },
+  pre: ({ children, raw, ...props }: any) => (
+    <CodeBlock raw={raw} {...props}>
+      {children}
+    </CodeBlock>
+  ),
 
   code: ({ children, ...props }: any) => {
-    // Inline code (no pre wrapper)
     if (!props.className) {
       return (
         <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm" {...props}>
@@ -31,11 +50,9 @@ export const mdxComponents = {
         </code>
       )
     }
-    // Block code (inside pre, styled by rehype-pretty-code)
     return <code {...props}>{children}</code>
   },
 
-  // Tables
   table: Table,
   thead: TableHead,
   tbody: TableBody,
@@ -43,7 +60,6 @@ export const mdxComponents = {
   th: TableHeader,
   td: TableCell,
 
-  // Blockquotes
   blockquote: ({ children, ...props }: any) => (
     <blockquote
       {...props}
@@ -53,40 +69,11 @@ export const mdxComponents = {
     </blockquote>
   ),
 
-  // Links
   a: MDXLink,
 
-  // Headings with IDs for anchor links
-  h1: ({ children, ...props }: any) => {
-    const id = typeof children === "string" ? children.toLowerCase().replace(/\s+/g, "-") : ""
-    return (
-      <h1 id={id} {...props}>
-        {children}
-      </h1>
-    )
-  },
-  h2: ({ children, ...props }: any) => {
-    const id = typeof children === "string" ? children.toLowerCase().replace(/\s+/g, "-") : ""
-    return (
-      <h2 id={id} {...props}>
-        {children}
-      </h2>
-    )
-  },
-  h3: ({ children, ...props }: any) => {
-    const id = typeof children === "string" ? children.toLowerCase().replace(/\s+/g, "-") : ""
-    return (
-      <h3 id={id} {...props}>
-        {children}
-      </h3>
-    )
-  },
-  h4: ({ children, ...props }: any) => {
-    const id = typeof children === "string" ? children.toLowerCase().replace(/\s+/g, "-") : ""
-    return (
-      <h4 id={id} {...props}>
-        {children}
-      </h4>
-    )
-  },
+  // Headings
+  h1: createHeading("h1", "#", "text-lg"),
+  h2: createHeading("h2", "#", "text-base"),
+  h3: createHeading("h3", "#", "text-sm"),
+  h4: createHeading("h4", "#", "text-sm"),
 }

@@ -1,106 +1,98 @@
+import remarkGfm from "remark-gfm"
 import { NextResponse } from "next/server"
+import { serialize } from "next-mdx-remote/serialize"
+
 import { SITE_CONFIG } from "@/lib/constants"
-
-interface BlogPost {
-  slug: string
-  title: string
-  date: string
-  excerpt: string
-  tags: string[]
-}
-
-// Helper function to parse date and get proper ISO date
-const parseDate = (dateStr: string) => {
-  const currentYear = new Date().getFullYear()
-  const [day, month] = dateStr.split(" ")
-
-  const monthMap: { [key: string]: number } = {
-    Jan: 0,
-    Feb: 1,
-    Mar: 2,
-    Apr: 3,
-    May: 4,
-    Jun: 5,
-    Jul: 6,
-    Aug: 7,
-    Sep: 8,
-    Oct: 9,
-    Nov: 10,
-    Dec: 11,
-  }
-
-  const monthIndex = monthMap[month]
-  const date = new Date(currentYear, monthIndex, parseInt(day))
-
-  // If the date is in the future, assume it's from the previous year
-  if (date > new Date()) {
-    date.setFullYear(currentYear - 1)
-  }
-
-  return date
-}
+import { getAllPosts, getSinglePost } from "@/lib/posts"
 
 export async function GET() {
   try {
-    // Fetch posts from API
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/blog`
-    )
-    if (!response.ok) {
-      throw new Error("Failed to fetch posts")
-    }
-    const posts: BlogPost[] = await response.json()
+    const posts = getAllPosts().slice(0, 20)
 
-    const rssItems = posts
-      .sort((a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime())
-      .slice(0, 20) // Latest 20 posts
-      .map((post) => {
-        const pubDate = parseDate(post.date).toUTCString()
-        const postUrl = `${SITE_CONFIG.url}/blog/${post.slug}`
+    const rssItems = await Promise.all(
+      posts.map(async (post) => {
+        const fullPost = getSinglePost(post.slug)
+        const pubDate = new Date(post.frontmatter.date).toUTCString()
+        const postUrl = `${SITE_CONFIG.url}/notes/${encodeURIComponent(post.slug)}`
+
+        // Convert MDX -> HTML using next-mdx-remote
+        const mdxSource = await serialize(fullPost.content, {
+          mdxOptions: {
+            remarkPlugins: [remarkGfm],
+            rehypePlugins: [],
+          },
+        })
+
+        // mdxSource contains compiled HTML string
+        let contentHtml = mdxSource.compiledSource
+        // Replace any CDATA terminators
+        contentHtml = contentHtml.replace(/]]>/g, "]]&gt;")
 
         return `
-    <item>
-      <title><![CDATA[${post.title}]]></title>
-      <description><![CDATA[${post.excerpt}]]></description>
-      <link>${postUrl}</link>
-      <guid isPermaLink="true">${postUrl}</guid>
-      <pubDate>${pubDate}</pubDate>
-      <category><![CDATA[${post.tags.join(", ")}]]></category>
-    </item>`
+<item>
+  <title>${escapeXml(post.frontmatter.title)}</title>
+  <description><![CDATA[${post.frontmatter.excerpt}]]></description>
+  <content:encoded><![CDATA[${contentHtml}]]></content:encoded>
+  <link>${postUrl}</link>
+  <guid isPermaLink="true">${postUrl}</guid>
+  <pubDate>${pubDate}</pubDate>
+  ${post.frontmatter.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join("\n  ")}
+  <author>${escapeXml(`${SITE_CONFIG.author.email} (${SITE_CONFIG.author.name})`)}</author>
+  ${
+    post.frontmatter.coverImage
+      ? `<enclosure url="${encodeURIComponent(post.frontmatter.coverImage)}" type="image/jpeg" />`
+      : ""
+  }
+</item>`
       })
-      .join("")
+    )
 
     const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title><![CDATA[${SITE_CONFIG.title}]]></title>
-    <description><![CDATA[${SITE_CONFIG.description}]]></description>
+    <title>${escapeXml(SITE_CONFIG.title)}</title>
+    <description>${escapeXml(SITE_CONFIG.description)}</description>
     <link>${SITE_CONFIG.url}</link>
     <language>en-us</language>
-    <managingEditor>${SITE_CONFIG.author.email} (${SITE_CONFIG.author.name})</managingEditor>
-    <webMaster>${SITE_CONFIG.author.email} (${SITE_CONFIG.author.name})</webMaster>
+    <managingEditor>${escapeXml(`${SITE_CONFIG.author.email} (${SITE_CONFIG.author.name})`)}</managingEditor>
+    <webMaster>${escapeXml(`${SITE_CONFIG.author.email} (${SITE_CONFIG.author.name})`)}</webMaster>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${SITE_CONFIG.url}/rss.xml" rel="self" type="application/rss+xml"/>
-    ${rssItems}
+    <image>
+      <url>${SITE_CONFIG.url}/favicon.ico</url>
+      <title>${escapeXml(SITE_CONFIG.title)}</title>
+      <link>${SITE_CONFIG.url}</link>
+    </image>
+    ${rssItems.join("\n")}
   </channel>
 </rss>`
 
     return new NextResponse(rssXml, {
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control": "public, s-maxage=1200, stale-while-revalidate=600",
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=1800",
       },
     })
   } catch (error) {
     console.error("Error generating RSS feed:", error)
     return new NextResponse(
-      '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Error</title><description>Failed to generate RSS feed</description></channel></rss>',
+      `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Error</title><description>Failed to generate RSS feed</description></channel></rss>`,
       {
         status: 500,
-        headers: {
-          "Content-Type": "application/xml",
-        },
+        headers: { "Content-Type": "application/xml" },
       }
     )
   }
+}
+
+// Escape XML helper
+function escapeXml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;")
 }

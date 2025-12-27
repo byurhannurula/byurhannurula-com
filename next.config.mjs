@@ -1,12 +1,7 @@
-import createMDX from "@next/mdx"
-import remarkGfm from "remark-gfm"
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
-  experimental: {
-    mdxRs: false, // Disable mdxRs to use remark plugins
-  },
+  // MDX is handled by next-mdx-remote/rsc in components/mdx/mdx-renderer.tsx
+  // No need for @next/mdx loader - it causes Turbopack serialization issues
   images: {
     remotePatterns: [
       {
@@ -17,12 +12,4 @@ const nextConfig = {
   },
 }
 
-const withMDX = createMDX({
-  options: {
-    remarkPlugins: [remarkGfm], // Enable GitHub Flavored Markdown (tables, etc.)
-    rehypePlugins: [],
-  },
-})
-
-// Wrap MDX and Next.js config with each other
-export default withMDX(nextConfig)
+export default nextConfig

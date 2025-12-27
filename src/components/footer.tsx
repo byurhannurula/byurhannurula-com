@@ -1,26 +1,55 @@
 import Link from "next/link"
-import { Rss } from "lucide-react"
+import { Github, Mail, Rss } from "lucide-react"
 
-import { SocialLinks } from "@/components/social-links"
 import { SITE_CONFIG } from "@/lib"
+import { MastodonIcon } from "@/components/icons"
 
 export function Footer() {
   return (
-    <footer className="border-t bg-background">
-      <div className="container mx-auto flex max-w-screen-md flex-col items-center justify-between gap-4 px-6 py-3 md:flex-row">
-        <p className="text-sm text-muted-foreground">
-          {SITE_CONFIG.name} &copy; {new Date().getFullYear()}
-        </p>
+    <footer className="relative bg-background">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      <div className="container mx-auto max-w-screen-md px-6 py-8">
+        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+          {/* Social Icons */}
+          <div className="flex items-center gap-4">
+            <Link
+              href={SITE_CONFIG.social.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+              aria-label="GitHub"
+            >
+              <Github className="size-4" />
+            </Link>
+            <Link
+              href={SITE_CONFIG.social.mastodon}
+              target="_blank"
+              rel="me noopener noreferrer"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+              aria-label="Mastodon"
+            >
+              <MastodonIcon className="size-4" />
+            </Link>
+            <Link
+              href={SITE_CONFIG.social.email}
+              className="text-muted-foreground transition-colors hover:text-foreground"
+              aria-label="Email"
+            >
+              <Mail className="size-4" />
+            </Link>
+            <Link
+              href="/rss.xml"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+              aria-label="RSS"
+            >
+              <Rss className="size-4" />
+            </Link>
+          </div>
 
-        <div className="flex items-center gap-4">
-          <SocialLinks />
-          <Link
-            href="/rss.xml"
-            className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-primary/80 hover:text-primary-foreground"
-            aria-label="RSS"
-          >
-            <Rss className="size-5" />
-          </Link>
+          {/* Copyright */}
+          <p className="text-xs text-muted-foreground">
+            &copy; {new Date().getFullYear()} {SITE_CONFIG.name}
+          </p>
         </div>
       </div>
     </footer>

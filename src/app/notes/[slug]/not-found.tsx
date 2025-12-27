@@ -9,7 +9,7 @@ export default function NotFound() {
       <div className="mx-auto max-w-screen-md px-6">
         <div className="animate-fade-in mb-8">
           <Link
-            href="/blog"
+            href="/notes"
             className="group inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-foreground transition-colors hover:text-primary"
           >
             <ArrowLeft className="size-3 transition-transform group-hover:-translate-x-1" />
@@ -29,7 +29,7 @@ export default function NotFound() {
             </p>
           </div>
           <Link
-            href="/blog"
+            href="/notes"
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Back to Blog

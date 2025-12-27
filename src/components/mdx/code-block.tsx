@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Copy, Check } from "lucide-react"
 
 interface CodeBlockProps {
@@ -12,11 +12,23 @@ interface CodeBlockProps {
 
 export function CodeBlock({ children, raw, ...props }: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
-  const language = props["data-language"] || ""
+  const codeRef = useRef<HTMLPreElement>(null)
 
   const copyToClipboard = async () => {
     try {
-      const textToCopy = raw || (typeof children === "string" ? children : "")
+      let textToCopy = raw || ""
+
+      if (!textToCopy && codeRef.current) {
+        const codeElement = codeRef.current.querySelector("code")
+        if (codeElement) {
+          textToCopy = codeElement.textContent || ""
+        }
+      }
+
+      if (!textToCopy && typeof children === "string") {
+        textToCopy = children
+      }
+
       await navigator.clipboard.writeText(textToCopy)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
@@ -26,28 +38,34 @@ export function CodeBlock({ children, raw, ...props }: CodeBlockProps) {
   }
 
   return (
-    <div className="not-prose group relative my-6">
+    <div className="not-prose code-block-wrapper group relative">
       {/* Copy button */}
       <button
         onClick={copyToClipboard}
-        className="absolute right-2 top-2 z-10 flex items-center gap-1.5 rounded-md bg-muted/80 px-2 py-1 text-xs opacity-0 transition-opacity hover:bg-muted group-hover:opacity-100"
+        className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded bg-[#313244]/80 px-2 py-1 text-xs opacity-0 transition-opacity hover:bg-[#313244] group-hover:opacity-100"
         aria-label="Copy code"
       >
         {copied ? (
           <>
-            <Check className="h-3 w-3 text-green-600" />
-            <span className="text-green-600">Copied!</span>
+            <Check className="h-3 w-3 text-green-500" />
+            <span className="text-green-500">Copied!</span>
           </>
         ) : (
           <>
-            <Copy className="h-3 w-3" />
-            <span>Copy</span>
+            <Copy className="h-3 w-3 text-muted-foreground" />
+            <span className="text-muted-foreground">Copy</span>
           </>
         )}
       </button>
 
-      {/* Code content - styled by rehype-pretty-code */}
-      <div className="overflow-x-auto rounded-lg border border-border bg-muted/30">{children}</div>
+      {/* Code content - rehype-pretty-code handles title via figure/figcaption */}
+      <pre
+        ref={codeRef}
+        className="overflow-x-auto rounded-lg border border-border/50 bg-[#1e1e2e] py-4"
+        {...props}
+      >
+        {children}
+      </pre>
     </div>
   )
 }

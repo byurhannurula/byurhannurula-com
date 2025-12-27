@@ -1,0 +1,81 @@
+/* Code block styling for rehype-pretty-code */
+pre {
+  @apply overflow-x-auto rounded-lg py-4;
+}
+
+pre > code {
+  @apply grid text-[13px] leading-relaxed;
+  counter-reset: line;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+pre code span {
+  font-family: inherit;
+}
+
+/* Line numbers - shown when showLineNumbers is used */
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1rem;
+  margin-right: 1.5rem;
+  text-align: right;
+  color: hsl(var(--muted-foreground) / 0.4);
+}
+
+code[data-line-numbers-max-digits="2"] > [data-line]::before {
+  width: 2rem;
+}
+
+code[data-line-numbers-max-digits="3"] > [data-line]::before {
+  width: 3rem;
+}
+
+/* Line padding - only for code blocks with line numbers */
+code[data-line-numbers] > [data-line] {
+  padding-left: 0;
+  padding-right: 1rem;
+  border-left: 2px solid transparent;
+}
+
+/* Line padding - for code blocks without line numbers */
+code:not([data-line-numbers]) > [data-line] {
+  border-left: 2px solid transparent;
+}
+
+/* Code block figure wrapper from rehype-pretty-code */
+[data-rehype-pretty-code-figure] {
+  @apply my-4;
+}
+
+/* Code block title */
+[data-rehype-pretty-code-title] {
+  @apply rounded-t-lg border border-b-0 border-border/50 bg-[#222] px-4 py-2 text-xs text-muted-foreground;
+}
+
+/* Pre following a title should have no top border-radius */
+[data-rehype-pretty-code-title] + pre {
+  @apply rounded-t-none border-t-0;
+}
+
+/* Fix for prose context - only apply rounded-t-none when title exists */
+.prose [data-rehype-pretty-code-figure]:has([data-rehype-pretty-code-title]) pre {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+/* Code block caption */
+[data-rehype-pretty-code-caption] {
+  @apply mt-2 text-center text-xs text-muted-foreground;
+}
+
+/* Highlighted lines */
+[data-highlighted-line] {
+  @apply border-l-primary bg-primary/10;
+}
+
+/* Highlighted chars */
+[data-highlighted-chars] {
+  @apply rounded bg-primary/20 px-1;
+}

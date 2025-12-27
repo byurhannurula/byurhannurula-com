@@ -2,8 +2,8 @@ import { cn } from "@/lib/utils"
 
 export function Table({ children, className, ...props }: any) {
   return (
-    <div className="not-prose my-8 overflow-x-auto rounded-lg border border-border">
-      <table {...props} className={cn("w-full border-collapse", className)}>
+    <div className="not-prose my-6 overflow-x-auto rounded-lg border border-border">
+      <table {...props} className={cn("w-full border-collapse text-sm", className)}>
         {children}
       </table>
     </div>
@@ -12,7 +12,7 @@ export function Table({ children, className, ...props }: any) {
 
 export function TableHead({ children, className, ...props }: any) {
   return (
-    <thead {...props} className={cn("border-b-2 border-border bg-muted/50", className)}>
+    <thead {...props} className={cn("bg-muted/50", className)}>
       {children}
     </thead>
   )
@@ -20,7 +20,7 @@ export function TableHead({ children, className, ...props }: any) {
 
 export function TableBody({ children, className, ...props }: any) {
   return (
-    <tbody {...props} className={className}>
+    <tbody {...props} className={cn("[&>tr:last-child]:border-0", className)}>
       {children}
     </tbody>
   )
@@ -39,7 +39,10 @@ export function TableRow({ children, className, ...props }: any) {
 
 export function TableHeader({ children, className, ...props }: any) {
   return (
-    <th {...props} className={cn("px-4 py-3 text-left text-sm font-semibold", className)}>
+    <th
+      {...props}
+      className={cn("px-4 py-3 text-left text-sm font-semibold text-foreground", className)}
+    >
       {children}
     </th>
   )
@@ -47,7 +50,7 @@ export function TableHeader({ children, className, ...props }: any) {
 
 export function TableCell({ children, className, ...props }: any) {
   return (
-    <td {...props} className={cn("px-4 py-3 text-sm", className)}>
+    <td {...props} className={cn("px-4 py-3 text-sm text-muted-foreground", className)}>
       {children}
     </td>
   )

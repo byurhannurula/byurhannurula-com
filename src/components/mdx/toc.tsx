@@ -17,26 +17,35 @@ export function TOC({ className = "" }: TOCProps) {
   const [activeId, setActiveId] = useState<string>("")
 
   useEffect(() => {
-    // Extract headings from the page
-    const headings = document.querySelectorAll("h2, h3, h4")
+    // Only get h2 headings within article element with data-mdx-content attribute
+    const articleContent = document.querySelector("[data-mdx-content]")
+    if (!articleContent) return
+
+    // Only select direct h2 children or h2 within the prose content
+    const headings = articleContent.querySelectorAll("h2[id], h3[id]")
     const items: TOCItem[] = []
 
     headings.forEach((heading) => {
-      const id = heading.id || heading.textContent?.toLowerCase().replace(/\s+/g, "-") || ""
-      if (!heading.id) {
-        heading.id = id
-      }
+      // Skip if heading is inside footer or navigation
+      if (heading.closest("footer") || heading.closest("nav")) return
+
+      const id = heading.id
+      if (!id) return
+
+      // Get the text content from the span inside the anchor (our heading structure)
+      const textSpan = heading.querySelector("span")
+      const text = textSpan?.textContent.trim() || ""
+      const level = Number(heading.tagName.replace("H", ""))
 
       items.push({
         id,
-        text: heading.textContent || "",
-        level: parseInt(heading.tagName.charAt(1)),
+        text,
+        level,
       })
     })
 
     setTocItems(items)
 
-    // Intersection Observer for active heading
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -45,10 +54,14 @@ export function TOC({ className = "" }: TOCProps) {
           }
         })
       },
-      { rootMargin: "-80px 0px -80% 0px" }
+      { rootMargin: "-100px 0px -70% 0px" }
     )
 
-    headings.forEach((heading) => observer.observe(heading))
+    headings.forEach((heading) => {
+      if (!heading.closest("footer") && !heading.closest("nav")) {
+        observer.observe(heading)
+      }
+    })
 
     return () => observer.disconnect()
   }, [])

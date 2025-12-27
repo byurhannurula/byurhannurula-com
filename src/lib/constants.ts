@@ -28,44 +28,72 @@ export const SITE_CONFIG = {
     "nextjs",
   ],
   social: {
-    github: "https://github.com/byurhannurula", // Update with your actual URLs
+    github: "https://github.com/byurhannurula",
     twitter: "https://twitter.com/byurhannurula",
     linkedin: "https://linkedin.com/in/byurhannurula",
     mastodon: "https://mastodon.social/@byurhannurula",
+    instagram: "https://instagram.com/byurhannurula",
     email: "mailto:hello@byurhannurula.com",
   },
 } as const
 
 export const NAVIGATION_ITEMS = [
   { name: "index", path: "/" },
-  // { name: "thoughts", path: "/blog" },
-  // { name: "uses", path: "/uses" },
-  // { name: "about", path: "/about" },
+  { name: "notes", path: "/notes" },
+  // { name: "projects", path: "/projects" },
+  { name: "uses", path: "/uses" },
+  { name: "about", path: "/about" },
 ] as const
 
 export const SKILLS_DATA: SkillCategory[] = [
   {
     title: "Frontend",
     skills: [
-      "HTML/CSS",
-      "React",
-      "Next.js",
-      "TypeScript",
-      "JavaScript",
-      "TailwindCSS",
-      "Shadcn UI",
+      { name: "HTML/CSS", logo: "Html" },
+      { name: "React", logo: "ReactIcon" },
+      { name: "Next.js", logo: "NextJs" },
+      { name: "TypeScript", logo: "TypeScript" },
+      { name: "JavaScript", logo: "JavaScript" },
+      { name: "TailwindCSS", logo: "TailwindCss" },
+      { name: "Shadcn UI", logo: "Shadcn" },
     ],
   },
   {
     title: "Backend",
-    skills: ["Node.js", "Express", "MongoDB", "MySQL", "PostgreSQL", "REST APIs", "GraphQL"],
+    skills: [
+      { name: "Bun", logo: "Bun" },
+      { name: "Node.js", logo: "NodeJs" },
+      { name: "Express", logo: "ExpressJs" },
+      { name: "MongoDB", logo: "MongoDB" },
+      { name: "MySQL", logo: null },
+      { name: "PostgreSQL", logo: "PostgreSQL" },
+      { name: "REST APIs", logo: null },
+      { name: "GraphQL", logo: null },
+    ],
   },
   {
     title: "Applications",
-    skills: ["Figma", "Postman", "Notion"],
+    skills: [
+      { name: "Figma", logo: "Figma" },
+      { name: "Postman", logo: "Postman" },
+      { name: "Notion", logo: null },
+    ],
   },
   {
     title: "Tools & Others",
-    skills: ["Git", "Docker", "Nginx/Apache", "Linux", "CI/CD"],
+    skills: [
+      { name: "Docker", logo: null },
+      { name: "Nginx", logo: null },
+      { name: "Apache", logo: null },
+      { name: "Linux", logo: null },
+      { name: "CI/CD", logo: null },
+      { name: "Git", logo: null },
+      { name: "GitHub", logo: "Github" },
+      { name: "GitLab", logo: null },
+      { name: "AWS", logo: "AWS" },
+      { name: "Vercel", logo: "Vercel" },
+      { name: "Netlify", logo: "Netlify" },
+      { name: "Cloudflare", logo: null },
+    ],
   },
 ] as const
