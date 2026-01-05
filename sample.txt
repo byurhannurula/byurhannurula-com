@@ -1,0 +1,5 @@
+bg-white dark:bg-zinc-900
+text-zinc-600 dark:text-zinc-400
+
+light mode texts zinc - 100, 300, 400, 600, 900
+dark mode texts zinc - 100, 300

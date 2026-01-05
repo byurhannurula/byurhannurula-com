@@ -3,10 +3,12 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-import { description, domain, name } from '@/constants';
+import { cn } from '@/utils';
+import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
-import { ThemeProvider } from '@/components/theme-provider';
 import { MainWrapper } from '@/components/wrapper';
+import { description, domain, name } from '@/constants';
+import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: {
@@ -59,8 +61,12 @@ const inter = Inter({
 
 function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} font-sans`}>
-      <body className="flex flex-col bg-white text-zinc-700 antialiased dark:bg-zinc-900 dark:text-zinc-400">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(inter.variable, 'font-sans')}
+    >
+      <body>
         <ThemeProvider
           themes={['light', 'dark']}
           defaultTheme="system"
@@ -68,7 +74,8 @@ function RootLayout({ children }: { children: ReactNode }) {
           enableSystem
         >
           <Header />
-          <MainWrapper className="mt-24 grow">{children}</MainWrapper>
+          <MainWrapper className="mt-16 grow">{children}</MainWrapper>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
