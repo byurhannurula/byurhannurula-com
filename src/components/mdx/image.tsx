@@ -1,21 +1,24 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Lightbox from "yet-another-react-lightbox"
-import "yet-another-react-lightbox/styles.css"
+import Image from "next/image";
+import { useCallback, useState } from "react";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
-type ImageSize = "default" | "wide" | "wider" | "full"
+import { cn } from "@/lib/utils";
+
+type ImageSize = "default" | "wide" | "wider" | "full";
 
 interface MDXImageProps {
-  src: string
-  alt: string
-  caption?: string
-  className?: string
-  width?: number
-  height?: number
-  size?: ImageSize
-  priority?: boolean
+  src: string;
+  alt: string;
+  caption?: string;
+  className?: string;
+  width?: number;
+  height?: number;
+  size?: ImageSize;
+  priority?: boolean;
+  blurDataURL?: string;
 }
 
 const sizeClasses: Record<ImageSize, string> = {
@@ -23,7 +26,7 @@ const sizeClasses: Record<ImageSize, string> = {
   wide: "md:-mx-16 lg:-mx-24",
   wider: "relative left-1/2 right-1/2 -ml-[42vw] -mr-[42vw] w-[84vw] max-w-6xl",
   full: "relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen !rounded-none",
-}
+};
 
 export function MDXImage({
   src,
@@ -34,15 +37,26 @@ export function MDXImage({
   height,
   size = "default",
   priority = false,
+  blurDataURL,
 }: MDXImageProps) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
 
   return (
     <>
-      <span className={`not-prose my-6 block ${sizeClasses[size]} ${className}`}>
+      <span
+        className={cn("not-prose my-6 block", sizeClasses[size], className)}
+      >
         <span className="relative block">
           <span
-            className={`relative block cursor-zoom-in overflow-hidden transition-opacity hover:opacity-90 ${size === "full" ? "" : "rounded-lg"}`}
+            className={cn(
+              "relative block cursor-zoom-in overflow-hidden transition-opacity hover:opacity-90",
+              size === "full" ? "" : "rounded-lg"
+            )}
             onClick={() => setIsOpen(true)}
           >
             <Image
@@ -53,20 +67,32 @@ export function MDXImage({
               sizes={
                 size === "full"
                   ? "100vw"
-                  : size === "wide"
-                    ? "(max-width: 1024px) 100vw, 1024px"
-                    : "(max-width: 768px) 100vw, 768px"
+                  : size === "wider"
+                    ? "(max-width: 1536px) 84vw, 1536px"
+                    : size === "wide"
+                      ? "(max-width: 1024px) 100vw, 1024px"
+                      : "(max-width: 768px) 100vw, 768px"
               }
-              className="h-auto w-full"
+              className={cn(
+                "h-auto w-full transition-all duration-500",
+                !(isLoaded || priority) && "scale-105 blur-lg",
+                isLoaded && "scale-100 blur-0"
+              )}
               priority={priority}
               loading={priority ? "eager" : "lazy"}
+              placeholder={blurDataURL ? "blur" : "empty"}
+              blurDataURL={blurDataURL}
+              onLoad={handleLoad}
             />
           </span>
 
           {/* Caption below image */}
           {(caption || alt) && (
             <span
-              className={`mt-3 block text-center text-xs text-muted-foreground ${size === "full" ? "px-6" : ""}`}
+              className={cn(
+                "mt-3 block text-center text-muted-foreground text-xs",
+                size === "full" && "px-6"
+              )}
             >
               {caption || alt}
             </span>
@@ -86,17 +112,17 @@ export function MDXImage({
         }}
       />
     </>
-  )
+  );
 }
 
 // Image Grid component for multiple images
-type GridSize = "default" | "wide" | "wider" | "full"
+type GridSize = "default" | "wide" | "wider" | "full";
 
 interface ImageGridProps {
-  children: React.ReactNode
-  columns?: 2 | 3 | 4
-  size?: GridSize
-  className?: string
+  children: React.ReactNode;
+  columns?: 2 | 3 | 4;
+  size?: GridSize;
+  className?: string;
 }
 
 const gridSizeClasses: Record<GridSize, string> = {
@@ -104,7 +130,7 @@ const gridSizeClasses: Record<GridSize, string> = {
   wide: "md:-mx-16 lg:-mx-24",
   wider: "relative left-1/2 right-1/2 -ml-[42vw] -mr-[42vw] w-[84vw] max-w-6xl",
   full: "relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen px-6",
-}
+};
 
 export function ImageGrid({
   children,
@@ -116,7 +142,7 @@ export function ImageGrid({
     2: "grid-cols-1 sm:grid-cols-2",
     3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
     4: "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4",
-  }
+  };
 
   return (
     <div
@@ -124,29 +150,43 @@ export function ImageGrid({
     >
       {children}
     </div>
-  )
+  );
 }
 
 // Grid Item - simplified image for use in grids
 interface GridImageProps {
-  src: string
-  alt: string
-  aspectRatio?: "square" | "video" | "auto"
+  src: string;
+  alt: string;
+  aspectRatio?: "square" | "video" | "auto";
+  blurDataURL?: string;
 }
 
-export function GridImage({ src, alt, aspectRatio = "auto" }: GridImageProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export function GridImage({
+  src,
+  alt,
+  aspectRatio = "auto",
+  blurDataURL,
+}: GridImageProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const aspectClasses = {
     square: "aspect-square",
     video: "aspect-video",
     auto: "",
-  }
+  };
+
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
 
   return (
     <>
       <div
-        className={`cursor-zoom-in overflow-hidden rounded-lg ${aspectClasses[aspectRatio]}`}
+        className={cn(
+          "cursor-zoom-in overflow-hidden rounded-lg",
+          aspectClasses[aspectRatio]
+        )}
         onClick={() => setIsOpen(true)}
       >
         <Image
@@ -154,7 +194,14 @@ export function GridImage({ src, alt, aspectRatio = "auto" }: GridImageProps) {
           alt={alt}
           width={600}
           height={400}
-          className="h-full w-full object-cover transition-transform hover:scale-105"
+          className={cn(
+            "h-full w-full object-cover transition-all duration-500",
+            !isLoaded && "scale-105 blur-lg",
+            isLoaded && "scale-100 blur-0 hover:scale-105"
+          )}
+          placeholder={blurDataURL ? "blur" : "empty"}
+          blurDataURL={blurDataURL}
+          onLoad={handleLoad}
         />
       </div>
       <Lightbox
@@ -168,5 +215,5 @@ export function GridImage({ src, alt, aspectRatio = "auto" }: GridImageProps) {
         }}
       />
     </>
-  )
+  );
 }

@@ -1,31 +1,34 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { ExternalLink, Github } from "lucide-react"
+import { ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
-import { PageWrapper } from "@/components/page-wrapper"
+import { PageWrapper } from "@/components/page-wrapper";
 
-type ProjectCategory = "all" | "dev" | "side" | "homelab" | "3dprint"
+type ProjectCategory = "all" | "dev" | "side" | "homelab" | "3dprint";
 
 interface Project {
-  id: string
-  title: string
-  description: string
-  image?: string
-  category: ProjectCategory
-  tags: string[]
-  github?: string
-  url?: string
-  featured?: boolean
+  id: string;
+  title: string;
+  description: string;
+  image?: string;
+  category: ProjectCategory;
+  tags: string[];
+  github?: string;
+  url?: string;
+  featured?: boolean;
 }
 
 export default function ProjectsPage() {
-  const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>("all")
+  const [selectedCategory, setSelectedCategory] =
+    useState<ProjectCategory>("all");
 
   const filteredProjects =
-    selectedCategory === "all" ? projects : projects.filter((p) => p.category === selectedCategory)
+    selectedCategory === "all"
+      ? projects
+      : projects.filter((p) => p.category === selectedCategory);
 
   const categories: { key: ProjectCategory; label: string }[] = [
     { key: "all", label: "All" },
@@ -33,12 +36,12 @@ export default function ProjectsPage() {
     { key: "side", label: "Side Projects" },
     { key: "homelab", label: "Homelab" },
     { key: "3dprint", label: "3D Printing" },
-  ]
+  ];
 
   return (
     <PageWrapper>
-      <div className="animate-fade-in mb-12">
-        <h1 className="text-2xl font-medium">Projects</h1>
+      <div className="mb-12 animate-fade-in">
+        <h1 className="font-medium text-2xl">Projects</h1>
         <p className="mt-2 text-muted-foreground">
           Things I&apos;ve built, tinkered with, and experimented on.
         </p>
@@ -48,9 +51,10 @@ export default function ProjectsPage() {
       <div className="mb-10 flex flex-wrap gap-2">
         {categories.map((cat) => (
           <button
+            type="button"
             key={cat.key}
             onClick={() => setSelectedCategory(cat.key)}
-            className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+            className={`rounded-full px-4 py-1.5 font-medium text-xs transition-colors ${
               selectedCategory === cat.key
                 ? "bg-primary text-primary-foreground"
                 : "bg-muted text-muted-foreground hover:text-foreground"
@@ -69,10 +73,12 @@ export default function ProjectsPage() {
       </div>
 
       {filteredProjects.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">No projects in this category yet.</p>
+        <p className="py-12 text-center text-muted-foreground">
+          No projects in this category yet.
+        </p>
       )}
     </PageWrapper>
-  )
+  );
 }
 
 function ProjectCard({ project }: { project: Project }) {
@@ -100,14 +106,16 @@ function ProjectCard({ project }: { project: Project }) {
 
       {/* Content */}
       <div className="absolute inset-x-0 bottom-0 p-4">
-        <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-primary">
+        <div className="mb-1 font-medium text-[10px] text-primary uppercase tracking-wider">
           {project.category === "dev" && "Development"}
           {project.category === "side" && "Side Project"}
           {project.category === "homelab" && "Homelab"}
           {project.category === "3dprint" && "3D Printing"}
         </div>
         <h3 className="mb-1 font-medium">{project.title}</h3>
-        <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">{project.description}</p>
+        <p className="mb-3 line-clamp-2 text-muted-foreground text-sm">
+          {project.description}
+        </p>
 
         {/* Tags */}
         <div className="mb-3 flex flex-wrap gap-1.5">
@@ -128,7 +136,7 @@ function ProjectCard({ project }: { project: Project }) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-foreground"
             >
               <Github className="size-3.5" />
               <span>Code</span>
@@ -139,7 +147,7 @@ function ProjectCard({ project }: { project: Project }) {
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-foreground"
             >
               <ExternalLink className="size-3.5" />
               <span>View</span>
@@ -148,7 +156,7 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 // Project data - replace with your actual projects
@@ -167,7 +175,8 @@ const projects: Project[] = [
   {
     id: "recheck",
     title: "ReCheck Platform",
-    description: "Blockchain-based document verification and secure data exchange platform.",
+    description:
+      "Blockchain-based document verification and secure data exchange platform.",
     category: "dev",
     tags: ["React", "TypeScript", "Blockchain", "Web3"],
   },
@@ -176,7 +185,8 @@ const projects: Project[] = [
   {
     id: "dotfiles",
     title: "Dotfiles",
-    description: "My personal dotfiles for macOS - Neovim, Zsh, Tmux, and more.",
+    description:
+      "My personal dotfiles for macOS - Neovim, Zsh, Tmux, and more.",
     category: "side",
     tags: ["Shell", "Neovim", "Lua", "Zsh"],
     github: "https://github.com/byurhannurula/dotfiles",
@@ -194,7 +204,8 @@ const projects: Project[] = [
   {
     id: "pihole",
     title: "Pi-hole DNS",
-    description: "Network-wide ad blocking and local DNS resolution for all devices.",
+    description:
+      "Network-wide ad blocking and local DNS resolution for all devices.",
     category: "homelab",
     tags: ["Pi-hole", "DNS", "Raspberry Pi", "Networking"],
   },
@@ -203,7 +214,8 @@ const projects: Project[] = [
   {
     id: "desk-organizer",
     title: "Desk Organizer",
-    description: "Custom designed desk organizer for cables, pens, and small items.",
+    description:
+      "Custom designed desk organizer for cables, pens, and small items.",
     category: "3dprint",
     tags: ["Fusion 360", "PLA", "Functional"],
   },
@@ -214,4 +226,4 @@ const projects: Project[] = [
     category: "3dprint",
     tags: ["Fusion 360", "PETG", "Functional"],
   },
-]
+];

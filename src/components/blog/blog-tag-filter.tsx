@@ -1,46 +1,47 @@
-"use client"
+"use client";
 
-import { useSearchParams, useRouter, usePathname } from "next/navigation"
-import { X } from "lucide-react"
-import { cn } from "@/lib"
+import { X } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { cn } from "@/lib";
 
 interface BlogTagFilterProps {
-  allTags: string[]
-  selectedTag: string | null
+  allTags: string[];
+  selectedTag: string | null;
 }
 
 export function BlogTagFilter({ allTags, selectedTag }: BlogTagFilterProps) {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const pathname = usePathname()
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleTagClick = (tag: string) => {
-    const params = new URLSearchParams(searchParams)
+    const params = new URLSearchParams(searchParams);
 
     if (selectedTag === tag) {
-      params.delete("tag")
+      params.delete("tag");
     } else {
-      params.set("tag", tag)
+      params.set("tag", tag);
     }
 
-    router.push(`${pathname}?${params.toString()}`, { scroll: false })
-  }
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   const clearFilter = () => {
-    router.push(pathname, { scroll: false })
-  }
+    router.push(pathname, { scroll: false });
+  };
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+      <span className="font-medium text-muted-foreground text-xs uppercase tracking-wider">
         Filter:
       </span>
 
       <div className="flex flex-wrap gap-2">
         <button
+          type="button"
           onClick={() => router.push(pathname, { scroll: false })}
           className={cn(
-            "rounded-full px-3 py-1 text-xs font-medium transition-colors",
+            "rounded-full px-3 py-1 font-medium text-xs transition-colors",
             selectedTag === null
               ? "bg-primary text-primary-foreground"
               : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
@@ -51,10 +52,11 @@ export function BlogTagFilter({ allTags, selectedTag }: BlogTagFilterProps) {
 
         {allTags.map((tag) => (
           <button
+            type="button"
             key={tag}
             onClick={() => handleTagClick(tag)}
             className={cn(
-              "rounded-full px-3 py-1 text-xs font-medium transition-colors",
+              "rounded-full px-3 py-1 font-medium text-xs transition-colors",
               selectedTag === tag
                 ? "bg-primary text-primary-foreground"
                 : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
@@ -67,13 +69,14 @@ export function BlogTagFilter({ allTags, selectedTag }: BlogTagFilterProps) {
 
       {selectedTag && (
         <button
+          type="button"
           onClick={clearFilter}
-          className="flex items-center gap-1 rounded-full px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-1 rounded-full px-2 py-1 text-muted-foreground text-xs hover:text-foreground"
         >
           <X className="h-3 w-3" />
           Clear
         </button>
       )}
     </div>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-import { ExternalLink } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { ExternalLink } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface MDXLinkProps {
-  href: string
-  children: React.ReactNode
-  className?: string
+  href: string;
+  children: React.ReactNode;
+  className?: string;
 }
 
 export function MDXLink({ href, children, className }: MDXLinkProps) {
-  const isExternal = href?.startsWith("http")
-  const isAnchor = href?.startsWith("#")
+  const isExternal = href?.startsWith("http");
+  const _isAnchor = href?.startsWith("#");
 
   return (
     <a
@@ -26,5 +26,5 @@ export function MDXLink({ href, children, className }: MDXLinkProps) {
       {children}
       {isExternal && <ExternalLink className="inline h-3 w-3" />}
     </a>
-  )
+  );
 }

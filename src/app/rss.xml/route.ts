@@ -1,19 +1,19 @@
-import remarkGfm from "remark-gfm"
-import { NextResponse } from "next/server"
-import { serialize } from "next-mdx-remote/serialize"
+import { NextResponse } from "next/server";
+import { serialize } from "next-mdx-remote/serialize";
+import remarkGfm from "remark-gfm";
 
-import { SITE_CONFIG } from "@/lib/constants"
-import { getAllPosts, getSinglePost } from "@/lib/posts"
+import { SITE_CONFIG } from "@/config";
+import { getAllPosts, getSinglePost } from "@/lib/server";
 
 export async function GET() {
   try {
-    const posts = getAllPosts().slice(0, 20)
+    const posts = getAllPosts().slice(0, 20);
 
     const rssItems = await Promise.all(
       posts.map(async (post) => {
-        const fullPost = getSinglePost(post.slug)
-        const pubDate = new Date(post.frontmatter.date).toUTCString()
-        const postUrl = `${SITE_CONFIG.url}/notes/${encodeURIComponent(post.slug)}`
+        const fullPost = getSinglePost(post.slug);
+        const pubDate = new Date(post.frontmatter.date).toUTCString();
+        const postUrl = `${SITE_CONFIG.url}/notes/${encodeURIComponent(post.slug)}`;
 
         // Convert MDX -> HTML using next-mdx-remote
         const mdxSource = await serialize(fullPost.content, {
@@ -21,12 +21,12 @@ export async function GET() {
             remarkPlugins: [remarkGfm],
             rehypePlugins: [],
           },
-        })
+        });
 
         // mdxSource contains compiled HTML string
-        let contentHtml = mdxSource.compiledSource
+        let contentHtml = mdxSource.compiledSource;
         // Replace any CDATA terminators
-        contentHtml = contentHtml.replace(/]]>/g, "]]&gt;")
+        contentHtml = contentHtml.replace(/]]>/g, "]]&gt;");
 
         return `
 <item>
@@ -43,9 +43,9 @@ export async function GET() {
       ? `<enclosure url="${encodeURIComponent(post.frontmatter.coverImage)}" type="image/jpeg" />`
       : ""
   }
-</item>`
+</item>`;
       })
-    )
+    );
 
     const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
@@ -67,23 +67,22 @@ export async function GET() {
     </image>
     ${rssItems.join("\n")}
   </channel>
-</rss>`
+</rss>`;
 
     return new NextResponse(rssXml, {
       headers: {
         "Content-Type": "application/xml",
         "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=1800",
       },
-    })
-  } catch (error) {
-    console.error("Error generating RSS feed:", error)
+    });
+  } catch (_error) {
     return new NextResponse(
       `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Error</title><description>Failed to generate RSS feed</description></channel></rss>`,
       {
         status: 500,
         headers: { "Content-Type": "application/xml" },
       }
-    )
+    );
   }
 }
 
@@ -94,5 +93,5 @@ function escapeXml(text: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;")
+    .replace(/'/g, "&apos;");
 }

@@ -1,50 +1,49 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState, useRef, type MouseEvent } from "react"
-import { Send } from "lucide-react"
+import { Send } from "lucide-react";
+import type React from "react";
+import { type MouseEvent, useRef, useState } from "react";
 
 export function NewsletterForm() {
-  const [email, setEmail] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const formRef = useRef<HTMLDivElement>(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!formRef.current) return
-    const rect = formRef.current.getBoundingClientRect()
+    if (!formRef.current) return;
+    const rect = formRef.current.getBoundingClientRect();
     setMousePosition({
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setError(null)
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
 
     // Validate email
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      setError("Please enter a valid email address")
-      setIsSubmitting(false)
-      return
+    if (!(email && /^\S+@\S+\.\S+$/.test(email))) {
+      setError("Please enter a valid email address");
+      setIsSubmitting(false);
+      return;
     }
 
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setIsSuccess(true)
-      setEmail("")
-    } catch (err) {
-      setError("Something went wrong. Please try again.")
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setIsSuccess(true);
+      setEmail("");
+    } catch (_err) {
+      setError("Something went wrong. Please try again.");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div
@@ -61,13 +60,14 @@ export function NewsletterForm() {
         }}
       />
 
-      <h3 className="text-lg font-medium">Subscribe to the newsletter</h3>
+      <h3 className="font-medium text-lg">Subscribe to the newsletter</h3>
       <p className="mt-2 text-base text-muted-foreground">
-        Get the latest updates on web development, design, and technology delivered to your inbox.
+        Get the latest updates on web development, design, and technology
+        delivered to your inbox.
       </p>
 
       {isSuccess ? (
-        <div className="animate-fade-in mt-4 rounded-md bg-primary/10 p-3 text-center text-sm text-primary">
+        <div className="mt-4 animate-fade-in rounded-md bg-primary/10 p-3 text-center text-primary text-sm">
           Thanks for subscribing! Please check your email to confirm.
         </div>
       ) : (
@@ -83,7 +83,7 @@ export function NewsletterForm() {
             />
             <button
               type="submit"
-              className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
+              className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 font-medium text-primary-foreground text-sm transition-colors hover:bg-primary/90 disabled:opacity-50"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -95,9 +95,9 @@ export function NewsletterForm() {
               )}
             </button>
           </div>
-          {error && <p className="mt-2 text-xs text-destructive">{error}</p>}
+          {error && <p className="mt-2 text-destructive text-xs">{error}</p>}
         </form>
       )}
     </div>
-  )
+  );
 }

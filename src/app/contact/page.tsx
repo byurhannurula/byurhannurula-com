@@ -1,14 +1,14 @@
-import { PageWrapper } from "@/components/page-wrapper"
-import { ContactForm } from "@/components/contact-form"
-import { createMetadata } from "@/config"
+import { ContactForm } from "@/components/contact-form";
+import { PageWrapper } from "@/components/page-wrapper";
+import { createMetadata } from "@/config";
 
-export const metadata = createMetadata("/contact")
+export const metadata = createMetadata("/contact");
 
 export default function ContactPage() {
   return (
     <PageWrapper>
-      <div className="animate-fade-in mb-10">
-        <h1 className="text-2xl font-medium">Contact</h1>
+      <div className="mb-10 animate-fade-in">
+        <h1 className="font-medium text-2xl">Contact</h1>
         <p className="mt-2 text-muted-foreground">
           Have a question or want to work together? Send me a message.
         </p>
@@ -16,5 +16,5 @@ export default function ContactPage() {
 
       <ContactForm />
     </PageWrapper>
-  )
+  );
 }

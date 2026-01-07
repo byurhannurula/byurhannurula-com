@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import { Twitter, Linkedin, Link2, Check } from "lucide-react"
-import { useState, useEffect } from "react"
-import { cn } from "@/lib/utils"
+import { Check, Link2, Linkedin, Twitter } from "lucide-react";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface ShareButtonsProps {
-  title: string
-  url?: string
-  className?: string
+  title: string;
+  url?: string;
+  className?: string;
 }
 
 export function ShareButtons({ title, url, className }: ShareButtonsProps) {
-  const [copied, setCopied] = useState(false)
-  const [shareUrl, setShareUrl] = useState(url || "")
+  const [copied, setCopied] = useState(false);
+  const [shareUrl, setShareUrl] = useState(url || "");
 
   useEffect(() => {
     if (!url) {
-      setShareUrl(window.location.href)
+      setShareUrl(window.location.href);
     }
-  }, [url])
+  }, [url]);
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch (err) {
-      console.error("Failed to copy:", err)
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (_err) {
+      console.error("Failed to copy to clipboard");
     }
-  }
+  };
 
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`
-  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`;
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+      <span className="font-medium text-muted-foreground text-xs uppercase tracking-wider">
         Share
       </span>
       <div className="flex items-center gap-1">
@@ -58,13 +58,18 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
           <Linkedin className="h-4 w-4" />
         </a>
         <button
+          type="button"
           onClick={copyToClipboard}
           className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           aria-label="Copy link"
         >
-          {copied ? <Check className="h-4 w-4 text-green-500" /> : <Link2 className="h-4 w-4" />}
+          {copied ? (
+            <Check className="h-4 w-4 text-green-500" />
+          ) : (
+            <Link2 className="h-4 w-4" />
+          )}
         </button>
       </div>
     </div>
-  )
+  );
 }

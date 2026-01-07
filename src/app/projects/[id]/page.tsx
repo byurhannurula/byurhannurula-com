@@ -1,38 +1,49 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowLeft, ExternalLink, Github } from "lucide-react"
+import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export default function ProjectDetailPage({ params }: { params: { id: string } }) {
+export default function ProjectDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   // Reset scroll position when component mounts
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
   // In a real application, you would fetch the project data based on the ID
   // For this example, we'll find the project in our sample data
-  const project = projects.find((p) => p.id === params.id) || projects[0]
+  const project = projects.find((p) => p.id === params.id) || projects[0];
 
-  const [activeTab, setActiveTab] = useState<"overview" | "features" | "tech">("overview")
+  const [activeTab, setActiveTab] = useState<"overview" | "features" | "tech">(
+    "overview"
+  );
 
   return (
-    <div className="pb-16 pt-24">
+    <div className="pt-24 pb-16">
       <div className="mx-auto max-w-screen-md px-6">
-        <div className="animate-fade-in mb-8">
+        <div className="mb-8 animate-fade-in">
           <Link
             href="/projects"
-            className="group inline-flex items-center gap-1 font-mono text-xs font-medium uppercase tracking-wider text-foreground"
+            className="group inline-flex items-center gap-1 font-medium font-mono text-foreground text-xs uppercase tracking-wider"
           >
             <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
             Back to projects
           </Link>
         </div>
 
-        <div className="animate-fade-in mb-8" style={{ animationDelay: "0.2s" }}>
-          <h1 className="font-mono text-3xl font-medium md:text-4xl">{project.title}</h1>
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+        <div
+          className="mb-8 animate-fade-in"
+          style={{ animationDelay: "0.2s" }}
+        >
+          <h1 className="font-medium font-mono text-3xl md:text-4xl">
+            {project.title}
+          </h1>
+          <p className="mt-4 text-base text-muted-foreground leading-relaxed">
             {project.description}
           </p>
 
@@ -40,7 +51,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground"
+                className="rounded-full bg-muted px-3 py-1 text-muted-foreground text-xs"
               >
                 {tag}
               </span>
@@ -53,7 +64,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 font-mono text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 font-medium font-mono text-primary-foreground text-xs transition-colors hover:bg-primary/90"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
                 Live Demo
@@ -64,7 +75,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 font-mono text-xs font-medium text-foreground transition-colors hover:bg-muted/80"
+                className="inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 font-medium font-mono text-foreground text-xs transition-colors hover:bg-muted/80"
               >
                 <Github className="h-3.5 w-3.5" />
                 View Code
@@ -73,7 +84,10 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
 
-        <div className="animate-fade-in mb-8" style={{ animationDelay: "0.3s" }}>
+        <div
+          className="mb-8 animate-fade-in"
+          style={{ animationDelay: "0.3s" }}
+        >
           <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-muted">
             <Image
               src={project.image || "/placeholder.svg?height=400&width=600"}
@@ -85,33 +99,39 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
 
-        <div className="animate-fade-in mb-8" style={{ animationDelay: "0.4s" }}>
+        <div
+          className="mb-8 animate-fade-in"
+          style={{ animationDelay: "0.4s" }}
+        >
           <div className="mb-6 flex border-b">
             <button
+              type="button"
               onClick={() => setActiveTab("overview")}
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 font-medium text-sm transition-colors ${
                 activeTab === "overview"
-                  ? "border-b-2 border-primary text-foreground"
+                  ? "border-primary border-b-2 text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Overview
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("features")}
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 font-medium text-sm transition-colors ${
                 activeTab === "features"
-                  ? "border-b-2 border-primary text-foreground"
+                  ? "border-primary border-b-2 text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Features
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("tech")}
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 font-medium text-sm transition-colors ${
                 activeTab === "tech"
-                  ? "border-b-2 border-primary text-foreground"
+                  ? "border-primary border-b-2 text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -128,13 +148,13 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 <p>{project.overview}</p>
                 {project.role && (
                   <div className="mt-4">
-                    <h3 className="text-lg font-medium">My Role</h3>
+                    <h3 className="font-medium text-lg">My Role</h3>
                     <p className="mt-2">{project.role}</p>
                   </div>
                 )}
                 {project.challenge && (
                   <div className="mt-4">
-                    <h3 className="text-lg font-medium">Challenge</h3>
+                    <h3 className="font-medium text-lg">Challenge</h3>
                     <p className="mt-2">{project.challenge}</p>
                   </div>
                 )}
@@ -164,14 +184,14 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
               >
                 {project.techStack.map((category) => (
                   <div key={category.name}>
-                    <h3 className="font-mono text-sm font-medium uppercase tracking-wider">
+                    <h3 className="font-medium font-mono text-sm uppercase tracking-wider">
                       {category.name}
                     </h3>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {category.items.map((item) => (
                         <span
                           key={item}
-                          className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground"
+                          className="rounded-full bg-muted px-3 py-1 text-muted-foreground text-sm"
                         >
                           {item}
                         </span>
@@ -185,13 +205,19 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         </div>
 
         {project.images && project.images.length > 0 && (
-          <div className="animate-fade-in mb-8" style={{ animationDelay: "0.8s" }}>
-            <h3 className="mb-4 font-mono text-sm font-medium uppercase tracking-wider">
+          <div
+            className="mb-8 animate-fade-in"
+            style={{ animationDelay: "0.8s" }}
+          >
+            <h3 className="mb-4 font-medium font-mono text-sm uppercase tracking-wider">
               Project Gallery
             </h3>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {project.images.map((image, index) => (
-                <div key={index} className="overflow-hidden rounded-lg bg-muted">
+                <div
+                  key={index}
+                  className="overflow-hidden rounded-lg bg-muted"
+                >
                   <Image
                     src={image || "/placeholder.svg"}
                     alt={`${project.title} screenshot ${index + 1}`}
@@ -206,20 +232,24 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         )}
 
         <div className="mt-12">
-          <h3 className="mb-4 font-mono text-sm font-medium uppercase tracking-wider">
+          <h3 className="mb-4 font-medium font-mono text-sm uppercase tracking-wider">
             Other Projects
           </h3>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {projects
               .filter((p) => p.id !== params.id)
               .slice(0, 2)
-              .map((project, index) => (
-                <Link key={project.id} href={`/projects/${project.id}`} className="group block">
+              .map((project, _index) => (
+                <Link
+                  key={project.id}
+                  href={`/projects/${project.id}`}
+                  className="group block"
+                >
                   <div className="rounded-lg border bg-card p-4 transition-colors hover:border-primary">
-                    <h4 className="text-base font-medium group-hover:text-primary">
+                    <h4 className="font-medium text-base group-hover:text-primary">
                       {project.title}
                     </h4>
-                    <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                    <p className="mt-2 line-clamp-2 text-muted-foreground text-sm">
                       {project.description}
                     </p>
                   </div>
@@ -229,7 +259,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 // Updated project data based on user's background
@@ -237,7 +267,8 @@ const projects = [
   {
     id: "recheck-platform",
     title: "ReCheck Blockchain Platform",
-    description: "A blockchain-based platform for document verification and secure data exchange.",
+    description:
+      "A blockchain-based platform for document verification and secure data exchange.",
     tags: ["React", "TypeScript", "Blockchain", "Web3", "Node.js"],
     image: "/placeholder.svg?height=400&width=600",
     liveUrl: "https://recheck.io",
@@ -326,7 +357,8 @@ const projects = [
   {
     id: "content-management",
     title: "Content Management System",
-    description: "A custom CMS built for a media company with advanced publishing workflows.",
+    description:
+      "A custom CMS built for a media company with advanced publishing workflows.",
     tags: ["React", "Node.js", "Express", "MongoDB", "GraphQL"],
     image: "/placeholder.svg?height=400&width=600",
     liveUrl: "https://example.com/cms",
@@ -367,4 +399,4 @@ const projects = [
       "/placeholder.svg?height=200&width=350",
     ],
   },
-]
+];

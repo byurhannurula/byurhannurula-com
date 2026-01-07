@@ -1,24 +1,25 @@
-import Link from "next/link"
-import { Code2, ArrowRight } from "lucide-react"
-
-import { PageWrapper } from "@/components/page-wrapper"
-import { getAllShorts } from "@/lib/shorts"
+import { ArrowRight, Code2 } from "lucide-react";
+import Link from "next/link";
+import { PageWrapper } from "@/components/page-wrapper";
+import { getAllShorts } from "@/lib/server";
 
 export default function ShortsPage() {
-  const shorts = getAllShorts()
+  const shorts = getAllShorts();
 
   return (
     <PageWrapper>
-      <div className="animate-fade-in mb-12">
-        <h1 className="text-2xl font-medium">Shorts</h1>
-        <p className="mt-2 text-muted-foreground">Quick code snippets, tips, and mini-tutorials.</p>
+      <div className="mb-12 animate-fade-in">
+        <h1 className="font-medium text-2xl">Shorts</h1>
+        <p className="mt-2 text-muted-foreground">
+          Quick code snippets, tips, and mini-tutorials.
+        </p>
       </div>
 
       {shorts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Code2 className="mb-4 size-12 text-muted-foreground/50" />
-          <h2 className="mb-2 text-lg font-medium">No shorts yet</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="mb-2 font-medium text-lg">No shorts yet</h2>
+          <p className="text-muted-foreground text-sm">
             Check back later for code snippets and tips.
           </p>
         </div>
@@ -33,7 +34,7 @@ export default function ShortsPage() {
               <div className="mb-3 flex items-center gap-2">
                 <Code2 className="size-4 text-primary" />
                 {short.frontmatter.language && (
-                  <span className="rounded bg-primary/10 px-2 py-0.5 text-[10px] font-medium uppercase text-primary">
+                  <span className="rounded bg-primary/10 px-2 py-0.5 font-medium text-[10px] text-primary uppercase">
                     {short.frontmatter.language}
                   </span>
                 )}
@@ -41,7 +42,7 @@ export default function ShortsPage() {
               <h3 className="mb-2 font-medium transition-colors group-hover:text-primary">
                 {short.frontmatter.title}
               </h3>
-              <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">
+              <p className="mb-3 line-clamp-2 text-muted-foreground text-sm">
                 {short.frontmatter.description}
               </p>
               <div className="flex items-center justify-between">
@@ -62,5 +63,5 @@ export default function ShortsPage() {
         </div>
       )}
     </PageWrapper>
-  )
+  );
 }

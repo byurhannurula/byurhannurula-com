@@ -1,17 +1,17 @@
-import { MDXRemote } from "next-mdx-remote/rsc"
-import remarkGfm from "remark-gfm"
-import rehypePrettyCode from "rehype-pretty-code"
-import { mdxComponents } from "./mdx-components"
+import { MDXRemote } from "next-mdx-remote/rsc";
+import rehypePrettyCode from "rehype-pretty-code";
+import remarkGfm from "remark-gfm";
+import { mdxComponents } from "./mdx-components";
 
 interface MDXRendererProps {
-  source: string
+  source: string;
 }
 
 const rehypePrettyCodeOptions = {
   theme: "one-dark-pro",
   keepBackground: true,
   defaultLang: "plaintext",
-}
+};
 
 export async function MDXRenderer({ source }: MDXRendererProps) {
   return (
@@ -25,5 +25,5 @@ export async function MDXRenderer({ source }: MDXRendererProps) {
       }}
       components={mdxComponents}
     />
-  )
+  );
 }

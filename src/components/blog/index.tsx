@@ -1,7 +1,0 @@
-export * from "./post-item"
-export * from "./card-home"
-export * from "./reading-progress"
-export * from "./post-stats"
-export * from "./post-like"
-export * from "./share-buttons"
-export * from "./blog-search"

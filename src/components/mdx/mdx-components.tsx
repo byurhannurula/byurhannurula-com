@@ -1,30 +1,51 @@
-import { MDXImage, ImageGrid, GridImage } from "./image"
-import { CodeBlock } from "./code-block"
-import { MDXLink } from "./link"
-import { Callout } from "./callout"
-import { Table, TableHead, TableBody, TableRow, TableHeader, TableCell } from "./table"
-import { cn } from "@/lib"
+import { cn } from "@/lib";
+import { Callout } from "./callout";
+import { CodeBlock } from "./code-block";
+import { GridImage, ImageGrid, MDXImage } from "./image";
+import { MDXLink } from "./link";
+import { Mermaid } from "./mermaid";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./table";
 
-const createHeading =
-  (Tag: "h1" | "h2" | "h3" | "h4", symbol = "#", symbolSize = "text-base") =>
-  ({ children, ...props }: any) => {
-    const id = typeof children === "string" ? children.toLowerCase().replace(/\s+/g, "-") : ""
+function createHeading(
+  Tag: "h1" | "h2" | "h3" | "h4",
+  symbol = "#",
+  symbolSize = "text-base"
+) {
+  const HeadingComponent = ({ children, ...props }: any) => {
+    const id =
+      typeof children === "string"
+        ? children.toLowerCase().replace(/\s+/g, "-")
+        : "";
 
     return (
       <Tag id={id} {...props} className="group relative scroll-mt-24">
-        <a href={`#${id}`} aria-label={`Link to ${children}`} className="block pr-6 no-underline">
+        <a
+          href={`#${id}`}
+          aria-label={`Link to ${children}`}
+          className="block pr-6 no-underline"
+        >
           <span className="text-foreground">{children}</span>
           <span
             className={cn(
-              `absolute top-1/2 -translate-y-1/2 translate-x-3 ${symbolSize} text-muted-foreground opacity-0 transition group-focus-within:opacity-100 group-hover:text-primary group-hover:opacity-100`
+              `absolute top-1/2 translate-x-3 -translate-y-1/2 ${symbolSize} text-muted-foreground opacity-0 transition group-focus-within:opacity-100 group-hover:text-primary group-hover:opacity-100`
             )}
           >
             {symbol}
           </span>
         </a>
       </Tag>
-    )
-  }
+    );
+  };
+  HeadingComponent.displayName = `MDX${Tag.toUpperCase()}`;
+  return HeadingComponent;
+}
 
 export const mdxComponents = {
   img: ({ src, alt, caption, size, ...props }: any) => (
@@ -35,6 +56,7 @@ export const mdxComponents = {
   ImageGrid,
   GridImage,
   MDXImage,
+  Mermaid,
 
   pre: ({ children, raw, ...props }: any) => (
     <CodeBlock raw={raw} {...props}>
@@ -45,12 +67,15 @@ export const mdxComponents = {
   code: ({ children, ...props }: any) => {
     if (!props.className) {
       return (
-        <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm" {...props}>
+        <code
+          className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm"
+          {...props}
+        >
           {children}
         </code>
-      )
+      );
     }
-    return <code {...props}>{children}</code>
+    return <code {...props}>{children}</code>;
   },
 
   table: Table,
@@ -63,7 +88,7 @@ export const mdxComponents = {
   blockquote: ({ children, ...props }: any) => (
     <blockquote
       {...props}
-      className="my-6 border-l-4 border-primary pl-4 italic text-muted-foreground"
+      className="my-6 border-primary border-l-4 pl-4 text-muted-foreground italic"
     >
       {children}
     </blockquote>
@@ -76,4 +101,4 @@ export const mdxComponents = {
   h2: createHeading("h2", "#", "text-base"),
   h3: createHeading("h3", "#", "text-sm"),
   h4: createHeading("h4", "#", "text-sm"),
-}
+};

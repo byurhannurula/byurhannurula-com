@@ -1,10 +1,11 @@
-import Image from "next/image"
-import Link from "next/link"
+import { Eye } from "lucide-react";
+import Link from "next/link";
 
-import type { Post } from "@/lib/posts"
+import type { Post } from "@/lib/server";
 
 interface BlogCardHomeProps {
-  post: Omit<Post, "content">
+  post: Omit<Post, "content">;
+  views?: number;
 }
 
 // STYLE 1: Minimal list style (like ouassim.tech) - currently active
@@ -57,20 +58,31 @@ interface BlogCardHomeProps {
 //   )
 // }
 
-export function BlogCardHome({ post }: BlogCardHomeProps) {
+export function BlogCardHome({ post, views }: BlogCardHomeProps) {
   return (
-    <article className="group border-b border-border/50 pb-6">
+    <article className="group border-border/50 border-b pb-6">
       <Link href={`/notes/${post.slug}`} className="block">
         <div className="flex items-baseline justify-between gap-4">
           <h3 className="font-medium transition-colors duration-200 group-hover:text-primary">
             {post.frontmatter.title}
           </h3>
-          <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
-            {post.frontmatter.date}
-          </span>
+          <div className="flex shrink-0 items-center gap-3 text-muted-foreground text-xs tabular-nums">
+            <span>{post.frontmatter.date}</span>
+            {views !== undefined && (
+              <>
+                <span>&bull;</span>
+                <span className="flex items-center gap-1">
+                  <Eye className="size-3" />
+                  {views.toLocaleString()}
+                </span>
+              </>
+            )}
+          </div>
         </div>
-        <p className="mt-2 text-sm text-muted-foreground">{post.frontmatter.excerpt}</p>
+        <p className="mt-2 text-muted-foreground text-sm">
+          {post.frontmatter.excerpt}
+        </p>
       </Link>
     </article>
-  )
+  );
 }

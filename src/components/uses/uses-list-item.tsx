@@ -1,14 +1,14 @@
-import { UseItem } from "@/data/uses"
+import type { UseItem } from "@/config";
 
 interface UsesListItemProps {
-  item: UseItem
-  index: number
+  item: UseItem;
+  index: number;
 }
 
 export function UsesListItem({ item, index }: UsesListItemProps) {
   return (
     <div
-      className="animate-fade-in-item flex items-center gap-2 opacity-0"
+      className="flex animate-fade-in-item items-center gap-2 opacity-0"
       style={{
         animationDelay: `${0.3 + index * 0.05}s`,
         animationFillMode: "forwards",
@@ -16,14 +16,16 @@ export function UsesListItem({ item, index }: UsesListItemProps) {
     >
       <a
         href={item.url}
-        className="text-sm font-medium transition-colors duration-200 ease-in-out hover:cursor-pointer hover:text-primary hover:underline"
+        className="font-medium text-sm transition-colors duration-200 ease-in-out hover:cursor-pointer hover:text-primary hover:underline"
         target="_blank"
         rel="noopener noreferrer"
       >
         {item.name}
       </a>
       <span className="h-1 w-1 rounded-full bg-muted-foreground" />
-      <p className="text-xs leading-relaxed text-muted-foreground">{item.description}</p>
+      <p className="text-muted-foreground text-xs leading-relaxed">
+        {item.description}
+      </p>
     </div>
-  )
+  );
 }

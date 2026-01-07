@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useCallback } from "react"
-import { useRouter } from "next/navigation"
 import {
-  Search,
+  ArrowUp,
+  Clock,
+  Code2,
+  ExternalLink,
   FileText,
-  Tag,
   Home,
+  Keyboard,
+  type LucideIcon,
+  Mail,
+  Moon,
+  Phone,
+  Search,
+  Share2,
+  Sun,
+  Tag,
   User,
   Wrench,
-  FolderKanban,
-  Link2,
-  BarChart3,
-  Code2,
-  Github,
-  Mail,
-  Rss,
-  Sun,
-  Moon,
-  Keyboard,
-  Phone,
-  ArrowUp,
-} from "lucide-react"
-import { useTheme } from "next-themes"
+} from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import {
   CommandDialog,
@@ -32,13 +32,13 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
+  CommandShortcut,
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui"
-import { MastodonIcon } from "@/components/icons"
-import { SITE_CONFIG } from "@/lib/constants"
+} from "@/components/ui";
+import { SITE_CONFIG, SOCIAL_LINKS } from "@/config/site";
 
 const shortcuts = [
   {
@@ -47,30 +47,22 @@ const shortcuts = [
     detail: "Navigate to the homepage",
     category: "Navigation",
   },
-  { key: "N", description: "Go to Notes", detail: "Browse all blog posts", category: "Navigation" },
   {
-    key: "P",
-    description: "Go to Projects",
-    detail: "View all projects and portfolio work",
+    key: "N",
+    description: "Go to Notes",
+    detail: "Browse all blog posts",
     category: "Navigation",
   },
-  { key: "A", description: "Go to About", detail: "Learn more about me", category: "Navigation" },
+  {
+    key: "A",
+    description: "Go to About",
+    detail: "Learn more about me",
+    category: "Navigation",
+  },
   {
     key: "U",
     description: "Go to Uses",
     detail: "View development setup and tools",
-    category: "Navigation",
-  },
-  {
-    key: "S",
-    description: "Go to Statistics",
-    detail: "View site analytics and metrics",
-    category: "Navigation",
-  },
-  {
-    key: "L",
-    description: "Go to Links",
-    detail: "Quick access to social links",
     category: "Navigation",
   },
   {
@@ -80,7 +72,7 @@ const shortcuts = [
     category: "Navigation",
   },
   {
-    key: "T / D",
+    key: "T",
     description: "Toggle Theme",
     detail: "Switch between light and dark mode",
     category: "Features",
@@ -103,162 +95,468 @@ const shortcuts = [
     detail: "Scroll to the top of the page",
     category: "Features",
   },
-]
+];
 
 interface Post {
-  slug: string
+  slug: string;
   frontmatter: {
-    title: string
-    excerpt: string
-    date: string
-    tags: string[]
-  }
-  readingTime: string
+    title: string;
+    excerpt: string;
+    date: string;
+    tags: string[];
+  };
+  readingTime: string;
 }
 
 interface Short {
-  slug: string
+  slug: string;
   frontmatter: {
-    title: string
-    description: string
-    tags: string[]
-  }
+    title: string;
+    description: string;
+    tags: string[];
+  };
 }
 
 interface GlobalSearchProps {
-  posts?: Post[]
-  shorts?: Short[]
-  allTags?: string[]
+  posts?: Post[];
+  shorts?: Short[];
+  allTags?: string[];
 }
 
 const pages = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "Notes", href: "/notes", icon: FileText },
-  { name: "Projects", href: "/projects", icon: FolderKanban },
-  { name: "Uses", href: "/uses", icon: Wrench },
-  { name: "About", href: "/about", icon: User },
-  { name: "Shorts", href: "/shorts", icon: Code2 },
-  { name: "Links", href: "/links", icon: Link2 },
-  { name: "Statistics", href: "/statistics", icon: BarChart3 },
-]
+  {
+    id: "home",
+    name: "Go to Home",
+    description: "Navigate to the homepage",
+    href: "/",
+    icon: Home,
+    shortcut: "H",
+  },
+  {
+    id: "notes",
+    name: "Go to Notes",
+    description: "Browse all blog posts",
+    href: "/notes",
+    icon: FileText,
+    shortcut: "N",
+  },
+  {
+    id: "uses",
+    name: "Go to Uses",
+    description: "View development setup and tools",
+    href: "/uses",
+    icon: Wrench,
+    shortcut: "U",
+  },
+  {
+    id: "about",
+    name: "Go to About",
+    description: "Learn more about me",
+    href: "/about",
+    icon: User,
+    shortcut: "A",
+  },
+  {
+    id: "contact",
+    name: "Go to Contact",
+    description: "Get in touch and send a message",
+    href: "/contact",
+    icon: Phone,
+    shortcut: "C",
+  },
+];
 
-const socialLinks = [
-  { name: "GitHub", href: SITE_CONFIG.social.github, icon: Github },
-  { name: "Mastodon", href: SITE_CONFIG.social.mastodon, icon: MastodonIcon },
-  { name: "Email", href: SITE_CONFIG.social.email, icon: Mail },
-  { name: "RSS Feed", href: "/rss.xml", icon: Rss },
-]
+const actions = [
+  {
+    id: "theme",
+    name: "Toggle Theme",
+    description: "Switch between light and dark mode",
+    shortcut: "T",
+  },
+  {
+    id: "shortcuts",
+    name: "Show Keyboard Shortcuts",
+    description: "View all available keyboard shortcuts",
+    shortcut: "?",
+  },
+  {
+    id: "scroll-top",
+    name: "Scroll to Top",
+    description: "Scroll to the top of the page",
+    shortcut: "⇧↑",
+  },
+  {
+    id: "copy-email",
+    name: "Copy Email",
+    description: "Copy email address to clipboard",
+    shortcut: "⇧E",
+  },
+  {
+    id: "share-page",
+    name: "Share Page",
+    description: "Share the current page",
+    shortcut: "⇧S",
+  },
+  {
+    id: "view-source",
+    name: "View Source Code",
+    description: "View the source code of this website",
+    shortcut: "⇧V",
+  },
+];
 
-export function GlobalSearch({ posts = [], shorts = [], allTags = [] }: GlobalSearchProps) {
-  const [open, setOpen] = useState(false)
-  const [shortcutsOpen, setShortcutsOpen] = useState(false)
-  const router = useRouter()
-  const { theme, setTheme } = useTheme()
+const RECENT_ACTIONS_KEY = "command-center-recent";
+const MAX_RECENT_ACTIONS = 5;
+
+interface RecentAction {
+  id: string;
+  name: string;
+  description: string;
+  type: "page" | "action";
+  timestamp: number;
+}
+
+function getRecentActions(): RecentAction[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const stored = localStorage.getItem(RECENT_ACTIONS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentAction(action: Omit<RecentAction, "timestamp">) {
+  if (typeof window === "undefined") return;
+  try {
+    const recent = getRecentActions().filter((a) => a.id !== action.id);
+    const newRecent = [{ ...action, timestamp: Date.now() }, ...recent].slice(
+      0,
+      MAX_RECENT_ACTIONS
+    );
+    localStorage.setItem(RECENT_ACTIONS_KEY, JSON.stringify(newRecent));
+  } catch {
+    // Ignore localStorage errors
+  }
+}
+
+export function GlobalSearch({
+  posts = [],
+  shorts = [],
+  allTags = [],
+}: GlobalSearchProps) {
+  const [open, setOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [recentActions, setRecentActions] = useState<RecentAction[]>([]);
+  const router = useRouter();
+  const _pathname = usePathname();
+  const { theme, setTheme } = useTheme();
+
+  // Load recent actions on mount
+  useEffect(() => {
+    setRecentActions(getRecentActions());
+  }, []);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen((open) => !open)
+        e.preventDefault();
+        setOpen((open) => !open);
       }
       // ? key to open shortcuts
       if (e.key === "?" && !e.metaKey && !e.ctrlKey) {
-        const target = e.target as HTMLElement
+        const target = e.target as HTMLElement;
         if (target.tagName !== "INPUT" && target.tagName !== "TEXTAREA") {
-          e.preventDefault()
-          setShortcutsOpen(true)
+          e.preventDefault();
+          setShortcutsOpen(true);
         }
       }
-    }
+    };
 
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [])
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
+
+  const trackAndRun = useCallback(
+    (action: Omit<RecentAction, "timestamp">, command: () => void) => {
+      saveRecentAction(action);
+      setRecentActions(getRecentActions());
+      setOpen(false);
+      command();
+    },
+    []
+  );
 
   const runCommand = useCallback((command: () => void) => {
-    setOpen(false)
-    command()
-  }, [])
+    setOpen(false);
+    command();
+  }, []);
+
+  const copyEmail = useCallback(() => {
+    navigator.clipboard.writeText(SITE_CONFIG.author.email);
+    toast.success("Email copied to clipboard");
+  }, []);
+
+  const sharePage = useCallback(() => {
+    if (navigator.share) {
+      navigator.share({
+        title: document.title,
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard");
+    }
+  }, []);
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const executeAction = useCallback(
+    (actionId: string) => {
+      const action = actions.find((a) => a.id === actionId);
+      if (!action) return;
+
+      trackAndRun(
+        {
+          id: action.id,
+          name: action.name,
+          description: action.description,
+          type: "action",
+        },
+        () => {
+          switch (actionId) {
+            case "theme":
+              setTheme(theme === "dark" ? "light" : "dark");
+              break;
+            case "shortcuts":
+              setShortcutsOpen(true);
+              break;
+            case "scroll-top":
+              scrollToTop();
+              break;
+            case "copy-email":
+              copyEmail();
+              break;
+            case "share-page":
+              sharePage();
+              break;
+            case "view-source":
+              window.open(SITE_CONFIG.social.github, "_blank");
+              break;
+          }
+        }
+      );
+    },
+    [trackAndRun, setTheme, theme, scrollToTop, copyEmail, sharePage]
+  );
+
+  const navigateToPage = useCallback(
+    (page: (typeof pages)[0]) => {
+      trackAndRun(
+        {
+          id: page.id,
+          name: page.name,
+          description: page.description,
+          type: "page",
+        },
+        () => {
+          router.push(page.href);
+        }
+      );
+    },
+    [trackAndRun, router]
+  );
+
+  const getActionIcon = (actionId: string): LucideIcon => {
+    switch (actionId) {
+      case "theme":
+        return theme === "dark" ? Sun : Moon;
+      case "shortcuts":
+        return Keyboard;
+      case "scroll-top":
+        return ArrowUp;
+      case "copy-email":
+        return Mail;
+      case "share-page":
+        return Share2;
+      case "view-source":
+        return ExternalLink;
+      default:
+        return Clock;
+    }
+  };
 
   return (
     <>
       <button
+        type="button"
         onClick={() => setOpen(true)}
         className="flex items-center gap-1.5 rounded-md border border-border/50 bg-muted/30 px-2 py-1.5 text-muted-foreground transition-colors hover:border-border hover:bg-muted/50"
         aria-label="Search"
       >
         <Search className="size-4" />
-        <kbd className="pointer-events-none select-none rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium">
+        <kbd className="pointer-events-none select-none rounded bg-muted px-1.5 py-0.5 font-medium text-[10px]">
           ⌘K
         </kbd>
       </button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type to search..." />
+        <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
 
-          {/* Pages */}
-          <CommandGroup heading="Pages">
+          {/* Recent Actions */}
+          {recentActions.length > 0 && (
+            <>
+              <CommandGroup heading="Recent">
+                {recentActions.map((recent) => {
+                  const Icon =
+                    recent.type === "page"
+                      ? pages.find((p) => p.id === recent.id)?.icon || Clock
+                      : getActionIcon(recent.id);
+                  return (
+                    <CommandItem
+                      key={`recent-${recent.id}`}
+                      value={`recent:${recent.name}`}
+                      onSelect={() => {
+                        if (recent.type === "page") {
+                          const page = pages.find((p) => p.id === recent.id);
+                          if (page) navigateToPage(page);
+                        } else {
+                          executeAction(recent.id);
+                        }
+                      }}
+                    >
+                      <Icon />
+                      <div className="flex flex-col">
+                        <span>{recent.name}</span>
+                        <span className="text-muted-foreground text-xs">
+                          {recent.description}
+                        </span>
+                      </div>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+              <CommandSeparator />
+            </>
+          )}
+
+          {/* Navigation */}
+          <CommandGroup heading="Navigation">
             {pages.map((page) => (
               <CommandItem
                 key={page.href}
-                value={`page:${page.name}`}
-                onSelect={() => runCommand(() => router.push(page.href))}
+                value={`page:${page.name} ${page.description}`}
+                onSelect={() => navigateToPage(page)}
               >
-                <page.icon className="mr-2 h-4 w-4" />
-                <span>{page.name}</span>
+                <page.icon />
+                <div className="flex flex-col">
+                  <span>{page.name}</span>
+                  <span className="text-muted-foreground text-xs">
+                    {page.description}
+                  </span>
+                </div>
+                <CommandShortcut>{page.shortcut}</CommandShortcut>
               </CommandItem>
             ))}
+          </CommandGroup>
+
+          <CommandSeparator />
+
+          {/* Features */}
+          <CommandGroup heading="Features">
+            {actions
+              .filter((a) =>
+                ["theme", "shortcuts", "scroll-top"].includes(a.id)
+              )
+              .map((action) => {
+                const Icon = getActionIcon(action.id);
+                return (
+                  <CommandItem
+                    key={action.id}
+                    value={`action:${action.name} ${action.description}`}
+                    onSelect={() => executeAction(action.id)}
+                  >
+                    <Icon />
+                    <div className="flex flex-col">
+                      <span>{action.name}</span>
+                      <span className="text-muted-foreground text-xs">
+                        {action.description}
+                      </span>
+                    </div>
+                    <CommandShortcut>{action.shortcut}</CommandShortcut>
+                  </CommandItem>
+                );
+              })}
           </CommandGroup>
 
           <CommandSeparator />
 
           {/* Actions */}
           <CommandGroup heading="Actions">
-            <CommandItem value="theme:light" onSelect={() => runCommand(() => setTheme("light"))}>
-              <Sun className="mr-2 h-4 w-4" />
-              <span>Light Mode</span>
-            </CommandItem>
-            <CommandItem value="theme:dark" onSelect={() => runCommand(() => setTheme("dark"))}>
-              <Moon className="mr-2 h-4 w-4" />
-              <span>Dark Mode</span>
-            </CommandItem>
-            <CommandItem
-              value="shortcuts:view"
-              onSelect={() => runCommand(() => setShortcutsOpen(true))}
-            >
-              <Keyboard className="mr-2 h-4 w-4" />
-              <div className="flex flex-1 items-center justify-between">
-                <span>Keyboard Shortcuts</span>
-                <kbd className="ml-auto rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium">
-                  ?
-                </kbd>
-              </div>
-            </CommandItem>
-            <CommandItem
-              value="contact:page"
-              onSelect={() => runCommand(() => router.push("/contact"))}
-            >
-              <Phone className="mr-2 h-4 w-4" />
-              <span>Contact</span>
-            </CommandItem>
+            {actions
+              .filter((a) =>
+                ["copy-email", "share-page", "view-source"].includes(a.id)
+              )
+              .map((action) => {
+                const Icon = getActionIcon(action.id);
+                return (
+                  <CommandItem
+                    key={action.id}
+                    value={`action:${action.name} ${action.description}`}
+                    onSelect={() => executeAction(action.id)}
+                  >
+                    <Icon />
+                    <div className="flex flex-col">
+                      <span>{action.name}</span>
+                      <span className="text-muted-foreground text-xs">
+                        {action.description}
+                      </span>
+                    </div>
+                    <CommandShortcut>{action.shortcut}</CommandShortcut>
+                  </CommandItem>
+                );
+              })}
           </CommandGroup>
 
           <CommandSeparator />
 
           {/* Social Links */}
           <CommandGroup heading="Connect">
-            {socialLinks.map((link) => (
+            {SOCIAL_LINKS.filter((l) => l.name !== "Email").map((link) => (
               <CommandItem
                 key={link.href}
                 value={`social:${link.name}`}
-                onSelect={() => runCommand(() => window.open(link.href, "_blank"))}
+                onSelect={() =>
+                  runCommand(() => window.open(link.href, "_blank"))
+                }
               >
-                <link.icon className="mr-2 h-4 w-4" />
+                <link.icon />
                 <span>{link.name}</span>
               </CommandItem>
             ))}
+          </CommandGroup>
+
+          <CommandSeparator />
+
+          {/* Help */}
+          <CommandGroup heading="Help">
+            <CommandItem
+              value="help:shortcuts"
+              onSelect={() => runCommand(() => setShortcutsOpen(true))}
+            >
+              <Keyboard />
+              <div className="flex flex-col">
+                <span>Keyboard Shortcuts</span>
+                <span className="text-muted-foreground text-xs">
+                  View all available shortcuts
+                </span>
+              </div>
+              <CommandShortcut>?</CommandShortcut>
+            </CommandItem>
           </CommandGroup>
 
           {/* Tags */}
@@ -270,9 +568,11 @@ export function GlobalSearch({ posts = [], shorts = [], allTags = [] }: GlobalSe
                   <CommandItem
                     key={tag}
                     value={`tag:${tag}`}
-                    onSelect={() => runCommand(() => router.push(`/notes?tag=${tag}`))}
+                    onSelect={() =>
+                      runCommand(() => router.push(`/notes?tag=${tag}`))
+                    }
                   >
-                    <Tag className="mr-2 h-4 w-4" />
+                    <Tag />
                     <span>{tag}</span>
                   </CommandItem>
                 ))}
@@ -289,12 +589,14 @@ export function GlobalSearch({ posts = [], shorts = [], allTags = [] }: GlobalSe
                   <CommandItem
                     key={post.slug}
                     value={`post:${post.frontmatter.title} ${post.frontmatter.excerpt}`}
-                    onSelect={() => runCommand(() => router.push(`/notes/${post.slug}`))}
+                    onSelect={() =>
+                      runCommand(() => router.push(`/notes/${post.slug}`))
+                    }
                   >
-                    <FileText className="mr-2 h-4 w-4" />
+                    <FileText />
                     <div className="flex flex-col">
                       <span>{post.frontmatter.title}</span>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-muted-foreground text-xs">
                         {post.frontmatter.date} • {post.readingTime}
                       </span>
                     </div>
@@ -313,12 +615,14 @@ export function GlobalSearch({ posts = [], shorts = [], allTags = [] }: GlobalSe
                   <CommandItem
                     key={short.slug}
                     value={`short:${short.frontmatter.title} ${short.frontmatter.description}`}
-                    onSelect={() => runCommand(() => router.push(`/shorts/${short.slug}`))}
+                    onSelect={() =>
+                      runCommand(() => router.push(`/shorts/${short.slug}`))
+                    }
                   >
-                    <Code2 className="mr-2 h-4 w-4" />
+                    <Code2 />
                     <div className="flex flex-col">
                       <span>{short.frontmatter.title}</span>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-muted-foreground text-xs">
                         {short.frontmatter.description}
                       </span>
                     </div>
@@ -342,7 +646,9 @@ export function GlobalSearch({ posts = [], shorts = [], allTags = [] }: GlobalSe
           <div className="max-h-[60vh] space-y-4 overflow-y-auto">
             {/* Navigation */}
             <div>
-              <h3 className="mb-2 text-sm font-medium text-muted-foreground">Navigation</h3>
+              <h3 className="mb-2 font-medium text-muted-foreground text-sm">
+                Navigation
+              </h3>
               <div className="space-y-1">
                 {shortcuts
                   .filter((s) => s.category === "Navigation")
@@ -352,8 +658,12 @@ export function GlobalSearch({ posts = [], shorts = [], allTags = [] }: GlobalSe
                       className="flex items-start justify-between gap-4 rounded-md px-2 py-2 hover:bg-muted/50"
                     >
                       <div className="flex-1">
-                        <div className="text-sm font-medium">{shortcut.description}</div>
-                        <div className="text-xs text-muted-foreground">{shortcut.detail}</div>
+                        <div className="font-medium text-sm">
+                          {shortcut.description}
+                        </div>
+                        <div className="text-muted-foreground text-xs">
+                          {shortcut.detail}
+                        </div>
                       </div>
                       <kbd className="shrink-0 rounded bg-muted px-2 py-1 font-mono text-xs">
                         {shortcut.key}
@@ -364,7 +674,9 @@ export function GlobalSearch({ posts = [], shorts = [], allTags = [] }: GlobalSe
             </div>
             {/* Features */}
             <div>
-              <h3 className="mb-2 text-sm font-medium text-muted-foreground">Features</h3>
+              <h3 className="mb-2 font-medium text-muted-foreground text-sm">
+                Features
+              </h3>
               <div className="space-y-1">
                 {shortcuts
                   .filter((s) => s.category === "Features")
@@ -374,8 +686,12 @@ export function GlobalSearch({ posts = [], shorts = [], allTags = [] }: GlobalSe
                       className="flex items-start justify-between gap-4 rounded-md px-2 py-2 hover:bg-muted/50"
                     >
                       <div className="flex-1">
-                        <div className="text-sm font-medium">{shortcut.description}</div>
-                        <div className="text-xs text-muted-foreground">{shortcut.detail}</div>
+                        <div className="font-medium text-sm">
+                          {shortcut.description}
+                        </div>
+                        <div className="text-muted-foreground text-xs">
+                          {shortcut.detail}
+                        </div>
                       </div>
                       <kbd className="shrink-0 rounded bg-muted px-2 py-1 font-mono text-xs">
                         {shortcut.key}
@@ -384,13 +700,16 @@ export function GlobalSearch({ posts = [], shorts = [], allTags = [] }: GlobalSe
                   ))}
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Press <kbd className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]">?</kbd>{" "}
+            <p className="text-muted-foreground text-xs">
+              Press{" "}
+              <kbd className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]">
+                ?
+              </kbd>{" "}
               anytime to view shortcuts
             </p>
           </div>
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

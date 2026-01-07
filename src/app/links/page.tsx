@@ -1,18 +1,17 @@
-import Link from "next/link"
-import { Github, Mail, ExternalLink, Rss } from "lucide-react"
+import { ExternalLink, Github, Mail, Rss } from "lucide-react";
+import Link from "next/link";
+import { MastodonIcon } from "@/components/icons/social";
+import { PageWrapper } from "@/components/page-wrapper";
+import { createMetadata } from "@/config/metadata";
+import { SITE_CONFIG } from "@/config/site";
 
-import { PageWrapper } from "@/components/page-wrapper"
-import { createMetadata } from "@/config/metadata"
-import { MastodonIcon } from "@/components/icons"
-import { SITE_CONFIG } from "@/lib/constants"
-
-export const metadata = createMetadata("/links")
+export const metadata = createMetadata("/links");
 
 interface LinkItem {
-  title: string
-  description?: string
-  url: string
-  icon?: React.ReactNode
+  title: string;
+  description?: string;
+  url: string;
+  icon?: React.ReactNode;
 }
 
 const socialLinks: LinkItem[] = [
@@ -34,7 +33,7 @@ const socialLinks: LinkItem[] = [
     url: SITE_CONFIG.social.email,
     icon: <Mail className="size-5" />,
   },
-]
+];
 
 const siteLinks: LinkItem[] = [
   {
@@ -58,7 +57,7 @@ const siteLinks: LinkItem[] = [
     url: "/rss.xml",
     icon: <Rss className="size-5" />,
   },
-]
+];
 
 const resourceLinks: LinkItem[] = [
   {
@@ -66,20 +65,22 @@ const resourceLinks: LinkItem[] = [
     description: "My macOS configuration",
     url: "https://github.com/byurhannurula/dotfiles",
   },
-]
+];
 
 export default function LinksPage() {
   return (
     <PageWrapper>
-      <div className="animate-fade-in mb-12 text-center">
-        <h1 className="text-2xl font-medium">{SITE_CONFIG.name}</h1>
-        <p className="mt-2 text-muted-foreground">Developer, Tech Geek & Thinker</p>
+      <div className="mb-12 animate-fade-in text-center">
+        <h1 className="font-medium text-2xl">{SITE_CONFIG.name}</h1>
+        <p className="mt-2 text-muted-foreground">
+          Developer, Tech Geek & Thinker
+        </p>
       </div>
 
       <div className="mx-auto max-w-sm space-y-8">
         {/* Social Links */}
         <section>
-          <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <h2 className="mb-4 font-medium text-muted-foreground text-xs uppercase tracking-wider">
             Connect
           </h2>
           <div className="space-y-3">
@@ -91,7 +92,7 @@ export default function LinksPage() {
 
         {/* Site Links */}
         <section>
-          <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <h2 className="mb-4 font-medium text-muted-foreground text-xs uppercase tracking-wider">
             Explore
           </h2>
           <div className="space-y-3">
@@ -99,7 +100,9 @@ export default function LinksPage() {
               <LinkCard
                 key={link.title}
                 link={link}
-                external={link.url.startsWith("http") || link.url.endsWith(".xml")}
+                external={
+                  link.url.startsWith("http") || link.url.endsWith(".xml")
+                }
               />
             ))}
           </div>
@@ -107,7 +110,7 @@ export default function LinksPage() {
 
         {/* Resources */}
         <section>
-          <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <h2 className="mb-4 font-medium text-muted-foreground text-xs uppercase tracking-wider">
             Resources
           </h2>
           <div className="space-y-3">
@@ -118,12 +121,20 @@ export default function LinksPage() {
         </section>
       </div>
     </PageWrapper>
-  )
+  );
 }
 
-function LinkCard({ link, external = false }: { link: LinkItem; external?: boolean }) {
-  const Component = external ? "a" : Link
-  const externalProps = external ? { target: "_blank", rel: "noopener noreferrer" } : {}
+function LinkCard({
+  link,
+  external = false,
+}: {
+  link: LinkItem;
+  external?: boolean;
+}) {
+  const Component = external ? "a" : Link;
+  const externalProps = external
+    ? { target: "_blank", rel: "noopener noreferrer" }
+    : {};
 
   return (
     <Component
@@ -139,10 +150,12 @@ function LinkCard({ link, external = false }: { link: LinkItem; external?: boole
       <div className="min-w-0 flex-1">
         <div className="font-medium">{link.title}</div>
         {link.description && (
-          <div className="truncate text-sm text-muted-foreground">{link.description}</div>
+          <div className="truncate text-muted-foreground text-sm">
+            {link.description}
+          </div>
         )}
       </div>
       <ExternalLink className="size-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
     </Component>
-  )
+  );
 }

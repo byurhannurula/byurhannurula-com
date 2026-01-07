@@ -1,48 +1,49 @@
-"use client"
+"use client";
 
-import { useState, useRef } from "react"
-import { Copy, Check } from "lucide-react"
+import { Check, Copy } from "lucide-react";
+import { useRef, useState } from "react";
 
 interface CodeBlockProps {
-  children: React.ReactNode
-  "data-language"?: string
-  "data-theme"?: string
-  raw?: string
+  children: React.ReactNode;
+  "data-language"?: string;
+  "data-theme"?: string;
+  raw?: string;
 }
 
 export function CodeBlock({ children, raw, ...props }: CodeBlockProps) {
-  const [copied, setCopied] = useState(false)
-  const codeRef = useRef<HTMLPreElement>(null)
+  const [copied, setCopied] = useState(false);
+  const codeRef = useRef<HTMLPreElement>(null);
 
   const copyToClipboard = async () => {
     try {
-      let textToCopy = raw || ""
+      let textToCopy = raw || "";
 
       if (!textToCopy && codeRef.current) {
-        const codeElement = codeRef.current.querySelector("code")
+        const codeElement = codeRef.current.querySelector("code");
         if (codeElement) {
-          textToCopy = codeElement.textContent || ""
+          textToCopy = codeElement.textContent || "";
         }
       }
 
       if (!textToCopy && typeof children === "string") {
-        textToCopy = children
+        textToCopy = children;
       }
 
-      await navigator.clipboard.writeText(textToCopy)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch (err) {
-      console.error("Failed to copy code:", err)
+      await navigator.clipboard.writeText(textToCopy);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (_err) {
+      console.error("Failed to copy code to clipboard");
     }
-  }
+  };
 
   return (
     <div className="not-prose code-block-wrapper group relative">
       {/* Copy button */}
       <button
+        type="button"
         onClick={copyToClipboard}
-        className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded bg-[#313244]/80 px-2 py-1 text-xs opacity-0 transition-opacity hover:bg-[#313244] group-hover:opacity-100"
+        className="absolute top-3 right-3 z-10 flex items-center gap-1 rounded bg-[#313244]/80 px-2 py-1 text-xs opacity-0 transition-opacity hover:bg-[#313244] group-hover:opacity-100"
         aria-label="Copy code"
       >
         {copied ? (
@@ -67,5 +68,5 @@ export function CodeBlock({ children, raw, ...props }: CodeBlockProps) {
         {children}
       </pre>
     </div>
-  )
+  );
 }

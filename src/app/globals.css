@@ -1,52 +1,75 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
-    --primary: 15 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 10%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 10%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 15 100% 50%;
-    --radius: 0.5rem;
-  }
+@custom-variant dark (&:is(.dark *));
 
-  .dark {
-    --background: 220 13% 9%;
-    --foreground: 0 0% 98%;
-    --card: 220 13% 9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 220 13% 9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 15 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 13% 14%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 220 13% 14%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 220 13% 14%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 220 13% 20%;
-    --input: 220 13% 20%;
-    --ring: 15 100% 50%;
-  }
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(0 0% 10%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 10%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 10%);
+  --primary: hsl(15 100% 50%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(0 0% 96%);
+  --secondary-foreground: hsl(0 0% 10%);
+  --muted: hsl(0 0% 96%);
+  --muted-foreground: hsl(0 0% 45%);
+  --accent: hsl(0 0% 96%);
+  --accent-foreground: hsl(0 0% 10%);
+  --destructive: hsl(0 84% 60%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 90%);
+  --input: hsl(0 0% 90%);
+  --ring: hsl(15 100% 50%);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: hsl(220 13% 9%);
+  --foreground: hsl(0 0% 98%);
+  --card: hsl(220 13% 9%);
+  --card-foreground: hsl(0 0% 98%);
+  --popover: hsl(220 13% 9%);
+  --popover-foreground: hsl(0 0% 98%);
+  --primary: hsl(15 100% 50%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(220 13% 14%);
+  --secondary-foreground: hsl(0 0% 98%);
+  --muted: hsl(220 13% 14%);
+  --muted-foreground: hsl(0 0% 65%);
+  --accent: hsl(220 13% 14%);
+  --accent-foreground: hsl(0 0% 98%);
+  --destructive: hsl(0 84% 60%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: hsl(220 13% 20%);
+  --input: hsl(220 13% 20%);
+  --ring: hsl(15 100% 50%);
 }
 
 @layer base {
@@ -56,6 +79,275 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ============================================ */
+/* Code Block Styles (from code.css) */
+/* ============================================ */
+
+/* Code block styling for rehype-pretty-code */
+pre {
+  @apply overflow-x-auto rounded-lg py-4;
+}
+
+pre > code {
+  @apply grid text-[13px] leading-relaxed;
+  counter-reset: line;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+pre code span {
+  font-family: inherit;
+}
+
+/* Line numbers - shown when showLineNumbers is used */
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1rem;
+  margin-right: 1.5rem;
+  text-align: right;
+  color: hsl(var(--muted-foreground) / 0.4);
+}
+
+code[data-line-numbers-max-digits="2"] > [data-line]::before {
+  width: 2rem;
+}
+
+code[data-line-numbers-max-digits="3"] > [data-line]::before {
+  width: 3rem;
+}
+
+/* Line padding - only for code blocks with line numbers */
+code[data-line-numbers] > [data-line] {
+  padding-left: 0;
+  padding-right: 1rem;
+  border-left: 2px solid transparent;
+}
+
+/* Line padding - for code blocks without line numbers */
+code:not([data-line-numbers]) > [data-line] {
+  border-left: 2px solid transparent;
+}
+
+/* Code block figure wrapper from rehype-pretty-code */
+[data-rehype-pretty-code-figure] {
+  @apply my-4;
+}
+
+/* Code block title */
+[data-rehype-pretty-code-title] {
+  @apply rounded-t-lg border border-b-0 border-border/50 bg-[#222] px-4 py-2 text-xs text-muted-foreground;
+}
+
+/* Pre following a title should have no top border-radius */
+[data-rehype-pretty-code-title] + pre {
+  @apply rounded-t-none border-t-0;
+}
+
+/* Fix for prose context - only apply rounded-t-none when title exists */
+.prose [data-rehype-pretty-code-figure]:has([data-rehype-pretty-code-title])
+  pre {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* Code block caption */
+[data-rehype-pretty-code-caption] {
+  @apply mt-2 text-center text-xs text-muted-foreground;
+}
+
+/* Highlighted lines */
+[data-highlighted-line] {
+  @apply border-l-primary bg-primary/10;
+}
+
+/* Highlighted chars */
+[data-highlighted-chars] {
+  @apply rounded bg-primary/20 px-1;
+}
+
+/* ============================================ */
+/* MDX Content Styles (from mdx.css) */
+/* ============================================ */
+
+/* MDX Content Styles */
+.mdx-content {
+  @apply text-foreground;
+}
+
+.mdx-content .not-prose {
+  @apply !max-w-none !text-base !leading-normal;
+}
+
+.mdx-content .not-prose * {
+  @apply !max-w-none;
+}
+
+/* Ensure block elements don't get wrapped in paragraphs */
+.mdx-content > div,
+.mdx-content > figure,
+.mdx-content > section {
+  @apply block;
+}
+
+/* Fix image sizing within prose */
+.prose .not-prose {
+  @apply !max-w-none;
+}
+
+/* Enhanced table styles */
+.prose table {
+  @apply w-full border-collapse border border-border bg-card text-sm;
+  margin: 0 0;
+}
+
+.prose th {
+  @apply border border-border bg-muted px-4 py-3 text-left font-semibold text-foreground;
+}
+
+.prose td {
+  @apply border border-border px-4 py-3 text-muted-foreground;
+}
+
+.prose tr:nth-child(even) {
+  @apply bg-muted/50;
+}
+
+.prose tr:hover {
+  @apply bg-muted/70;
+}
+
+/* Enhanced blockquote styles */
+.prose blockquote {
+  @apply border-l-4 border-primary bg-muted/30 px-6 py-4 italic text-muted-foreground;
+  margin: 2rem 0;
+}
+
+.prose blockquote p {
+  @apply mb-0;
+}
+
+/* Enhanced code block styles */
+.prose pre {
+  @apply rounded-lg border bg-muted p-4 text-sm;
+  margin: 0;
+}
+
+/* Remove prose margins from code blocks only */
+.prose .not-prose.code-block-wrapper {
+  margin: 0;
+}
+
+.prose code {
+  @apply rounded bg-muted px-1.5 py-0.5 font-mono text-sm;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0;
+}
+
+/* Enhanced list styles */
+.prose ul {
+  @apply list-disc space-y-2 pl-6;
+}
+
+.prose ol {
+  @apply list-decimal space-y-2 pl-6;
+}
+
+.prose li {
+  @apply text-muted-foreground;
+}
+
+/* Enhanced heading styles */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply font-medium tracking-tight text-foreground;
+  scroll-margin-top: 6rem;
+}
+
+.prose h1 {
+  @apply text-3xl;
+  margin: 3rem 0 1.5rem 0;
+}
+
+.prose h2 {
+  @apply text-2xl;
+  margin: 2.5rem 0 1rem 0;
+}
+
+.prose h3 {
+  @apply text-xl;
+  margin: 2rem 0 0.75rem 0;
+}
+
+.prose h4 {
+  @apply text-lg;
+  margin: 1.5rem 0 0.5rem 0;
+}
+
+/* Enhanced paragraph styles */
+.prose p {
+  @apply leading-relaxed text-muted-foreground;
+  margin: 1rem 0;
+}
+
+/* Enhanced link styles */
+.prose a {
+  @apply text-primary underline-offset-4 hover:underline;
+}
+
+/* Enhanced strong/bold styles */
+.prose strong {
+  @apply font-semibold text-foreground;
+}
+
+/* Enhanced emphasis/italic styles */
+.prose em {
+  @apply italic;
+}
+
+/* Custom grid layouts for masonry */
+.columns-2 {
+  column-count: 2;
+  column-gap: 1rem;
+}
+
+.columns-3 {
+  column-count: 3;
+  column-gap: 1rem;
+}
+
+.columns-4 {
+  column-count: 4;
+  column-gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .columns-3,
+  .columns-4 {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .columns-2,
+  .columns-3,
+  .columns-4 {
+    column-count: 1;
+  }
+}
+
+.break-inside-avoid {
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .font-sans {

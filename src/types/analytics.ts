@@ -9,55 +9,55 @@ export type AnalyticsEvent = {
     | "clap_action"
     | "like_action"
     | "theme_toggle"
-    | "shortcut_used"
+    | "shortcut_used";
   data: {
-    [key: string]: string | boolean | number
-  }
-}
+    [key: string]: string | boolean | number;
+  };
+};
 
 export type AnalyticsEventData = {
   page_view: {
-    path: string
-    title: string
-  }
+    path: string;
+    title: string;
+  };
   button_click: {
-    buttonId: string
-    section?: string
-    action?: string
-  }
+    buttonId: string;
+    section?: string;
+    action?: string;
+  };
   form_submit: {
-    formId: string
-    success: boolean
-  }
+    formId: string;
+    success: boolean;
+  };
   form_error: {
-    formId: string
-    errorType: string
-    field?: string
-  }
+    formId: string;
+    errorType: string;
+    field?: string;
+  };
   content_view: {
-    contentId: string
-    contentType: "blog" | "project" | "short"
-    section: string
-  }
+    contentId: string;
+    contentType: "blog" | "project" | "short";
+    section: string;
+  };
   external_link_click: {
-    url: string
-    text: string
-    location: string
-  }
+    url: string;
+    text: string;
+    location: string;
+  };
   clap_action: {
-    postSlug: string
-    clapCount: number
-  }
+    postSlug: string;
+    clapCount: number;
+  };
   like_action: {
-    postSlug: string
-    liked: boolean
-  }
+    postSlug: string;
+    liked: boolean;
+  };
   theme_toggle: {
-    from: string
-    to: string
-  }
+    from: string;
+    to: string;
+  };
   shortcut_used: {
-    key: string
-    action: string
-  }
-}
+    key: string;
+    action: string;
+  };
+};

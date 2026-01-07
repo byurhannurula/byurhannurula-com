@@ -1,0 +1,16 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["src/app/**/*.{ts,tsx}", "next.config.mjs"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignore": [
+    "**/*.test.{ts,tsx}",
+    "**/*.spec.{ts,tsx}",
+    "**/__tests__/**",
+    ".next/**",
+    "node_modules/**"
+  ],
+  "ignoreDependencies": [],
+  "next": {
+    "entry": ["src/app/**/*.{ts,tsx}"]
+  }
+}
