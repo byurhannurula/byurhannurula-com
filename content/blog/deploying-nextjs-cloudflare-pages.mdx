@@ -1,0 +1,553 @@
+---
+title: "Deploying Next.js to Cloudflare Pages: Complete Guide"
+date: "2024-12-25"
+excerpt: "A comprehensive guide to deploying Next.js applications to Cloudflare Pages with GitHub Actions, environment variables, and edge runtime optimization."
+coverImage: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=1200&h=630&fit=crop"
+tags: ["nextjs", "cloudflare", "deployment", "ci-cd", "devops"]
+toc: true
+---
+
+Cloudflare Pages has become one of the best platforms for deploying modern web applications. With its global edge network, generous free tier, and excellent developer experience, it's a perfect match for Next.js applications. In this guide, I'll walk you through the complete setup process.
+
+## Why Cloudflare Pages?
+
+Before diving in, here's why I chose Cloudflare Pages over alternatives like Vercel or Netlify:
+
+- **Free tier is generous** - Unlimited sites, 500 builds/month, unlimited bandwidth
+- **Edge network** - 300+ data centers worldwide for ultra-low latency
+- **Native Next.js support** - Full support for App Router, Server Components, and Edge Runtime
+- **Integrated with Cloudflare ecosystem** - Easy access to Workers, KV, D1, R2, and more
+
+## Prerequisites
+
+Before we start, make sure you have:
+
+- A Next.js 14+ application
+- A GitHub repository
+- A Cloudflare account (free tier works)
+- Node.js 18+ installed locally
+
+## Project Setup
+
+### 1. Install the Cloudflare Adapter
+
+First, install the `@cloudflare/next-on-pages` package:
+
+```bash
+npm install -D @cloudflare/next-on-pages
+```
+
+This adapter transforms your Next.js application to run on Cloudflare's edge runtime.
+
+### 2. Update next.config.mjs
+
+Configure your Next.js app for Cloudflare compatibility:
+
+```javascript title="next.config.mjs"
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Enable edge runtime for all pages
+  experimental: {
+    runtime: "edge",
+  },
+
+  // Required for Cloudflare Pages
+  output: "standalone",
+
+  // Image optimization settings
+  images: {
+    loader: "custom",
+    loaderFile: "./src/lib/image-loader.ts",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
+}
+
+export default nextConfig
+```
+
+### 3. Create Custom Image Loader
+
+Cloudflare Pages doesn't support Next.js's built-in image optimization, so we need a custom loader:
+
+```typescript title="src/lib/image-loader.ts"
+interface ImageLoaderProps {
+  src: string
+  width: number
+  quality?: number
+}
+
+export default function cloudflareLoader({ src, width, quality }: ImageLoaderProps): string {
+  // For external URLs, use Cloudflare Image Resizing
+  if (src.startsWith("http")) {
+    const params = [`width=${width}`, `quality=${quality || 75}`, "format=auto"]
+    return `/cdn-cgi/image/${params.join(",")}/${src}`
+  }
+
+  // For local images, return as-is
+  return src
+}
+```
+
+### 4. Add Wrangler Configuration
+
+Create a `wrangler.toml` file in your project root:
+
+```toml title="wrangler.toml"
+name = "my-nextjs-app"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+
+# Optional: KV namespace binding
+# [[kv_namespaces]]
+# binding = "MY_KV"
+# id = "your-kv-namespace-id"
+
+# Optional: D1 database binding
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "my-database"
+# database_id = "your-database-id"
+```
+
+## GitHub Actions CI/CD
+
+Now let's set up automated deployments with GitHub Actions.
+
+### 1. Create Workflow File
+
+```yaml title=".github/workflows/deploy.yml"
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build with next-on-pages
+        run: npx @cloudflare/next-on-pages
+        env:
+          NODE_ENV: production
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy .vercel/output/static --project-name=my-nextjs-app
+```
+
+### 2. Set Up GitHub Secrets
+
+Go to your GitHub repository → Settings → Secrets and variables → Actions, and add:
+
+| Secret Name             | Description                           |
+| ----------------------- | ------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | API token with Pages edit permissions |
+| `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID            |
+
+To create an API token:
+
+1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com/profile/api-tokens)
+2. Click "Create Token"
+3. Use the "Edit Cloudflare Workers" template
+4. Add "Cloudflare Pages: Edit" permission
+5. Copy the token
+
+### 3. Preview Deployments for PRs
+
+Add a separate job for preview deployments:
+
+```yaml title=".github/workflows/deploy.yml"
+preview:
+  runs-on: ubuntu-latest
+  if: github.event_name == 'pull_request'
+
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20"
+        cache: "npm"
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build
+      run: npx @cloudflare/next-on-pages
+      env:
+        NODE_ENV: production
+
+    - name: Deploy Preview
+      uses: cloudflare/wrangler-action@v3
+      id: deploy
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        command: pages deploy .vercel/output/static --project-name=my-nextjs-app --branch=${{ github.head_ref }}
+
+    - name: Comment Preview URL
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '🚀 Preview deployed to: ${{ steps.deploy.outputs.deployment-url }}'
+          })
+```
+
+## Environment Variables
+
+### Local Development
+
+Create a `.dev.vars` file for local development (add to `.gitignore`):
+
+```bash title=".dev.vars"
+DATABASE_URL="postgresql://..."
+API_KEY="your-api-key"
+NEXT_PUBLIC_SITE_URL="http://localhost:3000"
+```
+
+### Production Variables
+
+Set production environment variables in Cloudflare Dashboard:
+
+1. Go to Workers & Pages → Your project → Settings → Environment variables
+2. Add your variables for both Production and Preview environments
+
+Or use Wrangler CLI:
+
+```bash
+# Set a secret
+npx wrangler pages secret put API_KEY --project-name=my-nextjs-app
+
+# List secrets
+npx wrangler pages secret list --project-name=my-nextjs-app
+```
+
+## Edge Runtime Considerations
+
+### Supported APIs
+
+When running on Cloudflare's edge runtime, some Node.js APIs are not available. Here's what works:
+
+```typescript title="src/app/api/example/route.ts"
+import { NextRequest, NextResponse } from "next/server"
+
+// This works on edge runtime
+export const runtime = "edge"
+
+export async function GET(request: NextRequest) {
+  // ✅ Fetch API
+  const data = await fetch("https://api.example.com/data")
+
+  // ✅ Web Crypto API
+  const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("hello"))
+
+  // ✅ URL API
+  const url = new URL(request.url)
+
+  // ✅ Headers API
+  const userAgent = request.headers.get("user-agent")
+
+  return NextResponse.json({ success: true })
+}
+```
+
+### Unsupported APIs
+
+These Node.js APIs are **not available** on edge:
+
+```typescript
+// ❌ File system operations
+import fs from "fs"
+
+// ❌ Child processes
+import { exec } from "child_process"
+
+// ❌ Native Node modules
+import crypto from "crypto" // Use Web Crypto instead
+
+// ❌ Long-running processes
+// Edge functions have a 30-second timeout
+```
+
+### Hybrid Approach
+
+For routes that need Node.js APIs, you can use the Node.js runtime selectively:
+
+```typescript title="src/app/api/node-route/route.ts"
+// This route will NOT run on edge
+export const runtime = "nodejs"
+
+export async function GET() {
+  // Node.js APIs available here
+  const fs = await import("fs/promises")
+  const data = await fs.readFile("./data.json", "utf-8")
+
+  return Response.json(JSON.parse(data))
+}
+```
+
+## Caching and Headers
+
+### Custom Headers
+
+Create a `_headers` file in your `public` folder:
+
+```text title="public/_headers"
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+```
+
+### Custom Redirects
+
+Create a `_redirects` file:
+
+```text title="public/_redirects"
+# Redirect old blog URLs
+/blog/old-post /blog/new-post 301
+
+# Redirect with wildcards
+/old-section/* /new-section/:splat 301
+
+# External redirect
+/github https://github.com/yourusername 302
+```
+
+## Using Cloudflare Bindings
+
+### KV Storage
+
+```typescript title="src/app/api/kv/route.ts"
+import { getRequestContext } from "@cloudflare/next-on-pages"
+
+export const runtime = "edge"
+
+export async function GET() {
+  const { env } = getRequestContext()
+
+  // Read from KV
+  const value = await env.MY_KV.get("key")
+
+  return Response.json({ value })
+}
+
+export async function POST(request: Request) {
+  const { env } = getRequestContext()
+  const { key, value } = await request.json()
+
+  // Write to KV
+  await env.MY_KV.put(key, value, {
+    expirationTtl: 60 * 60 * 24, // 24 hours
+  })
+
+  return Response.json({ success: true })
+}
+```
+
+### D1 Database
+
+```typescript title="src/app/api/users/route.ts"
+import { getRequestContext } from "@cloudflare/next-on-pages"
+
+export const runtime = "edge"
+
+export async function GET() {
+  const { env } = getRequestContext()
+
+  const { results } = await env.DB.prepare(
+    "SELECT * FROM users ORDER BY created_at DESC LIMIT 10"
+  ).all()
+
+  return Response.json({ users: results })
+}
+
+export async function POST(request: Request) {
+  const { env } = getRequestContext()
+  const { name, email } = await request.json()
+
+  const result = await env.DB.prepare("INSERT INTO users (name, email) VALUES (?, ?)")
+    .bind(name, email)
+    .run()
+
+  return Response.json({ id: result.lastRowId })
+}
+```
+
+## Monitoring and Analytics
+
+### Web Analytics
+
+Enable Cloudflare Web Analytics for free:
+
+```typescript title="src/app/layout.tsx"
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+
+        {/* Cloudflare Web Analytics */}
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "your-token-here"}'
+        />
+      </body>
+    </html>
+  )
+}
+```
+
+### Error Tracking
+
+Add error boundaries and logging:
+
+```typescript title="src/app/error.tsx"
+'use client'
+
+import { useEffect } from 'react'
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
+  useEffect(() => {
+    // Log to your error tracking service
+    console.error('Application error:', error)
+  }, [error])
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center">
+      <h2 className="text-2xl font-bold">Something went wrong!</h2>
+      <button
+        onClick={reset}
+        className="mt-4 rounded bg-primary px-4 py-2 text-white"
+      >
+        Try again
+      </button>
+    </div>
+  )
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Build fails with "Module not found"**
+
+```bash
+# Clear cache and rebuild
+rm -rf .next .vercel node_modules
+npm install
+npx @cloudflare/next-on-pages
+```
+
+**Edge runtime errors**
+
+Check if you're using unsupported Node.js APIs. Add `export const runtime = 'nodejs'` to routes that need full Node.js support.
+
+**Environment variables not working**
+
+Make sure variables are set in Cloudflare Dashboard for the correct environment (Production vs Preview).
+
+### Debug Locally
+
+Run your app locally with Wrangler:
+
+```bash
+# Build first
+npx @cloudflare/next-on-pages
+
+# Run locally with Cloudflare runtime
+npx wrangler pages dev .vercel/output/static
+```
+
+## Complete package.json Scripts
+
+```json title="package.json"
+{
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "pages:dev": "npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat",
+    "pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static"
+  }
+}
+```
+
+## Summary
+
+Deploying Next.js to Cloudflare Pages gives you:
+
+- **Global edge deployment** with 300+ data centers
+- **Automatic CI/CD** with GitHub Actions
+- **Preview deployments** for every PR
+- **Access to Cloudflare services** like KV, D1, R2
+- **Free SSL** and DDoS protection
+
+The initial setup takes about 30 minutes, but once configured, deployments are automatic and fast. Your site will be globally distributed and highly available.
+
+---
+
+**Resources:**
+
+- [Cloudflare Pages Documentation](https://developers.cloudflare.com/pages/)
+- [next-on-pages GitHub](https://github.com/cloudflare/next-on-pages)
+- [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)

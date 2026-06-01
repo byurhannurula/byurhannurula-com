@@ -1,0 +1,499 @@
+---
+title: "Docker Best Practices: Building Production-Ready Containers"
+date: "2024-12-15"
+excerpt: "Learn how to write efficient Dockerfiles, optimize image sizes, implement security best practices, and manage containers like a pro."
+coverImage: "https://images.unsplash.com/photo-1605745341112-85968b19335b?w=800&q=80"
+tags: ["docker", "containers", "devops", "security", "optimization"]
+toc: true
+---
+
+Docker has revolutionized how we build, ship, and run applications. But there's a big difference between a Docker setup that "works" and one that's production-ready. In this guide, I'll share the practices I've learned from running containers in production for years.
+
+## Writing Efficient Dockerfiles
+
+The Dockerfile is the foundation of your container. Let's start with the basics and work up to advanced patterns.
+
+### Use Multi-Stage Builds
+
+Multi-stage builds are essential for keeping images small while having all the tools you need during build time:
+
+```dockerfile title="Dockerfile"
+# Build stage
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+# Don't run as root
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+USER nextjs
+EXPOSE 3000
+ENV PORT 3000
+
+CMD ["node", "server.js"]
+```
+
+<Callout type="success" title="Size Matters">
+  Multi-stage builds can reduce image sizes by 90% or more. A typical Node.js app might go from 1GB
+  to under 100MB.
+</Callout>
+
+### Layer Caching Strategy
+
+Docker caches each layer. Order your instructions to maximize cache hits:
+
+```dockerfile title="Dockerfile"
+# ❌ Bad - Any code change invalidates npm install cache
+COPY . .
+RUN npm install
+
+# ✅ Good - Dependencies cached unless package.json changes
+COPY package*.json ./
+RUN npm ci
+COPY . .
+```
+
+### Choose the Right Base Image
+
+| Base Image          | Size   | Use Case                     |
+| ------------------- | ------ | ---------------------------- |
+| `node:20`           | ~1GB   | Development, full tooling    |
+| `node:20-slim`      | ~200MB | Production, most deps        |
+| `node:20-alpine`    | ~130MB | Production, minimal          |
+| `distroless/nodejs` | ~120MB | Production, maximum security |
+| `scratch`           | 0MB    | Static binaries only         |
+
+```dockerfile title="Dockerfile"
+# For Go applications, you can use scratch
+FROM golang:1.22-alpine AS builder
+WORKDIR /app
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+
+FROM scratch
+COPY --from=builder /app/main /main
+ENTRYPOINT ["/main"]
+```
+
+## Security Best Practices
+
+Container security is not optional. Here are the essentials:
+
+### Never Run as Root
+
+```dockerfile title="Dockerfile"
+# Create a non-root user
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
+
+# Set ownership of app files
+COPY --chown=appuser:appgroup . /app
+
+# Switch to non-root user
+USER appuser
+```
+
+### Scan Images for Vulnerabilities
+
+```bash title="Terminal"
+# Using Trivy for vulnerability scanning
+trivy image myapp:latest
+
+# Example output
+myapp:latest (alpine 3.19.0)
+=============================
+Total: 0 (UNKNOWN: 0, LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
+
+# Using Docker Scout
+docker scout cves myapp:latest
+```
+
+### Use Read-Only File Systems
+
+```yaml title="docker-compose.yml"
+services:
+  app:
+    image: myapp:latest
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run
+    security_opt:
+      - no-new-privileges:true
+```
+
+<Callout type="warning" title="Security Scanning">
+  Add vulnerability scanning to your CI/CD pipeline. Block deployments if critical vulnerabilities
+  are found.
+</Callout>
+
+### Secrets Management
+
+Never bake secrets into images:
+
+```dockerfile title="Dockerfile"
+# ❌ Never do this
+ENV API_KEY=super_secret_key
+COPY .env /app/.env
+
+# ✅ Use runtime secrets
+# Pass via environment at runtime
+# Or use Docker secrets / external secret managers
+```
+
+```yaml title="docker-compose.yml"
+services:
+  app:
+    image: myapp:latest
+    secrets:
+      - db_password
+    environment:
+      - DB_PASSWORD_FILE=/run/secrets/db_password
+
+secrets:
+  db_password:
+    external: true
+```
+
+## Image Optimization
+
+### Minimize Layer Count
+
+```dockerfile title="Dockerfile"
+# ❌ Multiple RUN commands = multiple layers
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get install -y git
+RUN rm -rf /var/lib/apt/lists/*
+
+# ✅ Single RUN command = single layer
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        curl \
+        git && \
+    rm -rf /var/lib/apt/lists/*
+```
+
+### Use .dockerignore
+
+```bash title=".dockerignore"
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+.env.*
+Dockerfile
+docker-compose*.yml
+.dockerignore
+README.md
+.nyc_output
+coverage
+.next
+dist
+build
+*.log
+```
+
+### Leverage BuildKit
+
+```bash title="Terminal"
+# Enable BuildKit for faster builds
+export DOCKER_BUILDKIT=1
+
+# Or in docker-compose
+COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build
+
+# Use cache mounts for package managers
+# syntax=docker/dockerfile:1.4
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --only=production
+```
+
+## Container Runtime Best Practices
+
+### Resource Limits
+
+Always set resource limits to prevent runaway containers:
+
+```yaml title="docker-compose.yml"
+services:
+  app:
+    image: myapp:latest
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+        reservations:
+          cpus: "0.5"
+          memory: 256M
+```
+
+### Health Checks
+
+```dockerfile title="Dockerfile"
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
+```
+
+```yaml title="docker-compose.yml"
+services:
+  app:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+```
+
+### Logging Best Practices
+
+```yaml title="docker-compose.yml"
+services:
+  app:
+    image: myapp:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+```
+
+```javascript title="logger.js"
+// Log to stdout/stderr, not files
+// Docker captures these automatically
+console.log(
+  JSON.stringify({
+    level: "info",
+    message: "Request processed",
+    timestamp: new Date().toISOString(),
+    requestId: req.id,
+  })
+)
+```
+
+## Docker Compose Patterns
+
+### Development vs Production
+
+```yaml title="docker-compose.yml"
+services:
+  app:
+    image: myapp:latest
+    environment:
+      - NODE_ENV=production
+
+# docker-compose.override.yml (development, auto-loaded)
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DEBUG=*
+
+# docker-compose.prod.yml (production)
+services:
+  app:
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          memory: 1G
+```
+
+```bash title="Terminal"
+# Development (uses override automatically)
+docker-compose up
+
+# Production
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+### Networking
+
+```yaml title="docker-compose.yml"
+services:
+  frontend:
+    networks:
+      - frontend
+
+  backend:
+    networks:
+      - frontend
+      - backend
+
+  database:
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
+    internal: true # No external access
+```
+
+## CI/CD Integration
+
+### GitHub Actions Example
+
+```yaml title=".github/workflows/docker.yml"
+name: Build and Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Scan for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
+```
+
+<Callout type="info" title="Build Caching">
+  Use GitHub Actions cache or registry cache to dramatically speed up builds. A well-cached build
+  can complete in seconds instead of minutes.
+</Callout>
+
+## Debugging Containers
+
+### Useful Commands
+
+```bash title="Terminal"
+# View running containers with resource usage
+docker stats
+
+# Execute shell in running container
+docker exec -it container_name /bin/sh
+
+# View logs with timestamps
+docker logs -f --timestamps container_name
+
+# Inspect container details
+docker inspect container_name | jq '.[0].NetworkSettings'
+
+# View container filesystem changes
+docker diff container_name
+
+# Export container filesystem for analysis
+docker export container_name > container.tar
+```
+
+### Debugging Production Issues
+
+```bash title="Terminal"
+# Copy files from container
+docker cp container_name:/app/logs ./logs
+
+# Run temporary debug container in same network
+docker run -it --rm --network container:app_container \
+  nicolaka/netshoot /bin/bash
+
+# Attach to container process
+docker attach container_name
+
+# Check why container exited
+docker inspect container_name --format='{{.State.ExitCode}}'
+docker inspect container_name --format='{{.State.Error}}'
+```
+
+## Performance Monitoring
+
+### Key Metrics to Track
+
+| Metric               | Warning Threshold | Critical Threshold |
+| -------------------- | ----------------- | ------------------ |
+| CPU Usage            | 70%               | 90%                |
+| Memory Usage         | 80%               | 95%                |
+| Container Restarts   | 1/hour            | 3/hour             |
+| Image Pull Time      | 30s               | 60s                |
+| Container Start Time | 5s                | 15s                |
+
+```bash title="health-check.sh"
+# Quick health check script
+#!/bin/bash
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | \
+  while read line; do
+    echo "$line"
+  done
+
+# Check for unhealthy containers
+docker ps --filter "health=unhealthy"
+```
+
+## Common Mistakes to Avoid
+
+1. **Using `latest` tag in production** - Always use specific version tags
+2. **Not cleaning up** - Dangling images and volumes consume disk space
+3. **Ignoring container logs** - Logs fill up disk if not rotated
+4. **Hardcoding configuration** - Use environment variables
+5. **Skipping health checks** - Orchestrators need them for proper management
+
+```bash title="cleanup.sh"
+#!/bin/bash
+# Remove stopped containers
+docker container prune -f
+
+# Remove unused images
+docker image prune -a -f --filter "until=24h"
+
+# Remove unused volumes
+docker volume prune -f
+
+# Remove unused networks
+docker network prune -f
+
+# Nuclear option - remove everything unused
+docker system prune -a -f --volumes
+```
+
+---
+
+Docker is a powerful tool, but it requires discipline to use well. Follow these practices, and you'll have containers that are secure, efficient, and easy to maintain. The investment in doing things right pays off every time you deploy.
+
+What Docker best practices have you found most valuable? I'd love to hear about your experiences!

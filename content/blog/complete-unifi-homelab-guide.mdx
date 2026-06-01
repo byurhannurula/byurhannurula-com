@@ -1,0 +1,619 @@
+---
+title: "Complete Unifi Homelab Setup"
+date: "2025-12-22"
+excerpt: "A comprehensive guide to building a professional home network with Ubiquiti Unifi equipment. Covers routers, switches, access points, cameras, VLANs, and network optimization."
+coverImage: "https://arslan.io/content/images/2024/09/L1004906-1.jpeg"
+tags: ["homelab", "unifi", "networking", "wifi", "home-network"]
+toc: true
+tocStyle: "floating"
+featured: true
+---
+
+It's been almost four years since I moved to my current house. I knew my concrete home would be a big challenge if I didn't deploy multiple APs to every floor or room. Concrete walls cut out Wi-Fi signals more than dry walls.
+
+I wanted several Ubiquiti devices, but obtaining them was hard initially. But there was one easily obtainable brand, TP-Link's Omada product line. So I fully went in. I bought a Router, Controller, a 24 PoE Switch, and 5-6 APs. I also got a set of Dahua cameras (PoE-powered). All this was at the beginning of 2021. However, my dream of using Unifi devices was still alive and never extinguished.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/L1004954-2.jpeg"
+  alt="Unifi Network Setup"
+/>
+
+Moving forward, I've discovered that buying Ubiquiti devices nowadays is possible. A close friend also showcased the latest Unifi cameras, the Unifi Network, and the Protect applications (the UI for managing Ubiquiti devices and Cameras) at his home. I loved it.
+
+## Why did I decide to update my networking infrastructure?
+
+This question was asked a lot. Previously I've used TP-Link's Omada system. Here is a photo of my old rack:
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/IMG_9241.jpeg"
+  alt="Old TP-Link Omada Rack Setup"
+/>
+
+I've used this system for almost 3.5 years with no issues. I had six APs and four PoE cameras. But there were many small things that bothered me and they piled up over the years:
+
+- Camera motion detection wasn't working well, and setting up it was not as straightforward as I imagined (I was using Synology as my NVR).
+- I would randomly get bandwidth bottleneck while watching a video or if the kids would watch a video, my work laptop would get throttled for no reason. I've tried many things, but I couldn't figure out the exact issue.
+- Omada's UI was slow and chunky, loading the devices, setting up VLANs and many other small things were just a chore to do. I knew there were better systems out there.
+- I bricked my controller two times over the years by just upgrading the firmware. This should never happen in networking gear. On top of it, TP-Link documentation was very bad explaining how to fix it.
+
+The hardware I was using was fine, but given the fact I also wanted to upgrade my AP's to use 6GHz band, replace my old cameras and use a product that provides superior UX, I've realized it was time to pull the trigger.
+
+---
+
+This is a **5,600+ word article** with tons of details. Grab a coffee ☕️, and let's dive into it!
+
+## Router and Controller
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/L1004927.jpeg"
+  alt="Unifi Dream Machine SE"
+  size="wide"
+/>
+
+First, I had to replace my Router and Controller. Unifi has several products. Because I already had a Rack in my attic, I went with the [**Unifi Dream Machine - Special Edition (UDM-SE)**](https://eu.store.ui.com/eu/en/category/all-unifi-cloud-gateways/products/udm-se). There are several reasons why I specifically chose this:
+
+- I wanted 10GbE WAN and SPF output to be futureproof.
+- I plan to purchase Unifi Cameras but not the NVR (it would be overkill). The UDM-SE has a 3.5" slot for an HDD that can store a month's worth of camera footage. That's enough for me.
+- The UDM-SE has PoE switches (compared to Dream Machine Pro (UDM-PRO)). I won't use them, but I wanted a backup in case my main switch fails.
+- It has an additional 128 GB SSD for detection recordings, which is lacking in the UDM-Pro.
+
+The Dream Machine is an excellent value because it is a Router, a Controller for all my Unifi devices, and an NVR for my cameras. Like my TP-Link router, it also supports multi-WAN—more on that later. (_For the record, I would buy the `Dream Machine Pro Max` gateway if I could find them, but they don't sell them here_)
+
+## Switch
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/L1004951.jpeg"
+  alt="Unifi Switch Pro Max 24 PoE"
+  size="wide"
+/>
+
+_Unlike other switches from Unifi, the `Switch Pro Max 24 PoE` ports are horizontally aligned, making it easier to plug cables from the patch panel._
+
+Next comes the Switch. I have in total four switches, each with a different purpose. Let's start with the main switch. Like my previous devices, I picked up a 24-port Switch, the [**Pro Max 24 PoE**](https://eu.store.ui.com/eu/en/category/all-switching/products/usw-pro-max-24-poe). Here are the reasons:
+
+- It has 16 PoE++ and 8 PoE+ ports, 8 of which are 2.5Gbe and the rest 1Gbe. There are a lot of PoEs, but we'll need them.
+- I plan to deploy Unifi's U7 APs. These are the most up-to-date APs and support Wi-Fi 7 (using 6GHz). This means, in theory, they can support up to 5.7Gbps data rate. These APs need to be powered by a 2.5Gbe uplink to get it. The `Pro Max 24 PoE` has 8 of them.
+- I'll use six PoE-powered Unifi cameras (some with PoE extenders via switches) and six U7 APs. I have seven rooms with several wall keystones. In addition, I have several devices (NAS, Printer, Home Assistant, etc.). All these need to be terminated, and 24 Ports are just right.
+- Unlike other switches, the Ports are all horizontally aligned. This makes patching easier and makes it look better from a patch panel.
+
+I also have several [Switch Flex's](https://eu.store.ui.com/eu/en/category/switching-utility/products/usw-flex). This flexible 5-port, Layer 2 PoE switch is for indoor and outdoor use and can be powered with PoE++. It allows us to use multiple devices with a single RJ45 cable. This switch is so valuable. First, it's outdoor rated; second, it's a must if you don't have an RJ45 cable for every camera.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/L1005004.jpeg"
+  alt="Switch Flex outdoor installation"
+/>
+
+_The Switch Flex is extremely handy for outdoor usage, especially for deploying multiple PoE powered Cameras with a single RJ45, PoE++ powered cable._
+
+Finally, I have a [Lite 8 Poe switch](https://eu.store.ui.com/eu/en/category/switching-utility/products/usw-lite-8-poe). It's an 8-port, Layer 2 PoE switch with four GbE PoE+ and four GbE ports. This switch is deployed in my living room (I tried to wire all devices I could do) for these devices:
+
+- PlayStation 5
+- XBOX Series X
+- Nintendo Switch
+- Sony TV
+- Apple TV4K
+- U7 AP
+
+The only caveat with this switch is that it doesn't support 2.5GbE. However, I had to get something, so it's okay for now.
+
+### Switch assignments
+
+Because the `Pro Max 24 PoE` has different kinds of ports based on 2.5Gbe or PoE++; I had to devise a good plan to lay out the keystone jacks and assign my various APs and Cameras efficiently. Two rules were vital for me:
+
+- APs need at least 2.5GBe. I'll explain more about my APs in the next section, but all my APs support Wi-Fi 6, and if linked to a 2.5GBe port, they can support significantly higher speeds when clients use the 6 GHz band.
+- Switch Flex needs to be on PoE++. This is important because they will power down the line of other Cameras, so we must ensure they use the maximum power. Cameras don't need a lot of bandwidth, so 1GBe is good enough for them (most 2K cameras at most use 100 Mbps btw).
+
+Here is a diagram I sketched before I worked on patching my keystone panel:
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-09-09.30.27@2x.png"
+  alt="Switch port assignment diagram"
+  size="wide"
+/>
+
+_My current port assignment for the `Switch Pro Max 24 PoE` switch._
+
+## APs
+
+Part of using Unifi is also using their excellent APs (Access Points). But the challenge for me is deploying them in my concrete house. My house has concrete walls and floors. However, some rooms are divided by ["Autoclaved aerated concrete"](https://en.wikipedia.org/wiki/Autoclaved_aerated_concrete) bricks (they are called [Ytong](https://www.xella.co.uk/en_GB/Ytong-building-blocks) here because a company made them very famous).
+
+Fortunately, these are good at letting Wi-Fi signals through the walls, but reinforced concrete is the opposite. You can expect a single wall to [cut off 20dB](https://www.reddit.com/r/askscience/comments/17zp69/what_type_of_building_materials_are_wifi/) of Power. It's like a Faraday cage. The second problem is that my house is like a townhouse that goes vertically. I have three floors, and there is another concrete slab between each floor.
+
+<MDXImage src="https://arslan.io/content/images/2024/09/L1004981.jpeg" alt="U7 Pro Wall mounted" />
+
+_The U7 Pro Wall mounted to the Wall._
+
+Hence, the optimal solution is to deploy multiple APs per floor but lower the Transmission Power so clients always pick up the nearest AP. Having explained the problem, here is the list of APs I've got for my house:
+
+- 3 x [**U7 Pro**](https://eu.store.ui.com/eu/en/category/all-wifi/products/u7-pro) (and a spare for backup)
+- 3 x [**U7 Pro Wall**](https://eu.store.ui.com/eu/en/category/all-wifi/products/u7-pro-wall)
+
+I had a few places where the Pros were more suitable and a few places where the Pro Wall was suitable. I also got a spare U7 Pro in case some of my APs fail. I deployed them in various ways. Some are mounted to the wall, and for some, I 3D-printed custom stands (_I even designed one myself; more on this later_).
+
+<ImageGrid columns={2} size="wider">
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/L1005003.jpeg"
+    alt="Various AP installations"
+  />
+  <GridImage src="https://arslan.io/content/images/2024/09/L1004988.jpeg" alt="AP ceiling mount" />
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/L1004992.jpeg"
+    alt="AP shelf placement"
+  />
+  <GridImage src="https://arslan.io/content/images/2024/09/L1004979.jpeg" alt="AP wall mount" />
+</ImageGrid>
+
+_Unifi's AP's can be installed in various ways. Even though some of the use cases here are not the optimal, it works for us._
+
+Unifi has several tools that allow you to simulate the strength of a Wi-Fi signal. You can upload your layout, draw the lines, and define the wall types (concrete, drywall, etc..). After that, you can start placing all your devices. Based on the wall type shows how much the signals propagate. Here, you can see that in 2.4 GHz, it's well covered (I also optimized the Wi-Fi channels for each Band; more on this later)
+
+<ImageGrid columns={3} size="wider">
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/ss-2024-09-07-164702.png"
+    alt="Wi-Fi coverage simulation - Floor 1"
+  />
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/ss-2024-09-07-164949.png"
+    alt="Wi-Fi coverage simulation - Floor 2"
+  />
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/ss-2024-09-07-164928.png"
+    alt="Wi-Fi coverage simulation - Floor 3"
+  />
+</ImageGrid>
+
+The great thing about this is that you can also locate your device and see where it was deployed. This is for big installations with hundreds of APs, Cameras, and Switches. Nevertheless, it's a cool feature.
+
+### Configuring SSIDs
+
+I have multiple SSIDs configured. Previously, I had SSIDs per Wi-Fi bandwidth (2.4 GHz and 5GHz). Now that all my APs also have support for 6GHz, I thought this was not suitable. Instead, I created three different SSIDs:
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-14.50.15@2x.png"
+  alt="SSID Configuration"
+  size="wide"
+/>
+
+Here is how they work:
+
+- **Takayama**: This is the backbone of our home. All wireless devices are connected here.
+- **Osaka**: We have a guest network. Guests cannot access any devices in our house, and I limit their speed to prevent rogue clients from using my household internet.
+- **Hiroshima**: I haven't yet configured this one, but I plan to configure my various Smart Hubs, TVs, Robot Vacuum Cleaners, and other Wireless devices I don't trust. This will use a dedicated VLAN.
+
+Note that these are configured with VLANs (the `Network` columns show the VLAN names). Hence, we'll have to configure both of them together. I'll explain VLANs later in the blog post.
+
+### Wi-Fi Radio and Channel optimization
+
+Deploying the APs isn't sometimes enough. Unifi does good work of automatically optimizing channel distribution. However, knowing that my house is a mix of brick and concrete walls, I improved it by assigning the band channels manually and changing the transmission powers. I have two APs on each floor, and all APs are in the opposite order (see the photos above). The best ideal way is to use non-overlapping channel numbers. For the 2.4 GHz band, we can only use 1, 6, and 11 (preferred). Hence, I came up with the assignment:
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ss-2024-09-07-170936.png"
+  alt="Channel and TX Power assignments"
+  size="wide"
+/>
+
+_The Channel and TX Power assignments for each AP._
+
+For example, on the ground floor, we have my `AP-Office` and `AP-Gym` installed. Hence, they are on the same floor, that's why one has the channel `1` and the other one `11`. However, above my office room, we have `AP-Living Room`. That's why we have to choose the channel `6` so it doesn't overlap with the `AP-Office`.
+
+Finally, I've changed the TX power to be `Low` for every single AP. This immensely helps clients to drop when they go to another room or switch floors. The biggest problem with the 2.4 GHz band is that it's like a parasite and very good at passing through a lot of walls. Hence, it also causes a lot of interference. By changing it to `Low`, we're not only a good citizen in our neighborhood, we also get the optimal environment for clients that use the 2.4 GHz band.
+
+Here, you can see that right now, the AP density is in excellent condition, and clients have a good signal to the various APs:
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ss-2024-09-07-170904.png"
+  alt="AP density graph"
+  size="wide"
+/>
+
+_Here's the AP density graph. The green dots are clients. Only one client is in poor condition, our car (a Tesla Model Y). I suspect it's because the Car is parked outside, and I've set the AP's TX low. But that's a good compromise because it's only used for software updates._
+
+I did something similar for the 5 GHz and 6 GHz bands. However, the rules are not as strict as for the 2.4 GHz. Hence, I changed only the transmission power for those and enabled the channel assignments to `auto`. Unifi recently released a new Software upgrade that shows all the channels and bandwidth assignments.
+
+It's also essential to use an optimized Channel Width. The channel width defines how much data you can pull in. However, the wider the channel, the more interference you'll see, which means packet loss and instability. Hence, in my network, I have these settings:
+
+- **2.4 GHz**: 20 MHz
+- **5 GHz**: 40 MHz
+- **6 GHz**: 160 MHz
+
+However, increasing the width gives you more speed out of your APs. Given that my ISP speed is capped at 50 Mbps, I was good with lower but more stable settings. (_My ISP is currently updating our infrastructure and laying out Fiber cables, so this will change_)
+
+You can see the final result of channel configurations here:
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-14.02.01@2x.png"
+  alt="Final channel configuration"
+  size="wide"
+/>
+
+Lastly, another important detail is that all my APs are wired (powered by PoE). Hence, because all of them are wired, `Wireless Meshing` is **disabled** for me. Wireless meshing is needed if the APs are not wired to the router; hence, they need to create a wireless backhaul. We don't need it.
+
+### Designing a desk stand for the Unifi U7 Pro Wall
+
+I wasn't sure if I wanted the Pro Wall installed on the walls in two places in my house. Those were concrete walls, and just putting holes there was challenging. Unifi sells a [table stand for the U7 Pro Wall](https://store.ui.com/us/en/category/wifi-wall/products/uacc-u7-pro-wall-ts), but is always out of stock.
+
+<ImageGrid columns={2} size="wide">
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/IMG_9489.jpeg"
+    alt="U7 Pro Wall Stand - Design process"
+  />
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/IMG_9491.jpeg"
+    alt="U7 Pro Wall Stand - 3D Print"
+  />
+</ImageGrid>
+
+<ImageGrid columns={2} size="wide">
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/IMG_9494.jpeg"
+    alt="U7 Pro Wall Stand - Assembly"
+  />
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/L1003425-1.jpeg"
+    alt="U7 Pro Wall Stand - Final result"
+  />
+</ImageGrid>
+
+_U7 Pro Wall Stand Desk_
+
+So, I decided to design it myself. After a few iterations, I developed a design that allowed me to reuse the Pro Wall's metal plate. It looks great, and I made it available for anyone to download and use freely.
+
+<Callout type="info" title="Unifi U7 Pro Wall Desk Stand">
+  A stand to place your U7 Pro Wall on a desktop or shelf. [Download STL Model from
+  Printables](https://www.printables.com/model/960363-unifi-u7-pro-wall-desk-stand)
+</Callout>
+
+## Cameras
+
+I replaced my existing Dahua cameras with Unifi ones. There were several reasons, but the biggest one is the ease of operation and integration. Second, the Dahua cameras (bullet, 2k) were not the best. Two failed over the years, and I wouldn't say I liked configuring them via their built-in UI. I was also using Synology's Surveillance software as an NVR. Even though it worked, its detection algorithm and many other things were not that great.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/IMG_9622-1.jpeg"
+  alt="Unifi cameras collection"
+  size="wide"
+/>
+
+_The various cameras I got from Unifi_
+
+My friend who went to Ubiquiti was very happy with his purchases of Unifi cameras. So, I decided it was time to upgrade my camera system. Here is the list of cameras I got:
+
+- 2 x [**G5 Pro**](https://eu.store.ui.com/eu/en/category/all-cameras-nvrs/products/uvc-g5-pro) with 2 x [**G5 Pro Enhancer**](https://eu.store.ui.com/eu/en/category/cameras-bullet/products/uacc-g5-enhancer)
+- 4 x [**G5 Turret Ultra**](https://eu.store.ui.com/eu/en/category/cameras-dome-turret/products/uvc-g5-turret-ultra)
+
+The G5 Pros are 4K, and Turret Ultras are 2K. I also got the enhancers for the Pros, which add floodlight integration. I ensured that the Pros were installed in the most sensitive places of my house and the rest around its perimeter.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/L1005006.jpeg"
+  alt="G5 Turret Ultra installed"
+/>
+
+_The G5 Turret Ultra provides has a microphone and a wide angle view of the area, providing a good compromise between image quality and price._
+
+So far, everything works as expected. One thing to note is that all these Cameras don't go straight to the Switch. I also deployed two **Switch Flexs.** These are outdoor-rated PoE-powered switches that can power other PoE devices. This was excellent because, in some places, I only had a single cable deployed from my Switch. So, I could `fan-out` use a single port for multiple cameras. This is possible because of PoE++ ports. High-watt output ports allow you to power multiple devices with a single port. This was something I discovered late in the game.
+
+## Rack Setup
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/L1004941.jpeg"
+  alt="12U Rack setup"
+  size="wide"
+/>
+
+_My 12U Rack_
+
+I have a 12U rack, though only half of it is being used. Because my rack has an enclosure with wheels, it's pretty useful because I have my NAS (Synology), Home Assistant Hub, PDU, and many other things at the bottom. There is a 9-port 2U, Schuko PDU, at the back. All my devices in the rack are terminated at this PDU. Then, the PDU is plugged into my UPS.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/201B74C4-CDCC-4748-B5CD-2B7A61607E63_1_105_c.jpeg"
+  alt="Rack bottom section"
+/>
+
+**Update September, 2025**: I replaced my Synology NAS with Unifi's UNAS Pro (7 bay). Obviously I lost some of the capabilities I had with my Synology, such as running apps on it, but it's worth due to ease of operation, and separating storage from compute. I have a Mac Mini for personal use already, and plan that for running any applications I need.
+
+<MDXImage src="https://arslan.io/content/images/2025/10/IMG_6483.jpeg" alt="UNAS Pro installed" />
+
+**Update October, 2025**: The UPS is also finally replaced by a 3kVA APC Smart-UPS. It's a 2U unit and very heavy. However because it was also very deep, I had to replace my rack with a deeper one. Here is how my Rack looks like:
+
+<ImageGrid columns={2} size="wide">
+  <GridImage
+    src="https://arslan.io/content/images/2025/10/IMG_6889.jpeg"
+    alt="Updated rack - Front"
+  />
+  <GridImage
+    src="https://arslan.io/content/images/2025/10/IMG_6896.jpeg"
+    alt="Updated rack - Side"
+  />
+</ImageGrid>
+
+<MDXImage src="https://arslan.io/content/images/2025/10/IMG_6887.jpeg" alt="Updated rack - Back" />
+
+Two things that I need with a UPS are:
+
+1. USB cable support can send signals to my NAS and other devices if there is a power outage so they can shut themselves down gracefully.
+
+2. A bypass switch to remove the UPS system from the circuit for servicing or maintenance or if it is no longer working correctly.
+
+Besides that, I used several Unifi Rack accessories. Some were must-have, some were nice to have, and some were just for aesthetic reasons. Let me explain them:
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/rack-desc.jpeg"
+  alt="Rack accessories diagram"
+  size="wide"
+/>
+
+- **Two Brush Panels**: These are for freeform cables that don't terminate at the Patch Panel, such as SFP cables between switches, Modem cables, or temporary devices. They are nice to have, but two are overkill. I bought them for aesthetic reasons.
+- **One OCD panel**: This is purely for aesthetic reasons, to keep the front unified.
+- **A 24-Port patch panel**: This is a must have. All my camera, outdoor, and indoor RJ45 cables terminate here. I also have a few inline couplers. A patch panel is the backbone of a good rack.
+- **Etherlightning Patch cables**: They are used purely for aesthetic reasons. They keep the Rack tidy. However, because they are so short, they don't obstruct the ports, which has the slight advantage of improving rack maintenance.
+- **RJ45 Dust Covers**: Protects from elements and aesthetically looks nice.
+- **Keystone Blank Patches**: If you don't use them, there are blank holes, and I don't like the look. Again, this is purely for aesthetic reasons.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/L1004917.jpeg"
+  alt="Etherlighting Patch Cables"
+/>
+
+_The Etherlighting Patch Cables were created specially to be used with the Pro Max switches with LED support. Because of the translucent socket it's able to reflect the LED colors._
+
+## Topology and naming devices
+
+A nit thing, but I prefixed the name of all my AP's with `AP-` and all my cameras with `CAM-`. This makes it extremely easy to understand the device type while configuring a setting.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-10-10.25.18@2x.png"
+  alt="All Unifi devices"
+  size="wide"
+/>
+
+_All my Unifi devices_
+
+Another important detail I had to change was the STP Priority of my various switches. It's crucial to avoid Network loops. Network loops happen when multiple paths exist between two points in a network. This leads to data continuously circulating and potentially causing significant issues such as performance degradation, unexpected port blockages, complete network outages, and device crashes. It's like a recursive stack overflow bug in software applications.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ss-2024-09-07-165552.png"
+  alt="Network topology"
+  size="wide"
+/>
+
+_The current topology_
+
+In my case, my main 24-Port switch has a Priority of `4096` (the lower it is, the more it's preferred) and my other switch, the Lite 8 Poe, which I use in my living room for our Game Consoles and TV boxes, has a priority of `32768`.
+
+### Dual WAN settings
+
+I have two ADSL connections coming to me. They are both from the same ISP, so they're unused for backup. Because the maximum speed I can obtain is around 50 Mbps, it's not enough for the whole family. So, one WAN powers my office and my devices, and the second WAN powers the rest of the home.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-14.18.00@2x.png"
+  alt="WAN configuration"
+  size="wide"
+/>
+
+By default, all devices go to the Primary WAN, but I added routing that routes specific devices to the Secondary WAN. This way, I can ensure that the devices I use always use the second one. And if the Secondary WAN fails, it automatically fallbacks to the Primary.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-14.27.18@2x.png"
+  alt="Traffic routing rules"
+  size="wide"
+/>
+
+Making sure that by default, all devices that use the primary WAN has the benefit that no guest or new device will **not congest** the secondary WAN.
+
+## VLAN
+
+A good network setup involves separating devices into their virtual network. This is done by creating VLANs and assigning ports or devices to these VLANs. You can go crazy here and add a lot of things. For me, I wanted to start small. Luckily, there is a great YouTube channel that explains these settings nicely, I recommend it as I've learned a lot from it: [https://www.youtube.com/watch?v=krhsZWnAxVc](https://www.youtube.com/watch?v=krhsZWnAxVc)
+
+Here are the current VLANs I set up:
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-19.10.50@2x-2.png"
+  alt="VLAN configuration"
+  size="wide"
+/>
+
+Again, you can go crazy here, but keeping a clean state is tough once the number of clients increases. So, how do I use them:
+
+- **Default**: This is my main network. My MacBooks, iPads, iPhones, Switches, APs, etc., all go into this network. Some people split this into two VLANs and add another `Secure` VLAN which is used to isolate the gateway, AP, and switches from their other devices. I considered this overkill, so I didn't choose that option.
+- **Guest**: I don't have any wired or wireless device that uses this network; however, people connecting to the Guest network are put into this network. The guest network is isolated and cannot reach other networks.
+- **IoT**: Anything I don't trust or might be an attack surface goes into this, including Robot Vacuum Cleaners, Espresso Machines, Smart Hubs, Tesla Chargers, Game Consoles, TVs, etc. With smart appliances being so popular, this is especially important. IoT devices can reach the Internet but not other devices unless I allow them.
+- **Camera**: As the name says, this only contains the PoE Cameras.
+
+All VLANs have a dedicated subnet with around ~249 usable IPs, which is good enough for household use.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-19.56.13@2x.png"
+  alt="Firewall rule example"
+/>
+
+_A simple Firewall rule that blocks my TV to the Internet_
+
+Of course, just adding VLAN is not enough. What matters is the firewall rules that define what VLAN can or cannot do. This is an advanced topic, and there are many Blog Posts and YouTube videos about it, but to give a recap, I have these in place:
+
+- Default VLAN can access all VLANs.
+- Block inter-vlan routing. No VLAN can see each other. For example, if a rogue device in the IoT device is compromised, they won't be able to access my different networks. This is an issue, though, if, for example, I want my HomeAssistant Hub to detect devices on other VLANs. Hence, I need to add explicit ALLOW rules for every single device.
+- Block access to gateways from each VLAN. Devices can still access the gateway addresses from other VLANs; hence, we must create custom firewall rules to allow them access. So, say if we have an IoT device with an IP `192.168.30.56` it won't be able to access `192.168.10.1` or `192.168.40.1`. The gateway address is our Unifi Controller interface, so this is just an extra caution.
+- Limit the speed of Guests. I had a few instances where guest clients would consume all my bandwidth; that's a no-go for me.
+- Block specific devices to the Internet. For example, my Sony TV cannot access the internet, and I only enable it occasionally to check if there is any FW update. I use an Apple TV 4K box, which I trust more than my TV.
+
+## DNS settings
+
+One thing I did that was a nice improvement was to assign local DNS names to some of my devices, such as my Synology NAS and HomeAssistant Hub. The idea here is to assign them fixed IPs and then create a DNS record by using a domain name that belongs to you (or anything else you want to use):
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-09-10.26.41@2x.png"
+  alt="Local DNS configuration"
+  size="wide"
+/>
+
+However, it's important to understand what I mean `fixed IP`. I use the DHCP server, and each VLAN Network is masked with `/24`, which gives me `249` usable IPs. That's more than enough for us. After plugging your device, the DHCP server assigns an IP from the usable ports. This IP can be fixed in the settings, so the device always uses it:
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-09-10.32.57@2x.png"
+  alt="Fixed IP configuration"
+  size="wide"
+/>
+
+_My Synology NAS has a fixed IP, with a local DNS record. That way, I can easily type `nas.arslan.io` in my browser, and it'll open my NAS without having to remember the IP._
+
+This is different from setting a fixed, static IP from the device. Never do that. Instead, let your router assign the IP and fix it inside your network. After setting it up, you can verify if via `dig` and see that the local domain resolves to your fixed IP:
+
+```bash
+$ dig +noall +answer nas.arslan.io @192.168.10.1
+nas.arslan.io.          0       IN      A       192.168.10.26
+```
+
+_My gateway IP is `192.168.10.1`, hence we target it to resolve our DNS name._
+
+## Tools
+
+No Homelab project is finished without having to build a custom cable. Some companies do custom cabling (which is super dope), but I wanted to learn it myself because I sometimes need cable somewhere in the house.
+
+To build the rack, I had to terminate a few outdoor RJ45 cables. Another thing I always wanted to fix was my old patch panel. Unfortunately, when we built the house 4-5 years ago, my contractor terminated all RJ45 cables directly at the wall without giving extra space. This meant I had to create extra hops and extend all the terminating cables again.
+
+We did that before, but the contractors made the same mistakes and used short cables. Because of that, it was always a hassle to move my rack around. I decided to redo every single cable.
+
+<ImageGrid columns={2} size="wide">
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/IMG_0339.jpeg"
+    alt="New extension cables"
+  />
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/IMG_0338.jpeg"
+    alt="Cable termination at wall"
+  />
+</ImageGrid>
+
+_Multiple new cables to extend the RJ45 cables that terminate at the wall (you can see a glimpse in the second picture)_
+
+This was the most challenging part of the whole homelab project. At one end was a keystone jack (female part), and on the end was an RJ45 socket (male part). So I needed two tools—one tool for punching down cables into the Keystone jack and another one to crimp RJ45 cables.
+
+<ImageGrid columns={2} size="wide">
+  <GridImage src="https://arslan.io/content/images/2024/09/IMG_0310.jpeg" alt="Punchdown tool" />
+  <GridImage src="https://arslan.io/content/images/2024/09/IMG_0309.jpeg" alt="Crimping tool" />
+</ImageGrid>
+
+_The first tool is a Punchdown tool from Oring Networking. It simultaneously punches down all 8 cables. The second tool is a Crimping tool for the RJ45 sockets._
+
+Now, having these tools is nice and good, but the most challenging part wasn't using them but rearranging the color-coded cables into a specific order before we could punch them down. And if you made a single error on both ends, you had to redo it.
+
+<ImageGrid columns={2} size="wide">
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/IMG_0297.jpeg"
+    alt="Color coded cables"
+  />
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/IMG_0298.jpeg"
+    alt="568B wiring standard"
+  />
+</ImageGrid>
+
+_Here you can see the color coded cables and the correct wiring. There are two standards btw, we use the 568B standard as it's more modern, and that's what I use throughout my house._
+
+Finally, if you have so many cables, it'll be hard to understand which cable goes to which room or camera. So, the best way is to label them consistently and efficiently. There are many ways of doing that. The best and most expensive way is to use a heat shrink tube. I didn't have that, but I purchased a Dymo Label printer (model: LabelManager 420P) and used it extensively to label all my cables.
+
+<ImageGrid columns={2} size="wide">
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/IMG_0301.jpeg"
+    alt="Dymo Label printer"
+  />
+  <GridImage
+    src="https://arslan.io/content/images/2024/09/camphoto_33463914.jpeg"
+    alt="Labeled cables"
+  />
+</ImageGrid>
+
+_I used a Dymo LabelManager 420P to print labels for all my new cables. The labels are wrapped around the cables. It does the work and makes it easy to understand the source and destination._
+
+After labeling all the cables, I terminated them at my Keystone Patch Panel. All the wires are neatly held together with zip-locks (I know there are better ways of doing this, but this works for me).
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/L1004948-1.jpeg"
+  alt="Patch panel back"
+  size="wide"
+/>
+
+## Pricing
+
+Here is the list of things I purchased and how much I paid for them. There are a few things I didn't show you in the blog post, such as various patch cables that I bought as spare backups in case I need them.
+
+One crucial detail is that I bought from several countries and marketplaces, so the prices differ significantly from those of the Unifi store. I also paid for customs because I imported some via Amazon.de or Amazon.com. I live in Ankara, Turkey, and our import taxes are quite high. Because of that, the prices you'll see are higher than if you buy it directly from Unifi.
+
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/IMG_9226.jpeg"
+  alt="Unifi boxes"
+  size="wide"
+/>
+
+- **2,296.73 €** (date: 16.07.2024)
+  - 1 x Dream Machine Special Edition
+  - 1 x Switch Pro Max 24 PoE
+  - 4 x U7 Pro (U7-Pro) (one is spare)
+
+- **403.97 €** (date: 11.07.2024)
+  - 2 x Switch Flex
+  - 1 x Lite 8 Poe
+
+- **1447.04 €** (date: 12.07.2024)
+  - 2 x G5 Pro
+  - 2 x G5 Pro Enhancer
+  - 4 x G5 Turret Ultra
+
+- **1015.97 €** (date: 12.07.2024)
+  - 3 x U7 Pro Wall
+  - 24-Port Blank Keystone Patch Panel
+  - 2 x 10 Gbps SFP+ Direct Attach Cable
+  - 1 SFP to RJ45 Adapter (1G)
+  - 15 x UniFi Ethernet Patch Cable (White/Blue/Black / 0.3 m)
+  - 10 x UniFi Ethernet Patch Cable (White/Blue / 0.1 m)
+  - RJ45 Dust Cover, 24-Pack
+  - Keystone Blank Insert, 24-pack
+  - 1U Blank Panel
+  - 2 x 1U Brush Panel
+  - UniFi Etherlighting Patch Cable (0.15 m (24-pack)
+
+**Total**: **5,203.71 Euro ($5,751.24)**. _Note for future readers: the prices might differ based on exchange ratios; these are approximates._
+
+I spent around ~**$5750** for all my devices and accessories. This includes 7 APs, 6 PoE cameras, and several switches. I rebuilt it from scratch, and my house is big. Here, you can see why people say Unifi is expensive. If you used other brands, this would cost you 2x or 3x less. However, none of them provide a user experience for Unifi. Quality and well-made, well-designed goods have a price. For me, it's worth it.
+
+## Future plans
+
+When I told a few friends that I finished my homelab project, they laughed and said, "A homelab project is never finished". That's even true of what I have done so far. There are, of course, a few things that are nice to have and a few things I plan to work on:
+
+- I need to replace my UPS. As I said earlier, it is old and needs to be replaced. I could replace the battery, but the UPS doesn't give me confidence and lacks features (such as USB support and bypass). Hence, I'll probably replace it with a rack-based one.
+- Add an NUC. I currently run a few things on my Synology; I have a dedicated HomeAssistant Hub. But sometimes, it would be cool if I had a dedicated [NUC](https://en.wikipedia.org/wiki/Next_Unit_of_Computing) or a small server.
+- I want to replace my existing NAS with a rack-based version. I love my Synology and have had no issues so far. But having a rack-based NAS would complete my rack. However, I've heard Synology's Rack-based versions are not worth it as they are expensive, but we'll see.
+- Update the Lite 8 PoE switch with a 2.5 GBe one, so I can use the full speed of my U7 Pro Wall. It's a bonus if it has a PoE input port.
+- Mount some APs to the wall for increased security and a streamlined look. Even though the desk stand I designed looks nice, I think having it on the wall is a better option.
+
+## Verdict
+
+It took me around three months to finish this project. Of course, I had this plan for many years, but I'm glad I followed through with it. I had a few hiccups. Two things that stuck with me were:
+
+- There is no PPPoE setup when using the iPhone or iPad app. I didn't realize that, but my modem is used in bridge mode, so I need to enter the credentials. However, the iPhone or iPad apps wouldn't allow it. I plugged my controller into my old switch to fix it and started the installation process from there.
+- I had a few power outages. In one case, the Switch didn't come back online. I thought it was dead. It fixed itself after I unplugged the power cable and put it back. I honestly thought the Switch was dead. I later read that Ubiquit devices are poorly handling power outages.
+
+However, besides these two things, everything else was superb.
+
+![All Ubiquiti devices summary](https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-20.08.19@2x.png)
+
+_All Ubiquiti devices currently used in my Homelab_
+
+So far, the UI and user experience have been great. The devices update themselves seamlessly every night (if there are any updates); I can immediately see what's happening and which client uses the most bandwidth. I can easily create Firewall rules and change policies.
+
+I especially like how easy it is to change the context, such as from the list of devices to a Switch, then from there to the Port manager, and so on. For example, the Unifi iOS App has an AR mode; if you scan the switches or devices, it'll create an overlay of the devices onto each port. It's genius.
+
+![Unifi AR feature](https://arslan.io/content/images/2024/09/6E7461E8-82BD-4412-9EF9-18880B2DF850_1_201_a.jpeg)
+
+_The AR feature of the Unifi iOS App allows you to see which port is used by which device._
+
+The UI flows with you, and I missed such a user experience. It's a breath of air.
+
+![Unifi Controller interface](https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-20.00.02@2x.png)
+
+_The Unifi Controller has a well designed control interface._
+
+---
+
+Thanks for reading so far. If you have any questions, feel free to reach out!
+
+_I want to give thanks to Cihangir Savaş, Can Doğancı, Harun Yazar, and Nursena Uzar for helping me build my Homelab Project from scratch and sourcing the components._

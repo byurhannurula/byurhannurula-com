@@ -1,0 +1,353 @@
+---
+title: "My Homelab Setup: From Zero to Self-Hosted Everything"
+date: "2024-12-20"
+excerpt: "A comprehensive guide to building a powerful homelab for self-hosting services, learning infrastructure, and having complete control over your data."
+coverImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80"
+tags: ["homelab", "self-hosting", "infrastructure", "docker", "networking"]
+toc: true
+---
+
+Building a homelab has been one of the most rewarding projects I've undertaken as a developer. It's not just about having cool hardware—it's about learning, experimenting, and taking control of your digital life. In this post, I'll walk you through my entire setup, from hardware choices to the services I run.
+
+## Why Build a Homelab?
+
+Before diving into the technical details, let's talk about why you might want a homelab:
+
+- **Learning**: Nothing beats hands-on experience with real infrastructure
+- **Privacy**: Keep your data under your control, not in someone else's cloud
+- **Cost savings**: Long-term, self-hosting can be cheaper than cloud subscriptions
+- **Customization**: Build exactly what you need, how you need it
+- **Fun**: Let's be honest, it's just cool to have your own datacenter
+
+<Callout type="info" title="Starting Small">
+  You don't need expensive enterprise hardware to start. An old laptop or a Raspberry Pi is enough
+  to begin your homelab journey.
+</Callout>
+
+## Hardware Overview
+
+Here's what powers my homelab:
+
+| Component   | Model               | Purpose             |
+| ----------- | ------------------- | ------------------- |
+| Main Server | Dell PowerEdge R720 | Virtualization host |
+| NAS         | Synology DS920+     | Storage & backups   |
+| Mini PC     | Intel NUC 12        | Kubernetes node     |
+| Network     | Ubiquiti UDM Pro    | Routing & firewall  |
+| Switch      | Ubiquiti USW-24-POE | Network switching   |
+| UPS         | APC Smart-UPS 1500  | Power protection    |
+
+### The Main Server
+
+My Dell PowerEdge R720 is the workhorse of the lab. I picked it up for around $300 on eBay, and it's been rock solid:
+
+- **CPU**: Dual Intel Xeon E5-2680 v2 (20 cores / 40 threads total)
+- **RAM**: 192GB DDR3 ECC
+- **Storage**: 8x 2TB SAS drives in RAID 10
+- **Network**: 4x 1GbE + 2x 10GbE
+
+```bash title="Terminal"
+# Check system resources
+$ htop
+$ free -h
+              total        used        free      shared  buff/cache   available
+Mem:          188Gi        45Gi        12Gi       2.1Gi       130Gi       138Gi
+Swap:          16Gi       512Mi        15Gi
+```
+
+### Storage Architecture
+
+Storage is critical in a homelab. I use a tiered approach:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Storage Tiers                         │
+├─────────────────────────────────────────────────────────┤
+│  Tier 1: NVMe SSD (500GB)    → VMs, Databases           │
+│  Tier 2: SAS SSD (2TB)       → Containers, Hot Data     │
+│  Tier 3: HDD RAID (16TB)     → Media, Backups, Archives │
+│  Tier 4: Synology NAS (40TB) → Cold Storage, Offsite    │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Network Setup
+
+Proper networking is the backbone of any homelab. Here's my network topology:
+
+### VLAN Configuration
+
+I separate my network into multiple VLANs for security and organization:
+
+| VLAN ID | Name       | Subnet       | Purpose                |
+| ------- | ---------- | ------------ | ---------------------- |
+| 1       | Management | 10.0.1.0/24  | Network devices        |
+| 10      | Trusted    | 10.0.10.0/24 | Personal devices       |
+| 20      | IoT        | 10.0.20.0/24 | Smart home devices     |
+| 30      | Servers    | 10.0.30.0/24 | Server infrastructure  |
+| 40      | DMZ        | 10.0.40.0/24 | Public-facing services |
+
+```yaml title="network-config.yml"
+networks:
+  - name: "Servers"
+    vlan_id: 30
+    subnet: "10.0.30.0/24"
+    gateway: "10.0.30.1"
+    dhcp:
+      enabled: true
+      start: "10.0.30.100"
+      stop: "10.0.30.254"
+    firewall:
+      - allow: internal
+      - deny: iot_to_servers
+```
+
+<Callout type="warning" title="Security First">
+  Always isolate IoT devices on their own VLAN. Many smart devices have poor security and can be
+  entry points for attackers.
+</Callout>
+
+## Virtualization with Proxmox
+
+I use Proxmox VE as my hypervisor. It's free, powerful, and has an excellent web interface.
+
+### VM Templates
+
+I maintain several VM templates for quick deployment:
+
+```bash title="Terminal"
+# Create a cloud-init enabled Ubuntu template
+wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+
+qm create 9000 --name "ubuntu-cloud" --memory 2048 --cores 2 --net0 virtio,bridge=vmbr0
+qm importdisk 9000 jammy-server-cloudimg-amd64.img local-lvm
+qm set 9000 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-9000-disk-0
+qm set 9000 --boot c --bootdisk scsi0
+qm set 9000 --ide2 local-lvm:cloudinit
+qm set 9000 --serial0 socket --vga serial0
+qm set 9000 --agent enabled=1
+qm template 9000
+```
+
+### Current VMs
+
+Here's what I'm running:
+
+```
+┌────────────────────────────────────────────────────┐
+│  Proxmox VE Cluster                                │
+├────────────────────────────────────────────────────┤
+│  VM 100: Docker Host      │ 8 cores │ 32GB │ 500GB │
+│  VM 101: K3s Master       │ 4 cores │ 16GB │ 100GB │
+│  VM 102: K3s Worker 1     │ 4 cores │ 16GB │ 100GB │
+│  VM 103: K3s Worker 2     │ 4 cores │ 16GB │ 100GB │
+│  VM 104: Database Server  │ 4 cores │ 32GB │ 200GB │
+│  VM 105: Dev Environment  │ 8 cores │ 32GB │ 500GB │
+└────────────────────────────────────────────────────┘
+```
+
+## Services I Self-Host
+
+### Infrastructure Services
+
+These are the foundational services that everything else depends on:
+
+```yaml title="docker-compose.yml"
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik:/etc/traefik
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.home.lab`)"
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    volumes:
+      - ./homepage:/app/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homepage.rule=Host(`home.lab`)"
+```
+
+### Productivity & Development
+
+| Service       | Purpose       | Why I Use It                      |
+| ------------- | ------------- | --------------------------------- |
+| Gitea         | Git hosting   | Lightweight GitHub alternative    |
+| Drone CI      | CI/CD         | Automated builds and deployments  |
+| Vaultwarden   | Passwords     | Bitwarden-compatible, self-hosted |
+| Paperless-ngx | Documents     | Searchable document archive       |
+| Nextcloud     | Cloud storage | Google Drive replacement          |
+
+### Media & Entertainment
+
+```yaml title="docker-compose.media.yml"
+services:
+  plex:
+    image: linuxserver/plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./plex:/config
+      - /data/media:/media
+
+  sonarr:
+    image: linuxserver/sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./sonarr:/config
+      - /data/media/tv:/tv
+      - /data/downloads:/downloads
+
+  radarr:
+    image: linuxserver/radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./radarr:/config
+      - /data/media/movies:/movies
+      - /data/downloads:/downloads
+```
+
+## Monitoring & Observability
+
+You can't manage what you can't measure. Here's my monitoring stack:
+
+### Prometheus + Grafana
+
+```yaml title="docker-compose.monitoring.yml"
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=30d"
+
+  grafana:
+    image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+  node-exporter:
+    image: prom/node-exporter
+    network_mode: host
+    pid: host
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+```
+
+### Key Metrics I Track
+
+- **CPU/Memory/Disk**: Basic resource utilization
+- **Network throughput**: Bandwidth usage per VLAN
+- **Container health**: Restart counts, resource usage
+- **SSL certificate expiry**: Never get caught with expired certs
+- **Backup status**: Ensure backups are completing
+
+<Callout type="success" title="Alerting is Key">
+  Set up alerts for critical thresholds. I use Alertmanager to send notifications to Discord when
+  something needs attention.
+</Callout>
+
+## Backup Strategy
+
+The 3-2-1 rule: 3 copies, 2 different media types, 1 offsite.
+
+```bash title="backup.sh"
+#!/bin/bash
+
+export RESTIC_REPOSITORY="sftp:backup@nas:/backups/homelab"
+export RESTIC_PASSWORD_FILE="/root/.restic-password"
+
+# Backup important directories
+restic backup \
+  /home \
+  /etc \
+  /var/lib/docker/volumes \
+  --exclude="*.tmp" \
+  --exclude="node_modules" \
+  --exclude=".cache"
+
+# Prune old backups
+restic forget \
+  --keep-daily 7 \
+  --keep-weekly 4 \
+  --keep-monthly 12 \
+  --prune
+
+# Verify backup integrity
+restic check
+```
+
+## Power Consumption & Costs
+
+Running a homelab isn't free. Here's my monthly breakdown:
+
+| Component    | Watts    | Monthly kWh | Cost ($0.12/kWh) |
+| ------------ | -------- | ----------- | ---------------- |
+| R720 Server  | 180W avg | 129.6       | $15.55           |
+| Synology NAS | 40W      | 28.8        | $3.46            |
+| Network gear | 50W      | 36.0        | $4.32            |
+| Intel NUC    | 25W      | 18.0        | $2.16            |
+| **Total**    | **295W** | **212.4**   | **$25.49**       |
+
+<Callout type="info" title="Efficiency Tips">
+  Consider using ARM-based devices or mini PCs for always-on services. My next upgrade will likely
+  be moving more workloads to efficient hardware.
+</Callout>
+
+## Lessons Learned
+
+After years of running a homelab, here's what I've learned:
+
+1. **Start simple**: Don't try to build everything at once
+2. **Document everything**: Future you will thank present you
+3. **Automate early**: Manual processes don't scale
+4. **Plan for failure**: Hardware fails, have backups and redundancy
+5. **Security matters**: Treat your homelab like a production environment
+
+## What's Next?
+
+My roadmap for the coming months:
+
+- Migrate to a Kubernetes-native setup
+- Implement GitOps with ArgoCD
+- Add more energy-efficient hardware
+- Set up a proper disaster recovery site
+- Explore home automation integration
+
+---
+
+Building a homelab is a journey, not a destination. Every problem you solve teaches you something new. If you're thinking about starting one, my advice is simple: just start. You'll learn more from doing than from planning.
+
+Feel free to reach out if you have questions about any part of my setup!

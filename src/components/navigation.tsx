@@ -48,7 +48,7 @@ export function Navigation() {
         scrolled ? "border-b bg-background/60 backdrop-blur-md" : ""
       } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
-      <div className="mx-auto flex h-16 max-w-screen-md items-center justify-between px-6">
+      <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-6">
         <Link href="/" className="font-bold text-foreground text-lg">
           {SITE_CONFIG.logo}
         </Link>
@@ -81,7 +81,6 @@ export function Navigation() {
               </li>
             ))}
           </ul>
-          <GlobalSearch />
           <ThemeToggle />
         </nav>
 
@@ -102,7 +101,7 @@ export function Navigation() {
       {/* Mobile Navigation Menu */}
       {isOpen && (
         <div className="animate-fade-in border-b bg-background md:hidden">
-          <nav className="mx-auto flex max-w-screen-md flex-col px-6 py-6">
+          <nav className="mx-auto flex max-w-3xl flex-col px-6 py-6">
             <ul className="flex flex-col gap-6">
               {NAVIGATION_ITEMS.map((item) => (
                 <li key={item.path}>

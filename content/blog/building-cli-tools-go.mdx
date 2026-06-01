@@ -1,0 +1,812 @@
+---
+title: "Building CLI Tools in Go: From Zero to Production"
+date: "2024-11-28"
+excerpt: "A practical guide to building professional command-line tools in Go. Learn project structure, argument parsing, configuration, testing, and distribution."
+coverImage: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=800&q=80"
+tags: ["go", "golang", "cli", "development", "tools"]
+toc: true
+tocStyle: floating
+---
+
+Go is perfect for building CLI tools. It compiles to a single binary, has excellent cross-compilation support, and the standard library handles most use cases. In this guide, I'll walk you through building a production-ready CLI tool from scratch.
+
+## Why Go for CLI Tools?
+
+| Feature        | Go     | Python | Rust   | Node.js |
+| -------------- | ------ | ------ | ------ | ------- |
+| Single Binary  | ✅     | ❌     | ✅     | ❌      |
+| Cross-compile  | Easy   | Hard   | Medium | N/A     |
+| Startup Time   | ~5ms   | ~50ms  | ~3ms   | ~100ms  |
+| Memory Usage   | Low    | Medium | Low    | High    |
+| Learning Curve | Medium | Low    | High   | Low     |
+
+<Callout type="info" title="Distribution is Key">
+  Go's single binary output means users don't need to install runtimes or dependencies. Download and
+  run—that's it.
+</Callout>
+
+## Project Setup
+
+Let's build a real tool: `devctl` - a developer utilities CLI.
+
+```bash title="Terminal"
+mkdir devctl && cd devctl
+go mod init github.com/username/devctl
+```
+
+### Project Structure
+
+```
+devctl/
+├── cmd/
+│   └── devctl/
+│       └── main.go        # Entry point
+├── internal/
+│   ├── commands/          # Command implementations
+│   │   ├── root.go
+│   │   ├── init.go
+│   │   ├── deploy.go
+│   │   └── config.go
+│   ├── config/            # Configuration handling
+│   │   └── config.go
+│   └── utils/             # Shared utilities
+│       └── helpers.go
+├── pkg/                   # Public packages (if any)
+├── go.mod
+├── go.sum
+├── Makefile
+└── README.md
+```
+
+## Using Cobra for Commands
+
+Cobra is the standard for Go CLI tools (used by kubectl, hugo, gh, etc.):
+
+```bash title="Terminal"
+go get github.com/spf13/cobra@latest
+go get github.com/spf13/viper@latest
+```
+
+### Root Command
+
+```go title="internal/commands/root.go"
+package commands
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+)
+
+var (
+	cfgFile string
+	verbose bool
+)
+
+var rootCmd = &cobra.Command{
+	Use:   "devctl",
+	Short: "Developer utilities CLI",
+	Long: `devctl is a collection of developer utilities
+for managing projects, deployments, and configurations.
+
+Complete documentation is available at https://github.com/username/devctl`,
+	Version: "1.0.0",
+}
+
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
+func init() {
+	cobra.OnInitialize(initConfig)
+
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "",
+		"config file (default is $HOME/.devctl.yaml)")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false,
+		"verbose output")
+
+	viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
+}
+
+func initConfig() {
+	if cfgFile != "" {
+		viper.SetConfigFile(cfgFile)
+	} else {
+		home, err := os.UserHomeDir()
+		cobra.CheckErr(err)
+
+		viper.AddConfigPath(home)
+		viper.SetConfigType("yaml")
+		viper.SetConfigName(".devctl")
+	}
+
+	viper.AutomaticEnv()
+	viper.SetEnvPrefix("DEVCTL")
+
+	if err := viper.ReadInConfig(); err == nil {
+		if verbose {
+			fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		}
+	}
+}
+```
+
+### Adding Subcommands
+
+```go title="internal/commands/init.go"
+package commands
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/spf13/cobra"
+)
+
+var initCmd = &cobra.Command{
+	Use:   "init [project-name]",
+	Short: "Initialize a new project",
+	Long:  `Initialize a new project with standard directory structure and configuration files.`,
+	Args:  cobra.ExactArgs(1),
+	RunE:  runInit,
+}
+
+func init() {
+	rootCmd.AddCommand(initCmd)
+
+	initCmd.Flags().StringP("template", "t", "default", "project template to use")
+	initCmd.Flags().Bool("git", true, "initialize git repository")
+}
+
+func runInit(cmd *cobra.Command, args []string) error {
+	projectName := args[0]
+	template, _ := cmd.Flags().GetString("template")
+	initGit, _ := cmd.Flags().GetBool("git")
+
+	fmt.Printf("Creating project: %s (template: %s)\n", projectName, template)
+
+	// Create project directory
+	if err := os.MkdirAll(projectName, 0755); err != nil {
+		return fmt.Errorf("failed to create directory: %w", err)
+	}
+
+	// Create standard directories
+	dirs := []string{"cmd", "internal", "pkg", "configs", "scripts"}
+	for _, dir := range dirs {
+		path := filepath.Join(projectName, dir)
+		if err := os.MkdirAll(path, 0755); err != nil {
+			return fmt.Errorf("failed to create %s: %w", dir, err)
+		}
+		fmt.Printf("  Created: %s/\n", dir)
+	}
+
+	// Initialize git if requested
+	if initGit {
+		// Git initialization logic here
+		fmt.Println("  Initialized git repository")
+	}
+
+	fmt.Printf("\n✅ Project %s created successfully!\n", projectName)
+	return nil
+}
+```
+
+### Deploy Command with Progress
+
+```go
+// internal/commands/deploy.go
+package commands
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/spf13/cobra"
+)
+
+var deployCmd = &cobra.Command{
+	Use:   "deploy",
+	Short: "Deploy the application",
+	Long:  `Deploy the application to the specified environment.`,
+	RunE:  runDeploy,
+}
+
+func init() {
+	rootCmd.AddCommand(deployCmd)
+
+	deployCmd.Flags().StringP("env", "e", "staging", "deployment environment")
+	deployCmd.Flags().Bool("dry-run", false, "simulate deployment")
+	deployCmd.Flags().Duration("timeout", 5*time.Minute, "deployment timeout")
+}
+
+func runDeploy(cmd *cobra.Command, args []string) error {
+	env, _ := cmd.Flags().GetString("env")
+	dryRun, _ := cmd.Flags().GetBool("dry-run")
+	timeout, _ := cmd.Flags().GetDuration("timeout")
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	if dryRun {
+		fmt.Println("🔍 Dry run mode - no changes will be made")
+	}
+
+	steps := []struct {
+		name string
+		fn   func(context.Context) error
+	}{
+		{"Building application", buildApp},
+		{"Running tests", runTests},
+		{"Pushing to registry", pushImage},
+		{"Deploying to " + env, deployToEnv},
+	}
+
+	for i, step := range steps {
+		fmt.Printf("[%d/%d] %s...", i+1, len(steps), step.name)
+
+		if dryRun {
+			fmt.Println(" ✓ (skipped)")
+			continue
+		}
+
+		if err := step.fn(ctx); err != nil {
+			fmt.Println(" ✗")
+			return fmt.Errorf("%s failed: %w", step.name, err)
+		}
+		fmt.Println(" ✓")
+	}
+
+	fmt.Printf("\n🚀 Deployment to %s complete!\n", env)
+	return nil
+}
+
+func buildApp(ctx context.Context) error {
+	time.Sleep(500 * time.Millisecond) // Simulate work
+	return nil
+}
+
+func runTests(ctx context.Context) error {
+	time.Sleep(300 * time.Millisecond)
+	return nil
+}
+
+func pushImage(ctx context.Context) error {
+	time.Sleep(400 * time.Millisecond)
+	return nil
+}
+
+func deployToEnv(ctx context.Context) error {
+	time.Sleep(600 * time.Millisecond)
+	return nil
+}
+```
+
+## Beautiful Terminal Output
+
+### Using Colors and Styles
+
+```go
+// internal/utils/output.go
+package utils
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/fatih/color"
+)
+
+var (
+	Success = color.New(color.FgGreen, color.Bold).SprintFunc()
+	Warning = color.New(color.FgYellow).SprintFunc()
+	Error   = color.New(color.FgRed, color.Bold).SprintFunc()
+	Info    = color.New(color.FgCyan).SprintFunc()
+	Subtle  = color.New(color.FgHiBlack).SprintFunc()
+)
+
+func PrintSuccess(format string, a ...interface{}) {
+	fmt.Printf("%s %s\n", Success("✓"), fmt.Sprintf(format, a...))
+}
+
+func PrintError(format string, a ...interface{}) {
+	fmt.Fprintf(os.Stderr, "%s %s\n", Error("✗"), fmt.Sprintf(format, a...))
+}
+
+func PrintWarning(format string, a ...interface{}) {
+	fmt.Printf("%s %s\n", Warning("!"), fmt.Sprintf(format, a...))
+}
+
+func PrintInfo(format string, a ...interface{}) {
+	fmt.Printf("%s %s\n", Info("→"), fmt.Sprintf(format, a...))
+}
+```
+
+### Progress Bars and Spinners
+
+```go
+// Using github.com/schollz/progressbar/v3
+package utils
+
+import (
+	"time"
+
+	"github.com/schollz/progressbar/v3"
+)
+
+func NewProgressBar(max int, description string) *progressbar.ProgressBar {
+	return progressbar.NewOptions(max,
+		progressbar.OptionEnableColorCodes(true),
+		progressbar.OptionSetWidth(40),
+		progressbar.OptionSetDescription(description),
+		progressbar.OptionSetTheme(progressbar.Theme{
+			Saucer:        "[green]=[reset]",
+			SaucerHead:    "[green]>[reset]",
+			SaucerPadding: " ",
+			BarStart:      "[",
+			BarEnd:        "]",
+		}),
+		progressbar.OptionShowCount(),
+		progressbar.OptionShowIts(),
+	)
+}
+
+// Usage example
+func downloadFiles(urls []string) error {
+	bar := NewProgressBar(len(urls), "Downloading")
+
+	for _, url := range urls {
+		// Download file...
+		bar.Add(1)
+		time.Sleep(100 * time.Millisecond)
+	}
+
+	return nil
+}
+```
+
+<Callout type="success" title="User Experience Matters">
+  Good CLI tools provide clear feedback. Use colors, progress indicators, and helpful error
+  messages.
+</Callout>
+
+## Interactive Prompts
+
+```go
+// Using github.com/AlecAivazis/survey/v2
+package commands
+
+import (
+	"fmt"
+
+	"github.com/AlecAivazis/survey/v2"
+)
+
+type ProjectConfig struct {
+	Name        string
+	Description string
+	Language    string
+	Features    []string
+}
+
+func interactiveInit() (*ProjectConfig, error) {
+	config := &ProjectConfig{}
+
+	questions := []*survey.Question{
+		{
+			Name:     "name",
+			Prompt:   &survey.Input{Message: "Project name:"},
+			Validate: survey.Required,
+		},
+		{
+			Name:   "description",
+			Prompt: &survey.Input{Message: "Description:"},
+		},
+		{
+			Name: "language",
+			Prompt: &survey.Select{
+				Message: "Primary language:",
+				Options: []string{"Go", "TypeScript", "Python", "Rust"},
+				Default: "Go",
+			},
+		},
+		{
+			Name: "features",
+			Prompt: &survey.MultiSelect{
+				Message: "Include features:",
+				Options: []string{
+					"Docker support",
+					"CI/CD pipeline",
+					"Pre-commit hooks",
+					"Documentation",
+					"Testing setup",
+				},
+			},
+		},
+	}
+
+	if err := survey.Ask(questions, config); err != nil {
+		return nil, err
+	}
+
+	// Confirm
+	confirm := false
+	prompt := &survey.Confirm{
+		Message: fmt.Sprintf("Create project '%s'?", config.Name),
+	}
+	survey.AskOne(prompt, &confirm)
+
+	if !confirm {
+		return nil, fmt.Errorf("cancelled by user")
+	}
+
+	return config, nil
+}
+```
+
+## Configuration Management
+
+```go
+// internal/config/config.go
+package config
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"gopkg.in/yaml.v3"
+)
+
+type Config struct {
+	Version     string            `yaml:"version"`
+	DefaultEnv  string            `yaml:"default_env"`
+	Registries  map[string]string `yaml:"registries"`
+	Environments map[string]EnvConfig `yaml:"environments"`
+}
+
+type EnvConfig struct {
+	URL      string `yaml:"url"`
+	Token    string `yaml:"token,omitempty"`
+	Insecure bool   `yaml:"insecure,omitempty"`
+}
+
+func DefaultConfig() *Config {
+	return &Config{
+		Version:    "1",
+		DefaultEnv: "staging",
+		Registries: map[string]string{
+			"default": "ghcr.io",
+		},
+		Environments: map[string]EnvConfig{
+			"staging": {URL: "https://staging.example.com"},
+			"production": {URL: "https://prod.example.com"},
+		},
+	}
+}
+
+func ConfigPath() string {
+	home, _ := os.UserHomeDir()
+	return filepath.Join(home, ".devctl.yaml")
+}
+
+func Load() (*Config, error) {
+	path := ConfigPath()
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return DefaultConfig(), nil
+		}
+		return nil, fmt.Errorf("failed to read config: %w", err)
+	}
+
+	var cfg Config
+	if err := yaml.Unmarshal(data, &cfg); err != nil {
+		return nil, fmt.Errorf("failed to parse config: %w", err)
+	}
+
+	return &cfg, nil
+}
+
+func (c *Config) Save() error {
+	data, err := yaml.Marshal(c)
+	if err != nil {
+		return fmt.Errorf("failed to marshal config: %w", err)
+	}
+
+	path := ConfigPath()
+	if err := os.WriteFile(path, data, 0644); err != nil {
+		return fmt.Errorf("failed to write config: %w", err)
+	}
+
+	return nil
+}
+```
+
+## Testing CLI Commands
+
+```go
+// internal/commands/init_test.go
+package commands
+
+import (
+	"bytes"
+	"os"
+	"path/filepath"
+	"testing"
+)
+
+func TestInitCommand(t *testing.T) {
+	// Create temp directory
+	tmpDir := t.TempDir()
+	originalDir, _ := os.Getwd()
+	os.Chdir(tmpDir)
+	defer os.Chdir(originalDir)
+
+	tests := []struct {
+		name    string
+		args    []string
+		wantErr bool
+	}{
+		{
+			name:    "basic init",
+			args:    []string{"init", "myproject"},
+			wantErr: false,
+		},
+		{
+			name:    "missing project name",
+			args:    []string{"init"},
+			wantErr: true,
+		},
+		{
+			name:    "with template",
+			args:    []string{"init", "myproject2", "--template", "api"},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Reset command for each test
+			rootCmd.SetArgs(tt.args)
+
+			buf := new(bytes.Buffer)
+			rootCmd.SetOut(buf)
+			rootCmd.SetErr(buf)
+
+			err := rootCmd.Execute()
+
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Execute() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			// Verify project was created
+			if !tt.wantErr && len(tt.args) > 1 {
+				projectPath := filepath.Join(tmpDir, tt.args[1])
+				if _, err := os.Stat(projectPath); os.IsNotExist(err) {
+					t.Errorf("Project directory not created: %s", projectPath)
+				}
+			}
+		})
+	}
+}
+
+func TestInitCreatesDirectories(t *testing.T) {
+	tmpDir := t.TempDir()
+	projectPath := filepath.Join(tmpDir, "testproject")
+
+	rootCmd.SetArgs([]string{"init", projectPath})
+	if err := rootCmd.Execute(); err != nil {
+		t.Fatalf("Execute() failed: %v", err)
+	}
+
+	expectedDirs := []string{"cmd", "internal", "pkg", "configs", "scripts"}
+	for _, dir := range expectedDirs {
+		path := filepath.Join(projectPath, dir)
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			t.Errorf("Expected directory not created: %s", dir)
+		}
+	}
+}
+```
+
+## Building and Distribution
+
+### Makefile
+
+```makefile
+# Makefile
+BINARY_NAME=devctl
+VERSION=$(shell git describe --tags --always --dirty)
+BUILD_TIME=$(shell date -u '+%Y-%m-%d_%H:%M:%S')
+LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
+
+.PHONY: all build clean test lint install
+
+all: clean lint test build
+
+build:
+	go build ${LDFLAGS} -o bin/${BINARY_NAME} ./cmd/devctl
+
+build-all:
+	GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o bin/${BINARY_NAME}-darwin-amd64 ./cmd/devctl
+	GOOS=darwin GOARCH=arm64 go build ${LDFLAGS} -o bin/${BINARY_NAME}-darwin-arm64 ./cmd/devctl
+	GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o bin/${BINARY_NAME}-linux-amd64 ./cmd/devctl
+	GOOS=linux GOARCH=arm64 go build ${LDFLAGS} -o bin/${BINARY_NAME}-linux-arm64 ./cmd/devctl
+	GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o bin/${BINARY_NAME}-windows-amd64.exe ./cmd/devctl
+
+clean:
+	rm -rf bin/
+
+test:
+	go test -v -race -cover ./...
+
+lint:
+	golangci-lint run
+
+install: build
+	cp bin/${BINARY_NAME} /usr/local/bin/
+
+release: build-all
+	@echo "Creating release archives..."
+	cd bin && for f in ${BINARY_NAME}-*; do tar -czf $$f.tar.gz $$f; done
+```
+
+### GitHub Actions Release
+
+```yaml
+# .github/workflows/release.yml
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### GoReleaser Config
+
+```yaml
+# .goreleaser.yaml
+version: 1
+
+builds:
+  - main: ./cmd/devctl
+    binary: devctl
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.Version={{.Version}}
+      - -X main.Commit={{.Commit}}
+      - -X main.Date={{.Date}}
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+brews:
+  - repository:
+      owner: username
+      name: homebrew-tap
+    homepage: https://github.com/username/devctl
+    description: Developer utilities CLI
+    license: MIT
+    install: |
+      bin.install "devctl"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+```
+
+## Shell Completions
+
+```go
+// internal/commands/completion.go
+package commands
+
+import (
+	"os"
+
+	"github.com/spf13/cobra"
+)
+
+var completionCmd = &cobra.Command{
+	Use:   "completion [bash|zsh|fish|powershell]",
+	Short: "Generate completion script",
+	Long: `To load completions:
+
+Bash:
+  $ source <(devctl completion bash)
+  # To load completions for each session, execute once:
+  # Linux:
+  $ devctl completion bash > /etc/bash_completion.d/devctl
+  # macOS:
+  $ devctl completion bash > $(brew --prefix)/etc/bash_completion.d/devctl
+
+Zsh:
+  $ echo "autoload -U compinit; compinit" >> ~/.zshrc
+  $ devctl completion zsh > "${fpath[1]}/_devctl"
+
+Fish:
+  $ devctl completion fish > ~/.config/fish/completions/devctl.fish
+`,
+	DisableFlagsInUseLine: true,
+	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
+	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+	Run: func(cmd *cobra.Command, args []string) {
+		switch args[0] {
+		case "bash":
+			cmd.Root().GenBashCompletion(os.Stdout)
+		case "zsh":
+			cmd.Root().GenZshCompletion(os.Stdout)
+		case "fish":
+			cmd.Root().GenFishCompletion(os.Stdout, true)
+		case "powershell":
+			cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(completionCmd)
+}
+```
+
+<Callout type="warning" title="Don't Forget Completions">
+  Shell completions dramatically improve usability. Always include them in your CLI tools.
+</Callout>
+
+---
+
+Building CLI tools in Go is a joy. The language's simplicity, excellent standard library, and cross-compilation support make it perfect for tools that need to run anywhere. Start with Cobra, add Viper for config, and you're 90% of the way there.
+
+What CLI tools are you building? I'd love to hear about your projects!

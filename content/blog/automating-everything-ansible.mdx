@@ -1,0 +1,642 @@
+---
+title: "Automating Everything with Ansible: Infrastructure as Code"
+date: "2024-12-05"
+excerpt: "Learn how to automate your server configuration, deployments, and maintenance tasks using Ansible. From basics to advanced patterns."
+coverImage: "https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=800&q=80"
+tags: ["ansible", "automation", "devops", "infrastructure", "iac"]
+toc: true
+---
+
+Manual server configuration doesn't scale. Every time you set up a new server, install packages, or configure services by hand, you're creating technical debt. Ansible changed how I manage infrastructure—now everything is documented, version-controlled, and reproducible.
+
+## Why Ansible?
+
+Ansible stands out from other configuration management tools for several reasons:
+
+| Feature        | Ansible | Puppet   | Chef | Terraform |
+| -------------- | ------- | -------- | ---- | --------- |
+| Agentless      | ✅      | ❌       | ❌   | ✅        |
+| Language       | YAML    | Ruby DSL | Ruby | HCL       |
+| Learning Curve | Low     | High     | High | Medium    |
+| Push/Pull      | Push    | Pull     | Pull | Push      |
+| Idempotent     | ✅      | ✅       | ✅   | ✅        |
+
+<Callout type="info" title="Agentless Architecture">
+  Ansible uses SSH to connect to servers. No agent installation needed—if you can SSH to it, you can
+  manage it with Ansible.
+</Callout>
+
+## Getting Started
+
+### Installation
+
+```bash title="Terminal"
+# macOS
+brew install ansible
+
+# Ubuntu/Debian
+sudo apt update
+sudo apt install ansible
+
+# pip (any platform)
+pip install ansible
+
+# Verify installation
+ansible --version
+# ansible [core 2.16.0]
+```
+
+### Project Structure
+
+A well-organized Ansible project looks like this:
+
+```
+ansible/
+├── ansible.cfg           # Configuration
+├── inventory/
+│   ├── production        # Production hosts
+│   ├── staging           # Staging hosts
+│   └── group_vars/
+│       ├── all.yml       # Variables for all hosts
+│       ├── webservers.yml
+│       └── databases.yml
+├── playbooks/
+│   ├── site.yml          # Main playbook
+│   ├── webservers.yml
+│   └── databases.yml
+├── roles/
+│   ├── common/
+│   ├── nginx/
+│   ├── docker/
+│   └── postgres/
+└── files/
+    └── templates/
+```
+
+### Inventory File
+
+```ini title="inventory/production"
+[webservers]
+web1.example.com ansible_host=10.0.30.10
+web2.example.com ansible_host=10.0.30.11
+
+[databases]
+db1.example.com ansible_host=10.0.30.20
+db2.example.com ansible_host=10.0.30.21
+
+[monitoring]
+prometheus.example.com ansible_host=10.0.30.30
+
+[homelab:children]
+webservers
+databases
+monitoring
+
+[homelab:vars]
+ansible_user=deploy
+ansible_ssh_private_key_file=~/.ssh/homelab_key
+```
+
+## Your First Playbook
+
+```yaml title="playbooks/setup-server.yml"
+---
+- name: Initial server setup
+  hosts: all
+  become: yes
+  vars:
+    created_username: deploy
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist
+      register: upgrade_result
+
+    - name: Install essential packages
+      apt:
+        name:
+          - vim
+          - htop
+          - curl
+          - wget
+          - git
+          - ufw
+          - fail2ban
+          - unattended-upgrades
+        state: present
+
+    - name: Create deploy user
+      user:
+        name: "{{ created_username }}"
+        groups: sudo
+        shell: /bin/bash
+        create_home: yes
+
+    - name: Add SSH key for deploy user
+      authorized_key:
+        user: "{{ created_username }}"
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+    - name: Disable root SSH login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+      notify: Restart SSH
+
+    - name: Configure UFW defaults
+      ufw:
+        direction: "{{ item.direction }}"
+        policy: "{{ item.policy }}"
+      loop:
+        - { direction: "incoming", policy: "deny" }
+        - { direction: "outgoing", policy: "allow" }
+
+    - name: Allow SSH through firewall
+      ufw:
+        rule: allow
+        port: "22"
+        proto: tcp
+
+    - name: Enable UFW
+      ufw:
+        state: enabled
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: sshd
+        state: restarted
+```
+
+Run it:
+
+```bash
+# Test connection first
+ansible all -i inventory/production -m ping
+
+# Run playbook (dry-run)
+ansible-playbook -i inventory/production playbooks/setup-server.yml --check
+
+# Run for real
+ansible-playbook -i inventory/production playbooks/setup-server.yml
+```
+
+## Roles: Reusable Components
+
+Roles are the key to maintainable Ansible code. Here's a complete Docker role:
+
+```
+roles/docker/
+├── defaults/
+│   └── main.yml      # Default variables
+├── tasks/
+│   └── main.yml      # Tasks to execute
+├── handlers/
+│   └── main.yml      # Handlers
+├── templates/
+│   └── daemon.json.j2
+└── meta/
+    └── main.yml      # Role metadata
+```
+
+### defaults/main.yml
+
+```yaml
+---
+docker_edition: "ce"
+docker_packages:
+  - "docker-{{ docker_edition }}"
+  - "docker-{{ docker_edition }}-cli"
+  - "docker-buildx-plugin"
+  - "docker-compose-plugin"
+  - containerd.io
+
+docker_users:
+  - deploy
+
+docker_daemon_options:
+  storage-driver: "overlay2"
+  log-driver: "json-file"
+  log-opts:
+    max-size: "10m"
+    max-file: "3"
+```
+
+### tasks/main.yml
+
+```yaml
+---
+- name: Install prerequisites
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    state: present
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
+    filename: docker
+
+- name: Install Docker packages
+  apt:
+    name: "{{ docker_packages }}"
+    state: present
+    update_cache: yes
+  notify: Restart Docker
+
+- name: Add users to docker group
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: yes
+  loop: "{{ docker_users }}"
+
+- name: Configure Docker daemon
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    mode: "0644"
+  notify: Restart Docker
+
+- name: Ensure Docker is started and enabled
+  service:
+    name: docker
+    state: started
+    enabled: yes
+```
+
+### templates/daemon.json.j2
+
+```jinja2
+{{ docker_daemon_options | to_nice_json }}
+```
+
+### handlers/main.yml
+
+```yaml
+---
+- name: Restart Docker
+  service:
+    name: docker
+    state: restarted
+```
+
+## Variables and Secrets
+
+### Variable Precedence
+
+Ansible has a complex variable precedence (lowest to highest):
+
+1. Role defaults
+2. Inventory vars
+3. Playbook vars
+4. Role vars
+5. Extra vars (`-e`)
+
+### Using Ansible Vault
+
+```bash
+# Create encrypted file
+ansible-vault create group_vars/all/vault.yml
+
+# Edit encrypted file
+ansible-vault edit group_vars/all/vault.yml
+
+# Encrypt existing file
+ansible-vault encrypt secrets.yml
+
+# Run playbook with vault
+ansible-playbook site.yml --ask-vault-pass
+# Or use password file
+ansible-playbook site.yml --vault-password-file ~/.vault_pass
+```
+
+```yaml
+# group_vars/all/vault.yml (encrypted)
+vault_db_password: "super_secret_password"
+vault_api_key: "api_key_here"
+vault_ssl_private_key: |
+  -----BEGIN PRIVATE KEY-----
+  ...
+  -----END PRIVATE KEY-----
+```
+
+```yaml
+# group_vars/all/vars.yml (references vault)
+db_password: "{{ vault_db_password }}"
+api_key: "{{ vault_api_key }}"
+```
+
+<Callout type="warning" title="Never Commit Secrets">
+  Always use Ansible Vault for sensitive data. Add `*vault*.yml` to your `.gitignore` if you're not
+  encrypting.
+</Callout>
+
+## Advanced Patterns
+
+### Dynamic Inventory
+
+```python
+#!/usr/bin/env python3
+# inventory/dynamic.py
+import json
+import subprocess
+
+def get_inventory():
+    # Example: Get hosts from cloud provider or database
+    inventory = {
+        "webservers": {
+            "hosts": ["web1.example.com", "web2.example.com"],
+            "vars": {
+                "http_port": 80
+            }
+        },
+        "databases": {
+            "hosts": ["db1.example.com"]
+        },
+        "_meta": {
+            "hostvars": {
+                "web1.example.com": {"ansible_host": "10.0.30.10"},
+                "web2.example.com": {"ansible_host": "10.0.30.11"},
+                "db1.example.com": {"ansible_host": "10.0.30.20"}
+            }
+        }
+    }
+    return inventory
+
+if __name__ == '__main__':
+    print(json.dumps(get_inventory()))
+```
+
+```bash
+chmod +x inventory/dynamic.py
+ansible-playbook -i inventory/dynamic.py site.yml
+```
+
+### Conditionals and Loops
+
+```yaml
+- name: Install packages based on OS
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ debian_packages }}"
+  when: ansible_os_family == "Debian"
+
+- name: Install packages based on OS (RedHat)
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ redhat_packages }}"
+  when: ansible_os_family == "RedHat"
+
+- name: Create multiple users
+  user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups | join(',') }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+  loop:
+    - { name: "alice", groups: ["sudo", "docker"] }
+    - { name: "bob", groups: ["docker"] }
+    - { name: "charlie", groups: ["www-data"], shell: "/bin/sh" }
+```
+
+### Blocks and Error Handling
+
+```yaml
+- name: Deploy application
+  block:
+    - name: Pull latest code
+      git:
+        repo: "{{ app_repo }}"
+        dest: "{{ app_path }}"
+        version: "{{ app_version }}"
+
+    - name: Install dependencies
+      command: npm ci
+      args:
+        chdir: "{{ app_path }}"
+
+    - name: Build application
+      command: npm run build
+      args:
+        chdir: "{{ app_path }}"
+
+    - name: Restart service
+      service:
+        name: "{{ app_service }}"
+        state: restarted
+
+  rescue:
+    - name: Rollback to previous version
+      git:
+        repo: "{{ app_repo }}"
+        dest: "{{ app_path }}"
+        version: "{{ previous_version }}"
+
+    - name: Notify about failure
+      slack:
+        token: "{{ slack_token }}"
+        channel: "#deployments"
+        msg: "Deployment failed for {{ app_name }}. Rolled back to {{ previous_version }}"
+
+  always:
+    - name: Clean up temporary files
+      file:
+        path: /tmp/deploy
+        state: absent
+```
+
+## Real-World Playbooks
+
+### Complete Web Server Setup
+
+```yaml
+# playbooks/webserver.yml
+---
+- name: Configure web servers
+  hosts: webservers
+  become: yes
+
+  vars:
+    nginx_sites:
+      - name: myapp
+        server_name: app.example.com
+        root: /var/www/myapp
+        ssl: true
+        ssl_certificate: /etc/ssl/certs/app.crt
+        ssl_certificate_key: /etc/ssl/private/app.key
+
+  roles:
+    - role: common
+    - role: docker
+    - role: nginx
+    - role: certbot
+    - role: node_exporter
+
+  tasks:
+    - name: Create web root directories
+      file:
+        path: "{{ item.root }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: "0755"
+      loop: "{{ nginx_sites }}"
+
+  post_tasks:
+    - name: Verify nginx configuration
+      command: nginx -t
+      changed_when: false
+
+    - name: Ensure nginx is running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+```
+
+### Database Backup Automation
+
+```yaml
+# playbooks/backup-databases.yml
+---
+- name: Backup all databases
+  hosts: databases
+  become: yes
+
+  vars:
+    backup_path: /backups
+    retention_days: 30
+    s3_bucket: my-db-backups
+
+  tasks:
+    - name: Create backup directory
+      file:
+        path: "{{ backup_path }}"
+        state: directory
+        mode: "0750"
+
+    - name: Backup PostgreSQL databases
+      postgresql_db:
+        name: "{{ item }}"
+        state: dump
+        target: "{{ backup_path }}/{{ item }}_{{ ansible_date_time.date }}.sql.gz"
+      loop: "{{ postgresql_databases }}"
+      become_user: postgres
+
+    - name: Upload backups to S3
+      amazon.aws.s3_object:
+        bucket: "{{ s3_bucket }}"
+        object: "{{ inventory_hostname }}/{{ item | basename }}"
+        src: "{{ item }}"
+        mode: put
+      with_fileglob:
+        - "{{ backup_path }}/*_{{ ansible_date_time.date }}.sql.gz"
+
+    - name: Clean old local backups
+      find:
+        paths: "{{ backup_path }}"
+        age: "{{ retention_days }}d"
+        recurse: no
+      register: old_backups
+
+    - name: Remove old backups
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ old_backups.files }}"
+```
+
+## Testing with Molecule
+
+```bash
+# Install molecule
+pip install molecule molecule-docker
+
+# Create new role with tests
+molecule init role my_role
+
+# Run tests
+cd roles/my_role
+molecule test
+```
+
+```yaml
+# molecule/default/molecule.yml
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: ubuntu
+    image: ubuntu:22.04
+    pre_build_image: true
+  - name: debian
+    image: debian:12
+    pre_build_image: true
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
+```
+
+```yaml
+# molecule/default/verify.yml
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Check if Docker is installed
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Assert Docker is installed
+      assert:
+        that:
+          - docker_version.rc == 0
+          - "'Docker version' in docker_version.stdout"
+```
+
+## Tips and Best Practices
+
+1. **Always use `--check` first** - Dry run before applying changes
+2. **Tag your tasks** - Run specific parts with `--tags`
+3. **Use `ansible-lint`** - Catch issues before they cause problems
+4. **Keep playbooks idempotent** - Running twice should have no effect
+5. **Version control everything** - Your infrastructure is code
+
+```bash
+# Useful command combinations
+ansible-playbook site.yml --check --diff  # Show what would change
+ansible-playbook site.yml --tags "nginx"  # Run only nginx tasks
+ansible-playbook site.yml --limit web1    # Run only on web1
+ansible-playbook site.yml -v              # Verbose output
+ansible-playbook site.yml -vvv            # Very verbose
+```
+
+---
+
+Ansible transformed how I manage servers. What used to take hours of manual work now takes minutes. Start with simple playbooks, build up your role library, and soon you'll wonder how you ever managed servers any other way.
+
+Got questions about automating your infrastructure? Drop me a message!

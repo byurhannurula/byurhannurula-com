@@ -1,0 +1,558 @@
+---
+title: "Kubernetes for Local Development: A Practical Guide to K3s"
+date: "2024-12-10"
+excerpt: "Set up a lightweight Kubernetes cluster on your local machine or homelab using K3s. Learn deployments, services, ingress, and GitOps workflows."
+coverImage: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&q=80"
+tags: ["kubernetes", "k3s", "devops", "homelab", "gitops"]
+toc: true
+---
+
+Kubernetes can seem overwhelming at first—the terminology, the YAML files, the architecture. But once you understand the core concepts, it becomes an incredibly powerful tool. In this guide, I'll show you how to set up a production-like Kubernetes environment locally using K3s.
+
+## Why K3s?
+
+K3s is a lightweight, certified Kubernetes distribution built for IoT and edge computing, but it's perfect for local development and homelabs:
+
+| Feature          | K3s     | Full K8s            | minikube |
+| ---------------- | ------- | ------------------- | -------- |
+| Memory Usage     | ~512MB  | ~2GB+               | ~1GB     |
+| Binary Size      | ~60MB   | Multiple components | ~300MB   |
+| Setup Time       | Minutes | Hours               | Minutes  |
+| Production Ready | Yes     | Yes                 | No       |
+| Multi-node       | Easy    | Complex             | Limited  |
+
+<Callout type="info" title="K3s vs K8s">
+  K3s removes legacy and alpha features, replaces etcd with SQLite (optional), and bundles
+  components. It's 100% compatible with standard Kubernetes APIs.
+</Callout>
+
+## Setting Up K3s
+
+### Single Node Installation
+
+```bash title="Terminal"
+# Install K3s on a single node (server + agent)
+curl -sfL https://get.k3s.io | sh -
+
+# Check installation
+sudo kubectl get nodes
+# NAME         STATUS   ROLES                  AGE   VERSION
+# k3s-server   Ready    control-plane,master   30s   v1.28.4+k3s1
+
+# Get kubeconfig for local kubectl
+sudo cat /etc/rancher/k3s/k3s.yaml > ~/.kube/config
+chmod 600 ~/.kube/config
+```
+
+### Multi-Node Cluster
+
+For a more realistic setup, create a multi-node cluster:
+
+```bash title="Terminal"
+# On the server node
+curl -sfL https://get.k3s.io | sh -s - server \
+  --cluster-init \
+  --tls-san=k3s.home.lab \
+  --disable=traefik  # We'll install our own ingress
+
+# Get the node token
+sudo cat /var/lib/rancher/k3s/server/node-token
+
+# On worker nodes
+curl -sfL https://get.k3s.io | K3S_URL=https://k3s-server:6443 \
+  K3S_TOKEN=<node-token> sh -
+```
+
+### Cluster Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    K3s Cluster                              │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │   Master    │  │   Worker 1  │  │   Worker 2  │         │
+│  │ k3s-server  │  │ k3s-node-1  │  │ k3s-node-2  │         │
+│  │             │  │             │  │             │         │
+│  │ API Server  │  │  Workloads  │  │  Workloads  │         │
+│  │ Scheduler   │  │  Pods       │  │  Pods       │         │
+│  │ Controller  │  │  Services   │  │  Services   │         │
+│  │ SQLite/etcd │  │             │  │             │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Kubernetes Core Concepts
+
+### Pods
+
+The smallest deployable unit in Kubernetes:
+
+```yaml title="pod.yaml"
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:alpine
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "100m"
+        limits:
+          memory: "128Mi"
+          cpu: "200m"
+```
+
+### Deployments
+
+Manage replicas and rolling updates:
+
+```yaml title="deployment.yaml"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+        - name: web
+          image: myapp:v1.0.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: database-url
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+```
+
+### Services
+
+Expose your deployments:
+
+```yaml
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  type: ClusterIP
+  selector:
+    app: web-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+```
+
+<Callout type="warning" title="Service Types">
+  - **ClusterIP**: Internal only (default) - **NodePort**: Exposes on each node's IP -
+  **LoadBalancer**: External load balancer (cloud) - **ExternalName**: Maps to external DNS
+</Callout>
+
+## Setting Up Ingress
+
+### Install NGINX Ingress Controller
+
+```bash
+# Using Helm
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+helm install ingress-nginx ingress-nginx/ingress-nginx \
+  --namespace ingress-nginx \
+  --create-namespace \
+  --set controller.service.type=LoadBalancer
+```
+
+### Configure Ingress Rules
+
+```yaml
+# ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - app.example.com
+      secretName: app-tls
+  rules:
+    - host: app.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-app-service
+                port:
+                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 80
+```
+
+## ConfigMaps and Secrets
+
+### ConfigMaps for Configuration
+
+```yaml
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  config.json: |
+    {
+      "feature_flags": {
+        "new_ui": true,
+        "dark_mode": true
+      }
+    }
+```
+
+```yaml
+# Using ConfigMap in Deployment
+spec:
+  containers:
+    - name: app
+      envFrom:
+        - configMapRef:
+            name: app-config
+      volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: app-config
+        items:
+          - key: config.json
+            path: config.json
+```
+
+### Secrets for Sensitive Data
+
+```bash
+# Create secret from literal
+kubectl create secret generic app-secrets \
+  --from-literal=database-url='postgres://user:pass@db:5432/app' \
+  --from-literal=api-key='secret-key-here'
+
+# Or from file
+kubectl create secret generic tls-certs \
+  --from-file=tls.crt=./cert.pem \
+  --from-file=tls.key=./key.pem
+```
+
+```yaml
+# secret.yaml (base64 encoded)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+type: Opaque
+data:
+  database-url: cG9zdGdyZXM6Ly91c2VyOnBhc3NAZGI6NTQzMi9hcHA=
+  api-key: c2VjcmV0LWtleS1oZXJl
+```
+
+<Callout type="error" title="Secret Security">
+  Kubernetes secrets are only base64 encoded, not encrypted! Use tools like Sealed Secrets or
+  External Secrets Operator for production.
+</Callout>
+
+## Persistent Storage
+
+### Persistent Volume Claims
+
+```yaml
+# pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: database-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path # K3s default
+  resources:
+    requests:
+      storage: 10Gi
+---
+# StatefulSet with PVC
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 10Gi
+```
+
+## GitOps with ArgoCD
+
+### Install ArgoCD
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+# Get initial admin password
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d
+
+# Port forward to access UI
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+### Define an Application
+
+```yaml
+# argocd-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: web-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/username/k8s-manifests.git
+    targetRevision: HEAD
+    path: apps/web-app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: production
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+```
+
+### Repository Structure for GitOps
+
+```
+k8s-manifests/
+├── apps/
+│   ├── web-app/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   ├── ingress.yaml
+│   │   └── kustomization.yaml
+│   └── api/
+│       ├── deployment.yaml
+│       └── service.yaml
+├── infrastructure/
+│   ├── cert-manager/
+│   ├── ingress-nginx/
+│   └── monitoring/
+└── base/
+    ├── namespace.yaml
+    └── network-policies.yaml
+```
+
+## Monitoring with Prometheus
+
+### Install Prometheus Stack
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+helm install prometheus prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --create-namespace \
+  --set grafana.adminPassword=admin
+```
+
+### ServiceMonitor for Custom Apps
+
+```yaml
+# servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: web-app-monitor
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: web-app
+  endpoints:
+    - port: metrics
+      interval: 30s
+      path: /metrics
+  namespaceSelector:
+    matchNames:
+      - production
+```
+
+## Useful Commands
+
+```bash
+# Cluster info
+kubectl cluster-info
+kubectl get nodes -o wide
+
+# Workload management
+kubectl get pods -A                    # All namespaces
+kubectl describe pod <pod-name>        # Detailed info
+kubectl logs <pod-name> -f             # Stream logs
+kubectl logs <pod-name> -c <container> # Specific container
+kubectl exec -it <pod-name> -- /bin/sh # Shell access
+
+# Debugging
+kubectl get events --sort-by='.lastTimestamp'
+kubectl top nodes                      # Resource usage
+kubectl top pods
+
+# Scaling
+kubectl scale deployment web-app --replicas=5
+
+# Rolling updates
+kubectl set image deployment/web-app web=myapp:v2.0.0
+kubectl rollout status deployment/web-app
+kubectl rollout history deployment/web-app
+kubectl rollout undo deployment/web-app
+
+# Port forwarding
+kubectl port-forward svc/web-app 8080:80
+kubectl port-forward pod/web-app-xxx 8080:3000
+```
+
+## Common Pitfalls
+
+1. **Resource limits not set** - Pods can consume all node resources
+2. **No health checks** - K8s can't know if your app is actually healthy
+3. **Using latest tag** - Makes deployments unpredictable
+4. **Ignoring namespaces** - Everything in default namespace gets messy
+5. **No network policies** - All pods can talk to all pods by default
+
+```yaml
+# Network Policy Example - Deny all, allow specific
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-to-api
+spec:
+  podSelector:
+    matchLabels:
+      app: api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: web
+      ports:
+        - protocol: TCP
+          port: 3000
+```
+
+---
+
+Kubernetes has a learning curve, but K3s makes it accessible for local development and homelabs. Start small, understand the core concepts, and gradually add complexity. The skills you build transfer directly to production environments.
+
+What aspect of Kubernetes would you like me to dive deeper into? Let me know!

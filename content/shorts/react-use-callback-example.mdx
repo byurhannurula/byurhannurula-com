@@ -1,0 +1,59 @@
+---
+title: "useCallback with Dependencies"
+description: "Quick tip on when and how to use useCallback effectively in React to prevent unnecessary re-renders."
+date: "2024-12-26"
+tags: ["react", "hooks", "performance"]
+language: "typescript"
+---
+
+## The Problem
+
+When you pass a callback to a child component, it gets recreated on every render, causing unnecessary re-renders of memoized children.
+
+```tsx
+// ❌ Bad: callback recreated every render
+function Parent() {
+  const handleClick = () => {
+    console.log("clicked")
+  }
+
+  return <MemoizedChild onClick={handleClick} />
+}
+```
+
+## The Solution
+
+Use `useCallback` to memoize the function reference:
+
+```tsx
+// ✅ Good: callback is stable
+function Parent() {
+  const handleClick = useCallback(() => {
+    console.log("clicked")
+  }, [])
+
+  return <MemoizedChild onClick={handleClick} />
+}
+```
+
+## With Dependencies
+
+If your callback uses props or state, include them in the dependency array:
+
+```tsx
+function Parent({ userId }: { userId: string }) {
+  const handleClick = useCallback(() => {
+    fetchUser(userId)
+  }, [userId]) // Re-create when userId changes
+
+  return <MemoizedChild onClick={handleClick} />
+}
+```
+
+## When NOT to Use
+
+Don't overuse `useCallback`. It has overhead and isn't needed when:
+
+- The child isn't memoized
+- The component rarely re-renders
+- The callback is simple and not passed to children

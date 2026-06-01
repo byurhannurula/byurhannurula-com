@@ -255,8 +255,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-
-content/*
-
 memory-bank/
 .cursorrules
+
+# Docker / Deployment
+.env.production
+certbot/
