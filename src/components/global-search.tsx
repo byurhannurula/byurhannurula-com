@@ -11,7 +11,6 @@ import {
   type LucideIcon,
   Mail,
   Moon,
-  Phone,
   Search,
   Share2,
   Sun,
@@ -155,14 +154,6 @@ const pages = [
     href: "/about",
     icon: User,
     shortcut: "A",
-  },
-  {
-    id: "contact",
-    name: "Go to Contact",
-    description: "Get in touch and send a message",
-    href: "/contact",
-    icon: Phone,
-    shortcut: "C",
   },
 ];
 

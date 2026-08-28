@@ -62,10 +62,6 @@ export function GlobalShortcuts() {
             e.preventDefault();
             router.push("/links");
             break;
-          case "c":
-            e.preventDefault();
-            router.push("/contact");
-            break;
         }
       }
 

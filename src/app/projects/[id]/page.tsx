@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { GithubIcon } from "@/components/icons/social";
 
 export default function ProjectDetailPage({
   params,
@@ -77,7 +78,7 @@ export default function ProjectDetailPage({
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 font-medium font-mono text-foreground text-xs transition-colors hover:bg-muted/80"
               >
-                <Github className="h-3.5 w-3.5" />
+                <GithubIcon className="h-3.5 w-3.5" />
                 View Code
               </a>
             )}

@@ -26,8 +26,7 @@ updates:
           - "*"
         exclude-patterns:
           - "@types/*"
-          - "eslint*"
-          - "prettier*"
+          - "@biomejs/*"
           - "typescript"
         update-types:
           - "minor"
@@ -35,8 +34,7 @@ updates:
       dev-dependencies:
         patterns:
           - "@types/*"
-          - "eslint*"
-          - "prettier*"
+          - "@biomejs/*"
           - "typescript"
         update-types:
           - "minor"

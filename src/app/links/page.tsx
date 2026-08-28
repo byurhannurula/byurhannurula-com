@@ -1,6 +1,6 @@
-import { ExternalLink, Github, Mail, Rss } from "lucide-react";
+import { ExternalLink, Mail, Rss } from "lucide-react";
 import Link from "next/link";
-import { MastodonIcon } from "@/components/icons/social";
+import { GithubIcon, MastodonIcon } from "@/components/icons/social";
 import { PageWrapper } from "@/components/page-wrapper";
 import { createMetadata } from "@/config/metadata";
 import { SITE_CONFIG } from "@/config/site";
@@ -19,7 +19,7 @@ const socialLinks: LinkItem[] = [
     title: "GitHub",
     description: "Code, projects, and contributions",
     url: SITE_CONFIG.social.github,
-    icon: <Github className="size-5" />,
+    icon: <GithubIcon className="size-5" />,
   },
   {
     title: "Mastodon",

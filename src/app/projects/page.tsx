@@ -1,9 +1,10 @@
 "use client";
 
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { GithubIcon } from "@/components/icons/social";
 
 import { PageWrapper } from "@/components/page-wrapper";
 
@@ -138,7 +139,7 @@ function ProjectCard({ project }: { project: Project }) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-foreground"
             >
-              <Github className="size-3.5" />
+              <GithubIcon className="size-3.5" />
               <span>Code</span>
             </Link>
           )}

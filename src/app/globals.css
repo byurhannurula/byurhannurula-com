@@ -148,7 +148,8 @@ code:not([data-line-numbers]) > [data-line] {
 }
 
 /* Fix for prose context - only apply rounded-t-none when title exists */
-.prose [data-rehype-pretty-code-figure]:has([data-rehype-pretty-code-title])
+.prose
+  [data-rehype-pretty-code-figure]:has([data-rehype-pretty-code-title])
   pre {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -226,10 +227,6 @@ code:not([data-line-numbers]) > [data-line] {
   margin: 2rem 0;
 }
 
-.prose blockquote p {
-  @apply mb-0;
-}
-
 /* Enhanced code block styles */
 .prose pre {
   @apply rounded-lg border bg-muted p-4 text-sm;
@@ -297,6 +294,10 @@ code:not([data-line-numbers]) > [data-line] {
 .prose p {
   @apply leading-relaxed text-muted-foreground;
   margin: 1rem 0;
+}
+
+.prose blockquote p {
+  @apply mb-0;
 }
 
 /* Enhanced link styles */

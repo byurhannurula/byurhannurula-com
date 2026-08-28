@@ -7,6 +7,7 @@ import {
   RssIcon,
   TwitterIcon,
 } from "@/components/icons";
+import { env } from "@/env";
 
 export const SITE_CONFIG = {
   logo: "byurhan.",
@@ -14,7 +15,7 @@ export const SITE_CONFIG = {
   title: "Byurhan | Developer, Tech geek & Thinker",
   description:
     "Personal website of Burhan - Full-Stack Software Engineer passionate about privacy, security, and tinkering with technology",
-  url: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+  url: env.NEXT_PUBLIC_BASE_URL,
   author: {
     name: "Byurhan",
     email: "hello@byurhannurula.com",
@@ -160,12 +161,6 @@ export const PAGE_METADATA: Record<string, PageMeta> = {
       "self-hosted",
       "productivity",
     ],
-  },
-  "/contact": {
-    title: "Contact | Byurhan",
-    description:
-      "Get in touch with me. Send a message for collaboration, questions, or just to say hello.",
-    keywords: ["contact", "email", "collaboration", "hire", "freelance"],
   },
   "/links": {
     title: "Links | Byurhan",

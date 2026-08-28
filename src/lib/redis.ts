@@ -1,18 +1,15 @@
 import { Redis } from "@upstash/redis";
+import { env } from "@/env";
 
 // Create Redis client only if env vars are available
 const createRedisClient = () => {
-  if (
-    !(
-      process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-    )
-  ) {
+  if (!(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN)) {
     return null;
   }
   try {
     return new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      url: env.UPSTASH_REDIS_REST_URL,
+      token: env.UPSTASH_REDIS_REST_TOKEN,
     });
   } catch {
     return null;

@@ -128,7 +128,7 @@ cd portfolio
 ### 2.2 Create Environment File
 
 ```bash
-cp .env.production.example .env.production
+cp .env.example .env.production
 nano .env.production
 ```
 

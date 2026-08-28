@@ -1,4 +1,12 @@
+# Supply-chain hardening. pnpm 11 defaults: blockExoticSubdeps, strictDepBuilds,
+# minimumReleaseAge 1440. We raise the cooldown to 48h and refuse provenance downgrades.
+minimumReleaseAge: 2880
+trustPolicy: no-downgrade
+blockExoticSubdeps: true
+strictDepBuilds: true
+
 allowBuilds:
+  esbuild: true
+  lefthook: true
   sharp: false
-minimumReleaseAgeExclude:
-  - react-hook-form@7.78.0
+  workerd: true

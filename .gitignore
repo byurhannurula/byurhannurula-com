@@ -261,3 +261,7 @@ memory-bank/
 # Docker / Deployment
 .env.production
 certbot/
+# OpenNext / Cloudflare
+.open-next
+.wrangler
+cloudflare-env.d.ts

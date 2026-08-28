@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -16,48 +16,96 @@
     "lineWidth": 80,
     "lineEnding": "lf"
   },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "linter": {
     "enabled": true,
+    "domains": {
+      "react": "recommended",
+      "next": "recommended",
+      "tailwind": "recommended",
+      "test": "recommended"
+    },
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "a11y": {
         "noAccessKey": "error",
+        "noAriaHiddenOnFocusable": "error",
         "noAriaUnsupportedElements": "error",
         "noAutofocus": "warn",
+        "noDistractingElements": "error",
+        "noInteractiveElementToNoninteractiveRole": "error",
+        "noNoninteractiveElementToInteractiveRole": "error",
+        "noNoninteractiveTabindex": "error",
+        "noPositiveTabindex": "error",
+        "noRedundantAlt": "error",
+        "noRedundantRoles": "error",
+        "noStaticElementInteractions": "warn",
+        "noSvgWithoutTitle": "off",
         "useAltText": "error",
         "useAnchorContent": "error",
+        "useAriaActivedescendantWithTabindex": "error",
+        "useAriaPropsForRole": "error",
         "useButtonType": "error",
+        "useFocusableInteractive": "error",
+        "useHeadingContent": "error",
+        "useHtmlLang": "error",
+        "useIframeTitle": "error",
+        "useKeyWithClickEvents": "warn",
+        "useKeyWithMouseEvents": "warn",
+        "useSemanticElements": "warn",
         "useValidAnchor": "error",
-        "noSvgWithoutTitle": "off",
-        "noStaticElementInteractions": "off",
-        "useKeyWithClickEvents": "off"
+        "useValidAriaProps": "error",
+        "useValidAriaRole": "error",
+        "useValidAriaValues": "error"
       },
       "complexity": {
         "noExtraBooleanCast": "error",
         "noUselessCatch": "error",
         "noUselessConstructor": "error",
         "noUselessFragments": "error",
+        "noUselessTernary": "error",
         "useFlatMap": "error",
         "useOptionalChain": "error",
         "useSimplifiedLogicExpression": "error"
       },
       "correctness": {
+        "noChildrenProp": "error",
         "noConstAssign": "error",
         "noConstantCondition": "error",
         "noEmptyCharacterClassInRegex": "error",
         "noEmptyPattern": "error",
         "noGlobalObjectCalls": "error",
         "noInvalidConstructorSuper": "error",
+        "noNestedComponentDefinitions": "error",
+        "noReactPropAssignments": "error",
+        "noRenderReturnValue": "error",
         "noSelfAssign": "error",
         "noSetterReturn": "error",
         "noUndeclaredVariables": "error",
         "noUnreachable": "error",
         "noUnreachableSuper": "error",
         "noUnsafeFinally": "error",
+        "noUnusedImports": "error",
         "noUnusedLabels": "error",
         "noUnusedVariables": "warn",
+        "noVoidElementsWithChildren": "error",
+        "useExhaustiveDependencies": "error",
+        "useHookAtTopLevel": "error",
         "useIsNan": "error",
+        "useJsxKeyInIterable": "error",
         "useValidForDirection": "error"
+      },
+      "performance": {
+        "noImgElement": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
       },
       "style": {
         "noNegationElse": "error",
@@ -80,6 +128,7 @@
         "noDoubleEquals": "warn",
         "noDuplicateCase": "error",
         "noDuplicateClassMembers": "error",
+        "noDuplicateJsxProps": "error",
         "noDuplicateObjectKeys": "error",
         "noDuplicateParameters": "error",
         "noEmptyBlockStatements": "error",
@@ -90,13 +139,16 @@
         "noPrototypeBuiltins": "error",
         "noRedeclare": "error",
         "noShadowRestrictedNames": "error",
-        "noUnsafeNegation": "error",
-        "noUnknownAtRules": "off"
+        "noUnsafeNegation": "error"
       },
       "nursery": {
         "useSortedClasses": {
           "level": "warn",
-          "fix": "safe"
+          "fix": "safe",
+          "options": {
+            "attributes": ["className", "class"],
+            "functions": ["cn", "clsx", "cva", "tv"]
+          }
         }
       }
     }
@@ -121,6 +173,9 @@
   "css": {
     "parser": {
       "tailwindDirectives": true
+    },
+    "linter": {
+      "enabled": true
     }
   },
   "overrides": [

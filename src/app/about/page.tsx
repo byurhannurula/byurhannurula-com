@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { TimelineItem } from "@/components/about";
 import * as TechLogos from "@/components/icons";
 import { PageWrapper } from "@/components/page-wrapper";
@@ -161,13 +160,6 @@ export default function AboutPage() {
             >
               email
             </a>{" "}
-            , use{" "}
-            <Link
-              className="text-foreground underline-offset-4 hover:underline"
-              href="/contact"
-            >
-              contact form
-            </Link>{" "}
             or connect on{" "}
             <a
               href={SITE_CONFIG.social.github}

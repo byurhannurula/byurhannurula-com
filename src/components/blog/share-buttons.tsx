@@ -1,7 +1,8 @@
 "use client";
 
-import { Check, Link2, Linkedin, Twitter } from "lucide-react";
+import { Check, Link2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { LinkedinIcon, TwitterIcon } from "@/components/icons/social";
 import { cn } from "@/lib/utils";
 
 interface ShareButtonsProps {
@@ -46,7 +47,7 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
           className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           aria-label="Share on Twitter"
         >
-          <Twitter className="h-4 w-4" />
+          <TwitterIcon className="h-4 w-4" />
         </a>
         <a
           href={linkedinUrl}
@@ -55,7 +56,7 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
           className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           aria-label="Share on LinkedIn"
         >
-          <Linkedin className="h-4 w-4" />
+          <LinkedinIcon className="h-4 w-4" />
         </a>
         <button
           type="button"
