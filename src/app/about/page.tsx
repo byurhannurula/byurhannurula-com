@@ -51,14 +51,14 @@ export default function AboutPage() {
       </p>
 
       <SectionHeading>work</SectionHeading>
-      <div>
+      <div className="[&>*:last-child]:border-b-0">
         {WORK.map((item) => (
           <CareerItem key={`${item.role}-${item.org}`} {...item} />
         ))}
       </div>
 
       <SectionHeading>education</SectionHeading>
-      <div>
+      <div className="[&>*:last-child]:border-b-0">
         {EDUCATION.map((item) => (
           <CareerItem key={`${item.role}-${item.org}`} {...item} />
         ))}
@@ -88,7 +88,7 @@ export default function AboutPage() {
           value: (
             <div className="flex flex-wrap gap-1.5">
               {group.items.map((item) => (
-                <TechChip key={item.name} {...item} />
+                <TechChip key={item.name} showLabel {...item} />
               ))}
             </div>
           ),

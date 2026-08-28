@@ -48,7 +48,7 @@ export function CareerItem({
               >
                 <span
                   aria-hidden="true"
-                  className={`absolute top-1/2 -left-4 size-[7px] -translate-y-1/2 rounded-full ${
+                  className={`absolute top-1/2 -left-4 size-1.75 -translate-y-1/2 rounded-full ${
                     isCurrent ? "bg-primary" : "bg-border-dash"
                   }`}
                 />

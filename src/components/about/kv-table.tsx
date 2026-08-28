@@ -14,7 +14,7 @@ export function KvTable({ rows }: KvTableProps) {
     <table className="w-full border-collapse text-[14px]">
       <tbody>
         {rows.map((row) => (
-          <tr key={row.key}>
+          <tr key={row.key} className="last:*:border-b-0">
             <th
               scope="row"
               className="hairline w-40 whitespace-nowrap py-2.5 pr-2 pl-2 text-left align-top font-mono font-normal text-[12.5px] text-primary max-sm:w-auto"

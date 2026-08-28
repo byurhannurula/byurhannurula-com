@@ -55,7 +55,7 @@ export default function Home() {
             >
               latest notes
             </SectionHeading>
-            <div>
+            <div className="[&>*:last-child]:border-b-0">
               {notes.map((post, index) => (
                 <RowLink
                   key={post.slug}
@@ -68,7 +68,7 @@ export default function Home() {
             </div>
             <Link
               href="/notes"
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-md border border-border bg-background-soft px-3 py-2.5 font-mono text-[12.5px] text-muted-foreground no-underline transition-colors hover:border-primary hover:border-dashed hover:text-foreground"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-background-soft px-3 py-2.5 font-mono text-[12.5px] text-muted-foreground no-underline transition-colors hover:border-primary hover:border-dashed hover:text-foreground"
             >
               all notes
               <span aria-hidden="true">→</span>
@@ -77,7 +77,7 @@ export default function Home() {
         ) : null}
 
         <SectionHeading>selected projects</SectionHeading>
-        <div>
+        <div className="[&>*:last-child]:border-b-0">
           {projects.map((project) => (
             <RowLink
               key={project.slug}

@@ -87,7 +87,7 @@ function ProjectCard({ project }: { project: Project }) {
     <div className="group relative overflow-hidden rounded-xl bg-muted/30">
       {/* Image */}
       {project.image ? (
-        <div className="aspect-[16/10] overflow-hidden">
+        <div className="aspect-16/10 overflow-hidden">
           <Image
             src={project.image}
             alt={project.title}
@@ -97,13 +97,13 @@ function ProjectCard({ project }: { project: Project }) {
           />
         </div>
       ) : (
-        <div className="flex aspect-[16/10] items-center justify-center bg-gradient-to-br from-muted to-muted/50">
+        <div className="flex aspect-16/10 items-center justify-center bg-linear-to-br from-muted to-muted/50">
           <span className="text-4xl opacity-30">🔧</span>
         </div>
       )}
 
       {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/20 to-transparent" />
 
       {/* Content */}
       <div className="absolute inset-x-0 bottom-0 p-4">

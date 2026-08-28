@@ -27,6 +27,7 @@ export { default as NodeJs } from "./NodeJs";
 export { default as PostgreSQL } from "./PostgreSQL";
 export { default as Postman } from "./Postman";
 export { default as Prisma } from "./Prisma";
+export { default as Proxmox } from "./Proxmox";
 export { default as ReactIcon } from "./ReactIcon";
 export { default as Redis } from "./Redis";
 export { default as Sanity } from "./Sanity";

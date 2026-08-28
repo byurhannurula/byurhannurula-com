@@ -97,7 +97,7 @@ export const STACK: StackGroup[] = [
       { name: "docker", logo: "Docker" },
       { name: "nginx", logo: "Nginx" },
       { name: "linux", logo: "Linux" },
-      { name: "proxmox" },
+      { name: "proxmox", logo: "Proxmox" },
       { name: "git", logo: "Git" },
       { name: "cloudflare", logo: "Cloudflare" },
       { name: "vercel", logo: "Vercel" },

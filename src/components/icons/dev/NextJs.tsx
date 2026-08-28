@@ -2,7 +2,7 @@ import type { SVGProps } from "react";
 
 export default function NextJs(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 128 128" {...props}>
+    <svg viewBox="0 0 128 128" fill="currentColor" {...props}>
       <circle cx="64" cy="64" r="64"></circle>
       <path
         fill="url(#a)"
@@ -19,8 +19,8 @@ export default function NextJs(props: SVGProps<SVGSVGElement>) {
           gradientTransform="scale(.71111)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#fff"></stop>
-          <stop offset="1" stopColor="#fff" stopOpacity="0"></stop>
+          <stop stopColor="var(--background)"></stop>
+          <stop offset="1" stopColor="var(--background)" stopOpacity="0"></stop>
         </linearGradient>
         <linearGradient
           id="b"
@@ -31,8 +31,8 @@ export default function NextJs(props: SVGProps<SVGSVGElement>) {
           gradientTransform="scale(.71111)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#fff"></stop>
-          <stop offset="1" stopColor="#fff" stopOpacity="0"></stop>
+          <stop stopColor="var(--background)"></stop>
+          <stop offset="1" stopColor="var(--background)" stopOpacity="0"></stop>
         </linearGradient>
       </defs>
     </svg>

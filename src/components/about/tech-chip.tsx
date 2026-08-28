@@ -1,9 +1,23 @@
 import * as TechLogos from "@/components/icons";
 import type { StackItem } from "@/config/about";
 
-/** Icon-only chip that reveals its label on hover or keyboard focus. */
-export function TechChip({ name, logo }: StackItem) {
+interface TechChipProps extends StackItem {
+  /** Always show the label instead of revealing it on hover. */
+  showLabel?: boolean;
+}
+
+/** Tech chip; icon-only by default, label revealed on hover or keyboard focus. */
+export function TechChip({ name, logo, showLabel = false }: TechChipProps) {
   const Logo = logo ? TechLogos[logo] : null;
+
+  if (Logo && showLabel) {
+    return (
+      <span className="inline-flex h-8 items-center gap-2 rounded-md border border-border border-dashed bg-background-soft px-2.5 font-mono text-[12px] text-foreground transition-colors hover:border-primary">
+        <Logo className="size-4 shrink-0" aria-hidden="true" />
+        {name}
+      </span>
+    );
+  }
 
   if (!Logo) {
     return (
