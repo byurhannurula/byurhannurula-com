@@ -1,43 +1,32 @@
 import Link from "next/link";
 
-import { SITE_CONFIG, SOCIAL_LINKS } from "@/config";
+import { SITE_CONFIG } from "@/config";
+
+const FOOTER_LINKS = [
+  { name: "uses", href: "/uses" },
+  { name: "about", href: "/about" },
+  { name: "rss", href: "/rss.xml" },
+] as const;
 
 export function Footer() {
   return (
-    <footer className="relative mb-4 bg-background">
-      <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
-      <div className="container mx-auto max-w-3xl px-6 py-8">
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-muted-foreground text-xs">
-              &copy; {new Date().getFullYear()} {SITE_CONFIG.name}
-            </p>
-
-            <div className="flex items-center gap-4">
-              {SOCIAL_LINKS.map((link) => {
-                const relAttr =
-                  "rel" in link
-                    ? `${link.rel} noopener noreferrer`
-                    : link.external
-                      ? "noopener noreferrer"
-                      : undefined;
-                return (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    target={link.external ? "_blank" : undefined}
-                    rel={relAttr}
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                    aria-label={link.name}
-                  >
-                    <link.icon className="size-4" />
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
+    <footer className="hairline-t flex flex-wrap justify-between gap-3 pt-6 pb-10 font-mono text-[12.5px] text-muted-foreground">
+      <span>
+        &copy; {new Date().getFullYear()} {SITE_CONFIG.author.name}
+      </span>
+      <span>
+        {FOOTER_LINKS.map((link, index) => (
+          <span key={link.href}>
+            {index > 0 ? " · " : null}
+            <Link
+              href={link.href}
+              className="no-underline transition-colors hover:text-primary"
+            >
+              {link.name}
+            </Link>
+          </span>
+        ))}
+      </span>
     </footer>
   );
 }

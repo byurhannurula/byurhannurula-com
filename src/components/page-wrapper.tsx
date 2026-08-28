@@ -1,14 +1,12 @@
 import type { ReactNode } from "react";
 
+import { cn } from "@/lib/utils";
+
 interface PageWrapperProps {
   children: ReactNode;
   className?: string;
 }
 
-export function PageWrapper({ children, className = "" }: PageWrapperProps) {
-  return (
-    <div className={`pt-24 pb-16 ${className}`}>
-      <div className="mx-auto max-w-screen-md px-6">{children}</div>
-    </div>
-  );
+export function PageWrapper({ children, className }: PageWrapperProps) {
+  return <div className={cn("pt-12 pb-16", className)}>{children}</div>;
 }

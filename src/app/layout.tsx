@@ -27,20 +27,20 @@ export default function RootLayout({
         className={`${GeistSans.variable} ${GeistMono.variable}`}
         suppressHydrationWarning
       >
-        <body className="min-h-screen bg-background font-sans antialiased">
+        <body className="min-h-dvh bg-background font-sans antialiased">
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
-            <div className="flex min-h-screen flex-col">
+            <div className="container-editorial flex min-h-dvh flex-col">
               <Navigation />
               <main className="flex-1">{children}</main>
               <Footer />
-              <ScrollToTop />
-              <GlobalShortcuts />
             </div>
+            <ScrollToTop />
+            <GlobalShortcuts />
           </ThemeProvider>
           <UmamiAnalytics />
         </body>
