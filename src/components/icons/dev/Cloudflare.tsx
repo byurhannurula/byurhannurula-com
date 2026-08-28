@@ -1,6 +1,8 @@
-export default function Cloudflare() {
+import type { SVGProps } from "react";
+
+export default function Cloudflare(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 128 128">
+    <svg viewBox="0 0 128 128" {...props}>
       <path
         fill="#FFF"
         d="m115.679 69.288-15.591-8.94-2.689-1.163-63.781.436v32.381h82.061z"

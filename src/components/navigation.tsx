@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { RssIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { NAVIGATION_ITEMS, SITE_CONFIG } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -51,14 +50,6 @@ export function Navigation() {
           </ul>
         </nav>
         <div className="flex items-center gap-1.5">
-          <Link
-            href="/rss.xml"
-            aria-label="RSS feed"
-            title="rss"
-            className="inline-flex size-[30px] items-center justify-center rounded-sm border border-border text-rss transition-colors hover:border-rss"
-          >
-            <RssIcon className="size-3.5" />
-          </Link>
           <ThemeToggle />
         </div>
       </div>

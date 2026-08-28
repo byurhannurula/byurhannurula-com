@@ -1,6 +1,8 @@
-export default function Linux() {
+import type { SVGProps } from "react";
+
+export default function Linux(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 128 128">
+    <svg viewBox="0 0 128 128" {...props}>
       <radialGradient
         id="linux-original-a"
         cx="-992.915"

@@ -1,10 +1,8 @@
-export default function Sanity({ className }: { className?: string }) {
+import type { SVGProps } from "react";
+
+export default function Sanity(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 128 128"
-      className={className}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" {...props}>
       <rect fill="#F03E2F" height="128" width="128"></rect>
       <path
         fill="#FFFFFF"

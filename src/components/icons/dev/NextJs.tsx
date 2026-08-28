@@ -1,6 +1,8 @@
-export default function NextJs() {
+import type { SVGProps } from "react";
+
+export default function NextJs(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 128 128">
+    <svg viewBox="0 0 128 128" {...props}>
       <circle cx="64" cy="64" r="64"></circle>
       <path
         fill="url(#a)"

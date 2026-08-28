@@ -48,6 +48,18 @@ export const SITE_CONFIG = {
 
 export const SOCIAL_LINKS = [
   {
+    name: "Email",
+    href: SITE_CONFIG.social.email,
+    icon: MailIcon,
+    external: false,
+  },
+  {
+    name: "LinkedIn",
+    href: SITE_CONFIG.social.linkedin,
+    icon: LinkedinIcon,
+    external: true,
+  },
+  {
     name: "GitHub",
     href: SITE_CONFIG.social.github,
     icon: GithubIcon,
@@ -67,22 +79,10 @@ export const SOCIAL_LINKS = [
     rel: "me",
   },
   {
-    name: "LinkedIn",
-    href: SITE_CONFIG.social.linkedin,
-    icon: LinkedinIcon,
-    external: true,
-  },
-  {
     name: "Instagram",
     href: SITE_CONFIG.social.instagram,
     icon: InstagramIcon,
     external: true,
-  },
-  {
-    name: "Email",
-    href: SITE_CONFIG.social.email,
-    icon: MailIcon,
-    external: false,
   },
   { name: "RSS", href: "/rss.xml", icon: RssIcon, external: false },
 ] as const;

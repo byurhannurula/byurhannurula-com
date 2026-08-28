@@ -1,6 +1,8 @@
-export default function Redis() {
+import type { SVGProps } from "react";
+
+export default function Redis(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 128 128">
+    <svg viewBox="0 0 128 128" {...props}>
       <path
         fill="#A41E11"
         d="M121.8 93.1c-6.7 3.5-41.4 17.7-48.8 21.6-7.4 3.9-11.5 3.8-17.3 1S13 98.1 6.3 94.9c-3.3-1.6-5-2.9-5-4.2V78s48-10.5 55.8-13.2c7.8-2.8 10.4-2.9 17-.5s46.1 9.5 52.6 11.9v12.5c0 1.3-1.5 2.7-4.9 4.4z"

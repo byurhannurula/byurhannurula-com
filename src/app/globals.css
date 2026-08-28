@@ -193,7 +193,7 @@
 /* "// section" heading; the trailing dashed rule is a child so an action can sit after it */
 @utility section-heading {
   @apply flex items-center gap-2.5 font-mono font-semibold text-[14px] text-muted-foreground lowercase;
-  margin: 44px 0 16px;
+  margin: 36px 0 14px;
 
   &::before {
     content: "//";

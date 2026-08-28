@@ -1,6 +1,8 @@
-export default function CiCd() {
+import type { SVGProps } from "react";
+
+export default function CiCd(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 128 128">
+    <svg viewBox="0 0 128 128" {...props}>
       <path
         fill="currentColor"
         d="M64 8C33.1 8 8 33.1 8 64s25.1 56 56 56 56-25.1 56-56S94.9 8 64 8zm0 96c-22.1 0-40-17.9-40-40s17.9-40 40-40 40 17.9 40 40-17.9 40-40 40z"

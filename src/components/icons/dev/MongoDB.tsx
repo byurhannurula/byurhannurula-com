@@ -1,6 +1,8 @@
-export default function MongoDB() {
+import type { SVGProps } from "react";
+
+export default function MongoDB(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 128 128">
+    <svg viewBox="0 0 128 128" {...props}>
       <path
         fillRule="evenodd"
         clipRule="evenodd"

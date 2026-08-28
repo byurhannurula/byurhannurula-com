@@ -1,6 +1,8 @@
-export default function Docker({ className }: { className?: string }) {
+import type { SVGProps } from "react";
+
+export default function Docker(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 128 128" className={className}>
+    <svg viewBox="0 0 128 128" {...props}>
       <path
         fillRule="evenodd"
         clipRule="evenodd"

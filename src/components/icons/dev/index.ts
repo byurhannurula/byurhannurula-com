@@ -1,4 +1,5 @@
 export { default as Apache } from "./Apache";
+export { default as Astro } from "./Astro";
 export { default as AWS } from "./AWS";
 export { default as Bun } from "./Bun";
 export { default as CiCd } from "./CiCd";
@@ -6,9 +7,11 @@ export { default as Cloudflare } from "./Cloudflare";
 export { default as CSS } from "./CSS";
 export { default as Docker } from "./Docker";
 export { default as ExpressJs } from "./ExpressJs";
+export { default as Fastify } from "./Fastify";
 export { default as Figma } from "./Figma";
 export { default as Git } from "./Git";
 export { default as Github } from "./Github";
+export { default as GoogleCloud } from "./GoogleCloud";
 export { default as GraphQL } from "./GraphQL";
 export { default as Html } from "./Html";
 export { default as JavaScript } from "./JavaScript";

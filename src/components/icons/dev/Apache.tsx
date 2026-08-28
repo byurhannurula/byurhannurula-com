@@ -1,6 +1,8 @@
-export default function Apache() {
+import type { SVGProps } from "react";
+
+export default function Apache(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 128 128">
+    <svg viewBox="0 0 128 128" {...props}>
       <path
         fill="url(#a)"
         d="M86.522.606c-2.007 1.185-5.348 4.54-9.318 9.407l3.652 6.903c2.57-3.666 5.177-6.977 7.807-9.8l.304-.325-.304.326c-.852.933-3.437 3.955-7.333 9.94 3.755-.185 9.518-.956 14.222-1.756 1.407-7.844-1.37-11.429-1.37-11.429S90.654-1.83 86.521.606Z"
