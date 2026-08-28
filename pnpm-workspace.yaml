@@ -1,0 +1,4 @@
+allowBuilds:
+  sharp: false
+minimumReleaseAgeExclude:
+  - react-hook-form@7.78.0
