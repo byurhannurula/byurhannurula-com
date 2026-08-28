@@ -180,7 +180,7 @@
   },
   "overrides": [
     {
-      "includes": ["*.tsx", "*.jsx"],
+      "includes": ["**/*.tsx", "**/*.jsx"],
       "linter": {
         "rules": {
           "correctness": {
@@ -190,7 +190,7 @@
       }
     },
     {
-      "includes": ["*.css"],
+      "includes": ["**/*.css"],
       "linter": {
         "rules": {
           "suspicious": {

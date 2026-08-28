@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { PageWrapper } from "@/components/page-wrapper";
 import { createMetadata } from "@/config";
-import { getPostStats } from "@/lib";
+import { getPostStats } from "@/lib/redis";
 import { getAllPosts } from "@/lib/server";
 
 export const metadata = createMetadata("/statistics");

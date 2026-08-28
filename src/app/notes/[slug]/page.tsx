@@ -12,7 +12,7 @@ import {
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
 import { MDXRenderer, TOC, TOCFloating, TOCSidebar } from "@/components/mdx";
 import { createBlogMetadata, SITE_CONFIG } from "@/config";
-import { getPostStats } from "@/lib";
+import { getPostStats } from "@/lib/redis";
 import { getAllPosts, getSinglePost, type Post } from "@/lib/server";
 
 interface PageProps {

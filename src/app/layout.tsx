@@ -1,4 +1,5 @@
-import { Inter } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import { ViewTransitions } from "next-view-transitions";
 import type React from "react";
 
@@ -12,8 +13,6 @@ import { GlobalShortcuts } from "@/components/theme-shortcut";
 import { UmamiAnalytics } from "@/components/umami-analytics";
 import { createMetadata } from "@/config";
 
-const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
 export const metadata = createMetadata("/");
 
 export default function RootLayout({
@@ -23,13 +22,15 @@ export default function RootLayout({
 }) {
   return (
     <ViewTransitions>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${sans.variable} min-h-screen bg-background font-sans antialiased`}
-        >
+      <html
+        lang="en"
+        className={`${GeistSans.variable} ${GeistMono.variable}`}
+        suppressHydrationWarning
+      >
+        <body className="min-h-screen bg-background font-sans antialiased">
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
