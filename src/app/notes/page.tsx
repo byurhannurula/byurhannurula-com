@@ -22,7 +22,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         </p>
       </div>
 
-      <div className="stagger-children space-y-16">
+      <div className="stagger-children space-y-10">
         {groupedPosts?.length ? (
           groupedPosts.map((yearGroup) => {
             // Find the FIRST month that has posts (since months are reverse chronological)
@@ -31,7 +31,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             );
 
             return (
-              <div key={yearGroup.year} className="space-y-12">
+              <div key={yearGroup.year} className="space-y-8">
                 {yearGroup.months.map((monthGroup, index) => {
                   // Check if this is the FIRST month WITH POSTS
                   const isFirstMonthWithPosts =
@@ -41,27 +41,27 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                   return (
                     <div
                       key={`${yearGroup.year}-${monthGroup.month}`}
-                      className="space-y-6"
+                      className="space-y-3"
                     >
                       <div className="flex items-center justify-between">
                         {/* Year Header (only on first month with posts) */}
                         {isFirstMonthWithPosts && (
-                          <h2 className="font-medium text-muted-foreground text-sm uppercase tracking-wider">
-                            {yearGroup.year} NOTES
+                          <h2 className="label-mono uppercase tracking-[0.08em]">
+                            {yearGroup.year} notes
                           </h2>
                         )}
 
                         {/* Month Header */}
                         <div
-                          className={`flex items-center justify-end gap-2 font-medium text-muted-foreground text-xs uppercase tracking-widest ${isFirstMonthWithPosts ? "" : "ml-auto"}`}
+                          className={`label-mono flex items-center justify-end gap-2 uppercase tracking-[0.08em] ${isFirstMonthWithPosts ? "" : "ml-auto"}`}
                         >
-                          <span>✦</span>
+                          <span className="text-primary">✦</span>
                           <span>{monthGroup.month}</span>
                         </div>
                       </div>
 
                       {/* Posts */}
-                      <div className="space-y-3">
+                      <div className="space-y-0.5">
                         {monthGroup.posts.map((post) => (
                           <BlogPostItem key={post.slug} post={post} />
                         ))}

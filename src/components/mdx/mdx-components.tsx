@@ -1,4 +1,3 @@
-import { cn } from "@/lib";
 import { Callout } from "./callout";
 import { CodeBlock } from "./code-block";
 import { GridImage, ImageGrid, MDXImage } from "./image";
@@ -13,11 +12,7 @@ import {
   TableRow,
 } from "./table";
 
-function createHeading(
-  Tag: "h1" | "h2" | "h3" | "h4",
-  symbol = "#",
-  symbolSize = "text-base"
-) {
+function createHeading(Tag: "h1" | "h2" | "h3" | "h4") {
   const HeadingComponent = ({ children, ...props }: any) => {
     const id =
       typeof children === "string"
@@ -29,16 +24,9 @@ function createHeading(
         <a
           href={`#${id}`}
           aria-label={`Link to ${children}`}
-          className="block pr-6 no-underline"
+          className="inline no-underline"
         >
           <span className="text-foreground">{children}</span>
-          <span
-            className={cn(
-              `absolute top-1/2 translate-x-3 -translate-y-1/2 ${symbolSize} text-muted-foreground opacity-0 transition group-focus-within:opacity-100 group-hover:text-primary group-hover:opacity-100`
-            )}
-          >
-            {symbol}
-          </span>
         </a>
       </Tag>
     );
@@ -97,8 +85,8 @@ export const mdxComponents = {
   a: MDXLink,
 
   // Headings
-  h1: createHeading("h1", "#", "text-lg"),
-  h2: createHeading("h2", "#", "text-base"),
-  h3: createHeading("h3", "#", "text-sm"),
-  h4: createHeading("h4", "#", "text-sm"),
+  h1: createHeading("h1"),
+  h2: createHeading("h2"),
+  h3: createHeading("h3"),
+  h4: createHeading("h4"),
 };

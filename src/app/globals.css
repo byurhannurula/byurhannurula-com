@@ -14,6 +14,7 @@
 
   --color-background: var(--background);
   --color-background-soft: var(--background-soft);
+  --color-surface-raised: var(--surface-raised);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -49,6 +50,9 @@
   --background-soft: #f1f1f1;
   --foreground: #1a1a1a;
   --card: #f1f1f1;
+  /* Floating surfaces sit over the footer dot field, where a fill matching
+     the page reads as transparent. */
+  --surface-raised: #ffffff;
   --card-foreground: #1a1a1a;
   --popover: #f1f1f1;
   --popover-foreground: #1a1a1a;
@@ -77,6 +81,7 @@
   --background-soft: #111111;
   --foreground: #e6e6e6;
   --card: #111111;
+  --surface-raised: #1c1c1c;
   --card-foreground: #e6e6e6;
   --popover: #111111;
   --popover-foreground: #e6e6e6;
@@ -279,9 +284,28 @@ code:not([data-line-numbers]) > [data-line] {
   @apply my-4;
 }
 
+/* rehype-pretty-code dual theme: each token carries both colours as vars. */
+code[data-theme*=" "],
+code[data-theme*=" "] span {
+  color: var(--shiki-light);
+}
+
+.dark code[data-theme*=" "],
+.dark code[data-theme*=" "] span {
+  color: var(--shiki-dark);
+}
+
 [data-rehype-pretty-code-title] {
   @apply rounded-t-lg border border-b-0 border-border bg-background-soft px-3.5 py-2 font-mono text-[11px] text-faint;
   border-bottom: 1px dashed var(--border-dash);
+}
+
+/* The title sits in the figure, the pre inside the wrapper div, so the
+   adjacent-sibling rule below never matched and both kept their own corners. */
+[data-rehype-pretty-code-figure]:has([data-rehype-pretty-code-title])
+  .code-block-wrapper
+  pre {
+  @apply rounded-t-none border-t-0;
 }
 
 [data-rehype-pretty-code-title] + pre {
@@ -322,6 +346,11 @@ code:not([data-line-numbers]) > [data-line] {
   @apply block;
 }
 
+.prose {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
 .prose .not-prose {
   @apply max-w-none!;
 }
@@ -338,28 +367,53 @@ code:not([data-line-numbers]) > [data-line] {
 }
 
 .prose h2 {
-  @apply text-[19px];
-  margin: 40px 0 12px;
-}
-
-.prose h3 {
   @apply text-[17px];
   margin: 36px 0 12px;
 }
 
-.prose h3::before {
+/* The prefix mirrors the markdown that produced the heading. */
+.prose h2::before {
   content: "## ";
   color: var(--primary);
-  opacity: 0.7;
+  opacity: 0.55;
+  transition: opacity 200ms ease-out;
+}
+
+.prose h2:hover::before,
+.prose h2:focus-within::before {
+  opacity: 1;
+}
+
+.prose h3 {
+  @apply text-[15.5px];
+  margin: 30px 0 10px;
+}
+
+.prose h3::before {
+  content: "### ";
+  color: var(--primary);
+  opacity: 0.55;
+  transition: opacity 200ms ease-out;
+}
+
+.prose h3:hover::before,
+.prose h3:focus-within::before {
+  opacity: 1;
 }
 
 .prose h4 {
-  @apply text-[15px];
-  margin: 28px 0 8px;
+  @apply text-[14.5px];
+  margin: 24px 0 8px;
 }
 
 .prose a {
   @apply link-inline;
+}
+
+/* Heading anchors are full-width block links, so link-inline would draw a
+   dashed rule across the whole heading. */
+.prose :is(h1, h2, h3, h4) a {
+  @apply border-b-0 text-inherit;
 }
 
 .prose strong {
@@ -399,22 +453,10 @@ code:not([data-line-numbers]) > [data-line] {
   @apply border-0 bg-transparent p-0;
 }
 
-.prose table {
-  @apply w-full border-collapse text-[13.5px];
-  margin: 16px 0;
-}
-
-.prose th {
-  @apply border-border border-b p-2 text-left font-mono text-[11px] text-faint uppercase tracking-[0.08em];
-}
-
-.prose td {
-  @apply p-2 text-muted-foreground;
-  border-bottom: 1px dashed var(--border-dash);
-}
-
-.prose td:first-child {
-  @apply font-mono text-foreground;
+.prose hr {
+  border: 0;
+  border-top: 1px dashed var(--border-dash);
+  margin: 32px 0;
 }
 
 .prose figure {

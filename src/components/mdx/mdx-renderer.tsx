@@ -8,8 +8,11 @@ interface MDXRendererProps {
 }
 
 const rehypePrettyCodeOptions = {
-  theme: "one-dark-pro",
-  keepBackground: true,
+  // Dual theme emits --shiki-light/--shiki-dark vars per token; globals.css
+  // picks the side. keepBackground:false hands the surface to our own tokens,
+  // so the code area matches its title bar instead of shipping Shiki's.
+  theme: { light: "github-light", dark: "one-dark-pro" },
+  keepBackground: false,
   defaultLang: "plaintext",
 };
 

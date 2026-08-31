@@ -1,6 +1,5 @@
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import { ViewTransitions } from "next-view-transitions";
 import type React from "react";
 
 import "./globals.css";
@@ -33,37 +32,35 @@ export default function RootLayout({
   const tags = getAllTags();
 
   return (
-    <ViewTransitions>
-      <html
-        lang="en"
-        className={`${GeistSans.variable} ${GeistMono.variable}`}
-        data-scroll-behavior="smooth"
-        suppressHydrationWarning
-      >
-        <body className="relative min-h-dvh bg-background font-sans antialiased">
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="container-editorial flex min-h-dvh flex-col">
-              <Navigation />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <FooterBackdrop />
-            <CommandPalette notes={notes} tags={tags} />
-            <ShortcutsDialog />
-            <BuildInfo />
-            <ConsoleBanner />
-            <Toaster />
-            <ScrollToTop />
-            <GlobalShortcuts />
-          </ThemeProvider>
-          <UmamiAnalytics />
-        </body>
-      </html>
-    </ViewTransitions>
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
+      <body className="relative min-h-dvh bg-background font-sans antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="container-editorial flex min-h-dvh flex-col">
+            <Navigation />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+          <FooterBackdrop />
+          <CommandPalette notes={notes} tags={tags} />
+          <ShortcutsDialog />
+          <BuildInfo />
+          <ConsoleBanner />
+          <Toaster />
+          <ScrollToTop />
+          <GlobalShortcuts />
+        </ThemeProvider>
+        <UmamiAnalytics />
+      </body>
+    </html>
   );
 }

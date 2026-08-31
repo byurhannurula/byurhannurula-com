@@ -19,10 +19,7 @@ export function CodeBlock({ children, raw, ...props }: CodeBlockProps) {
       let textToCopy = raw || "";
 
       if (!textToCopy && codeRef.current) {
-        const codeElement = codeRef.current.querySelector("code");
-        if (codeElement) {
-          textToCopy = codeElement.textContent || "";
-        }
+        textToCopy = codeRef.current.querySelector("code")?.textContent || "";
       }
 
       if (!textToCopy && typeof children === "string") {
@@ -39,30 +36,30 @@ export function CodeBlock({ children, raw, ...props }: CodeBlockProps) {
 
   return (
     <div className="not-prose code-block-wrapper group relative">
-      {/* Copy button */}
       <button
         type="button"
         onClick={copyToClipboard}
-        className="absolute top-3 right-3 z-10 flex items-center gap-1 rounded bg-[#313244]/80 px-2 py-1 text-xs opacity-0 transition-opacity hover:bg-[#313244] group-hover:opacity-100"
+        className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 rounded-sm border border-border bg-background px-2 py-1 font-mono text-[11px] text-muted-foreground opacity-0 transition-opacity hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
         aria-label="Copy code"
       >
         {copied ? (
           <>
-            <Check className="h-3 w-3 text-green-500" />
-            <span className="text-green-500">Copied!</span>
+            <Check className="size-3 text-primary" />
+            <span className="text-primary">copied</span>
           </>
         ) : (
           <>
-            <Copy className="h-3 w-3 text-muted-foreground" />
-            <span className="text-muted-foreground">Copy</span>
+            <Copy className="size-3" />
+            <span>copy</span>
           </>
         )}
       </button>
 
-      {/* Code content - rehype-pretty-code handles title via figure/figcaption */}
+      {/* rehype-pretty-code renders the title as a sibling figcaption, so the
+          rounding and top border are dropped when one is present (globals.css). */}
       <pre
         ref={codeRef}
-        className="overflow-x-auto rounded-lg border border-border/50 bg-[#1e1e2e] py-4"
+        className="overflow-x-auto rounded-lg border border-border bg-background-soft py-3.5"
         {...props}
       >
         {children}
