@@ -23,7 +23,7 @@ export default function Home() {
       <WebsiteJsonLd />
       <PersonJsonLd />
       <PageWrapper>
-        <h1 className="mb-4 text-[30px] leading-[1.35]">
+        <h1 className="mb-4 text-[26px] leading-[1.35] tracking-[-0.5px]">
           Hi, I&apos;m Byurhan —{" "}
           <span className="text-primary">a developer who tinkers.</span>
         </h1>

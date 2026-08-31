@@ -1,5 +1,5 @@
 import { Eye } from "lucide-react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 import type { Post } from "@/lib/server";
 
@@ -63,7 +63,10 @@ export function BlogCardHome({ post, views }: BlogCardHomeProps) {
     <article className="group border-border/50 border-b pb-6">
       <Link href={`/notes/${post.slug}`} className="block">
         <div className="flex items-baseline justify-between gap-4">
-          <h3 className="font-medium transition-colors duration-200 group-hover:text-primary">
+          <h3
+            className="font-medium transition-colors duration-200 group-hover:text-primary"
+            style={{ viewTransitionName: `note-title-${post.slug}` }}
+          >
             {post.frontmatter.title}
           </h3>
           <div className="flex shrink-0 items-center gap-3 text-muted-foreground text-xs tabular-nums">

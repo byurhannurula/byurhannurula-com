@@ -103,7 +103,10 @@ export default async function BlogPostPage({ params }: PageProps) {
                 initialLikes={initialStats.likes}
               />
             </div>
-            <h1 className="font-medium text-2xl md:text-3xl">
+            <h1
+              className="font-medium text-2xl md:text-3xl"
+              style={{ viewTransitionName: `note-title-${slug}` }}
+            >
               {currentPost.frontmatter.title}
             </h1>
             <p className="mt-3 text-lg text-muted-foreground">

@@ -1,5 +1,34 @@
+import { execSync } from "node:child_process";
+
+/**
+ * Build stamp for the footer panel. CI providers expose the SHA as an env var;
+ * local builds fall back to git, and a shallow checkout without either falls
+ * back to "dev" rather than failing the build.
+ */
+function buildSha() {
+  const fromEnv =
+    process.env.CF_PAGES_COMMIT_SHA ??
+    process.env.WORKERS_CI_COMMIT_SHA ??
+    process.env.GITHUB_SHA;
+  if (fromEnv) return fromEnv.slice(0, 7);
+
+  try {
+    return execSync("git rev-parse --short HEAD", {
+      stdio: ["ignore", "pipe", "ignore"],
+    })
+      .toString()
+      .trim();
+  } catch {
+    return "dev";
+  }
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_BUILD_SHA: buildSha(),
+    NEXT_PUBLIC_BUILD_TIME: new Date().toISOString(),
+  },
   // MDX is handled by next-mdx-remote/rsc in components/mdx/mdx-renderer.tsx
   // No need for @next/mdx loader - it causes Turbopack serialization issues
   output: "standalone",

@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 import type { Post } from "@/lib/server";
 
@@ -12,7 +12,10 @@ export function BlogPostItem({ post }: BlogPostItemProps) {
     <article className="relative overflow-hidden">
       <Link href={`/notes/${post.slug}`} className="group block">
         <div className="flex items-center justify-between">
-          <h3 className="text-foreground/90 text-lg transition-colors duration-300 ease-in-out group-hover:text-primary">
+          <h3
+            className="text-foreground/90 text-lg transition-colors duration-300 ease-in-out group-hover:text-primary"
+            style={{ viewTransitionName: `note-title-${post.slug}` }}
+          >
             {post.frontmatter.title}
           </h3>
           <div className="mx-[8px] mb-[8px] h-px flex-1 self-end border-muted-foreground/30 border-b border-dotted"></div>

@@ -116,21 +116,25 @@
   body {
     @apply bg-background font-sans text-[15px] text-foreground leading-[1.65] antialiased;
     overflow-x: clip;
-    transition:
-      background-color 0.25s,
-      color 0.25s;
   }
 
-  /* Dotted paper background */
+  /* Paper grain: a tiled 160px feTurbulence tile, kept tiny so it repaints cheaply */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background-image: radial-gradient(var(--border-dash) 1px, transparent 1px);
-    background-size: 28px 28px;
-    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    opacity: 0.2;
+    mix-blend-mode: multiply;
     pointer-events: none;
-    z-index: 0;
+    /* Above the editorial column (z 1) so the grain covers the page, not just the gutters */
+    z-index: 2;
+  }
+
+  .dark body::before {
+    opacity: 0.07;
+    mix-blend-mode: screen;
   }
 
   h1,
@@ -305,11 +309,11 @@ code:not([data-line-numbers]) > [data-line] {
 }
 
 .mdx-content .not-prose {
-  @apply !max-w-none !text-base !leading-normal;
+  @apply max-w-none! text-base! leading-normal!;
 }
 
 .mdx-content .not-prose * {
-  @apply !max-w-none;
+  @apply max-w-none!;
 }
 
 .mdx-content > div,
@@ -319,7 +323,7 @@ code:not([data-line-numbers]) > [data-line] {
 }
 
 .prose .not-prose {
-  @apply !max-w-none;
+  @apply max-w-none!;
 }
 
 .prose p {
@@ -529,4 +533,16 @@ code:not([data-line-numbers]) > [data-line] {
 }
 .stagger-children > :nth-child(n + 9) {
   --i: 9;
+}
+
+/* Terminal caret: 404 prompt, and the hero experiment in /lab. */
+@keyframes caret {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
 }

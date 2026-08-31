@@ -2,79 +2,101 @@
 
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { useCallback, useEffect } from "react";
+import { useEffect, useRef } from "react";
+
+import { OPEN_SHORTCUTS_EVENT } from "@/components/shortcuts-dialog";
+import { SITE_CONFIG } from "@/config/site";
+import { copyEmail, copyPageLink, openExternal } from "@/lib/shortcuts";
+
+const NAV_KEYS: Record<string, string> = {
+  h: "/",
+  n: "/notes",
+  u: "/uses",
+  a: "/about",
+};
+
+const SHIFT_LINKS: Record<string, string> = {
+  g: SITE_CONFIG.social.github,
+  i: SITE_CONFIG.social.linkedin,
+  x: SITE_CONFIG.social.twitter,
+};
+
+function isTyping(event: KeyboardEvent) {
+  const target = event.target;
+  return (
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement ||
+    (target instanceof HTMLElement && target.isContentEditable)
+  );
+}
+
+/** Window in which a second `g` counts as the `gg` motion, matching vim's default. */
+const CHORD_TIMEOUT_MS = 600;
 
 export function GlobalShortcuts() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const router = useRouter();
-
-  const isTyping = useCallback((e: KeyboardEvent) => {
-    return (
-      e.target instanceof HTMLInputElement ||
-      e.target instanceof HTMLTextAreaElement ||
-      (e.target as HTMLElement)?.isContentEditable
-    );
-  }, []);
+  const pendingGRef = useRef(0);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Skip if typing in input fields
-      if (isTyping(e)) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (isTyping(event)) return;
 
-      // Skip if modifier keys are pressed (except for specific combos)
-      const hasModifier = e.metaKey || e.ctrlKey || e.altKey;
-
-      // Theme toggle: T or D
-      if (!hasModifier && e.key === "t") {
-        e.preventDefault();
-        setTheme(theme === "dark" ? "light" : "dark");
+      // `?` sits behind AltGr on several non-US layouts, and Windows reports
+      // AltGr as ctrl+alt together, so this has to run before the modifier
+      // guard below. `code` covers layouts that remap the character itself.
+      const isHelpKey =
+        event.key === "?" || (event.code === "Slash" && event.shiftKey);
+      if (isHelpKey && !event.metaKey) {
+        event.preventDefault();
+        window.dispatchEvent(new Event(OPEN_SHORTCUTS_EVENT));
         return;
       }
 
-      // Navigation shortcuts (single key)
-      if (!hasModifier) {
-        switch (e.key.toLowerCase()) {
-          case "h":
-            e.preventDefault();
-            router.push("/");
-            break;
-          case "n":
-            e.preventDefault();
-            router.push("/notes");
-            break;
-          case "p":
-            e.preventDefault();
-            router.push("/projects");
-            break;
-          case "a":
-            e.preventDefault();
-            router.push("/about");
-            break;
-          case "u":
-            e.preventDefault();
-            router.push("/uses");
-            break;
-          case "s":
-            e.preventDefault();
-            router.push("/statistics");
-            break;
-          case "l":
-            e.preventDefault();
-            router.push("/links");
-            break;
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      const key = event.key.toLowerCase();
+
+      if (event.shiftKey) {
+        if (key === "e") copyEmail();
+        else if (key === "l") copyPageLink();
+        else if (key in SHIFT_LINKS) openExternal(SHIFT_LINKS[key]);
+        else if (event.key === "ArrowUp") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else if (event.key === "ArrowDown") {
+          window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
+        } else return;
+        event.preventDefault();
+        return;
+      }
+
+      if (key === "g") {
+        event.preventDefault();
+        const now = Date.now();
+        if (now - pendingGRef.current < CHORD_TIMEOUT_MS) {
+          pendingGRef.current = 0;
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          pendingGRef.current = now;
         }
+        return;
       }
+      pendingGRef.current = 0;
 
-      // Scroll to top: Shift + ArrowUp
-      if (e.shiftKey && e.key === "ArrowUp") {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+      if (key === "t") {
+        event.preventDefault();
+        setTheme(resolvedTheme === "dark" ? "light" : "dark");
+      } else if (key in NAV_KEYS) {
+        event.preventDefault();
+        router.push(NAV_KEYS[key]);
       }
-    };
+    }
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [theme, setTheme, router, isTyping]);
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [resolvedTheme, setTheme, router]);
 
   return null;
 }
