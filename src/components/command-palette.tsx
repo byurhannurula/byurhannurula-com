@@ -17,7 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
-
+import { Drawer } from "vaul";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/icons";
 import { OPEN_SHORTCUTS_EVENT } from "@/components/shortcuts-dialog";
 import {
@@ -32,7 +32,10 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui";
+import type { LightMode } from "@/config/light-modes";
 import { SITE_CONFIG } from "@/config/site";
+import { useIsMobile } from "@/hooks";
+import { cycleLightMode } from "@/lib/light-mode";
 import {
   copyEmail,
   copyPageLink,
@@ -60,6 +63,7 @@ export function CommandPalette({ notes, tags }: CommandPaletteProps) {
   const [search, setSearch] = useState("");
   const router = useRouter();
   const { resolvedTheme, setTheme } = useTheme();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -91,6 +95,193 @@ export function CommandPalette({ notes, tags }: CommandPaletteProps) {
 
   const go = (href: string) => run(() => router.push(href));
 
+  const palette = (
+    <Command
+      label="Command palette"
+      loop
+      className="rounded-lg bg-background font-mono text-[13px]"
+    >
+      <CommandInput
+        value={search}
+        onValueChange={setSearch}
+        placeholder="type a command or search"
+        className="h-12 font-mono text-[13px] placeholder:text-faint"
+      />
+
+      <CommandList className="max-h-[360px] p-1 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:text-faint [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.08em]">
+        <CommandEmpty className="flex flex-col items-center justify-center gap-1.5 px-6 py-14 text-center font-mono">
+          {VIM_QUIT.has(search.trim().toLowerCase()) ? (
+            <>
+              <span className="text-[15px] text-primary">
+                {search.trim().toLowerCase()}
+              </span>
+              <span className="text-[12px] text-muted-foreground">
+                esc works here. no swap file, i promise.
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="text-[13px] text-muted-foreground">
+                nothing found
+              </span>
+              <span className="text-[11.5px] text-faint">
+                try a note title, a tag, or an action like{" "}
+                <span className="text-muted-foreground">theme</span>
+              </span>
+            </>
+          )}
+        </CommandEmpty>
+
+        <CommandGroup heading="pages">
+          {PAGES.map((page) => (
+            <PaletteItem
+              key={page.href}
+              icon={page.icon}
+              onSelect={() => go(page.href)}
+              hint={<Key>{page.shortcut}</Key>}
+            >
+              {page.name}
+            </PaletteItem>
+          ))}
+        </CommandGroup>
+
+        <CommandGroup heading="actions">
+          <PaletteItem
+            icon={<Copy />}
+            keywords={["mail", "contact"]}
+            onSelect={() => run(copyEmail)}
+            hint={<Key>{SHORTCUTS.copyEmail}</Key>}
+          >
+            copy email
+          </PaletteItem>
+          <PaletteItem
+            icon={<Link2 />}
+            keywords={["share", "url"]}
+            onSelect={() => run(copyPageLink)}
+            hint={<Key>{SHORTCUTS.copyLink}</Key>}
+          >
+            copy page link
+          </PaletteItem>
+          <PaletteItem
+            icon={
+              resolvedTheme === "evening" || resolvedTheme === "night" ? (
+                <Sun />
+              ) : (
+                <Moon />
+              )
+            }
+            keywords={["dark", "light", "mode"]}
+            onSelect={() =>
+              run(() => cycleLightMode(resolvedTheme as LightMode, setTheme))
+            }
+            hint={<Key>{SHORTCUTS.theme}</Key>}
+          >
+            toggle theme
+          </PaletteItem>
+          <PaletteItem
+            icon={<Keyboard />}
+            keywords={["help", "keys", "hotkeys"]}
+            onSelect={() =>
+              run(() => window.dispatchEvent(new Event(OPEN_SHORTCUTS_EVENT)))
+            }
+            hint={<Key>{SHORTCUTS.help}</Key>}
+          >
+            keyboard shortcuts
+          </PaletteItem>
+          <PaletteItem
+            icon={<Rss />}
+            onSelect={() => go("/rss.xml")}
+            hint="/rss.xml"
+          >
+            rss feed
+          </PaletteItem>
+        </CommandGroup>
+
+        <CommandGroup heading="elsewhere">
+          {EXTERNAL_LINKS.map((link) => (
+            <PaletteItem
+              key={link.href}
+              icon={link.icon}
+              onSelect={() => run(() => openExternal(link.href))}
+              hint={
+                <span className="flex items-center gap-2">
+                  <Key>{link.shortcut}</Key>
+                  <ArrowUpRight className="size-3.5" />
+                </span>
+              }
+            >
+              {link.name}
+            </PaletteItem>
+          ))}
+        </CommandGroup>
+
+        {notes.length > 0 ? (
+          <CommandGroup heading="notes">
+            {notes.map((note) => (
+              <PaletteItem
+                key={note.slug}
+                icon={<FileText />}
+                onSelect={() => go(`/notes/${note.slug}`)}
+              >
+                {note.title}
+              </PaletteItem>
+            ))}
+          </CommandGroup>
+        ) : null}
+
+        {tags.length > 0 ? (
+          <CommandGroup heading="tags">
+            {tags.map((tag) => (
+              <PaletteItem
+                key={tag}
+                icon={<Hash />}
+                onSelect={() => go(`/notes/tag/${tag}`)}
+              >
+                {tag}
+              </PaletteItem>
+            ))}
+          </CommandGroup>
+        ) : null}
+      </CommandList>
+
+      <div className="hairline-t hidden items-center gap-4 px-4 py-2 text-[11px] text-faint sm:flex">
+        <span>
+          <kbd>↑↓</kbd> navigate
+        </span>
+        <span>
+          <kbd>↵</kbd> select
+        </span>
+        <span className="ml-auto">
+          <kbd>{SHORTCUTS.palette}</kbd> toggle
+        </span>
+      </div>
+    </Command>
+  );
+
+  // Native-feeling sheet on touch, centred palette on pointer devices. Vaul
+  // brings the drag-to-dismiss and rubber-band that a Dialog cannot.
+  if (isMobile) {
+    return (
+      <Drawer.Root
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        repositionInputs={false}
+      >
+        <Drawer.Portal>
+          <Drawer.Overlay className="fixed inset-0 z-50 bg-background/60 backdrop-blur-[2px]" />
+          <Drawer.Content className="fixed right-0 bottom-0 left-0 z-50 flex max-h-[85dvh] flex-col rounded-t-2xl border-border border-t bg-background pb-[env(safe-area-inset-bottom)] outline-none">
+            <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-border" />
+            <Drawer.Title className="sr-only">Command palette</Drawer.Title>
+            <Drawer.Description className="sr-only">
+              Search pages, notes, and actions
+            </Drawer.Description>
+            <div className="flex min-h-0 flex-1 flex-col">{palette}</div>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
+    );
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
@@ -101,164 +292,7 @@ export function CommandPalette({ notes, tags }: CommandPaletteProps) {
         <DialogDescription className="sr-only">
           Search pages, notes, and actions
         </DialogDescription>
-        <Command
-          label="Command palette"
-          loop
-          className="rounded-lg bg-background font-mono text-[13px]"
-        >
-          <CommandInput
-            value={search}
-            onValueChange={setSearch}
-            placeholder="type a command or search"
-            className="h-12 font-mono text-[13px] placeholder:text-faint"
-          />
-
-          <CommandList className="max-h-[360px] p-1 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:text-faint [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.08em]">
-            <CommandEmpty className="flex flex-col items-center justify-center gap-1.5 px-6 py-14 text-center font-mono">
-              {VIM_QUIT.has(search.trim().toLowerCase()) ? (
-                <>
-                  <span className="text-[15px] text-primary">
-                    {search.trim().toLowerCase()}
-                  </span>
-                  <span className="text-[12px] text-muted-foreground">
-                    esc works here. no swap file, i promise.
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="text-[13px] text-muted-foreground">
-                    nothing found
-                  </span>
-                  <span className="text-[11.5px] text-faint">
-                    try a note title, a tag, or an action like{" "}
-                    <span className="text-muted-foreground">theme</span>
-                  </span>
-                </>
-              )}
-            </CommandEmpty>
-
-            <CommandGroup heading="pages">
-              {PAGES.map((page) => (
-                <PaletteItem
-                  key={page.href}
-                  icon={page.icon}
-                  onSelect={() => go(page.href)}
-                  hint={<Key>{page.shortcut}</Key>}
-                >
-                  {page.name}
-                </PaletteItem>
-              ))}
-            </CommandGroup>
-
-            <CommandGroup heading="actions">
-              <PaletteItem
-                icon={<Copy />}
-                keywords={["mail", "contact"]}
-                onSelect={() => run(copyEmail)}
-                hint={<Key>{SHORTCUTS.copyEmail}</Key>}
-              >
-                copy email
-              </PaletteItem>
-              <PaletteItem
-                icon={<Link2 />}
-                keywords={["share", "url"]}
-                onSelect={() => run(copyPageLink)}
-                hint={<Key>{SHORTCUTS.copyLink}</Key>}
-              >
-                copy page link
-              </PaletteItem>
-              <PaletteItem
-                icon={resolvedTheme === "dark" ? <Sun /> : <Moon />}
-                keywords={["dark", "light", "mode"]}
-                onSelect={() =>
-                  run(() =>
-                    setTheme(resolvedTheme === "dark" ? "light" : "dark")
-                  )
-                }
-                hint={<Key>{SHORTCUTS.theme}</Key>}
-              >
-                toggle theme
-              </PaletteItem>
-              <PaletteItem
-                icon={<Keyboard />}
-                keywords={["help", "keys", "hotkeys"]}
-                onSelect={() =>
-                  run(() =>
-                    window.dispatchEvent(new Event(OPEN_SHORTCUTS_EVENT))
-                  )
-                }
-                hint={<Key>{SHORTCUTS.help}</Key>}
-              >
-                keyboard shortcuts
-              </PaletteItem>
-              <PaletteItem
-                icon={<Rss />}
-                onSelect={() => go("/rss.xml")}
-                hint="/rss.xml"
-              >
-                rss feed
-              </PaletteItem>
-            </CommandGroup>
-
-            <CommandGroup heading="elsewhere">
-              {EXTERNAL_LINKS.map((link) => (
-                <PaletteItem
-                  key={link.href}
-                  icon={link.icon}
-                  onSelect={() => run(() => openExternal(link.href))}
-                  hint={
-                    <span className="flex items-center gap-2">
-                      <Key>{link.shortcut}</Key>
-                      <ArrowUpRight className="size-3.5" />
-                    </span>
-                  }
-                >
-                  {link.name}
-                </PaletteItem>
-              ))}
-            </CommandGroup>
-
-            {notes.length > 0 ? (
-              <CommandGroup heading="notes">
-                {notes.map((note) => (
-                  <PaletteItem
-                    key={note.slug}
-                    icon={<FileText />}
-                    onSelect={() => go(`/notes/${note.slug}`)}
-                  >
-                    {note.title}
-                  </PaletteItem>
-                ))}
-              </CommandGroup>
-            ) : null}
-
-            {tags.length > 0 ? (
-              <CommandGroup heading="tags">
-                {tags.map((tag) => (
-                  <PaletteItem
-                    key={tag}
-                    icon={<Hash />}
-                    onSelect={() => go(`/notes/tag/${tag}`)}
-                  >
-                    {tag}
-                  </PaletteItem>
-                ))}
-              </CommandGroup>
-            ) : null}
-          </CommandList>
-
-          <div className="hairline-t flex items-center gap-4 px-4 py-2 text-[11px] text-faint">
-            <span>
-              <kbd>↑↓</kbd> navigate
-            </span>
-            <span>
-              <kbd>↵</kbd> select
-            </span>
-            <span className="ml-auto">
-              <kbd>{SHORTCUTS.palette}</kbd> toggle
-            </span>
-          </div>
-        </Command>
+        {palette}
       </DialogContent>
     </Dialog>
   );

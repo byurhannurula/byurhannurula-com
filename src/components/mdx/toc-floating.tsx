@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { scrollToHeading } from "@/lib/scroll-to-heading";
 import { cn } from "@/lib/utils";
 
 interface TOCItem {
@@ -101,12 +102,9 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
       ?.scrollIntoView({ block: "nearest" });
   }, [isOpen, activeId]);
 
-  const scrollToHeading = useCallback(
+  const goToHeading = useCallback(
     (id: string) => {
-      document.getElementById(id)?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      scrollToHeading(id);
       close();
     },
     [close]
@@ -140,7 +138,9 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
 
       <div
         className={cn(
-          "fixed bottom-6 left-1/2 z-50 -translate-x-1/2",
+          // Nudged off-centre below sm so it clears the mobile nav button in the
+          // bottom-right corner; centred again once that button is gone.
+          "fixed bottom-6 left-[calc(50%-1.75rem)] z-50 -translate-x-1/2 sm:left-1/2",
           isVisible
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-16 opacity-0",
@@ -162,7 +162,7 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
             bulges the corners mid-transition. */}
         <nav
           id={panelId}
-          className="overflow-hidden rounded-[24px] border border-border bg-surface-raised shadow-2xl motion-reduce:transition-none"
+          className="overflow-hidden rounded-3xl border border-border bg-surface-raised shadow-2xl motion-reduce:transition-none"
           style={{
             width: `min(${isOpen ? OPEN_WIDTH : COLLAPSED_WIDTH}px, calc(100vw - 2rem))`,
             transition: `width ${ISLAND_MS}ms ${ISLAND_EASE}`,
@@ -213,7 +213,7 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
                       type="button"
                       key={item.id}
                       data-toc-id={item.id}
-                      onClick={() => scrollToHeading(item.id)}
+                      onClick={() => goToHeading(item.id)}
                       className={cn(
                         "flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-left text-[13px] transition-colors",
                         activeId === item.id
@@ -253,7 +253,7 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
             aria-expanded={isOpen}
             aria-controls={panelId}
             className={cn(
-              "flex h-[46px] w-full items-center gap-3 px-3 text-left transition-colors",
+              "flex h-11.5 w-full items-center gap-3 px-3 text-left transition-colors",
               // The nav clips overflow, so the global offset ring shows only as
               // a stray line along one edge. Draw it inside, on the pill shape.
               "focus-visible:rounded-[22px] focus-visible:-outline-offset-2",

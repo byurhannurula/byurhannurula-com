@@ -1,12 +1,13 @@
 import Link from "next/link";
 
 import { BuildStamp } from "@/components/build-stamp";
+import { LightSwitcher } from "@/components/light-switcher";
 import { FlickeringGrid } from "@/components/ui";
 import { SITE_CONFIG } from "@/config";
 
+// uses and about live in the nav; the footer carries only what the nav doesn't.
 const FOOTER_LINKS = [
-  { name: "uses", href: "/uses" },
-  { name: "about", href: "/about" },
+  { name: "colophon", href: "/colophon" },
   { name: "rss", href: "/rss.xml" },
 ] as const;
 
@@ -16,18 +17,21 @@ export function Footer() {
       <span>
         <BuildStamp year={new Date().getFullYear()} /> {SITE_CONFIG.author.name}
       </span>
-      <span>
-        {FOOTER_LINKS.map((link, index) => (
-          <span key={link.href}>
-            {index > 0 ? " · " : null}
-            <Link
-              href={link.href}
-              className="no-underline transition-colors hover:text-primary"
-            >
-              {link.name}
-            </Link>
-          </span>
-        ))}
+      <span className="flex items-center gap-3">
+        <span>
+          {FOOTER_LINKS.map((link, index) => (
+            <span key={link.href}>
+              {index > 0 ? " · " : null}
+              <Link
+                href={link.href}
+                className="no-underline transition-colors hover:text-primary"
+              >
+                {link.name}
+              </Link>
+            </span>
+          ))}
+        </span>
+        <LightSwitcher />
       </span>
     </footer>
   );
@@ -41,7 +45,7 @@ export function FooterBackdrop() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[140px] overflow-hidden"
+      className="pointer-events-none absolute inset-x-0 bottom-0 z-2 h-35 overflow-hidden"
       style={{
         maskImage: "linear-gradient(to top, black, transparent)",
         WebkitMaskImage: "linear-gradient(to top, black, transparent)",

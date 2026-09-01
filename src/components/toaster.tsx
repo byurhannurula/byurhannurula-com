@@ -8,7 +8,11 @@ export function Toaster() {
 
   return (
     <SonnerToaster
-      theme={resolvedTheme === "light" ? "light" : "dark"}
+      theme={
+        resolvedTheme === "evening" || resolvedTheme === "night"
+          ? "dark"
+          : "light"
+      }
       position="bottom-center"
       toastOptions={{
         className: "font-mono text-[12.5px] border-border bg-background-soft",

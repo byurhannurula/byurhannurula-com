@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
+/* Two of the four light modes are dim. Redefining the variant here keeps every
+   existing `dark:` utility correct without touching component markup. */
+@custom-variant dark (&:is([data-light="evening"] *, [data-light="night"] *));
 
 /* ============================================ */
 /* Design tokens — mono editorial                */
@@ -10,7 +12,7 @@
 @theme inline {
   --font-sans: var(--font-geist-sans), -apple-system, system-ui, sans-serif;
   --font-mono:
-    var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-background: var(--background);
   --color-background-soft: var(--background-soft);
@@ -43,6 +45,8 @@
   --radius-sm: calc(var(--radius) - 4px);
 
   --container-editorial: 720px;
+  /* Pitch of the backdrop dot grid. The theme wipe steps on this too. */
+  --grid-pitch: 28px;
 }
 
 :root {
@@ -76,7 +80,109 @@
   --radius: 0.5rem;
 }
 
-.dark {
+[data-light="morning"] {
+  --background: #faf6f0;
+  --background-soft: #f2ece3;
+  --foreground: #241f1a;
+  --card: #f2ece3;
+  /* Floating surfaces sit over the footer dot field, where a fill matching
+     the page reads as transparent. */
+  --surface-raised: #fffdf9;
+  --card-foreground: #241f1a;
+  --popover: #f2ece3;
+  --popover-foreground: #241f1a;
+  --primary: #15803d;
+  --primary-foreground: #faf6f0;
+  --primary-soft: rgb(21 128 61 / 0.1);
+  --secondary: #f2ece3;
+  --secondary-foreground: #241f1a;
+  --muted: #f2ece3;
+  --muted-foreground: #6b6157;
+  --faint: #a39889;
+  --accent: #f2ece3;
+  --accent-foreground: #241f1a;
+  --destructive: #b91c1c;
+  --destructive-foreground: #faf6f0;
+  --border: #e8dfd2;
+  --border-dash: #ddd2c2;
+  --input: #e8dfd2;
+  --ring: #15803d;
+  --rss: #c2410c;
+  --radius: 0.5rem;
+}
+
+[data-light="day"] {
+  --background: #fafafa;
+  --background-soft: #f1f1f1;
+  --foreground: #1a1a1a;
+  --card: #f1f1f1;
+  /* Floating surfaces sit over the footer dot field, where a fill matching
+     the page reads as transparent. */
+  --surface-raised: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #f1f1f1;
+  --popover-foreground: #1a1a1a;
+  --primary: #16a34a;
+  --primary-foreground: #fafafa;
+  --primary-soft: rgb(22 163 74 / 0.1);
+  --secondary: #f1f1f1;
+  --secondary-foreground: #1a1a1a;
+  --muted: #f1f1f1;
+  --muted-foreground: #666666;
+  --faint: #9a9a9a;
+  --accent: #f1f1f1;
+  --accent-foreground: #1a1a1a;
+  --destructive: #dc2626;
+  --destructive-foreground: #fafafa;
+  --border: #e4e4e4;
+  --border-dash: #d9d9d9;
+  --input: #e4e4e4;
+  --ring: #16a34a;
+  --rss: #ea580c;
+  --radius: 0.5rem;
+}
+
+[data-light="evening"] {
+  --background: #1c1815;
+  --background-soft: #241f1a;
+  --foreground: #ede4d8;
+  --card: #241f1a;
+  --surface-raised: #2b241d;
+  --card-foreground: #ede4d8;
+  --popover: #241f1a;
+  --popover-foreground: #ede4d8;
+  --primary: #5ecf8b;
+  --primary-foreground: #1c1815;
+  --primary-soft: rgb(94 207 139 / 0.12);
+  --secondary: #241f1a;
+  --secondary-foreground: #ede4d8;
+  --muted: #241f1a;
+  --muted-foreground: #a1917f;
+  --faint: #6d6053;
+  --accent: #241f1a;
+  --accent-foreground: #ede4d8;
+  --destructive: #f87171;
+  --destructive-foreground: #fafafa;
+  --border: #302a23;
+  --border-dash: #3a3229;
+  --input: #302a23;
+  --ring: #5ecf8b;
+  --rss: #fb923c;
+}
+
+/* Scrollbars, form controls and the browser's own UI follow the mode too;
+   without this a dim page keeps light scrollbars. */
+[data-light="morning"],
+[data-light="day"] {
+  color-scheme: light;
+}
+
+[data-light="evening"],
+[data-light="night"] {
+  color-scheme: dark;
+}
+
+[data-light="night"] {
   --background: #0a0a0a;
   --background-soft: #111111;
   --foreground: #e6e6e6;
@@ -119,27 +225,8 @@
   }
 
   body {
-    @apply bg-background font-sans text-[15px] text-foreground leading-[1.65] antialiased;
+    @apply bg-background font-sans text-[15px] text-foreground leading-[1.65];
     overflow-x: clip;
-  }
-
-  /* Paper grain: a tiled 160px feTurbulence tile, kept tiny so it repaints cheaply */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 160px 160px;
-    opacity: 0.2;
-    mix-blend-mode: multiply;
-    pointer-events: none;
-    /* Above the editorial column (z 1) so the grain covers the page, not just the gutters */
-    z-index: 2;
-  }
-
-  .dark body::before {
-    opacity: 0.07;
-    mix-blend-mode: screen;
   }
 
   h1,
@@ -155,6 +242,20 @@
 
   :focus-visible {
     @apply rounded-sm outline-2 outline-primary outline-offset-2;
+  }
+
+  /* Dot grid from the mockup. ::before is already the paper grain, so this
+     takes ::after. At z 0 it sits behind container-editorial's opaque
+     background, which is why it reads only in the gutters. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(var(--border-dash) 1px, transparent 1px);
+    background-size: var(--grid-pitch) var(--grid-pitch);
+    opacity: 0.35;
   }
 
   ::selection {
@@ -212,10 +313,34 @@
 
 @utility link-inline {
   @apply text-primary no-underline;
-  border-bottom: 1px dashed var(--primary);
 
-  &:hover {
-    border-bottom-style: solid;
+  /* Two stacked underlines: a solid rule that wipes in left-to-right over a
+     permanent dashed one. border-bottom-style is a discrete property, so the
+     old dashed -> solid swap snapped and could never be transitioned. */
+  background-image:
+    linear-gradient(var(--primary), var(--primary)),
+    repeating-linear-gradient(
+      to right,
+      var(--primary) 0 3px,
+      transparent 3px 6px
+    );
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size:
+    0 1px,
+    100% 1px;
+  padding-bottom: 2px;
+  /* Without clone, a link wrapping across lines gets one gradient stretched
+     over the whole inline box instead of a rule per line. */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 220ms ease-out;
+
+  &:hover,
+  &:focus-visible {
+    background-size:
+      100% 1px,
+      100% 1px;
   }
 }
 
@@ -413,7 +538,9 @@ code[data-theme*=" "] span {
 /* Heading anchors are full-width block links, so link-inline would draw a
    dashed rule across the whole heading. */
 .prose :is(h1, h2, h3, h4) a {
-  @apply border-b-0 text-inherit;
+  @apply text-inherit;
+  background-image: none;
+  padding-bottom: 0;
 }
 
 .prose strong {
@@ -586,5 +713,92 @@ code[data-theme*=" "] span {
   50.01%,
   100% {
     opacity: 0;
+  }
+}
+
+/* ============================================ */
+/* Light-mode switch                             */
+/* ============================================ */
+
+/*
+ * The incoming mode opens as a circle from the switcher itself, so the change
+ * appears to come from the control the reader just used.
+ *
+ * One soft-edged radial mask does both variants: `--switch-feather` at 0 gives
+ * a hard circle, and a larger value blurs the leading edge. The origin and the
+ * radius that clears the furthest corner are measured per switch and set as
+ * custom properties, since neither is knowable from CSS.
+ *
+ * `data-light-switching` still carries "lighter"/"darker". Nothing here reads
+ * it -- it is kept so the previous up/down wipe can be restored in CSS alone.
+ */
+@property --switch-r {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+@keyframes light-open {
+  from {
+    --switch-r: 0px;
+  }
+  to {
+    --switch-r: var(--switch-max);
+  }
+}
+
+@keyframes light-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Scoped to the mode switch: a route transition, if one is ever added, gets
+   ::view-transition-*(root) to itself. */
+html[data-light-switching] {
+  --light-switch-duration: 520ms;
+  /* Softness of the leading edge. Set to 0 for the hard-edged circle. */
+  --switch-feather: 140px;
+}
+
+html[data-light-switching]::view-transition-group(root) {
+  animation-duration: var(--light-switch-duration);
+}
+
+html[data-light-switching]::view-transition-old(root),
+html[data-light-switching]::view-transition-new(root) {
+  /* Both UA defaults fight a masked reveal: the crossfade shows the old mode
+     through the new one, and plus-lighter blows out the overlap. */
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-light-switching]::view-transition-old(root) {
+  z-index: 0;
+}
+
+html[data-light-switching]::view-transition-new(root) {
+  z-index: 1;
+  mask-image: radial-gradient(
+    circle at var(--switch-x) var(--switch-y),
+    #000 var(--switch-r),
+    transparent calc(var(--switch-r) + var(--switch-feather))
+  );
+  mask-repeat: no-repeat;
+  /* Strong ease-out: the circle leaves the control fast and settles at the
+     edges, so the switch feels answered rather than played back. */
+  animation: light-open var(--light-switch-duration)
+    cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Nothing travels: the modes cross-dissolve in place. Still gentler than
+     the whole page changing between one frame and the next. */
+  html[data-light-switching]::view-transition-old(root) {
+    animation: light-fade-out 160ms ease-out both;
+  }
+  html[data-light-switching]::view-transition-new(root) {
+    mask-image: none;
+    animation: fade-in 160ms ease-out both;
   }
 }

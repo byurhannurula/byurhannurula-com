@@ -5,7 +5,9 @@ import { useTheme } from "next-themes";
 import { useEffect, useRef } from "react";
 
 import { OPEN_SHORTCUTS_EVENT } from "@/components/shortcuts-dialog";
+import type { LightMode } from "@/config/light-modes";
 import { SITE_CONFIG } from "@/config/site";
+import { cycleLightMode } from "@/lib/light-mode";
 import { copyEmail, copyPageLink, openExternal } from "@/lib/shortcuts";
 
 const NAV_KEYS: Record<string, string> = {
@@ -87,7 +89,7 @@ export function GlobalShortcuts() {
 
       if (key === "t") {
         event.preventDefault();
-        setTheme(resolvedTheme === "dark" ? "light" : "dark");
+        cycleLightMode(resolvedTheme as LightMode, setTheme);
       } else if (key in NAV_KEYS) {
         event.preventDefault();
         router.push(NAV_KEYS[key]);
