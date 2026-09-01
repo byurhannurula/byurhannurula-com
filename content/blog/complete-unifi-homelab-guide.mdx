@@ -130,7 +130,7 @@ Hence, the optimal solution is to deploy multiple APs per floor but lower the Tr
 
 I had a few places where the Pros were more suitable and a few places where the Pro Wall was suitable. I also got a spare U7 Pro in case some of my APs fail. I deployed them in various ways. Some are mounted to the wall, and for some, I 3D-printed custom stands (_I even designed one myself; more on this later_).
 
-<ImageGrid columns={2} size="wider">
+<ImageGrid columns="2" size="wider">
   <GridImage
     src="https://arslan.io/content/images/2024/09/L1005003.jpeg"
     alt="Various AP installations"
@@ -147,7 +147,7 @@ _Unifi's AP's can be installed in various ways. Even though some of the use case
 
 Unifi has several tools that allow you to simulate the strength of a Wi-Fi signal. You can upload your layout, draw the lines, and define the wall types (concrete, drywall, etc..). After that, you can start placing all your devices. Based on the wall type shows how much the signals propagate. Here, you can see that in 2.4 GHz, it's well covered (I also optimized the Wi-Fi channels for each Band; more on this later)
 
-<ImageGrid columns={3} size="wider">
+<ImageGrid columns="3" size="wider">
   <GridImage
     src="https://arslan.io/content/images/2024/09/ss-2024-09-07-164702.png"
     alt="Wi-Fi coverage simulation - Floor 1"
@@ -232,7 +232,7 @@ Lastly, another important detail is that all my APs are wired (powered by PoE). 
 
 I wasn't sure if I wanted the Pro Wall installed on the walls in two places in my house. Those were concrete walls, and just putting holes there was challenging. Unifi sells a [table stand for the U7 Pro Wall](https://store.ui.com/us/en/category/wifi-wall/products/uacc-u7-pro-wall-ts), but is always out of stock.
 
-<ImageGrid columns={2} size="wide">
+<ImageGrid columns="2" size="wider">
   <GridImage
     src="https://arslan.io/content/images/2024/09/IMG_9489.jpeg"
     alt="U7 Pro Wall Stand - Design process"
@@ -241,9 +241,6 @@ I wasn't sure if I wanted the Pro Wall installed on the walls in two places in m
     src="https://arslan.io/content/images/2024/09/IMG_9491.jpeg"
     alt="U7 Pro Wall Stand - 3D Print"
   />
-</ImageGrid>
-
-<ImageGrid columns={2} size="wide">
   <GridImage
     src="https://arslan.io/content/images/2024/09/IMG_9494.jpeg"
     alt="U7 Pro Wall Stand - Assembly"
@@ -314,7 +311,7 @@ I have a 12U rack, though only half of it is being used. Because my rack has an 
 
 **Update October, 2025**: The UPS is also finally replaced by a 3kVA APC Smart-UPS. It's a 2U unit and very heavy. However because it was also very deep, I had to replace my rack with a deeper one. Here is how my Rack looks like:
 
-<ImageGrid columns={2} size="wide">
+<ImageGrid columns="3" size="wider">
   <GridImage
     src="https://arslan.io/content/images/2025/10/IMG_6889.jpeg"
     alt="Updated rack - Front"
@@ -323,9 +320,9 @@ I have a 12U rack, though only half of it is being used. Because my rack has an 
     src="https://arslan.io/content/images/2025/10/IMG_6896.jpeg"
     alt="Updated rack - Side"
   />
+  <GridImage src="https://arslan.io/content/images/2025/10/IMG_6887.jpeg" alt="Updated rack - Back" />
 </ImageGrid>
 
-<MDXImage src="https://arslan.io/content/images/2025/10/IMG_6887.jpeg" alt="Updated rack - Back" />
 
 Two things that I need with a UPS are:
 
@@ -362,7 +359,7 @@ A nit thing, but I prefixed the name of all my AP's with `AP-` and all my camera
 <MDXImage
   src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-10-10.25.18@2x.png"
   alt="All Unifi devices"
-  size="wide"
+  size="wider"
 />
 
 _All my Unifi devices_
@@ -472,7 +469,7 @@ To build the rack, I had to terminate a few outdoor RJ45 cables. Another thing I
 
 We did that before, but the contractors made the same mistakes and used short cables. Because of that, it was always a hassle to move my rack around. I decided to redo every single cable.
 
-<ImageGrid columns={2} size="wide">
+<ImageGrid columns="2" size="wider">
   <GridImage
     src="https://arslan.io/content/images/2024/09/IMG_0339.jpeg"
     alt="New extension cables"
@@ -487,7 +484,7 @@ _Multiple new cables to extend the RJ45 cables that terminate at the wall (you c
 
 This was the most challenging part of the whole homelab project. At one end was a keystone jack (female part), and on the end was an RJ45 socket (male part). So I needed two tools—one tool for punching down cables into the Keystone jack and another one to crimp RJ45 cables.
 
-<ImageGrid columns={2} size="wide">
+<ImageGrid columns="2" size="wider">
   <GridImage src="https://arslan.io/content/images/2024/09/IMG_0310.jpeg" alt="Punchdown tool" />
   <GridImage src="https://arslan.io/content/images/2024/09/IMG_0309.jpeg" alt="Crimping tool" />
 </ImageGrid>
@@ -496,7 +493,7 @@ _The first tool is a Punchdown tool from Oring Networking. It simultaneously pun
 
 Now, having these tools is nice and good, but the most challenging part wasn't using them but rearranging the color-coded cables into a specific order before we could punch them down. And if you made a single error on both ends, you had to redo it.
 
-<ImageGrid columns={2} size="wide">
+<ImageGrid columns="2" size="wider">
   <GridImage
     src="https://arslan.io/content/images/2024/09/IMG_0297.jpeg"
     alt="Color coded cables"
@@ -511,7 +508,7 @@ _Here you can see the color coded cables and the correct wiring. There are two s
 
 Finally, if you have so many cables, it'll be hard to understand which cable goes to which room or camera. So, the best way is to label them consistently and efficiently. There are many ways of doing that. The best and most expensive way is to use a heat shrink tube. I didn't have that, but I purchased a Dymo Label printer (model: LabelManager 420P) and used it extensively to label all my cables.
 
-<ImageGrid columns={2} size="wide">
+<ImageGrid columns="2" size="wider">
   <GridImage
     src="https://arslan.io/content/images/2024/09/IMG_0301.jpeg"
     alt="Dymo Label printer"
@@ -608,7 +605,11 @@ _The AR feature of the Unifi iOS App allows you to see which port is used by whi
 
 The UI flows with you, and I missed such a user experience. It's a breath of air.
 
-![Unifi Controller interface](https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-20.00.02@2x.png)
+<MDXImage
+  src="https://arslan.io/content/images/2024/09/ScreenShot-2024-09-08-20.00.02@2x.png"
+  alt="Unifi Controller interface"
+  size="wide"
+/>
 
 _The Unifi Controller has a well designed control interface._
 

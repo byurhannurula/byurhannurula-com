@@ -33,12 +33,20 @@ const nextConfig = {
   // No need for @next/mdx loader - it causes Turbopack serialization issues
   output: "standalone",
   images: {
+    // Named hosts, not a wildcard: /_next/image will transform whatever URL it
+    // is handed, so "**" lets anyone use this site as an image proxy and spend
+    // its Cloudflare Images quota on images that are not ours.
+    //
+    // Both entries are borrowed demo content. Our own images belong in the repo
+    // or R2, which needs no entry here at all -- and lets the build read their
+    // dimensions off disk instead of over the network.
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
+      { protocol: "https", hostname: "arslan.io" },
+      { protocol: "https", hostname: "images.unsplash.com" },
     ],
+    // Content images are immutable once published, and Cloudflare bills per
+    // unique transformation, so there is nothing to gain from re-deriving them.
+    minimumCacheTTL: 31_536_000,
   },
   async headers() {
     return [

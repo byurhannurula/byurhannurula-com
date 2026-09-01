@@ -1,6 +1,8 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
+
+import { remarkImageDimensions } from "@/lib/server/remark-image-dimensions";
 import { mdxComponents } from "./mdx-components";
 
 interface MDXRendererProps {
@@ -22,7 +24,7 @@ export async function MDXRenderer({ source }: MDXRendererProps) {
       source={source}
       options={{
         mdxOptions: {
-          remarkPlugins: [remarkGfm],
+          remarkPlugins: [remarkGfm, remarkImageDimensions],
           rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
         },
       }}

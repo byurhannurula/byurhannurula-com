@@ -8,6 +8,12 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  // Without this binding the OpenNext adapter streams the original image
+  // through untouched: no resize, no WebP. next/image's `sizes` only pays off
+  // once something is actually there to do the resizing.
+  "images": {
+    "binding": "IMAGES"
+  },
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
