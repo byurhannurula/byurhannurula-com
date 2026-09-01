@@ -8,6 +8,7 @@ import { SITE_CONFIG } from "@/config";
 // uses and about live in the nav; the footer carries only what the nav doesn't.
 const FOOTER_LINKS = [
   { name: "colophon", href: "/colophon" },
+  { name: "design", href: "/design-system" },
   { name: "rss", href: "/rss.xml" },
 ] as const;
 
