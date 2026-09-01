@@ -9,22 +9,20 @@ interface MDXLinkProps {
 
 export function MDXLink({ href, children, className }: MDXLinkProps) {
   const isExternal = href?.startsWith("http");
-  const _isAnchor = href?.startsWith("#");
 
   return (
     <a
       href={href}
-      className={cn(
-        "inline-flex items-center gap-1 font-medium text-primary underline-offset-4 hover:underline",
-        className
-      )}
+      className={cn("link-inline font-medium", className)}
       {...(isExternal && {
         target: "_blank",
         rel: "noopener noreferrer",
       })}
     >
       {children}
-      {isExternal && <ExternalLink className="inline h-3 w-3" />}
+      {isExternal && (
+        <ExternalLink className="ml-0.5 inline size-3 align-[-0.125em]" />
+      )}
     </a>
   );
 }

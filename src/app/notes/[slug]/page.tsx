@@ -9,6 +9,7 @@ import {
   ReadingProgress,
   ShareButtons,
 } from "@/components/blog";
+import { HashScroll } from "@/components/hash-scroll";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
 import { MDXRenderer, TOC, TOCFloating, TOCSidebar } from "@/components/mdx";
 import { createBlogMetadata, SITE_CONFIG } from "@/config";
@@ -78,10 +79,11 @@ export default async function BlogPostPage({ params }: PageProps) {
         ]}
       />
       <ReadingProgress />
-      <div className="pt-12 pb-16">
+      <HashScroll />
+      <div className="pt-8 pb-16">
         {/* Header section */}
         <div>
-          <div className="mb-8">
+          <div className="mb-5">
             <Link
               href="/notes"
               className="group inline-flex items-center gap-1.5 font-mono text-[12.5px] text-muted-foreground no-underline transition-colors hover:text-primary"
@@ -101,9 +103,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <span aria-hidden>·</span>
               <PostStats slug={slug} />
             </div>
-            <h1 className="font-semibold text-[26px] tracking-[-0.5px]">
-              {currentPost.frontmatter.title}
-            </h1>
+            <h1>{currentPost.frontmatter.title}</h1>
             <p className="mt-3 text-[16px] text-muted-foreground">
               {currentPost.frontmatter.excerpt}
             </p>
@@ -126,8 +126,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Cover Image - wider than content */}
         {currentPost.frontmatter.coverImage && (
-          <div className="mx-auto mb-10 max-w-5xl px-6">
-            <div className="overflow-hidden rounded-xl">
+          <div className="mb-10">
+            <div className="overflow-hidden rounded-md">
               <Image
                 src={currentPost.frontmatter.coverImage}
                 alt={currentPost.frontmatter.title}

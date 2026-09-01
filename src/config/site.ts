@@ -122,6 +122,12 @@ export const PAGE_METADATA: Record<string, PageMeta> = {
       "web development",
     ],
   },
+  "/colophon": {
+    title: "Colophon | Byurhan",
+    description:
+      "How this site is built: the stack, the type, the hosting, and the decisions behind them.",
+    keywords: ["colophon", "nextjs", "tailwind", "cloudflare", "geist"],
+  },
   "/about": {
     title: "About | Byurhan",
     description:

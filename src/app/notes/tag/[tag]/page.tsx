@@ -64,7 +64,7 @@ export default async function TagPage({ params }: TagPageProps) {
           </div>
 
           <div className="mb-12">
-            <h1 className="font-medium text-2xl md:text-3xl">
+            <h1>
               Posts tagged <span className="text-primary">#{decodedTag}</span>
             </h1>
             <p className="mt-2 text-muted-foreground">

@@ -53,7 +53,7 @@ export default async function StatisticsPage() {
       <div className="mb-10 animate-fade-in">
         <div className="flex items-center gap-2">
           <BarChart3 className="size-5 text-primary" />
-          <h1 className="font-medium text-2xl">Statistics</h1>
+          <h1>Statistics</h1>
         </div>
         <p className="mt-2 text-muted-foreground">
           Content performance and engagement metrics.

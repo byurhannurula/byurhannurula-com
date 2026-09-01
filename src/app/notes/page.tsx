@@ -16,7 +16,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <PageWrapper>
       <div className="mb-8 animate-fade-in">
-        <h1 className="font-medium text-2xl">Notes</h1>
+        <h1>Notes</h1>
         <p className="mt-2 text-muted-foreground">
           Thoughts on tech, privacy, and tinkering.
         </p>

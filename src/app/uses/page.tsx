@@ -9,7 +9,7 @@ export default function UsesPage() {
     <PageWrapper>
       <div className="mb-8 animate-fade-in">
         <div className="flex items-center justify-between">
-          <h1 className="font-medium text-2xl">Uses</h1>
+          <h1>Uses</h1>
           <div className="text-muted-foreground text-xs">
             Last updated: {USES_LAST_UPDATED}
           </div>

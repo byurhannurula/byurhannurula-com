@@ -71,7 +71,7 @@ export default function LinksPage() {
   return (
     <PageWrapper>
       <div className="mb-12 animate-fade-in text-center">
-        <h1 className="font-medium text-2xl">{SITE_CONFIG.name}</h1>
+        <h1>{SITE_CONFIG.name}</h1>
         <p className="mt-2 text-muted-foreground">
           Developer, Tech Geek & Thinker
         </p>

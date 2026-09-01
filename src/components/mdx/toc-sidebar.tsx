@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { scrollToHeading } from "@/lib/scroll-to-heading";
 
 interface TOCItem {
   id: string;
@@ -86,10 +87,7 @@ export function TOCSidebar({ className = "" }: TOCSidebarProps) {
                 }`}
                 onClick={(e) => {
                   e.preventDefault();
-                  document.getElementById(item.id)?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
+                  scrollToHeading(item.id);
                 }}
               >
                 {item.text}

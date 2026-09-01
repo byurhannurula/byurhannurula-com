@@ -9,7 +9,7 @@ export default function ShortsPage() {
   return (
     <PageWrapper>
       <div className="mb-12 animate-fade-in">
-        <h1 className="font-medium text-2xl">Shorts</h1>
+        <h1>Shorts</h1>
         <p className="mt-2 text-muted-foreground">
           Quick code snippets, tips, and mini-tutorials.
         </p>

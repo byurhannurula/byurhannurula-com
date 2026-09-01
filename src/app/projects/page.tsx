@@ -42,7 +42,7 @@ export default function ProjectsPage() {
   return (
     <PageWrapper>
       <div className="mb-12 animate-fade-in">
-        <h1 className="font-medium text-2xl">Projects</h1>
+        <h1>Projects</h1>
         <p className="mt-2 text-muted-foreground">
           Things I&apos;ve built, tinkered with, and experimented on.
         </p>

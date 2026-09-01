@@ -49,9 +49,7 @@ export default async function ShortPage({
               {short.frontmatter.date}
             </span>
           </div>
-          <h1 className="font-medium text-2xl md:text-3xl">
-            {short.frontmatter.title}
-          </h1>
+          <h1>{short.frontmatter.title}</h1>
           <p className="mt-3 text-lg text-muted-foreground">
             {short.frontmatter.description}
           </p>
