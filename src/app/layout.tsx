@@ -50,10 +50,7 @@ export default function RootLayout({
         {/* Blocking and first: under `auto` the stored mode is whatever the
             clock said last visit, so it is corrected from the current hour
             before anything paints. */}
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: must be a blocking classic script in <head>
-          dangerouslySetInnerHTML={{ __html: LIGHT_MODE_SCRIPT }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: LIGHT_MODE_SCRIPT }} />
       </head>
       <body className="relative min-h-dvh bg-background font-sans">
         <ThemeProvider

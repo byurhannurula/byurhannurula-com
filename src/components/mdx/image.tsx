@@ -68,9 +68,11 @@ export function MDXImage({
         className={cn("not-prose my-6 block", sizeClasses[size], className)}
       >
         <span className="relative block">
-          <span
+          <button
+            type="button"
+            aria-label={`Open image: ${alt}`}
             className={cn(
-              "relative block cursor-zoom-in overflow-hidden transition-opacity hover:opacity-90",
+              "relative block w-full cursor-zoom-in appearance-none overflow-hidden border-0 bg-transparent p-0 transition-opacity hover:opacity-90",
               size === "full" ? "" : "rounded-md"
             )}
             onClick={() => setIsOpen(true)}
@@ -100,7 +102,7 @@ export function MDXImage({
               blurDataURL={blurDataURL}
               onLoad={handleLoad}
             />
-          </span>
+          </button>
 
           {/* Caption below image */}
           {(caption || alt) && (
