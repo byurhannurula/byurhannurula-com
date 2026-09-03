@@ -81,10 +81,12 @@ export function Spec({
 }) {
   const id = title.replace(/[^a-z]+/gi, "-").toLowerCase();
   return (
-    <section className="scroll-mt-20 pt-9" id={id}>
-      <h2 className="section-heading !mt-0">
+    <section className="pt-9">
+      {/* The id lives on the heading, not the section: the floating TOC
+          collects h2[id] and scroll-spies on their positions. */}
+      <h2 className="section-heading !mt-0 scroll-mt-20" id={id}>
         <span className="text-faint">{index}</span>
-        <a className="no-underline" href={`#${id}`}>
+        <a className="no-underline" data-toc-text href={`#${id}`}>
           {title}
         </a>
         <span aria-hidden className="hairline-t flex-1" />
