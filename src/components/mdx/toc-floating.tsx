@@ -51,7 +51,14 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
         .filter((heading) => heading.id)
         .map((heading) => ({
           id: heading.id,
-          text: heading.querySelector("span")?.textContent?.trim() ?? "",
+          // An explicit marker first, then the first span, then the heading
+          // itself. Reading only the first span gave an empty entry for any
+          // heading that leads with something other than its title.
+          text:
+            heading.querySelector("[data-toc-text]")?.textContent?.trim() ||
+            heading.querySelector("span")?.textContent?.trim() ||
+            heading.textContent?.trim() ||
+            "",
           level: Number(heading.tagName.replace("H", "")),
         }))
     );
@@ -254,9 +261,10 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
             aria-controls={panelId}
             className={cn(
               "flex h-11.5 w-full items-center gap-3 px-3 text-left transition-colors",
-              // The nav clips overflow, so the global offset ring shows only as
-              // a stray line along one edge. Draw it inside, on the pill shape.
-              "focus-visible:rounded-[22px] focus-visible:-outline-offset-2",
+              // No ring: this is a floating pill over the page, and an outline
+              // on it reads as a second border. Opening it already announces
+              // itself through aria-expanded and the panel it reveals.
+              "focus-visible:outline-none",
               isOpen && "border-border border-t border-dashed"
             )}
           >

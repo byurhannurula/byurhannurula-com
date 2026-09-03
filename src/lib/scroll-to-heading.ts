@@ -5,20 +5,25 @@ const PRELOAD_TIMEOUT_MS = 1200;
 /** How long to keep correcting afterwards, for anything that lands late. */
 const SETTLE_TIMEOUT_MS = 4000;
 const TOLERANCE_PX = 1;
+/** Frames of no movement before a correction is considered safe. */
+const STILL_FRAMES = 2;
 
 let cancelSettle: (() => void) | null = null;
 
 /**
  * Keeps a heading pinned while late content changes the layout.
  *
- * Corrects every frame rather than waiting for the page to go quiet, so drift
- * is absorbed a pixel at a time instead of accumulating into one visible jump.
+ * Corrects only once the page has stopped moving. A smooth scroll moves it
+ * every frame, and correcting mid-animation jumps straight to the target,
+ * which silently turns every smooth scroll into an instant one.
  */
 export function settleOnHeading(id: string) {
   cancelSettle?.();
 
   let frame = 0;
   let cancelled = false;
+  let lastY = Number.NaN;
+  let stillFrames = 0;
   const deadline = performance.now() + SETTLE_TIMEOUT_MS;
 
   const stop = () => {
@@ -36,9 +41,18 @@ export function settleOnHeading(id: string) {
     const target = document.getElementById(id);
     if (!target || performance.now() > deadline) return stop();
 
-    const drift = target.getBoundingClientRect().top - SCROLL_MARGIN;
-    if (Math.abs(drift) > TOLERANCE_PX) {
-      window.scrollBy({ top: drift, behavior: "instant" });
+    const y = window.scrollY;
+    stillFrames = y === lastY ? stillFrames + 1 : 0;
+    lastY = y;
+
+    // Two still frames means nothing is animating, so a remaining offset is
+    // real drift from late content rather than a scroll in progress.
+    if (stillFrames >= STILL_FRAMES) {
+      const drift = target.getBoundingClientRect().top - SCROLL_MARGIN;
+      if (Math.abs(drift) > TOLERANCE_PX) {
+        window.scrollBy({ top: drift, behavior: "instant" });
+        stillFrames = 0;
+      }
     }
     frame = requestAnimationFrame(tick);
   };

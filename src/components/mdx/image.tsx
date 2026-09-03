@@ -36,12 +36,23 @@ interface MDXImageProps {
  * Written out per variant: Tailwind only scans literal class strings, and a
  * responsive prefix applies to one class, not to an interpolated group.
  */
+/*
+ * Centred with a translate, not with matching negative margins.
+ *
+ * The margin trick only holds while the element is exactly the width the
+ * margins assume. As soon as a max-width clamps it -- which `wider` does on any
+ * viewport past ~1370px -- the margins keep shifting by the unclamped amount
+ * and the figure drifts off centre. A translate is independent of the final
+ * width, so clamping cannot break it.
+ */
+const BLEED = "relative left-1/2 -translate-x-1/2 bg-background py-3";
+
 const sizeClasses: Record<ImageSize, string> = {
   default: "",
+  // `wide` keeps its margins: no max-width clamps it, so it cannot drift.
   wide: "md:relative md:-mx-16 md:bg-background md:py-3 lg:-mx-24",
-  wider:
-    "relative right-1/2 left-1/2 -mr-[42vw] -ml-[42vw] w-[84vw] max-w-6xl bg-background py-3",
-  full: "relative right-1/2 left-1/2 -mr-[50vw] -ml-[50vw] w-screen bg-background py-3 !rounded-none",
+  wider: `${BLEED} w-[min(100vw-2rem,72rem)]`,
+  full: `${BLEED} w-screen !rounded-none`,
 };
 
 export function MDXImage({
@@ -68,11 +79,16 @@ export function MDXImage({
         className={cn("not-prose my-6 block", sizeClasses[size], className)}
       >
         <span className="relative block">
-          <button
-            type="button"
-            aria-label={`Open image: ${alt}`}
+          {/* A span, not a button, on purpose. Making every content image
+              focusable put a tab stop on each one -- 31 on a long post, a
+              quarter of the page's tab stops -- which is worse for keyboard
+              use than not reaching the lightbox at all. The image is content;
+              the zoom is a mouse affordance on top of it.
+              biome-ignore lint/a11y/noStaticElementInteractions: see above
+              biome-ignore lint/a11y/useKeyWithClickEvents: see above */}
+          <span
             className={cn(
-              "relative block w-full cursor-zoom-in appearance-none overflow-hidden border-0 bg-transparent p-0 transition-opacity hover:opacity-90",
+              "relative block cursor-zoom-in overflow-hidden transition-opacity hover:opacity-90",
               size === "full" ? "" : "rounded-md"
             )}
             onClick={() => setIsOpen(true)}
@@ -102,7 +118,7 @@ export function MDXImage({
               blurDataURL={blurDataURL}
               onLoad={handleLoad}
             />
-          </button>
+          </span>
 
           {/* Caption below image */}
           {(caption || alt) && (
@@ -272,10 +288,10 @@ export function GridImage({
 
   return (
     <>
-      <button
-        type="button"
-        aria-label={`Open image: ${alt}`}
-        className="block cursor-zoom-in appearance-none overflow-hidden rounded-md border-0 bg-transparent p-0"
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: see MDXImage
+          biome-ignore lint/a11y/useKeyWithClickEvents: see MDXImage */}
+      <div
+        className="cursor-zoom-in overflow-hidden rounded-md"
         style={{ flex: `${ratio} 1 0%` }}
         onClick={() => setIsOpen(true)}
       >
@@ -295,7 +311,7 @@ export function GridImage({
           blurDataURL={blurDataURL}
           onLoad={handleLoad}
         />
-      </button>
+      </div>
       <Lightbox
         open={isOpen}
         close={() => setIsOpen(false)}
