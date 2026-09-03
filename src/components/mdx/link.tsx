@@ -13,7 +13,14 @@ export function MDXLink({ href, children, className }: MDXLinkProps) {
   return (
     <a
       href={href}
-      className={cn("link-inline font-medium", className)}
+      // Colour by destination: the accent leaves the site, the inbound hue
+      // stays on it. The icon says the same thing for anyone who cannot use
+      // the hue, so neither carries it alone.
+      className={cn(
+        "link-inline font-medium",
+        !isExternal && "link-internal",
+        className
+      )}
       {...(isExternal && {
         target: "_blank",
         rel: "noopener noreferrer",

@@ -1,8 +1,11 @@
 import { Callout } from "./callout";
 import { CodeBlock } from "./code-block";
+import { DoDont } from "./do-dont";
 import { GridImage, ImageGrid, MDXImage } from "./image";
 import { MDXLink } from "./link";
+import { LinkChip, LinkEmbed } from "./link-embed";
 import { Mermaid } from "./mermaid";
+import { ProsCons } from "./pros-cons";
 import {
   Table,
   TableBody,
@@ -41,6 +44,10 @@ export const mdxComponents = {
   ),
 
   Callout,
+  DoDont,
+  LinkChip,
+  LinkEmbed,
+  ProsCons,
   ImageGrid,
   GridImage,
   MDXImage,
@@ -67,10 +74,10 @@ export const mdxComponents = {
   },
 
   table: Table,
-  thead: TableHead,
+  thead: TableHeader,
   tbody: TableBody,
   tr: TableRow,
-  th: TableHeader,
+  th: TableHead,
   td: TableCell,
 
   blockquote: ({ children, ...props }: any) => (

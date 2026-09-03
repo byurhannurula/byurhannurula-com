@@ -7,29 +7,34 @@ interface CalloutProps {
   children: React.ReactNode;
 }
 
+/**
+ * Tokens, not palette colours.
+ *
+ * The system allows one accent, so info and success both take `primary` and
+ * are told apart by their icon. Warning and error borrow `rss` and
+ * `destructive`, the only other two hues the site defines -- adding a yellow
+ * and a red here would have introduced two colours nothing else uses.
+ */
 const calloutConfig = {
   info: {
     icon: Info,
-    className:
-      "border-blue-500/50 bg-blue-500/10 text-blue-700 dark:text-blue-300",
-    iconClassName: "text-blue-500",
-  },
-  warning: {
-    icon: AlertTriangle,
-    className:
-      "border-yellow-500/50 bg-yellow-500/10 text-yellow-700 dark:text-yellow-300",
-    iconClassName: "text-yellow-500",
+    className: "border-primary/40 bg-primary-soft text-muted-foreground",
+    iconClassName: "text-primary",
   },
   success: {
     icon: CheckCircle,
-    className:
-      "border-green-500/50 bg-green-500/10 text-green-700 dark:text-green-300",
-    iconClassName: "text-green-500",
+    className: "border-primary/40 bg-primary-soft text-muted-foreground",
+    iconClassName: "text-primary",
+  },
+  warning: {
+    icon: AlertTriangle,
+    className: "border-rss/40 bg-background-soft text-muted-foreground",
+    iconClassName: "text-rss",
   },
   error: {
     icon: AlertCircle,
-    className: "border-red-500/50 bg-red-500/10 text-red-700 dark:text-red-300",
-    iconClassName: "text-red-500",
+    className: "border-destructive/40 bg-background-soft text-muted-foreground",
+    iconClassName: "text-destructive",
   },
 };
 

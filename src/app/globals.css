@@ -39,6 +39,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-rss: var(--rss);
+  --color-link-inbound: var(--link-inbound);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -50,6 +51,7 @@
 }
 
 :root {
+  --link-inbound: #5b46c9;
   --background: #fafafa;
   --background-soft: #f1f1f1;
   --foreground: #1a1a1a;
@@ -81,6 +83,7 @@
 }
 
 [data-light="morning"] {
+  --link-inbound: #5b46c9;
   --background: #faf6f0;
   --background-soft: #f2ece3;
   --foreground: #241f1a;
@@ -112,6 +115,7 @@
 }
 
 [data-light="day"] {
+  --link-inbound: #5b46c9;
   --background: #fafafa;
   --background-soft: #f1f1f1;
   --foreground: #1a1a1a;
@@ -143,6 +147,7 @@
 }
 
 [data-light="evening"] {
+  --link-inbound: #a99af0;
   --background: #1c1815;
   --background-soft: #241f1a;
   --foreground: #ede4d8;
@@ -179,6 +184,7 @@
 
 [data-light="evening"],
 [data-light="night"] {
+  --link-inbound: #a396f5;
   color-scheme: dark;
 }
 
@@ -292,6 +298,13 @@
   border-inline: 1px dashed var(--border-dash);
 }
 
+/* A link that stays on the site. Departs from the one-accent rule on purpose:
+   knowing whether a click leaves is worth more than palette purity, and the
+   hue is the only signal that survives being skimmed. */
+@utility link-internal {
+  --link-color: var(--link-inbound);
+}
+
 @utility hairline {
   border-bottom: 1px dashed var(--border-dash);
 }
@@ -312,16 +325,20 @@
 }
 
 @utility link-inline {
-  @apply text-primary no-underline;
+  @apply no-underline;
+  color: var(--link-color, var(--primary));
 
   /* Two stacked underlines: a solid rule that wipes in left-to-right over a
      permanent dashed one. border-bottom-style is a discrete property, so the
      old dashed -> solid swap snapped and could never be transitioned. */
   background-image:
-    linear-gradient(var(--primary), var(--primary)),
+    linear-gradient(
+      var(--link-color, var(--primary)),
+      var(--link-color, var(--primary))
+    ),
     repeating-linear-gradient(
       to right,
-      var(--primary) 0 3px,
+      var(--link-color, var(--primary)) 0 3px,
       transparent 3px 6px
     );
   background-position: 0 100%;
@@ -563,13 +580,21 @@ code[data-theme*=" "] span {
   color: var(--faint);
 }
 
+/* No fill and no rounding: a quote is someone else's voice in the column, not
+   an object sitting on it. The accent rule and a hanging indent carry it, and
+   the text keeps prose size so it reads as prose. */
 .prose blockquote {
-  @apply rounded-r-md border-l-2 border-primary bg-primary-soft px-4 py-3 text-[13.5px] text-muted-foreground;
-  margin: 20px 0;
+  @apply border-l-2 border-primary/40 pl-5 text-[15px] text-muted-foreground italic;
+  margin: 22px 0;
+}
+
+/* Attribution, when a quote carries one: `> text` then `> -- Name`. */
+.prose blockquote cite {
+  @apply mt-2 block font-mono text-[12px] text-faint not-italic;
 }
 
 .prose blockquote p {
-  @apply mb-0;
+  @apply mb-0 text-[15px];
 }
 
 .prose code {

@@ -19,7 +19,7 @@ export function Table({
   );
 }
 
-export function TableHead({
+export function TableHeader({
   children,
   className,
   ...props
@@ -64,7 +64,7 @@ export function TableRow({
   );
 }
 
-export function TableHeader({
+export function TableHead({
   children,
   className,
   ...props
