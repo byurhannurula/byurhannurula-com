@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { BlogPostItem } from "@/components/blog";
+import { RssIcon } from "@/components/icons";
 import { PageWrapper } from "@/components/page-wrapper";
 import { createMetadata } from "@/config";
 import { getPostsGroupedByDate } from "@/lib/server";
@@ -16,7 +18,16 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <PageWrapper>
       <div className="mb-8 animate-fade-in">
-        <h1>Notes</h1>
+        <div className="flex items-center justify-between gap-4">
+          <h1>Notes</h1>
+          <Link
+            href="/rss.xml"
+            className="inline-flex items-center gap-1 font-mono text-[15px] text-rss uppercase tracking-[0.08em] no-underline transition-opacity hover:opacity-80"
+          >
+            rss
+            <RssIcon className="size-4.5" />
+          </Link>
+        </div>
         <p className="mt-2 text-muted-foreground">
           Thoughts on tech, privacy, and tinkering.
         </p>
@@ -25,7 +36,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <div className="stagger-children space-y-10">
         {groupedPosts?.length ? (
           groupedPosts.map((yearGroup) => {
-            // Find the FIRST month that has posts (since months are reverse chronological)
             const firstMonthWithPostsIndex = yearGroup.months.findIndex(
               (month) => month.posts.length > 0
             );

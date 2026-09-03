@@ -46,7 +46,7 @@ export default function Home() {
               action={
                 <Link
                   href="/rss.xml"
-                  className="inline-flex items-center gap-1.5 font-mono font-semibold text-[11px] text-rss uppercase tracking-[0.08em] no-underline transition-opacity hover:opacity-80"
+                  className="inline-flex items-center gap-1 font-mono font-semibold text-[11px] text-rss uppercase tracking-[0.08em] no-underline transition-opacity hover:opacity-80"
                 >
                   rss
                   <RssIcon className="size-3.5" />
