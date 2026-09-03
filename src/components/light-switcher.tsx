@@ -1,10 +1,15 @@
 "use client";
 
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Check } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui";
 import {
   LIGHT_MODES,
   type LightPreference,
@@ -82,45 +87,29 @@ export function LightSwitcher() {
     : MODE_LABELS[resolved];
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger
-        className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-transparent px-2.5 py-1 font-mono text-[12px] text-muted-foreground leading-normal transition-colors hover:border-muted-foreground hover:text-foreground data-[state=open]:border-muted-foreground data-[state=open]:text-foreground"
+    <DropdownMenu>
+      <DropdownMenuTrigger
         aria-label="Change the light"
+        className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-transparent px-2.5 py-1 font-mono text-[12px] text-muted-foreground leading-normal transition-colors hover:border-muted-foreground hover:text-foreground data-[state=open]:border-muted-foreground data-[state=open]:text-foreground"
       >
         <span className="tabular-nums">{label}</span>
-      </DropdownMenu.Trigger>
+      </DropdownMenuTrigger>
 
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          side="top"
-          align="end"
-          sideOffset={6}
-          collisionPadding={12}
-          className="z-50 min-w-[176px] rounded-md border border-border bg-surface-raised p-1 shadow-lg"
-        >
-          <DropdownMenu.Label className="px-2 py-1.5 font-mono text-[11px] text-faint uppercase tracking-[0.08em]">
-            change the light
-          </DropdownMenu.Label>
-          {CHOICES.map((choice) => (
-            <DropdownMenu.Item
-              key={choice}
-              onSelect={() => choose(choice)}
-              className={cn(
-                "flex cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 font-mono text-[13px] outline-none",
-                "focus:bg-background-soft data-[highlighted]:bg-background-soft",
-                choice === preference
-                  ? "text-foreground"
-                  : "text-muted-foreground"
-              )}
-            >
-              {MODE_LABELS[choice]}
-              {choice === preference && (
-                <Check aria-hidden className="size-3.5 text-primary" />
-              )}
-            </DropdownMenu.Item>
-          ))}
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+      <DropdownMenuContent align="end" side="top">
+        <DropdownMenuLabel>change the light</DropdownMenuLabel>
+        {CHOICES.map((choice) => (
+          <DropdownMenuItem
+            className={cn(choice === preference && "text-foreground")}
+            key={choice}
+            onSelect={() => choose(choice)}
+          >
+            {MODE_LABELS[choice]}
+            {choice === preference && (
+              <Check aria-hidden className="size-3.5 text-primary" />
+            )}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
