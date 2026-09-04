@@ -21,8 +21,20 @@ export interface Post {
   readingTime: string;
 }
 
+const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function assertValidSlug(slug: string) {
+  if (!SLUG_RE.test(slug)) throw new Error(`Invalid slug "${slug}"`);
+}
+
 export function getSinglePost(slug: string): Post {
-  const filePath = path.join(process.cwd(), "content/blog", `${slug}.mdx`);
+  assertValidSlug(slug);
+  const postsDirectory = path.join(process.cwd(), "content/blog");
+  const filePath = path.join(postsDirectory, `${slug}.mdx`);
+  // Defensive even with regex: ensure resolved path stays inside content.
+  if (!filePath.startsWith(postsDirectory)) {
+    throw new Error(`Invalid slug "${slug}"`);
+  }
 
   if (!fs.existsSync(filePath)) {
     throw new Error(`Post with slug "${slug}" not found`);

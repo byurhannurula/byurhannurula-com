@@ -1,20 +1,30 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { incrementLikes, rateLimit } from "@/lib/redis";
 
+const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function getClientIp(request: NextRequest): string {
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0]?.trim() || "anonymous";
+  return request.headers.get("x-real-ip")?.trim() || "anonymous";
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
+  if (!SLUG_RE.test(slug)) {
+    return NextResponse.json({ error: "Invalid slug" }, { status: 400 });
+  }
 
-  // Rate limit by IP - 5 likes per minute per IP (stricter for likes)
-  const ip = request.headers.get("x-forwarded-for") || "anonymous";
-  const { success } = await rateLimit(`like:${ip}`, 5, 10);
+  const ip = getClientIp(request);
+  const { success } = await rateLimit(`like:${ip}`, 5, 60);
 
   if (!success) {
     return NextResponse.json(
       { error: "Too many requests. Please try again later." },
-      { status: 429 }
+      { status: 429, headers: { "Retry-After": "60" } }
     );
   }
 

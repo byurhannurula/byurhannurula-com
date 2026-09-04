@@ -84,7 +84,7 @@ const nextConfig = {
           },
           {
             key: "Strict-Transport-Security",
-            value: "max-age=63072000; includeSubDomains; preload",
+            value: "max-age=31536000; includeSubDomains; preload",
           },
           {
             key: "X-Content-Type-Options",
@@ -92,7 +92,7 @@ const nextConfig = {
           },
           {
             key: "X-Frame-Options",
-            value: "SAMEORIGIN",
+            value: "DENY",
           },
           {
             key: "X-XSS-Protection",
@@ -106,6 +106,15 @@ const nextConfig = {
             key: "Permissions-Policy",
             value:
               "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+          },
+          {
+            // Mirrors public/_headers so Workers gets the same policy.
+            // public/_headers only applies on Pages; OpenNext Workers uses this.
+            // TODO: replace 'unsafe-inline' with sha256 hash of LIGHT_MODE_SCRIPT
+            // and remove 'unsafe-eval' once mermaid is sandboxed (securityLevel: strict).
+            key: "Content-Security-Policy",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://*.upstash.io https://api.github.com https://github-contributions-api.jogruber.de; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
           },
         ],
       },

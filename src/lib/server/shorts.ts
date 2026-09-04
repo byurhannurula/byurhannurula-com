@@ -39,8 +39,14 @@ export function getAllShorts(): Omit<Short, "content">[] {
   return shorts;
 }
 
+const SHORT_SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 export function getSingleShort(slug: string): Short {
+  if (!SHORT_SLUG_RE.test(slug)) throw new Error(`Invalid slug "${slug}"`);
   const filePath = path.join(shortsDirectory, `${slug}.mdx`);
+  if (!filePath.startsWith(shortsDirectory)) {
+    throw new Error(`Invalid slug "${slug}"`);
+  }
 
   if (!fs.existsSync(filePath)) {
     throw new Error(`Short not found: ${slug}`);
