@@ -54,7 +54,7 @@ let inFlight = false;
  * middle rather than from a corner.
  */
 function switchOrigin() {
-  const trigger = document.querySelector('[aria-label="Change the light"]');
+  const trigger = document.querySelector("[data-light-switch]");
   const box = trigger?.getBoundingClientRect();
   if (!box || box.width === 0) {
     return { x: window.innerWidth / 2, y: window.innerHeight / 2 };

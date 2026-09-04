@@ -1,4 +1,9 @@
 import { execSync } from "node:child_process";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+// Wires the Workers bindings into `next dev`. Next only ever loads the config
+// at the repo root, so the copy that used to sit in src/ never ran.
+initOpenNextCloudflareForDev();
 
 /**
  * Build stamp for the footer panel. CI providers expose the SHA as an env var;
@@ -47,6 +52,26 @@ const nextConfig = {
     // Content images are immutable once published, and Cloudflare bills per
     // unique transformation, so there is nothing to gain from re-deriving them.
     minimumCacheTTL: 31_536_000,
+  },
+  /*
+   * Analytics served from this origin.
+   *
+   * Both umami scripts derive their collect endpoints from their own src
+   * directory -- script.js posts to <dir>/api/send, recorder.js to
+   * <dir>/api/record -- so proxying the directory is all it takes: no
+   * data-host-url, no second hostname to preconnect to, and nothing for a
+   * content blocker to match on. The api rewrite is a wildcard because the
+   * recorder also reads /api/websites/<id>/recorder.
+   */
+  async rewrites() {
+    const host = process.env.UMAMI_HOST?.replace(/\/$/, "");
+    if (!host) return [];
+
+    return [
+      { source: "/stats/script.js", destination: `${host}/script.js` },
+      { source: "/stats/recorder.js", destination: `${host}/recorder.js` },
+      { source: "/stats/api/:path*", destination: `${host}/api/:path*` },
+    ];
   },
   async headers() {
     return [
