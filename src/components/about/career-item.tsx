@@ -1,5 +1,5 @@
 import { TechChip } from "@/components/about/tech-chip";
-import type { CareerItem as CareerItemData } from "@/config/about";
+import { type CareerItem as CareerItemData, toHighlight } from "@/config/about";
 
 export function CareerItem({
   role,
@@ -83,12 +83,12 @@ export function CareerItem({
         <div className="mt-3">
           <p className="label-mono mb-1.5">what I&apos;ve done</p>
           <ul className="space-y-1 text-[13.5px] text-muted-foreground leading-[1.6]">
-            {highlights.map((line) => (
-              <li key={line} className="flex gap-2">
+            {highlights.map(toHighlight).map((line) => (
+              <li key={line.text} className="flex gap-2">
                 <span aria-hidden="true" className="text-primary">
                   —
                 </span>
-                <span>{line}</span>
+                <span>{line.text}</span>
               </li>
             ))}
           </ul>

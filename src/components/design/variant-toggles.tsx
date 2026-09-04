@@ -27,11 +27,18 @@ export function VariantToggles({
   variants,
   label = "toggle options",
   exclusive,
+  initial,
   bare,
 }: {
   options: ToggleOption[];
   variants: Record<string, ReactNode>;
   label?: string;
+  /**
+   * Option selected on load. An exclusive group needs one: a radio cannot be
+   * cleared, so without a default option to go back to, the first choice is
+   * final and the other side of the comparison is gone.
+   */
+  initial?: string;
   /** One at a time, for props that cannot combine -- a size, for instance. */
   exclusive?: boolean;
   /**
@@ -41,7 +48,9 @@ export function VariantToggles({
    */
   bare?: boolean;
 }) {
-  const [active, setActive] = useState<Record<string, boolean>>({});
+  const [active, setActive] = useState<Record<string, boolean>>(
+    initial ? { [initial]: true } : {}
+  );
 
   const isDisabled = (option: ToggleOption) =>
     Boolean(option.disabledBy?.some((id) => active[id]));

@@ -43,7 +43,6 @@ export function Navigation() {
       <Link
         href="/"
         className="order-1 font-semibold text-[15px] text-foreground no-underline"
-        aria-label="Home"
         onPointerDown={startLongPress}
         onPointerUp={cancelLongPress}
         onPointerLeave={cancelLongPress}

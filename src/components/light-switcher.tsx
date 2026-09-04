@@ -88,10 +88,18 @@ export function LightSwitcher() {
 
   return (
     <DropdownMenu>
+      {/*
+       * The name is built from the visible text rather than replacing it: an
+       * aria-label of "Change the light" on a control that reads "night" left
+       * voice-control users with nothing sayable to activate it.
+       * data-light-switch is what the view transition finds -- see
+       * lib/light-mode.ts -- so the name is free to change.
+       */}
       <DropdownMenuTrigger
-        aria-label="Change the light"
         className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-transparent px-2.5 py-1 font-mono text-[12px] text-muted-foreground leading-normal transition-colors hover:border-muted-foreground hover:text-foreground data-[state=open]:border-muted-foreground data-[state=open]:text-foreground"
+        data-light-switch=""
       >
+        <span className="sr-only">Change the light, currently </span>
         <span className="tabular-nums">{label}</span>
       </DropdownMenuTrigger>
 

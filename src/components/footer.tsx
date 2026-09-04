@@ -14,7 +14,7 @@ const FOOTER_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="hairline-t flex flex-wrap justify-between gap-3 pt-6 pb-40 font-mono text-[12.5px] text-muted-foreground">
+    <footer className="hairline-t flex flex-wrap items-center justify-between gap-3 pt-6 pb-40 font-mono text-[12.5px] text-muted-foreground">
       <span>
         <BuildStamp year={new Date().getFullYear()} /> {SITE_CONFIG.author.name}
       </span>

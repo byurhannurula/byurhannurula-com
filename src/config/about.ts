@@ -23,6 +23,17 @@ export interface RoleStep {
   years: string;
 }
 
+export interface Highlight {
+  text: string;
+  /** The numbers behind the claim. Revealed on hover, never load-bearing. */
+  note?: string;
+}
+
+/** Highlights are written as bare strings until one earns a note. */
+export function toHighlight(value: string | Highlight): Highlight {
+  return typeof value === "string" ? { text: value } : value;
+}
+
 export interface CareerItem {
   role: string;
   org: string;
@@ -32,7 +43,7 @@ export interface CareerItem {
   /** Progression inside the same org, oldest first. */
   roles?: RoleStep[];
   stack?: StackItem[];
-  highlights?: string[];
+  highlights?: (string | Highlight)[];
 }
 
 export const CAPABILITIES: Capability[] = [

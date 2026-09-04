@@ -108,6 +108,11 @@ const INSPIRATION = [
     name: "wesbos.com",
     why: "the uses idea — and the courses that started everything",
   },
+  {
+    href: "https://colinlienard.com",
+    name: "colinlienard.com",
+    why: "the travelling social card, ported from his MIT source",
+  },
 ];
 
 const LINEAGE = [

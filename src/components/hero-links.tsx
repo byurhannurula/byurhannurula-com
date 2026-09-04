@@ -48,7 +48,7 @@ export function HeroLinks({ all = false, className }: HeroLinksProps) {
             title={link.name.toLowerCase()}
             className="group inline-flex size-9 items-center justify-center rounded-lg border border-border bg-background-soft transition-colors hover:border-primary hover:border-dashed"
           >
-            <link.icon className="size-4 text-muted-foreground opacity-75 transition-opacity group-hover:opacity-100" />
+            <link.icon className="size-4 text-muted-foreground transition-colors group-hover:text-foreground group-focus-visible:text-foreground" />
           </Link>
         );
       })}

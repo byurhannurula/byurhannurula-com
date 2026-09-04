@@ -1,8 +1,12 @@
 import { ArrowRight, Copy, Mail, Search } from "lucide-react";
+import { CareerItem } from "@/components/about/career-item";
+import { CareerItemLines } from "@/components/about/career-item-lines";
+import { Annotated } from "@/components/annotated";
 import { HighlightedCode } from "@/components/design/highlighted-code";
 import { Replay } from "@/components/design/replay";
 import { Sample, Spec, Swatch, TokenValue } from "@/components/design/spec";
 import { VariantToggles } from "@/components/design/variant-toggles";
+import { HeroLinks } from "@/components/hero-links";
 import { GithubIcon } from "@/components/icons";
 import { Callout } from "@/components/mdx/callout";
 import { DoDont } from "@/components/mdx/do-dont";
@@ -19,6 +23,7 @@ import {
 } from "@/components/mdx/table";
 import { TOCFloating } from "@/components/mdx/toc-floating";
 import { PageWrapper } from "@/components/page-wrapper";
+import { SocialCards } from "@/components/social-cards";
 import {
   Button,
   Card,
@@ -35,6 +40,7 @@ import {
   Skeleton,
 } from "@/components/ui";
 import { createMetadata } from "@/config";
+import { WORK } from "@/config/about";
 import { LIGHT_MODES } from "@/config/light-modes";
 
 export const metadata = createMetadata("/design-system", {
@@ -921,6 +927,84 @@ export default async function DesignSystemPage() {
               </div>
             ))}
           </dl>
+        </Spec>
+
+        <Spec
+          index="20"
+          title="social previews"
+          intro="One card that travels between the icons instead of one card per icon. Hover the row; the GitHub graph is live, the other two are written down."
+        >
+          <VariantToggles
+            bare
+            exclusive
+            initial="row"
+            label="social row"
+            options={[
+              { id: "row", label: "icon row" },
+              { id: "cards", label: "hover cards" },
+            ]}
+            variants={{
+              row: <HeroLinks />,
+              cards: (
+                <div className="flex min-h-56 items-end pb-2">
+                  <SocialCards />
+                </div>
+              ),
+            }}
+          />
+        </Spec>
+
+        <Spec
+          index="21"
+          title="career item, two ways"
+          intro="Real content through both layouts. The second leads with the dates, draws the titles it replaced on a line, and gives each highlight room for the number behind it."
+        >
+          <VariantToggles
+            bare
+            exclusive
+            initial="rows"
+            label="layout"
+            options={[
+              { id: "rows", label: "rows" },
+              { id: "lines", label: "lines" },
+            ]}
+            variants={{
+              rows: <CareerItem {...WORK[0]} />,
+              lines: <CareerItemLines {...WORK[0]} />,
+            }}
+          />
+        </Spec>
+
+        <Spec
+          index="22"
+          title="annotated"
+          intro="A dashed underline says a line has a number behind it without spending a sentence on it. Sample copy: put the real figures in the config."
+        >
+          <ul className="space-y-1.5 text-[13.5px] text-muted-foreground leading-[1.6]">
+            {[
+              {
+                text: "Improved application and test-suite performance.",
+                note: "Cut initial load time by 1.4s and CI duration by 25%.",
+              },
+              {
+                text: "Led several structural technical migrations.",
+                note: "Webpack to Vite, JS to TS, REST to tRPC.",
+              },
+              { text: "Owned production deployments and on-call rotations." },
+            ].map((line) => (
+              <li className="flex gap-2.5" key={line.text}>
+                <span
+                  aria-hidden="true"
+                  className="mt-[0.5em] size-1.5 shrink-0 rounded-full border border-muted-foreground/60"
+                />
+                {line.note ? (
+                  <Annotated note={line.note}>{line.text}</Annotated>
+                ) : (
+                  <span>{line.text}</span>
+                )}
+              </li>
+            ))}
+          </ul>
         </Spec>
       </div>
 
