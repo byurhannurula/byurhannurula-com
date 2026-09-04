@@ -2,8 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { cache } from "react";
-
 import { calculateReadingTime } from "../utils";
+import { SLUG_RE } from "../validation";
 
 export interface PostFrontmatter {
   title: string;
@@ -21,8 +21,6 @@ export interface Post {
   frontmatter: PostFrontmatter;
   readingTime: string;
 }
-
-const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function assertValidSlug(slug: string) {
   if (!SLUG_RE.test(slug)) throw new Error(`Invalid slug "${slug}"`);

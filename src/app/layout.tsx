@@ -7,10 +7,13 @@ import "./globals.css";
 import dynamic from "next/dynamic";
 
 import { BuildInfo } from "@/components/build-info";
+import { ConsoleBanner } from "@/components/console-banner";
 import { Footer, FooterBackdrop } from "@/components/footer";
+import { MobileNav } from "@/components/mobile-nav";
 import { Navigation } from "@/components/navigation";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { ThemeProvider } from "@/components/theme-provider";
+import { GlobalShortcuts } from "@/components/theme-shortcut";
 import { Toaster } from "@/components/toaster";
 import { UmamiAnalytics } from "@/components/umami-analytics";
 import { createMetadata } from "@/config";
@@ -21,20 +24,8 @@ const CommandPalette = dynamic(
   () => import("@/components/command-palette").then((m) => m.CommandPalette),
   { ssr: false }
 );
-const MobileNav = dynamic(
-  () => import("@/components/mobile-nav").then((m) => m.MobileNav),
-  { ssr: false }
-);
-const ConsoleBanner = dynamic(
-  () => import("@/components/console-banner").then((m) => m.ConsoleBanner),
-  { ssr: false }
-);
 const ShortcutsDialog = dynamic(
   () => import("@/components/shortcuts-dialog").then((m) => m.ShortcutsDialog),
-  { ssr: false }
-);
-const GlobalShortcuts = dynamic(
-  () => import("@/components/theme-shortcut").then((m) => m.GlobalShortcuts),
   { ssr: false }
 );
 

@@ -25,19 +25,21 @@ export { Redis };
 // In-memory fallback when Redis is not configured (local dev). Not
 // shared across workers but prevents fail-open on a misconfigured deploy.
 const memoryStore = new Map<string, number[]>();
+let hasWarnedMissingRedis = false;
 
 function memoryRateLimit(
   identifier: string,
   limit: number,
-  window: number
+  windowSeconds: number
 ): { success: boolean; remaining: number } {
   const key = `rate_limit:${identifier}`;
   const now = Date.now();
-  const windowStart = now - window * 1000;
+  const windowStart = now - windowSeconds * 1000;
   const timestamps = memoryStore.get(key) ?? [];
   const valid = timestamps.filter((t) => t > windowStart);
   if (valid.length >= limit) {
-    memoryStore.set(key, valid);
+    if (valid.length === 0) memoryStore.delete(key);
+    else memoryStore.set(key, valid);
     return { success: false, remaining: 0 };
   }
   valid.push(now);
@@ -49,26 +51,21 @@ function memoryRateLimit(
 export async function rateLimit(
   identifier: string,
   limit: number = 10,
-  window: number = 60
+  windowSeconds: number = 60
 ): Promise<{ success: boolean; remaining: number }> {
   if (!redis) {
-    // Fail-open would let a misconfigured prod skip all limits. Keep a
-    // local counter instead and warn once so the misconfig is visible.
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === "production" && !hasWarnedMissingRedis) {
+      hasWarnedMissingRedis = true;
       console.warn("[redis] UPSTASH_* not set — using in-memory rate limit");
     }
-    return memoryRateLimit(identifier, limit, window);
+    return memoryRateLimit(identifier, limit, windowSeconds);
   }
 
   try {
     const key = `rate_limit:${identifier}`;
     const now = Date.now();
-    const windowStart = now - window * 1000;
+    const windowStart = now - windowSeconds * 1000;
 
-    // Pipeline reduces round-trips; the window is still not strictly atomic
-    // but the unique member prevents the same-ms collision that dropped
-    // concurrent requests before. For strict atomicity use Upstash Ratelimit
-    // or an EVAL Lua script.
     const pipeline = redis.pipeline();
     pipeline.zremrangebyscore(key, 0, windowStart);
     pipeline.zcard(key);
@@ -79,12 +76,11 @@ export async function rateLimit(
       return { success: false, remaining: 0 };
     }
 
-    // Unique member so two requests in the same ms don't overwrite each other.
-    const member = `${now}:${Math.random().toString(36).slice(2, 8)}`;
+    const member = `${now}:${crypto.randomUUID()}`;
     await redis
       .pipeline()
       .zadd(key, { score: now, member })
-      .expire(key, window)
+      .expire(key, windowSeconds)
       .exec();
 
     return { success: true, remaining: limit - count - 1 };

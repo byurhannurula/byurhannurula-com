@@ -25,7 +25,10 @@ import {
 } from "./table";
 
 function textFromChildren(children: unknown): string {
-  if (typeof children === "string") return children;
+  if (typeof children === "string" || typeof children === "number") {
+    return String(children);
+  }
+  if (typeof children === "boolean" || children == null) return "";
   if (Array.isArray(children)) return children.map(textFromChildren).join("");
   if (
     children &&
@@ -50,31 +53,33 @@ function slugify(text: string): string {
     .replace(/^-|-$/g, "");
 }
 
-// Per-document dedup so duplicate headings get -1, -2 suffixes.
-const slugCounts = new Map<string, number>();
-
-function uniqueSlug(base: string): string {
-  if (!base) return "";
-  const count = slugCounts.get(base) ?? 0;
-  slugCounts.set(base, count + 1);
-  return count === 0 ? base : `${base}-${count}`;
-}
-
-function createHeading(Tag: "h1" | "h2" | "h3" | "h4") {
+function createHeading(
+  Tag: "h1" | "h2" | "h3" | "h4",
+  slugCounts: Map<string, number>
+) {
   const HeadingComponent = ({ children, ...props }: any) => {
     const text = textFromChildren(children);
     const base = slugify(text);
-    const id = base ? uniqueSlug(base) : "";
+    const id = (() => {
+      if (!base) return "";
+      const count = slugCounts.get(base) ?? 0;
+      slugCounts.set(base, count + 1);
+      return count === 0 ? base : `${base}-${count}`;
+    })();
+
+    if (!id) {
+      return (
+        <Tag {...props} className="group relative scroll-mt-24">
+          {children}
+        </Tag>
+      );
+    }
 
     return (
-      <Tag
-        id={id || undefined}
-        {...props}
-        className="group relative scroll-mt-24"
-      >
+      <Tag id={id} {...props} className="group relative scroll-mt-24">
         <a
           href={`#${id}`}
-          aria-label={`Link to ${text || Tag}`}
+          aria-label={`Link to ${text}`}
           className="inline no-underline"
         >
           <span className="text-foreground">{children}</span>
@@ -86,62 +91,69 @@ function createHeading(Tag: "h1" | "h2" | "h3" | "h4") {
   return HeadingComponent;
 }
 
-export const mdxComponents = {
-  img: ({ src, alt, caption, size, ...props }: any) => (
-    <MDXImage src={src} alt={alt} caption={caption} size={size} {...props} />
-  ),
+export function createMdxComponents() {
+  const slugCounts = new Map<string, number>();
 
-  Callout,
-  DoDont,
-  LinkChip,
-  LinkEmbed,
-  ProsCons,
-  ImageGrid,
-  GridImage,
-  MDXImage,
-  Mermaid,
+  return {
+    img: ({ src, alt, caption, size, ...props }: any) => (
+      <MDXImage src={src} alt={alt} caption={caption} size={size} {...props} />
+    ),
 
-  pre: ({ children, raw, ...props }: any) => (
-    <CodeBlock raw={raw} {...props}>
-      {children}
-    </CodeBlock>
-  ),
+    Callout,
+    DoDont,
+    LinkChip,
+    LinkEmbed,
+    ProsCons,
+    ImageGrid,
+    GridImage,
+    MDXImage,
+    Mermaid,
 
-  code: ({ children, ...props }: any) => {
-    if (!props.className) {
-      return (
-        <code
-          className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm"
-          {...props}
-        >
-          {children}
-        </code>
-      );
-    }
-    return <code {...props}>{children}</code>;
-  },
+    pre: ({ children, raw, ...props }: any) => (
+      <CodeBlock raw={raw} {...props}>
+        {children}
+      </CodeBlock>
+    ),
 
-  table: Table,
-  thead: TableHeader,
-  tbody: TableBody,
-  tr: TableRow,
-  th: TableHead,
-  td: TableCell,
+    code: ({ children, ...props }: any) => {
+      if (!props.className) {
+        return (
+          <code
+            className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm"
+            {...props}
+          >
+            {children}
+          </code>
+        );
+      }
+      return <code {...props}>{children}</code>;
+    },
 
-  blockquote: ({ children, ...props }: any) => (
-    <blockquote
-      {...props}
-      className="my-6 border-primary border-l-4 pl-4 text-muted-foreground italic"
-    >
-      {children}
-    </blockquote>
-  ),
+    table: Table,
+    thead: TableHeader,
+    tbody: TableBody,
+    tr: TableRow,
+    th: TableHead,
+    td: TableCell,
 
-  a: MDXLink,
+    blockquote: ({ children, ...props }: any) => (
+      <blockquote
+        {...props}
+        className="my-6 border-primary border-l-4 pl-4 text-muted-foreground italic"
+      >
+        {children}
+      </blockquote>
+    ),
 
-  // Headings
-  h1: createHeading("h1"),
-  h2: createHeading("h2"),
-  h3: createHeading("h3"),
-  h4: createHeading("h4"),
-};
+    a: MDXLink,
+
+    h1: createHeading("h1", slugCounts),
+    h2: createHeading("h2", slugCounts),
+    h3: createHeading("h3", slugCounts),
+    h4: createHeading("h4", slugCounts),
+  };
+}
+
+// Back-compat: existing imports still work but get a fresh map per import.
+// Prefer createMdxComponents() per render for true isolation.
+export const mdxComponents = createMdxComponents();

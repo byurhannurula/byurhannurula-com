@@ -3,7 +3,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 
 import { remarkImageDimensions } from "@/lib/server/remark-image-dimensions";
-import { mdxComponents } from "./mdx-components";
+import { createMdxComponents } from "./mdx-components";
 
 interface MDXRendererProps {
   source: string;
@@ -28,7 +28,7 @@ export async function MDXRenderer({ source }: MDXRendererProps) {
           rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
         },
       }}
-      components={mdxComponents}
+      components={createMdxComponents()}
     />
   );
 }
