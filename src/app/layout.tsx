@@ -4,14 +4,14 @@ import type React from "react";
 
 import "./globals.css";
 
-import dynamic from "next/dynamic";
-
 import { BuildInfo } from "@/components/build-info";
+import { CommandPalette } from "@/components/command-palette";
 import { ConsoleBanner } from "@/components/console-banner";
 import { Footer, FooterBackdrop } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
 import { Navigation } from "@/components/navigation";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { ShortcutsDialog } from "@/components/shortcuts-dialog";
 import { ThemeProvider } from "@/components/theme-provider";
 import { GlobalShortcuts } from "@/components/theme-shortcut";
 import { Toaster } from "@/components/toaster";
@@ -19,15 +19,6 @@ import { UmamiAnalytics } from "@/components/umami-analytics";
 import { createMetadata } from "@/config";
 import { LIGHT_MODE_SCRIPT, LIGHT_MODES } from "@/config/light-modes";
 import { getAllPosts, getAllTags } from "@/lib/server";
-
-const CommandPalette = dynamic(
-  () => import("@/components/command-palette").then((m) => m.CommandPalette),
-  { ssr: false }
-);
-const ShortcutsDialog = dynamic(
-  () => import("@/components/shortcuts-dialog").then((m) => m.ShortcutsDialog),
-  { ssr: false }
-);
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],

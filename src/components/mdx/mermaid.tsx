@@ -1,6 +1,5 @@
 "use client";
 
-import mermaid from "mermaid";
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -10,44 +9,53 @@ interface MermaidProps {
   className?: string;
 }
 
-mermaid.initialize({
-  startOnLoad: false,
-  theme: "dark",
-  themeVariables: {
-    primaryColor: "#a6e3a1",
-    primaryTextColor: "#cdd6f4",
-    primaryBorderColor: "#6c7086",
-    lineColor: "#6c7086",
-    secondaryColor: "#313244",
-    tertiaryColor: "#1e1e2e",
-    background: "#1e1e2e",
-    mainBkg: "#1e1e2e",
-    nodeBorder: "#6c7086",
-    clusterBkg: "#181825",
-    clusterBorder: "#6c7086",
-    titleColor: "#cdd6f4",
-    edgeLabelBackground: "#1e1e2e",
-    textColor: "#cdd6f4",
-    nodeTextColor: "#cdd6f4",
-  },
-  fontFamily:
-    "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-  flowchart: {
-    htmlLabels: true,
-    curve: "basis",
-  },
-  sequence: {
-    diagramMarginX: 50,
-    diagramMarginY: 10,
-    actorMargin: 50,
-    width: 150,
-    height: 65,
-    boxMargin: 10,
-    boxTextMargin: 5,
-    noteMargin: 10,
-    messageMargin: 35,
-  },
-});
+let mermaidInitialized = false;
+
+async function ensureMermaid() {
+  const mermaid = (await import("mermaid")).default;
+  if (!mermaidInitialized) {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "dark",
+      themeVariables: {
+        primaryColor: "#a6e3a1",
+        primaryTextColor: "#cdd6f4",
+        primaryBorderColor: "#6c7086",
+        lineColor: "#6c7086",
+        secondaryColor: "#313244",
+        tertiaryColor: "#1e1e2e",
+        background: "#1e1e2e",
+        mainBkg: "#1e1e2e",
+        nodeBorder: "#6c7086",
+        clusterBkg: "#181825",
+        clusterBorder: "#6c7086",
+        titleColor: "#cdd6f4",
+        edgeLabelBackground: "#1e1e2e",
+        textColor: "#cdd6f4",
+        nodeTextColor: "#cdd6f4",
+      },
+      fontFamily:
+        "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+      flowchart: {
+        htmlLabels: true,
+        curve: "basis",
+      },
+      sequence: {
+        diagramMarginX: 50,
+        diagramMarginY: 10,
+        actorMargin: 50,
+        width: 150,
+        height: 65,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35,
+      },
+    });
+    mermaidInitialized = true;
+  }
+  return mermaid;
+}
 
 export function Mermaid({ chart, className }: MermaidProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,12 +63,15 @@ export function Mermaid({ chart, className }: MermaidProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
     const renderChart = async () => {
       if (!containerRef.current) return;
 
       try {
-        const id = `mermaid-${crypto.randomUUID()}`;
+        const mermaid = await ensureMermaid();
+        const id = `mermaid-${globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2, 9)}`;
         const { svg } = await mermaid.render(id, chart);
+        if (cancelled) return;
         setSvg(svg);
         setError(null);
       } catch (err) {
@@ -71,6 +82,9 @@ export function Mermaid({ chart, className }: MermaidProps) {
     };
 
     renderChart();
+    return () => {
+      cancelled = true;
+    };
   }, [chart]);
 
   if (error) {
