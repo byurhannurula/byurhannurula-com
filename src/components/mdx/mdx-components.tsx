@@ -1,11 +1,20 @@
+import dynamic from "next/dynamic";
 import { Callout } from "./callout";
 import { CodeBlock } from "./code-block";
 import { DoDont } from "./do-dont";
 import { GridImage, ImageGrid, MDXImage } from "./image";
+
 import { MDXLink } from "./link";
 import { LinkChip, LinkEmbed } from "./link-embed";
-import { Mermaid } from "./mermaid";
 import { ProsCons } from "./pros-cons";
+
+const Mermaid = dynamic(() => import("./mermaid").then((m) => m.Mermaid), {
+  ssr: false,
+  loading: () => (
+    <div className="my-6 h-32 animate-pulse rounded-lg border bg-muted" />
+  ),
+});
+
 import {
   Table,
   TableBody,

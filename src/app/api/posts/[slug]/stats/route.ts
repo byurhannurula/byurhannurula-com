@@ -26,11 +26,12 @@ export async function POST(
     return NextResponse.json(stats);
   }
 
-  // Increment views
+  // Return incr value directly — avoids stale read if another request
+  // incremented between incr and get, and saves one round-trip for views.
   const views = await incrementViews(slug);
-  const stats = await getPostStats(slug);
+  const { likes } = await getPostStats(slug);
 
-  return NextResponse.json({ views, likes: stats.likes });
+  return NextResponse.json({ views, likes });
 }
 
 export async function GET(

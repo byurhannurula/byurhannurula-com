@@ -59,7 +59,7 @@ export function Mermaid({ chart, className }: MermaidProps) {
       if (!containerRef.current) return;
 
       try {
-        const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+        const id = `mermaid-${crypto.randomUUID()}`;
         const { svg } = await mermaid.render(id, chart);
         setSvg(svg);
         setError(null);

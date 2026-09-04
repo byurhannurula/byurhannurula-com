@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { cache } from "react";
 
 import { calculateReadingTime } from "../utils";
 
@@ -51,7 +52,7 @@ export function getSinglePost(slug: string): Post {
   };
 }
 
-export function getAllPosts(): Omit<Post, "content">[] {
+export const getAllPosts = cache((): Omit<Post, "content">[] => {
   try {
     const postsDirectory = path.join(process.cwd(), "content/blog");
     const filenames = fs.readdirSync(postsDirectory);
@@ -82,7 +83,7 @@ export function getAllPosts(): Omit<Post, "content">[] {
   } catch (_error) {
     return [];
   }
-}
+});
 
 export function getFeaturedPost(): Omit<Post, "content"> | null {
   const posts = getAllPosts();
@@ -97,11 +98,11 @@ export interface GroupedPosts {
   }[];
 }
 
-export function getAllTags(): string[] {
+export const getAllTags = cache((): string[] => {
   const posts = getAllPosts();
   const allTags = posts.flatMap((post) => post.frontmatter.tags);
   return Array.from(new Set(allTags)).sort();
-}
+});
 
 export function getPostsGroupedByDate(tag?: string): GroupedPosts[] {
   const posts = getAllPosts();

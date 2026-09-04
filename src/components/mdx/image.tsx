@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import {
   Children,
@@ -8,8 +9,11 @@ import {
   useCallback,
   useState,
 } from "react";
-import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+
+const Lightbox = dynamic(() => import("yet-another-react-lightbox"), {
+  ssr: false,
+});
 
 import { splitIntoRows } from "@/lib/gallery-rows";
 import { cn } from "@/lib/utils";
@@ -134,17 +138,19 @@ export function MDXImage({
         </span>
       </span>
 
-      {/* Lightbox */}
-      <Lightbox
-        open={isOpen}
-        close={() => setIsOpen(false)}
-        slides={[{ src, alt }]}
-        carousel={{ finite: true }}
-        render={{
-          buttonPrev: () => null,
-          buttonNext: () => null,
-        }}
-      />
+      {/* Lightbox — only mount when opened so closed galleries don't create portals */}
+      {isOpen && (
+        <Lightbox
+          open={isOpen}
+          close={() => setIsOpen(false)}
+          slides={[{ src, alt }]}
+          carousel={{ finite: true }}
+          render={{
+            buttonPrev: () => null,
+            buttonNext: () => null,
+          }}
+        />
+      )}
     </>
   );
 }
@@ -312,16 +318,18 @@ export function GridImage({
           onLoad={handleLoad}
         />
       </div>
-      <Lightbox
-        open={isOpen}
-        close={() => setIsOpen(false)}
-        slides={[{ src, alt }]}
-        carousel={{ finite: true }}
-        render={{
-          buttonPrev: () => null,
-          buttonNext: () => null,
-        }}
-      />
+      {isOpen && (
+        <Lightbox
+          open={isOpen}
+          close={() => setIsOpen(false)}
+          slides={[{ src, alt }]}
+          carousel={{ finite: true }}
+          render={{
+            buttonPrev: () => null,
+            buttonNext: () => null,
+          }}
+        />
+      )}
     </>
   );
 }
