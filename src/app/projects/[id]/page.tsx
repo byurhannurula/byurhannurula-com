@@ -247,9 +247,9 @@ export default function ProjectDetailPage({
                   className="group block"
                 >
                   <div className="rounded-lg border bg-card p-4 transition-colors hover:border-primary">
-                    <h4 className="font-medium text-base group-hover:text-primary">
+                    <h3 className="font-medium text-base group-hover:text-primary">
                       {project.title}
-                    </h4>
+                    </h3>
                     <p className="mt-2 line-clamp-2 text-muted-foreground text-sm">
                       {project.description}
                     </p>

@@ -9,7 +9,7 @@ export async function POST(
 
   // Rate limit by IP - 5 likes per minute per IP (stricter for likes)
   const ip = request.headers.get("x-forwarded-for") || "anonymous";
-  const { success } = await rateLimit(`likes:${ip}`, 5, 10);
+  const { success } = await rateLimit(`like:${ip}`, 5, 10);
 
   if (!success) {
     return NextResponse.json(

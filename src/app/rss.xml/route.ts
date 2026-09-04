@@ -1,56 +1,56 @@
 import { NextResponse } from "next/server";
-import { serialize } from "next-mdx-remote/serialize";
-import remarkGfm from "remark-gfm";
 
 import { SITE_CONFIG } from "@/config";
-import { getAllPosts, getSinglePost } from "@/lib/server";
+import { getAllPosts } from "@/lib/server";
+
+/** enclosure needs a MIME type and the URL is all there is to derive one from. */
+function imageType(url: string) {
+  const extension = new URL(url).pathname.split(".").pop()?.toLowerCase();
+  if (extension === "png") return "image/png";
+  if (extension === "webp") return "image/webp";
+  if (extension === "gif") return "image/gif";
+  return "image/jpeg";
+}
 
 export async function GET() {
   try {
     const posts = getAllPosts().slice(0, 20);
 
-    const rssItems = await Promise.all(
-      posts.map(async (post) => {
-        const fullPost = getSinglePost(post.slug);
-        const pubDate = new Date(post.frontmatter.date).toUTCString();
-        const postUrl = `${SITE_CONFIG.url}/notes/${encodeURIComponent(post.slug)}`;
+    /*
+     * Excerpt only, deliberately.
+     *
+     * This used to put `serialize().compiledSource` into content:encoded,
+     * which is a compiled JavaScript function body, not HTML -- every reader
+     * was being served `"use strict";` and the module source. Rendering the
+     * real thing is not a small fix either: the posts lean on MDX components
+     * (MDXImage, GridImage, Callout, ImageGrid) that a plain remark-to-HTML
+     * pipeline drops, so a "full" feed would silently lose most images and
+     * every callout. An honest excerpt that links out beats a mangled article.
+     */
+    const rssItems = posts.map((post) => {
+      const pubDate = new Date(post.frontmatter.date).toUTCString();
+      const postUrl = `${SITE_CONFIG.url}/notes/${encodeURIComponent(post.slug)}`;
+      const { coverImage } = post.frontmatter;
 
-        // Convert MDX -> HTML using next-mdx-remote
-        const mdxSource = await serialize(fullPost.content, {
-          mdxOptions: {
-            remarkPlugins: [remarkGfm],
-            rehypePlugins: [],
-          },
-        });
-
-        // mdxSource contains compiled HTML string
-        let contentHtml = mdxSource.compiledSource;
-        // Replace any CDATA terminators
-        contentHtml = contentHtml.replace(/]]>/g, "]]&gt;");
-
-        return `
+      return `
 <item>
   <title>${escapeXml(post.frontmatter.title)}</title>
   <description><![CDATA[${post.frontmatter.excerpt}]]></description>
-  <content:encoded><![CDATA[${contentHtml}]]></content:encoded>
   <link>${postUrl}</link>
   <guid isPermaLink="true">${postUrl}</guid>
   <pubDate>${pubDate}</pubDate>
   ${post.frontmatter.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join("\n  ")}
   <author>${escapeXml(`${SITE_CONFIG.author.email} (${SITE_CONFIG.author.name})`)}</author>
   ${
-    post.frontmatter.coverImage
-      ? `<enclosure url="${encodeURIComponent(post.frontmatter.coverImage)}" type="image/jpeg" />`
+    coverImage
+      ? `<enclosure url="${escapeXml(coverImage)}" type="${imageType(coverImage)}" />`
       : ""
   }
 </item>`;
-      })
-    );
+    });
 
     const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0"
-  xmlns:atom="http://www.w3.org/2005/Atom"
-  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(SITE_CONFIG.title)}</title>
     <description>${escapeXml(SITE_CONFIG.description)}</description>
@@ -72,7 +72,7 @@ export async function GET() {
     return new NextResponse(rssXml, {
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=1800",
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
       },
     });
   } catch (_error) {

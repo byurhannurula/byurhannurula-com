@@ -147,7 +147,6 @@
 }
 
 [data-light="evening"] {
-  --link-inbound: #a99af0;
   --background: #1c1815;
   --background-soft: #241f1a;
   --foreground: #ede4d8;
@@ -432,8 +431,11 @@ code[data-theme*=" "] span {
   color: var(--shiki-light);
 }
 
-.dark code[data-theme*=" "],
-.dark code[data-theme*=" "] span {
+/* Matches @custom-variant dark above. `.dark` was never set on this site --
+   the palette lives on [data-light] -- so every code block was painting its
+   light-theme tokens onto a dark surface. */
+:is([data-light="evening"], [data-light="night"]) code[data-theme*=" "],
+:is([data-light="evening"], [data-light="night"]) code[data-theme*=" "] span {
   color: var(--shiki-dark);
 }
 
@@ -825,5 +827,53 @@ html[data-light-switching]::view-transition-new(root) {
   html[data-light-switching]::view-transition-new(root) {
     mask-image: none;
     animation: fade-in 160ms ease-out both;
+  }
+}
+
+/* ============================================ */
+/* Social hover card                            */
+/* ============================================ */
+
+/* Direction-aware swap: the incoming body arrives from the side the pointer
+   came from, the outgoing one leaves the opposite way, so the row of icons
+   reads as a track the card slides along. --dir is set per swap. */
+@keyframes card-body-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--dir, 0) * 2.5rem));
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@keyframes card-body-out {
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--dir, 0) * -2.5rem));
+    filter: blur(5px);
+  }
+}
+
+.card-body-in {
+  animation: card-body-in 300ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.card-body-out {
+  animation: card-body-out 300ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Keep the cross-fade, drop the travel and the blur. */
+  .card-body-in,
+  .card-body-out {
+    animation-duration: 150ms;
+    animation-name: fade-in;
+  }
+  .card-body-out {
+    animation-direction: reverse;
   }
 }

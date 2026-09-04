@@ -11,7 +11,6 @@ export interface PostFrontmatter {
   coverImage?: string;
   tags: string[];
   toc?: boolean;
-  tocStyle?: "inline" | "sidebar" | "floating";
   featured?: boolean;
 }
 

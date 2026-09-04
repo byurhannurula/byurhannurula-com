@@ -11,7 +11,7 @@ import {
 } from "@/components/blog";
 import { HashScroll } from "@/components/hash-scroll";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
-import { MDXRenderer, TOC, TOCFloating, TOCSidebar } from "@/components/mdx";
+import { MDXRenderer, TOCFloating } from "@/components/mdx";
 import { createBlogMetadata, SITE_CONFIG } from "@/config";
 import { getAllPosts, getSinglePost, type Post } from "@/lib/server";
 
@@ -135,6 +135,10 @@ export default async function BlogPostPage({ params }: PageProps) {
                 height={630}
                 priority
                 fetchPriority="high"
+                // The column is --container-editorial (720px) and the image is
+                // w-full inside it. Without this Next assumes 100vw and the
+                // browser fetches the 3840px candidate for a 720px slot.
+                sizes="(min-width: 768px) 720px, 100vw"
                 className="h-auto w-full object-cover"
               />
             </div>
@@ -143,26 +147,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Content section */}
         <div className="relative">
-          {/* Sidebar TOC - positioned to the left */}
-          {currentPost.frontmatter.toc &&
-            currentPost.frontmatter.tocStyle === "sidebar" && (
-              <div className="absolute top-0 left-0 hidden w-64 xl:block">
-                <div className="fixed top-24 w-56">
-                  <TOCSidebar />
-                </div>
-              </div>
-            )}
-
           <div>
-            {/* Inline TOC if enabled and style is inline (default) */}
-            {currentPost.frontmatter.toc &&
-              currentPost.frontmatter.tocStyle !== "sidebar" &&
-              currentPost.frontmatter.tocStyle !== "floating" && (
-                <div className="mb-8">
-                  <TOC />
-                </div>
-              )}
-
             {/* Article content */}
             <div data-mdx-content className="prose">
               <MDXRenderer source={currentPost.content} />
@@ -174,9 +159,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Floating TOC - shows when tocStyle is floating */}
-          {currentPost.frontmatter.toc &&
-            currentPost.frontmatter.tocStyle === "floating" && <TOCFloating />}
+          {currentPost.frontmatter.toc && <TOCFloating />}
         </div>
 
         {/* Read Previous/Next Section */}
@@ -195,9 +178,9 @@ export default async function BlogPostPage({ params }: PageProps) {
                         <ArrowLeft className="size-3 transition-transform group-hover:-translate-x-1" />
                         older
                       </span>
-                      <h4 className="line-clamp-2 font-normal text-[13.5px] text-muted-foreground transition-colors group-hover:text-primary">
+                      <h3 className="line-clamp-2 font-normal text-[13.5px] text-muted-foreground transition-colors group-hover:text-primary">
                         {prevPost.frontmatter.title}
-                      </h4>
+                      </h3>
                     </div>
                   </Link>
                 ) : (
@@ -215,9 +198,9 @@ export default async function BlogPostPage({ params }: PageProps) {
                         newer
                         <ArrowRight className="size-3 transition-transform group-hover:translate-x-1" />
                       </span>
-                      <h4 className="line-clamp-2 font-normal text-[13.5px] text-muted-foreground transition-colors group-hover:text-primary">
+                      <h3 className="line-clamp-2 font-normal text-[13.5px] text-muted-foreground transition-colors group-hover:text-primary">
                         {nextPost.frontmatter.title}
-                      </h4>
+                      </h3>
                     </div>
                   </Link>
                 )}
