@@ -96,14 +96,27 @@ export async function getPostStats(slug: string) {
   }
 
   try {
-    const [views, likes] = await Promise.all([
-      redis.get<number>(`post:${slug}:views`),
-      redis.get<number>(`post:${slug}:likes`),
-    ]);
+    const pipeline = redis.pipeline();
+    pipeline.get(`post:${slug}:views`);
+    pipeline.get(`post:${slug}:likes`);
+    const [views, likes] = (await pipeline.exec()) as [
+      number | null,
+      number | null,
+    ];
 
     return { views: views || 0, likes: likes || 0 };
   } catch (_error) {
     return { views: 0, likes: 0 };
+  }
+}
+
+export async function getPostLikes(slug: string): Promise<number> {
+  if (!redis) return 0;
+  try {
+    const likes = await redis.get<number>(`post:${slug}:likes`);
+    return likes || 0;
+  } catch {
+    return 0;
   }
 }
 

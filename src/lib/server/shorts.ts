@@ -1,13 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { cache } from "react";
 
 import type { Short } from "@/types";
 import { SLUG_RE } from "../validation";
 
 const shortsDirectory = path.join(process.cwd(), "content/shorts");
 
-export function getAllShorts(): Omit<Short, "content">[] {
+export const getAllShorts = cache((): Omit<Short, "content">[] => {
   if (!fs.existsSync(shortsDirectory)) {
     return [];
   }
@@ -38,7 +39,7 @@ export function getAllShorts(): Omit<Short, "content">[] {
     );
 
   return shorts;
-}
+});
 
 export function getSingleShort(slug: string): Short {
   if (!SLUG_RE.test(slug)) throw new Error(`Invalid slug "${slug}"`);
@@ -67,8 +68,8 @@ export function getSingleShort(slug: string): Short {
   };
 }
 
-export function getAllShortTags(): string[] {
+export const getAllShortTags = cache((): string[] => {
   const shorts = getAllShorts();
   const tags = shorts.flatMap((short) => short.frontmatter.tags);
   return Array.from(new Set(tags)).sort();
-}
+});

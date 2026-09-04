@@ -2,8 +2,30 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { cache } from "react";
+import { z } from "zod";
+
 import { calculateReadingTime } from "../utils";
 import { SLUG_RE } from "../validation";
+
+const frontmatterSchema = z.object({
+  title: z.string().min(1),
+  date: z.string().min(1),
+  excerpt: z.string().min(1),
+  coverImage: z.string().optional(),
+  tags: z.array(z.string()).default([]),
+  toc: z.boolean().optional(),
+  featured: z.boolean().optional(),
+});
+
+function parseFrontmatter(data: unknown, slug: string): PostFrontmatter {
+  const parsed = frontmatterSchema.safeParse(data);
+  if (!parsed.success) {
+    throw new Error(
+      `Invalid frontmatter for "${slug}": ${parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join(", ")}`
+    );
+  }
+  return parsed.data;
+}
 
 export interface PostFrontmatter {
   title: string;
@@ -45,7 +67,7 @@ export function getSinglePost(slug: string): Post {
   return {
     slug,
     content,
-    frontmatter: data as PostFrontmatter,
+    frontmatter: parseFrontmatter(data, slug),
     readingTime: calculateReadingTime(content),
   };
 }
@@ -59,16 +81,18 @@ export const getAllPosts = cache((): Omit<Post, "content">[] => {
       .filter((filename) => filename.endsWith(".mdx"))
       .map((filename) => {
         const slug = filename.replace(/\.mdx$/, "");
+        if (!SLUG_RE.test(slug)) return null;
         const filePath = path.join(postsDirectory, filename);
         const fileContents = fs.readFileSync(filePath, "utf-8");
         const { content, data } = matter(fileContents);
 
         return {
           slug,
-          frontmatter: data as PostFrontmatter,
+          frontmatter: parseFrontmatter(data, slug),
           readingTime: calculateReadingTime(content),
         };
-      });
+      })
+      .filter((p): p is Omit<Post, "content"> => p !== null);
 
     // Sort by date (newest first)
     posts.sort((a, b) => {

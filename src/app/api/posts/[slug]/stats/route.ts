@@ -1,5 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getPostStats, incrementViews, rateLimit } from "@/lib/redis";
+import {
+  getPostLikes,
+  getPostStats,
+  incrementViews,
+  rateLimit,
+} from "@/lib/redis";
 import { getClientIp } from "@/lib/server/ip";
 import { SLUG_RE } from "@/lib/validation";
 
@@ -20,10 +25,8 @@ export async function POST(
     return NextResponse.json(stats);
   }
 
-  // Return incr value directly — avoids stale read if another request
-  // incremented between incr and get, and saves one round-trip for views.
   const views = await incrementViews(slug);
-  const { likes } = await getPostStats(slug);
+  const likes = await getPostLikes(slug);
 
   return NextResponse.json({ views, likes });
 }

@@ -6,9 +6,9 @@ import type { NextRequest } from "next/server";
  * Trusted IP extraction.
  *
  * Cloudflare Workers sets `cf-connecting-ip` (cannot be spoofed). Fall back to
- * `x-real-ip`, then the last entry of `x-forwarded-for` that is not empty. If
- * none present, return "anonymous" but caller should treat it as untrusted
- * (separate bucket, not shared across users via a single key).
+ * `x-real-ip`, then the first entry of `x-forwarded-for`. If none present,
+ * returns a per-request random anonymous id so the global
+ * `like:anonymous` bucket is not shared across all anon users.
  */
 export function getClientIp(request: NextRequest): string {
   const cf = request.headers.get("cf-connecting-ip")?.trim();
@@ -23,9 +23,8 @@ export function getClientIp(request: NextRequest): string {
     if (first) return first;
   }
 
-  // Next 15 exposes request.ip in some runtimes; fallback to anonymous.
   const ip = (request as unknown as { ip?: string }).ip;
   if (ip) return ip;
 
-  return "anonymous";
+  return `anonymous:${crypto.randomUUID()}`;
 }
