@@ -140,9 +140,7 @@ export function getPostsGroupedByDate(tag?: string): GroupedPosts[] {
   filteredPosts.forEach((post) => {
     const date = new Date(post.frontmatter.date);
     const year = date.getFullYear();
-    const month = date
-      .toLocaleString("default", { month: "long" })
-      .toUpperCase();
+    const month = date.toLocaleString("en-US", { month: "long" }).toUpperCase();
 
     if (!grouped[year]) {
       grouped[year] = {};

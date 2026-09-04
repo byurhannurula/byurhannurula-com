@@ -49,6 +49,7 @@ function createHeading(
   Tag: "h1" | "h2" | "h3" | "h4",
   slugCounts: Map<string, number>
 ) {
+  // biome-ignore lint/suspicious/noExplicitAny: MDXRemote heading props are intentionally untyped
   const HeadingComponent = ({ children, ...props }: any) => {
     const text = textFromChildren(children);
     const base = slugify(text);
@@ -87,6 +88,7 @@ export function createMdxComponents() {
   const slugCounts = new Map<string, number>();
 
   return {
+    // biome-ignore lint/suspicious/noExplicitAny: MDXRemote img props intentionally untyped
     img: ({ src, alt, caption, size, ...props }: any) => (
       <MDXImage src={src} alt={alt} caption={caption} size={size} {...props} />
     ),
@@ -101,12 +103,14 @@ export function createMdxComponents() {
     MDXImage,
     Mermaid,
 
+    // biome-ignore lint/suspicious/noExplicitAny: MDXRemote pre props
     pre: ({ children, raw, ...props }: any) => (
       <CodeBlock raw={raw} {...props}>
         {children}
       </CodeBlock>
     ),
 
+    // biome-ignore lint/suspicious/noExplicitAny: MDXRemote code props
     code: ({ children, ...props }: any) => {
       if (!props.className) {
         return (
@@ -128,6 +132,7 @@ export function createMdxComponents() {
     th: TableHead,
     td: TableCell,
 
+    // biome-ignore lint/suspicious/noExplicitAny: MDXRemote blockquote props
     blockquote: ({ children, ...props }: any) => (
       <blockquote
         {...props}

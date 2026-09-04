@@ -17,12 +17,14 @@ export const getAllShorts = cache((): Omit<Short, "content">[] => {
   const shorts = files
     .filter((file) => file.endsWith(".mdx"))
     .map((file) => {
+      const slug = file.replace(/\.mdx$/, "");
+      if (!SLUG_RE.test(slug)) return null;
       const filePath = path.join(shortsDirectory, file);
       const fileContent = fs.readFileSync(filePath, "utf8");
       const { data } = matter(fileContent);
 
       return {
-        slug: file.replace(".mdx", ""),
+        slug,
         frontmatter: {
           title: data.title || "Untitled",
           description: data.description || "",
@@ -30,12 +32,13 @@ export const getAllShorts = cache((): Omit<Short, "content">[] => {
           tags: data.tags || [],
           language: data.language || "typescript",
         },
-      };
+      } as Omit<Short, "content">;
     })
+    .filter((s): s is Omit<Short, "content"> => s !== null)
     .sort(
       (a, b) =>
-        new Date(b.frontmatter.date).getTime() -
-        new Date(a.frontmatter.date).getTime()
+        new Date(b!.frontmatter.date).getTime() -
+        new Date(a!.frontmatter.date).getTime()
     );
 
   return shorts;
