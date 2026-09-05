@@ -88,7 +88,7 @@ export default function AboutPage() {
           value: (
             <div className="flex flex-wrap gap-1.5">
               {group.items.map((item) => (
-                <TechChip key={item.name} showLabel {...item} />
+                <TechChip key={item} item={item} showLabel />
               ))}
             </div>
           ),

@@ -111,7 +111,7 @@ export function Navigation() {
           window.dispatchEvent(new Event(OPEN_COMMAND_PALETTE_EVENT))
         }
         className="order-2 ml-auto hidden appearance-none rounded-sm border border-border bg-transparent px-2.5 py-1 font-mono text-[12px] text-muted-foreground leading-normal transition-colors hover:border-muted-foreground hover:text-foreground sm:order-3 sm:ml-0 sm:inline-flex"
-        aria-label="Open command palette"
+        aria-label="⌘K, open command palette"
       >
         ⌘k
       </button>

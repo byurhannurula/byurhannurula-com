@@ -39,9 +39,9 @@ export default function ShortsPage() {
                   </span>
                 )}
               </div>
-              <h3 className="mb-2 font-medium transition-colors group-hover:text-primary">
+              <h2 className="mb-2 font-medium transition-colors group-hover:text-primary">
                 {short.frontmatter.title}
-              </h3>
+              </h2>
               <p className="mb-3 line-clamp-2 text-muted-foreground text-sm">
                 {short.frontmatter.description}
               </p>

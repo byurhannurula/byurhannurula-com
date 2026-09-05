@@ -1,6 +1,4 @@
-import type * as TechLogos from "@/components/icons";
-
-export type TechLogoName = keyof typeof TechLogos;
+import type { StackKey } from "./stack";
 
 export interface Capability {
   name: string;
@@ -8,14 +6,9 @@ export interface Capability {
   why?: string;
 }
 
-export interface StackItem {
-  name: string;
-  logo?: TechLogoName;
-}
-
 export interface StackGroup {
   name: string;
-  items: StackItem[];
+  items: StackKey[];
 }
 
 export interface RoleStep {
@@ -42,7 +35,7 @@ export interface CareerItem {
   description: string;
   /** Progression inside the same org, oldest first. */
   roles?: RoleStep[];
-  stack?: StackItem[];
+  stack?: StackKey[];
   highlights?: (string | Highlight)[];
 }
 
@@ -78,48 +71,40 @@ export const CAPABILITIES: Capability[] = [
 export const STACK: StackGroup[] = [
   {
     name: "frontend",
-    items: [
-      { name: "typescript", logo: "TypeScript" },
-      { name: "javascript", logo: "JavaScript" },
-      { name: "react", logo: "ReactIcon" },
-      { name: "next.js", logo: "NextJs" },
-      { name: "tailwind", logo: "TailwindCss" },
-      { name: "astro", logo: "Astro" },
-    ],
+    items: ["typescript", "javascript", "react", "nextjs", "tailwind", "astro"],
   },
   {
     name: "backend",
     items: [
-      { name: "node", logo: "NodeJs" },
-      { name: "bun", logo: "Bun" },
-      { name: "express", logo: "ExpressJs" },
-      { name: "fastify", logo: "Fastify" },
-      { name: "postgresql", logo: "PostgreSQL" },
-      { name: "mysql", logo: "MySQL" },
-      { name: "mongodb", logo: "MongoDB" },
-      { name: "redis", logo: "Redis" },
-      { name: "prisma", logo: "Prisma" },
-      { name: "graphql", logo: "GraphQL" },
+      "node",
+      "bun",
+      "express",
+      "fastify",
+      "postgresql",
+      "mysql",
+      "mongodb",
+      "redis",
+      "prisma",
+      "graphql",
     ],
   },
   {
     name: "devops",
     items: [
-      { name: "docker", logo: "Docker" },
-      { name: "nginx", logo: "Nginx" },
-      { name: "linux", logo: "Linux" },
-      { name: "proxmox", logo: "Proxmox" },
-      { name: "git", logo: "Git" },
-      { name: "cloudflare", logo: "Cloudflare" },
-      { name: "vercel", logo: "Vercel" },
-      { name: "google cloud", logo: "GoogleCloud" },
-      { name: "aws", logo: "AWS" },
-      { name: "postman", logo: "Postman" },
+      "docker",
+      "nginx",
+      "proxmox",
+      "git",
+      "cloudflare",
+      "vercel",
+      "google-cloud",
+      "aws",
+      "postman",
     ],
   },
   {
     name: "design",
-    items: [{ name: "figma", logo: "Figma" }],
+    items: ["figma"],
   },
 ];
 
@@ -138,17 +123,17 @@ export const WORK: CareerItem[] = [
       { title: "Team Lead", years: "2024 — now" },
     ],
     stack: [
-      { name: "typescript", logo: "TypeScript" },
-      { name: "react", logo: "ReactIcon" },
-      { name: "next.js", logo: "NextJs" },
-      { name: "node", logo: "NodeJs" },
-      { name: "express", logo: "ExpressJs" },
-      { name: "fastify", logo: "Fastify" },
-      { name: "postgresql", logo: "PostgreSQL" },
-      { name: "mongodb", logo: "MongoDB" },
-      { name: "docker", logo: "Docker" },
-      { name: "tailwind", logo: "TailwindCss" },
-      { name: "figma", logo: "Figma" },
+      "typescript",
+      "react",
+      "nextjs",
+      "node",
+      "express",
+      "fastify",
+      "postgresql",
+      "mongodb",
+      "docker",
+      "tailwind",
+      "figma",
     ],
     highlights: [
       "Built and shipped the company's web apps, landing pages, and marketing sites end to end.",
@@ -165,12 +150,7 @@ export const WORK: CareerItem[] = [
     years: "~2018 — 2020",
     description:
       "Gatsby & GitLab era — published gatsby-source-gitlab, built small tools, learned in public.",
-    stack: [
-      { name: "javascript", logo: "JavaScript" },
-      { name: "react", logo: "ReactIcon" },
-      { name: "graphql", logo: "GraphQL" },
-      { name: "html/css", logo: "Html" },
-    ],
+    stack: ["javascript", "react", "graphql", "html-css"],
   },
 ];
 

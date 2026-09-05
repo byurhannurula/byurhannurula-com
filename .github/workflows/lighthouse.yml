@@ -10,8 +10,16 @@ permissions:
 
 jobs:
   lighthouse:
-    name: Lighthouse CI
+    name: Lighthouse CI (${{ matrix.form-factor }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - form-factor: desktop
+            config: ./lighthouserc.json
+          - form-factor: mobile
+            config: ./lighthouserc.mobile.json
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,6 +46,6 @@ jobs:
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v12
         with:
-          configPath: ./lighthouserc.json
+          configPath: ${{ matrix.config }}
           uploadArtifacts: true
           temporaryPublicStorage: true

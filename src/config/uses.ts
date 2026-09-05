@@ -3,23 +3,33 @@ export interface UseItem {
   description: string;
   image?: string;
   url?: string;
+  /** Replaced but kept for reference, rendered struck through. */
+  deprecated?: boolean;
+  /**
+   * Command-line tools that belong to this entry rather than to a shelf of
+   * their own. Rendered as a plain mono line: the row is already a link, so
+   * these cannot be links too.
+   */
+  stack?: string[];
 }
 
 export interface UseCategory {
   title: string;
   type?: "list" | "grid" | "gear";
+  /** One-line notice under the heading, e.g. a planned move-out. */
+  note?: string;
   items: UseItem[];
 }
 
 export const usesData: UseCategory[] = [
   {
-    title: "Workstation",
+    title: "Desk",
     type: "gear",
     items: [
       {
         name: 'MacBook Pro 14" M1 Pro',
         description:
-          "Base model 16GB RAM, 512GB SSD - My daily driver for development still going strong",
+          "Base model, 16GB RAM and 512GB SSD. Still the daily driver.",
         image: "/assets/images/macbook-pro-14.jpg",
       },
       {
@@ -33,10 +43,9 @@ export const usesData: UseCategory[] = [
         image: "/assets/images/iphone-13.jpg",
       },
       {
-        name: "Wireless Keyboard 84 Keys",
-        description:
-          "84-key wireless low-profile mechanical keyboard for daily use",
-        image: "/assets/images/keyboard.jpg",
+        name: "Keychron B1 Pro",
+        description: "84-key wireless low-profile keyboard for daily use",
+        image: "/assets/images/keyboard.png",
       },
       {
         name: "Trust Ozaa Mouse",
@@ -48,6 +57,7 @@ export const usesData: UseCategory[] = [
   {
     title: "Homelab Hardware",
     type: "gear",
+    note: "Moving to its own /homelab page soon; listed here until then.",
     items: [
       {
         name: "UniFi UCG Ultra",
@@ -87,9 +97,9 @@ export const usesData: UseCategory[] = [
     items: [
       {
         name: "Creality Ender 3 V2",
-        description:
-          "Currently not in active use but was a great start to 3D printing",
+        description: "Retired, but a great start to 3D printing",
         image: "/assets/images/creality-ender-3-v2.jpg",
+        deprecated: true,
       },
       {
         name: "Bambu Lab A1 Combo",
@@ -110,39 +120,78 @@ export const usesData: UseCategory[] = [
     items: [
       {
         name: "VS Code",
-        description: "Primary code editor",
+        description: "Daily editor, paired with Claude Code CLI",
         url: "https://code.visualstudio.com/",
       },
       {
-        name: "Windsurf",
-        description: "Primary AI agentic code editor",
-        url: "https://windsurf.com/",
-      },
-      {
-        name: "Cursor",
-        description: "Secondary AI code editor",
-        url: "https://www.cursor.com/",
-      },
-      {
-        name: "iTerm2 w/ ZSH & Oh My Zsh",
-        description: "Main terminal with ZSH and Oh My Zsh",
-        url: "https://iterm2.com/",
-      },
-      {
-        name: "Orbstack",
+        name: "Claude Code CLI",
         description:
-          "Docker Desktop alternative with better performance and integration",
-        url: "https://www.orbstack.dev/",
+          "Agentic coding in the terminal, where most code gets written now",
+        url: "https://docs.anthropic.com/en/docs/claude-code",
       },
+      // Retired: replaced by VS Code + Claude Code CLI.
+      // {
+      //   name: "Windsurf",
+      //   description: "Replaced by VS Code + Claude Code CLI",
+      //   url: "https://windsurf.com/",
+      //   deprecated: true,
+      // },
+      // {
+      //   name: "Cursor",
+      //   description: "Replaced by VS Code + Claude Code CLI",
+      //   url: "https://www.cursor.com/",
+      //   deprecated: true,
+      // },
       {
-        name: "Docker Desktop",
-        description: "Containerization platform",
-        url: "https://www.docker.com/products/docker-desktop/",
+        name: "Ghostty",
+        description: "Daily terminal now: fast, native, calm",
+        url: "https://ghostty.org/",
+        stack: ["eza", "bat", "ripgrep", "fzf", "jq", "btop", "gh"],
+      },
+      // Retired: replaced by Ghostty.
+      // {
+      //   name: "iTerm2 w/ ZSH & Oh My Zsh",
+      //   description: "Replaced by Ghostty, kept for reference",
+      //   url: "https://iterm2.com/",
+      //   deprecated: true,
+      // },
+      {
+        name: "OrbStack",
+        description: "Main container runtime now: faster and lighter",
+        url: "https://orbstack.dev/",
+      },
+      // Retired: replaced by OrbStack.
+      // {
+      //   name: "Docker Desktop",
+      //   description: "Replaced by OrbStack",
+      //   url: "https://www.docker.com/products/docker-desktop/",
+      //   deprecated: true,
+      // },
+      {
+        name: "Podman",
+        description: "Daemonless container runtime, kept alongside OrbStack",
+        url: "https://podman.io/",
       },
       {
         name: "TablePlus",
         description: "Database management tool",
         url: "https://tableplus.com/",
+      },
+      {
+        name: "MongoDB Compass",
+        description: "GUI for reading and poking at MongoDB collections",
+        url: "https://www.mongodb.com/products/tools/compass",
+      },
+      {
+        name: "Cyberduck",
+        description: "SFTP and S3 browser for servers and buckets",
+        url: "https://cyberduck.io/",
+      },
+      {
+        name: "pnpm",
+        description:
+          "Package manager for every JS project here, release-age cooldown on",
+        url: "https://pnpm.io/",
       },
       {
         name: "Homebrew",
@@ -157,23 +206,23 @@ export const usesData: UseCategory[] = [
     items: [
       {
         name: "f.lux",
-        description:
-          "Adjusts the color temperature of your screen based on the time of day",
+        description: "Warms the screen color temperature after dark",
+        url: "https://justgetflux.com/",
       },
-      // {
-      //   name: "MonitorControl",
-      //   description: "Adjusts the brightness of your screens",
-      //   url: "https://github.com/MonitorControl/MonitorControl#readme",
-      // },
+      {
+        name: "MonitorControl",
+        description: "Brightness and volume keys for external monitors",
+        url: "https://github.com/MonitorControl/MonitorControl",
+      },
       {
         name: "Hidden Bar",
-        description: "Hide the menu bar icons",
+        description: "Hides the menu bar icons that do not earn their space",
         url: "https://github.com/dwarvesf/hidden",
       },
       {
         name: "Stats",
-        description: "Monitor your system resources",
-        url: "https://github.com/exelban/stats",
+        description: "System resource monitor that lives in the menu bar",
+        url: "https://mac-stats.com/",
       },
       {
         name: "Raycast",
@@ -183,7 +232,7 @@ export const usesData: UseCategory[] = [
       {
         name: "Brave Browser",
         description: "Privacy-focused web browser for daily browsing",
-        url: "https://www.brave.com/",
+        url: "https://brave.com/",
       },
       // {
       //   name: "Zen Browser",
@@ -193,22 +242,22 @@ export const usesData: UseCategory[] = [
       {
         name: "Bitwarden",
         description: "Password manager for secure credential storage",
-        url: "https://www.bitwarden.com/",
+        url: "https://bitwarden.com/",
       },
       {
         name: "Discord",
         description: "Communication platform for daily interactions",
-        url: "https://www.discord.com/",
+        url: "https://discord.com/",
       },
       {
         name: "Notion",
-        description: "Productivity notes, tasks, and knowledge base",
+        description: "Shared docs, tasks, and anything with a database in it",
         url: "https://www.notion.com/",
       },
       {
         name: "Obsidian",
-        description: "Another productivity notes, tasks, and knowledge base",
-        url: "https://www.obsidian.md/",
+        description: "Local markdown vault for notes that stay private",
+        url: "https://obsidian.md/",
       },
       {
         name: "AppCleaner",
@@ -217,117 +266,141 @@ export const usesData: UseCategory[] = [
       },
       {
         name: "Tiles",
-        description: "MacOS missing window management",
-        url: "https://www.sempliva.com/tiles/",
+        description: "Window snapping that macOS still does not do",
+        url: "https://freemacsoft.net/tiles/",
       },
       {
-        name: "Flameshot",
-        description: "Screenshot utility",
-        url: "https://flameshot.org/",
+        name: "Screendrop",
+        description: "Screenshot sharing: fast captures, instant links",
+        url: "https://github.com/fayazara/Screendrop",
+      },
+      {
+        name: "AltTab",
+        description: "Alt-tab that switches windows, not whole apps",
+        url: "https://alt-tab.app/",
+      },
+      {
+        name: "Raindrop.io",
+        description: "Bookmark manager, synced across browsers and devices",
+        url: "https://raindrop.io/",
+      },
+      {
+        name: "The Unarchiver",
+        description: "Opens the archive formats macOS will not",
+        url: "https://theunarchiver.com/",
+      },
+      {
+        name: "Jotter",
+        description: "My own app: a fast, minimal notepad for quick thoughts",
+        url: "https://jotter.byurhannurula.com/",
       },
     ],
   },
-  {
-    title: "Self-Hosted Services - Infrastructure",
-    type: "list",
-    items: [
-      {
-        name: "Proxmox",
-        description:
-          "Virtualization platform for running virtual machines and containers",
-        url: "https://www.proxmox.com/",
-      },
-      {
-        name: "Nginx Proxy Manager",
-        description: "Reverse proxy with SSL certificate management",
-        url: "https://nginxproxymanager.com/",
-      },
-      {
-        name: "AdGuard Home",
-        description: "Network-wide ad and tracker blocking",
-        url: "https://adguard.com/en/adguard-home/overview.html",
-      },
-      {
-        name: "Cloudflare Tunnel",
-        description: "Secure remote access without port forwarding",
-        url: "https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/",
-      },
-      {
-        name: "Tailscale",
-        description: "Secure VPN for remote access to homelab",
-        url: "https://tailscale.com/",
-      },
-      {
-        name: "PocketID",
-        description:
-          "Self-hosted simple and easy-to-use OIDC provider that allows to authenticate with passkeys",
-        url: "https://pocket-id.org/",
-      },
-    ],
-  },
-  {
-    title: "Self-Hosted Services - Core",
-    type: "list",
-    items: [
-      {
-        name: "Home Assistant",
-        description: "Home automation and IoT device management",
-        url: "https://www.home-assistant.io/",
-      },
-      {
-        name: "Immich",
-        description: "Self-hosted photo and video backup solution",
-        url: "https://immich.app/",
-      },
-      {
-        name: "Vaultwarden",
-        description: "Self-hosted Bitwarden-compatible password manager",
-        url: "https://vaultwarden.org/",
-      },
-      {
-        name: "Navidrome",
-        description: "Personal music streaming server",
-        url: "https://navidrome.org/",
-      },
-      {
-        name: "FreshRSS",
-        description: "Self-hosted RSS reader to escape social media algorithms",
-        url: "https://freshrss.org/",
-      },
-      {
-        name: "Baikal",
-        description: "CalDAV and CardDAV server for calendars and contacts",
-        url: "https://sabre.io/baikal/",
-      },
-      {
-        name: "Papra",
-        description:
-          "Open Source simple and lightweight document management platform",
-        url: "https://papra.app/",
-      },
-    ],
-  },
-  {
-    title: "Self-Hosted Services - Monitoring",
-    type: "list",
-    items: [
-      {
-        name: "Glance Dashboard",
-        description: "Personal dashboard for monitoring services",
-        url: "https://github.com/glanceapp/glance",
-      },
-      {
-        name: "Uptime Kuma",
-        description: "Self-hosted monitoring tool for service uptime",
-        url: "https://github.com/louislam/uptime-kuma",
-      },
-      {
-        name: "Beszel",
-        description: "Self-hosted simple, lightweight server monitoring",
-        url: "https://www.beszel.dev/",
-      },
-    ],
-  },
+  // {
+  //   title: "Self-Hosted Services - Infrastructure",
+  //   type: "list",
+  //   note: "Moving to its own /homelab page soon; listed here until then.",
+  //   items: [
+  //     {
+  //       name: "Proxmox",
+  //       description:
+  //         "Virtualization platform for running virtual machines and containers",
+  //       url: "https://www.proxmox.com/",
+  //     },
+  //     {
+  //       name: "Nginx Proxy Manager",
+  //       description: "Reverse proxy with SSL certificate management",
+  //       url: "https://nginxproxymanager.com/",
+  //     },
+  //     {
+  //       name: "AdGuard Home",
+  //       description: "Network-wide ad and tracker blocking",
+  //       url: "https://adguard.com/en/adguard-home/overview.html",
+  //     },
+  //     {
+  //       name: "Cloudflare Tunnel",
+  //       description: "Secure remote access without port forwarding",
+  //       url: "https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/",
+  //     },
+  //     {
+  //       name: "Tailscale",
+  //       description: "Stepping back for now; Cloudflare Tunnel covers remote access",
+  //       url: "https://tailscale.com/",
+  //       deprecated: true,
+  //     },
+  //     {
+  //       name: "PocketID",
+  //       description:
+  //         "Self-hosted simple and easy-to-use OIDC provider that allows to authenticate with passkeys",
+  //       url: "https://pocket-id.org/",
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: "Self-Hosted Services - Core",
+  //   type: "list",
+  //   note: "Moving to its own /homelab page soon; listed here until then.",
+  //   items: [
+  //     {
+  //       name: "Home Assistant",
+  //       description: "Home automation and IoT device management",
+  //       url: "https://www.home-assistant.io/",
+  //     },
+  //     {
+  //       name: "Immich",
+  //       description: "Self-hosted photo and video backup solution",
+  //       url: "https://immich.app/",
+  //     },
+  //     {
+  //       name: "Vaultwarden",
+  //       description: "Self-hosted Bitwarden-compatible password manager",
+  //       url: "https://vaultwarden.org/",
+  //     },
+  //     {
+  //       name: "Navidrome",
+  //       description: "Personal music streaming server",
+  //       url: "https://navidrome.org/",
+  //     },
+  //     {
+  //       name: "FreshRSS",
+  //       description: "Self-hosted RSS reader to escape social media algorithms",
+  //       url: "https://freshrss.org/",
+  //     },
+  //     {
+  //       name: "Baikal",
+  //       description: "CalDAV and CardDAV server for calendars and contacts",
+  //       url: "https://sabre.io/baikal/",
+  //     },
+  //     {
+  //       name: "Papra",
+  //       description:
+  //         "Open Source simple and lightweight document management platform",
+  //       url: "https://papra.app/",
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: "Self-Hosted Services - Monitoring",
+  //   type: "list",
+  //   note: "Moving to its own /homelab page soon; listed here until then.",
+  //   items: [
+  //     {
+  //       name: "Glance Dashboard",
+  //       description: "Personal dashboard for monitoring services",
+  //       url: "https://github.com/glanceapp/glance",
+  //     },
+  //     {
+  //       name: "Uptime Kuma",
+  //       description: "Self-hosted monitoring tool for service uptime",
+  //       url: "https://github.com/louislam/uptime-kuma",
+  //     },
+  //     {
+  //       name: "Beszel",
+  //       description: "Self-hosted simple, lightweight server monitoring",
+  //       url: "https://www.beszel.dev/",
+  //     },
+  //   ],
+  // },
 ];
 
-export const USES_LAST_UPDATED = "December 2025";
+export const USES_LAST_UPDATED = "September 2026";

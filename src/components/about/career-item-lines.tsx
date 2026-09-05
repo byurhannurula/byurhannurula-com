@@ -25,7 +25,7 @@ export function CareerItemLines({
 }: CareerItemData) {
   const orgNode = orgUrl ? (
     <a
-      className="text-primary no-underline hover:underline"
+      className="link-inline"
       href={orgUrl}
       rel="noopener noreferrer"
       target="_blank"
@@ -104,7 +104,7 @@ export function CareerItemLines({
           className={cn("flex flex-wrap gap-1.5", highlights ? "mt-4" : "mt-3")}
         >
           {stack.map((item) => (
-            <TechChip key={item.name} {...item} showLabel />
+            <TechChip key={item} item={item} showLabel />
           ))}
         </div>
       ) : null}

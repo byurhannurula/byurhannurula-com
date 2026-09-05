@@ -12,6 +12,7 @@ import {
 import { HashScroll } from "@/components/hash-scroll";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
 import { MDXRenderer, TOCFloating } from "@/components/mdx";
+import { PageWrapper } from "@/components/page-wrapper";
 import { createBlogMetadata, SITE_CONFIG } from "@/config";
 import { getAllPosts, getSinglePost, type Post } from "@/lib/server";
 
@@ -80,7 +81,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
       <ReadingProgress />
       <HashScroll />
-      <div className="pt-8 pb-16">
+      <PageWrapper>
         {/* Header section */}
         <div>
           <div className="mb-5">
@@ -208,7 +209,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
           </div>
         )}
-      </div>
+      </PageWrapper>
     </>
   );
 }

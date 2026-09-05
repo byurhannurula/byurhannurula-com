@@ -7,12 +7,14 @@ import { env } from "@/env";
  *
  * /stats is rewritten to the analytics host (see next.config.mjs), so the
  * request is first-party: nothing to preconnect to, no third-party hostname
- * for a content blocker to match, and same-site cookie rules apply. Both
- * scripts derive their collect endpoints from their own src directory, so the
+ * for a content blocker to match, and same-site cookie rules apply. The
+ * script derives its collect endpoint from its own src directory, so the
  * rewrite is the whole configuration.
+ *
+ * Session replay (recorder.js) is deliberately not loaded: 57KB on every
+ * route, against no question it currently answers.
  */
 const SCRIPT = "/stats/script.js";
-const RECORDER = "/stats/recorder.js";
 
 export function UmamiAnalytics() {
   const websiteId = env.NEXT_PUBLIC_UMAMI_ID;
@@ -39,14 +41,6 @@ export function UmamiAnalytics() {
         id="umami-analytics"
         src={SCRIPT}
         strategy="afterInteractive"
-      />
-      {/* Session replay is 190KB and nothing on the page waits for it. */}
-      <Script
-        data-domains={domains}
-        data-website-id={websiteId}
-        id="umami-recorder"
-        src={RECORDER}
-        strategy="lazyOnload"
       />
     </>
   );

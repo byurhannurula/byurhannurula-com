@@ -15,7 +15,6 @@ export { default as GoogleCloud } from "./GoogleCloud";
 export { default as GraphQL } from "./GraphQL";
 export { default as Html } from "./Html";
 export { default as JavaScript } from "./JavaScript";
-export { default as Linux } from "./Linux";
 export { default as MDXIcon } from "./MDXIcon";
 export { default as MongoDB } from "./MongoDB";
 export { default as Motion } from "./Motion";

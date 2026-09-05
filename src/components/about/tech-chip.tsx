@@ -1,27 +1,19 @@
-import * as TechLogos from "@/components/icons";
-import type { StackItem } from "@/config/about";
+import { getStackItem, type StackKey } from "@/config/stack";
 
-interface TechChipProps extends StackItem {
+interface TechChipProps {
+  item: StackKey;
   /** Always show the label instead of revealing it on hover. */
   showLabel?: boolean;
 }
 
 /** Tech chip; icon-only by default, label revealed on hover or keyboard focus. */
-export function TechChip({ name, logo, showLabel = false }: TechChipProps) {
-  const Logo = logo ? TechLogos[logo] : null;
+export function TechChip({ item, showLabel = false }: TechChipProps) {
+  const { name, icon: Logo } = getStackItem(item);
 
-  if (Logo && showLabel) {
+  if (showLabel) {
     return (
       <span className="inline-flex h-8 items-center gap-2 rounded-md border border-border border-dashed bg-background-soft px-2.5 font-mono text-[12px] text-foreground transition-colors hover:border-primary">
         <Logo className="size-4 shrink-0" aria-hidden="true" />
-        {name}
-      </span>
-    );
-  }
-
-  if (!Logo) {
-    return (
-      <span className="inline-flex h-8 items-center rounded-md border border-border border-dashed bg-background-soft px-2.5 font-mono text-[12px] text-foreground">
         {name}
       </span>
     );

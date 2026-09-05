@@ -1,9 +1,20 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "pnpm start",
+      "startServerCommand": "pnpm start:standalone",
       "startServerReadyPattern": "Ready in",
-      "url": ["http://localhost:3000/", "http://localhost:3000/notes"],
+      "url": [
+        "http://localhost:3000/",
+        "http://localhost:3000/notes",
+        "http://localhost:3000/notes/complete-unifi-homelab-guide",
+        "http://localhost:3000/notes/tag/homelab",
+        "http://localhost:3000/uses",
+        "http://localhost:3000/about",
+        "http://localhost:3000/projects",
+        "http://localhost:3000/shorts",
+        "http://localhost:3000/links",
+        "http://localhost:3000/colophon"
+      ],
       "numberOfRuns": 3,
       "settings": {
         "preset": "desktop"

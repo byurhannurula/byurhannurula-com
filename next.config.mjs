@@ -56,12 +56,10 @@ const nextConfig = {
   /*
    * Analytics served from this origin.
    *
-   * Both umami scripts derive their collect endpoints from their own src
-   * directory -- script.js posts to <dir>/api/send, recorder.js to
-   * <dir>/api/record -- so proxying the directory is all it takes: no
+   * script.js derives its collect endpoint from its own src directory and
+   * posts to <dir>/api/send, so proxying the directory is all it takes: no
    * data-host-url, no second hostname to preconnect to, and nothing for a
-   * content blocker to match on. The api rewrite is a wildcard because the
-   * recorder also reads /api/websites/<id>/recorder.
+   * content blocker to match on.
    */
   async rewrites() {
     const host = process.env.UMAMI_HOST?.replace(/\/$/, "");
@@ -69,8 +67,7 @@ const nextConfig = {
 
     return [
       { source: "/stats/script.js", destination: `${host}/script.js` },
-      { source: "/stats/recorder.js", destination: `${host}/recorder.js` },
-      { source: "/stats/api/:path*", destination: `${host}/api/:path*` },
+      { source: "/stats/api/send", destination: `${host}/api/send` },
     ];
   },
   async headers() {
@@ -115,15 +112,6 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value:
               "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://*.upstash.io https://api.github.com https://github-contributions-api.jogruber.de; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
-          },
-        ],
-      },
-      {
-        source: "/_next/static/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
           },
         ],
       },

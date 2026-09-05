@@ -2,6 +2,7 @@ import { ArrowRight, Copy, Mail, Search } from "lucide-react";
 import { CareerItem } from "@/components/about/career-item";
 import { CareerItemLines } from "@/components/about/career-item-lines";
 import { Annotated } from "@/components/annotated";
+import { ContrastMatrix } from "@/components/design/contrast-matrix";
 import { HighlightedCode } from "@/components/design/highlighted-code";
 import { Replay } from "@/components/design/replay";
 import { Sample, Spec, Swatch, TokenValue } from "@/components/design/spec";
@@ -264,6 +265,14 @@ export default async function DesignSystemPage() {
               </div>
             ))}
           </div>
+        </Spec>
+
+        <Spec
+          index="01b"
+          title="contrast"
+          intro="Every text token against both grounds, in all four modes at once, measured off the DOM. WCAG AA for body text is 4.5:1; anything under it is flagged."
+        >
+          <ContrastMatrix />
         </Spec>
 
         <Spec

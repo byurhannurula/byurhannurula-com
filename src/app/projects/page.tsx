@@ -113,7 +113,7 @@ function ProjectCard({ project }: { project: Project }) {
           {project.category === "homelab" && "Homelab"}
           {project.category === "3dprint" && "3D Printing"}
         </div>
-        <h3 className="mb-1 font-medium">{project.title}</h3>
+        <h2 className="mb-1 font-medium">{project.title}</h2>
         <p className="mb-3 line-clamp-2 text-muted-foreground text-sm">
           {project.description}
         </p>

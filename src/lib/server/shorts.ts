@@ -37,8 +37,8 @@ export const getAllShorts = cache((): Omit<Short, "content">[] => {
     .filter((s): s is Omit<Short, "content"> => s !== null)
     .sort(
       (a, b) =>
-        new Date(b!.frontmatter.date).getTime() -
-        new Date(a!.frontmatter.date).getTime()
+        new Date(b.frontmatter.date).getTime() -
+        new Date(a.frontmatter.date).getTime()
     );
 
   return shorts;

@@ -16,7 +16,7 @@ export function CareerItem({
       href={orgUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-primary no-underline hover:underline"
+      className="link-inline"
     >
       {org}
     </a>
@@ -73,7 +73,7 @@ export function CareerItem({
           <p className="label-mono mb-1.5">tools</p>
           <div className="flex flex-wrap gap-1.5">
             {stack.map((item) => (
-              <TechChip key={item.name} {...item} />
+              <TechChip key={item} item={item} />
             ))}
           </div>
         </div>

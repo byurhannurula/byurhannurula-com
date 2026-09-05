@@ -1,5 +1,5 @@
 export * from "./journey";
 export * from "./metadata";
 export * from "./site";
-export * from "./skills";
+export * from "./stack";
 export * from "./uses";

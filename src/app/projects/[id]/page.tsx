@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GithubIcon } from "@/components/icons/social";
+import { PageWrapper } from "@/components/page-wrapper";
 
 export default function ProjectDetailPage({
   params,
@@ -25,241 +26,227 @@ export default function ProjectDetailPage({
   );
 
   return (
-    <div className="pt-24 pb-16">
-      <div className="mx-auto max-w-screen-md px-6">
-        <div className="mb-8 animate-fade-in">
-          <Link
-            href="/projects"
-            className="group inline-flex items-center gap-1 font-medium font-mono text-foreground text-xs uppercase tracking-wider"
+    <PageWrapper>
+      <div className="mb-8 animate-fade-in">
+        <Link
+          href="/projects"
+          className="group inline-flex items-center gap-1 font-medium font-mono text-foreground text-xs uppercase tracking-wider"
+        >
+          <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
+          Back to projects
+        </Link>
+      </div>
+
+      <div className="mb-8 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+        <h1 className="font-medium font-mono text-3xl md:text-4xl">
+          {project.title}
+        </h1>
+        <p className="mt-4 text-base text-muted-foreground leading-relaxed">
+          {project.description}
+        </p>
+
+        <div className="mt-6 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full bg-muted px-3 py-1 text-muted-foreground text-xs"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-4">
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 font-medium font-mono text-primary-foreground text-xs transition-colors hover:bg-primary/90"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              Live Demo
+            </a>
+          )}
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 font-medium font-mono text-foreground text-xs transition-colors hover:bg-muted/80"
+            >
+              <GithubIcon className="h-3.5 w-3.5" />
+              View Code
+            </a>
+          )}
+        </div>
+      </div>
+
+      <div className="mb-8 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+        <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-muted">
+          <Image
+            src={project.image || "/placeholder.svg?height=400&width=600"}
+            alt={project.title}
+            width={720}
+            height={405}
+            className="h-full w-full object-cover"
+          />
+        </div>
+      </div>
+
+      <div className="mb-8 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+        <div className="mb-6 flex border-b">
+          <button
+            type="button"
+            onClick={() => setActiveTab("overview")}
+            className={`px-4 py-2 font-medium text-sm transition-colors ${
+              activeTab === "overview"
+                ? "border-primary border-b-2 text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
           >
-            <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
-            Back to projects
-          </Link>
+            Overview
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("features")}
+            className={`px-4 py-2 font-medium text-sm transition-colors ${
+              activeTab === "features"
+                ? "border-primary border-b-2 text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Features
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("tech")}
+            className={`px-4 py-2 font-medium text-sm transition-colors ${
+              activeTab === "tech"
+                ? "border-primary border-b-2 text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Tech Stack
+          </button>
         </div>
 
-        <div
-          className="mb-8 animate-fade-in"
-          style={{ animationDelay: "0.2s" }}
-        >
-          <h1 className="font-medium font-mono text-3xl md:text-4xl">
-            {project.title}
-          </h1>
-          <p className="mt-4 text-base text-muted-foreground leading-relaxed">
-            {project.description}
-          </p>
-
-          <div className="mt-6 flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full bg-muted px-3 py-1 text-muted-foreground text-xs"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-4">
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 font-medium font-mono text-primary-foreground text-xs transition-colors hover:bg-primary/90"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Live Demo
-              </a>
-            )}
-            {project.githubUrl && (
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 font-medium font-mono text-foreground text-xs transition-colors hover:bg-muted/80"
-              >
-                <GithubIcon className="h-3.5 w-3.5" />
-                View Code
-              </a>
-            )}
-          </div>
-        </div>
-
-        <div
-          className="mb-8 animate-fade-in"
-          style={{ animationDelay: "0.3s" }}
-        >
-          <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-muted">
-            <Image
-              src={project.image || "/placeholder.svg?height=400&width=600"}
-              alt={project.title}
-              width={720}
-              height={405}
-              className="h-full w-full object-cover"
-            />
-          </div>
-        </div>
-
-        <div
-          className="mb-8 animate-fade-in"
-          style={{ animationDelay: "0.4s" }}
-        >
-          <div className="mb-6 flex border-b">
-            <button
-              type="button"
-              onClick={() => setActiveTab("overview")}
-              className={`px-4 py-2 font-medium text-sm transition-colors ${
-                activeTab === "overview"
-                  ? "border-primary border-b-2 text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+        <div className="space-y-4">
+          {activeTab === "overview" && (
+            <div
+              className="animate-fade-in text-base leading-relaxed"
+              style={{ animationDelay: "0.5s" }}
             >
-              Overview
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("features")}
-              className={`px-4 py-2 font-medium text-sm transition-colors ${
-                activeTab === "features"
-                  ? "border-primary border-b-2 text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              <p>{project.overview}</p>
+              {project.role && (
+                <div className="mt-4">
+                  <h3 className="font-medium text-lg">My Role</h3>
+                  <p className="mt-2">{project.role}</p>
+                </div>
+              )}
+              {project.challenge && (
+                <div className="mt-4">
+                  <h3 className="font-medium text-lg">Challenge</h3>
+                  <p className="mt-2">{project.challenge}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === "features" && (
+            <div
+              className="animate-fade-in text-base leading-relaxed"
+              style={{ animationDelay: "0.6s" }}
             >
-              Features
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("tech")}
-              className={`px-4 py-2 font-medium text-sm transition-colors ${
-                activeTab === "tech"
-                  ? "border-primary border-b-2 text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Tech Stack
-            </button>
-          </div>
-
-          <div className="space-y-4">
-            {activeTab === "overview" && (
-              <div
-                className="animate-fade-in text-base leading-relaxed"
-                style={{ animationDelay: "0.5s" }}
-              >
-                <p>{project.overview}</p>
-                {project.role && (
-                  <div className="mt-4">
-                    <h3 className="font-medium text-lg">My Role</h3>
-                    <p className="mt-2">{project.role}</p>
-                  </div>
-                )}
-                {project.challenge && (
-                  <div className="mt-4">
-                    <h3 className="font-medium text-lg">Challenge</h3>
-                    <p className="mt-2">{project.challenge}</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === "features" && (
-              <div
-                className="animate-fade-in text-base leading-relaxed"
-                style={{ animationDelay: "0.6s" }}
-              >
-                <ul className="space-y-3 text-base leading-relaxed">
-                  {project.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {activeTab === "tech" && (
-              <div
-                className="animate-fade-in text-base leading-relaxed"
-                style={{ animationDelay: "0.7s" }}
-              >
-                {project.techStack.map((category) => (
-                  <div key={category.name}>
-                    <h3 className="font-medium font-mono text-sm uppercase tracking-wider">
-                      {category.name}
-                    </h3>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {category.items.map((item) => (
-                        <span
-                          key={item}
-                          className="rounded-full bg-muted px-3 py-1 text-muted-foreground text-sm"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+              <ul className="space-y-3 text-base leading-relaxed">
+                {project.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    <span>{feature}</span>
+                  </li>
                 ))}
-              </div>
-            )}
-          </div>
-        </div>
+              </ul>
+            </div>
+          )}
 
-        {project.images && project.images.length > 0 && (
-          <div
-            className="mb-8 animate-fade-in"
-            style={{ animationDelay: "0.8s" }}
-          >
-            <h3 className="mb-4 font-medium font-mono text-sm uppercase tracking-wider">
-              Project Gallery
-            </h3>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {project.images.map((image, index) => (
-                <div
-                  key={index}
-                  className="overflow-hidden rounded-lg bg-muted"
-                >
-                  <Image
-                    src={image || "/placeholder.svg"}
-                    alt={`${project.title} screenshot ${index + 1}`}
-                    width={350}
-                    height={200}
-                    className="h-full w-full object-cover transition-transform hover:scale-105"
-                  />
+          {activeTab === "tech" && (
+            <div
+              className="animate-fade-in text-base leading-relaxed"
+              style={{ animationDelay: "0.7s" }}
+            >
+              {project.techStack.map((category) => (
+                <div key={category.name}>
+                  <h3 className="font-medium font-mono text-sm uppercase tracking-wider">
+                    {category.name}
+                  </h3>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {category.items.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full bg-muted px-3 py-1 text-muted-foreground text-sm"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-        <div className="mt-12">
-          <h3 className="mb-4 font-medium font-mono text-sm uppercase tracking-wider">
-            Other Projects
-          </h3>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {projects
-              .filter((p) => p.id !== params.id)
-              .slice(0, 2)
-              .map((project, _index) => (
-                <Link
-                  key={project.id}
-                  href={`/projects/${project.id}`}
-                  className="group block"
-                >
-                  <div className="rounded-lg border bg-card p-4 transition-colors hover:border-primary">
-                    <h3 className="font-medium text-base group-hover:text-primary">
-                      {project.title}
-                    </h3>
-                    <p className="mt-2 line-clamp-2 text-muted-foreground text-sm">
-                      {project.description}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-          </div>
+          )}
         </div>
       </div>
-    </div>
+
+      {project.images && project.images.length > 0 && (
+        <div
+          className="mb-8 animate-fade-in"
+          style={{ animationDelay: "0.8s" }}
+        >
+          <h3 className="mb-4 font-medium font-mono text-sm uppercase tracking-wider">
+            Project Gallery
+          </h3>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {project.images.map((image, index) => (
+              <div key={image} className="overflow-hidden rounded-lg bg-muted">
+                <Image
+                  src={image || "/placeholder.svg"}
+                  alt={`${project.title} screenshot ${index + 1}`}
+                  width={350}
+                  height={200}
+                  className="h-full w-full object-cover transition-transform hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="mt-12">
+        <h3 className="mb-4 font-medium font-mono text-sm uppercase tracking-wider">
+          Other Projects
+        </h3>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {projects
+            .filter((p) => p.id !== params.id)
+            .slice(0, 2)
+            .map((project, _index) => (
+              <Link
+                key={project.id}
+                href={`/projects/${project.id}`}
+                className="group block"
+              >
+                <div className="rounded-lg border bg-card p-4 transition-colors hover:border-primary">
+                  <h3 className="font-medium text-base group-hover:text-primary">
+                    {project.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 text-muted-foreground text-sm">
+                    {project.description}
+                  </p>
+                </div>
+              </Link>
+            ))}
+        </div>
+      </div>
+    </PageWrapper>
   );
 }
 

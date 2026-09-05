@@ -1,36 +1,35 @@
 import { PageWrapper } from "@/components/page-wrapper";
-import { UsesCategory } from "@/components/uses";
 import { createMetadata, USES_LAST_UPDATED, usesData } from "@/config";
+
+import { UsesFilter } from "./uses-filter";
 
 export const metadata = createMetadata("/uses");
 
 export default function UsesPage() {
   return (
     <PageWrapper>
-      <div className="mb-8 animate-fade-in">
+      <div className="mb-8">
         <div className="flex items-center justify-between">
           <h1>Uses</h1>
-          <div className="text-muted-foreground text-xs">
-            Last updated: {USES_LAST_UPDATED}
-          </div>
+          <span className="label-mono">updated {USES_LAST_UPDATED}</span>
         </div>
         <p className="mt-2 text-muted-foreground">
           Tools, gear, and services I use for development, productivity, and my
-          homelab setup.
+          homelab setup. The shell, editor and terminal config behind them lives
+          in{" "}
+          <a
+            href="https://github.com/byurhannurula/dotfiles"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link-inline"
+          >
+            dotfiles
+          </a>
+          .
         </p>
       </div>
 
-      <div className="mb-12 space-y-12">
-        {usesData.map((category, categoryIndex) => (
-          <UsesCategory
-            key={category.title}
-            title={category.title}
-            items={category.items}
-            index={categoryIndex}
-            type={category.type || "grid"}
-          />
-        ))}
-      </div>
+      <UsesFilter categories={usesData} />
     </PageWrapper>
   );
 }
