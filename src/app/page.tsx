@@ -7,7 +7,7 @@ import { PageWrapper } from "@/components/page-wrapper";
 import { RowLink } from "@/components/row-link";
 import { SectionHeading } from "@/components/section-heading";
 import { createMetadata } from "@/config";
-import { getFeaturedProjects } from "@/config/projects";
+import { getFeaturedProjects, hasDetailPage } from "@/config/projects";
 import { getAllPosts } from "@/lib/server";
 
 export const metadata = createMetadata("/");
@@ -81,14 +81,25 @@ export default function Home() {
           {projects.map((project) => (
             <RowLink
               key={project.slug}
-              href={project.github ?? project.url ?? "/projects"}
-              external={Boolean(project.github ?? project.url)}
+              href={
+                hasDetailPage(project)
+                  ? `/projects/${project.slug}`
+                  : (project.github ?? project.url ?? "/projects")
+              }
+              external={!hasDetailPage(project)}
               title={project.title}
-              subtitle={project.description}
+              subtitle={project.tagline}
               meta={project.status}
             />
           ))}
         </div>
+        <Link
+          href="/projects"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-background-soft px-3 py-2.5 font-mono text-[12.5px] text-muted-foreground no-underline transition-colors hover:border-primary hover:border-dashed hover:text-foreground"
+        >
+          all projects
+          <span aria-hidden="true">→</span>
+        </Link>
       </PageWrapper>
     </>
   );

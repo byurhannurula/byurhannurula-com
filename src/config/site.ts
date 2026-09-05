@@ -90,10 +90,10 @@ export const SOCIAL_LINKS = [
 export const NAVIGATION_ITEMS = [
   { name: "home", path: "/" },
   { name: "notes", path: "/notes" },
+  { name: "projects", path: "/projects" },
   { name: "uses", path: "/uses" },
   { name: "about", path: "/about" },
   // Hidden pages - uncomment when ready:
-  // { name: "projects", path: "/projects" },
   // { name: "shorts", path: "/shorts" },
   // { name: "links", path: "/links" },
   // { name: "statistics", path: "/statistics" },

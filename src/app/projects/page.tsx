@@ -1,230 +1,124 @@
-"use client";
-
-import { ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+
 import { GithubIcon } from "@/components/icons/social";
-
 import { PageWrapper } from "@/components/page-wrapper";
+import { SectionHeading } from "@/components/section-heading";
+import { createMetadata } from "@/config";
+import { hasDetailPage, PROJECTS } from "@/config/projects";
+import { cn } from "@/lib/utils";
 
-type ProjectCategory = "all" | "dev" | "side" | "homelab" | "3dprint";
-
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  image?: string;
-  category: ProjectCategory;
-  tags: string[];
-  github?: string;
-  url?: string;
-  featured?: boolean;
-}
+export const metadata = createMetadata("/projects");
 
 export default function ProjectsPage() {
-  const [selectedCategory, setSelectedCategory] =
-    useState<ProjectCategory>("all");
-
-  const filteredProjects =
-    selectedCategory === "all"
-      ? projects
-      : projects.filter((p) => p.category === selectedCategory);
-
-  const categories: { key: ProjectCategory; label: string }[] = [
-    { key: "all", label: "All" },
-    { key: "dev", label: "Development" },
-    { key: "side", label: "Side Projects" },
-    { key: "homelab", label: "Homelab" },
-    { key: "3dprint", label: "3D Printing" },
-  ];
+  const shipped = PROJECTS.filter(hasDetailPage);
+  const rest = PROJECTS.filter((project) => !hasDetailPage(project));
 
   return (
     <PageWrapper>
-      <div className="mb-12 animate-fade-in">
+      <div className="mb-8">
         <h1>Projects</h1>
         <p className="mt-2 text-muted-foreground">
-          Things I&apos;ve built, tinkered with, and experimented on.
+          Things I have built, tinkered with, and experimented on.
         </p>
       </div>
 
-      {/* Category Filter */}
-      <div className="mb-10 flex flex-wrap gap-2">
-        {categories.map((cat) => (
-          <button
-            type="button"
-            key={cat.key}
-            onClick={() => setSelectedCategory(cat.key)}
-            className={`rounded-full px-4 py-1.5 font-medium text-xs transition-colors ${
-              selectedCategory === cat.key
-                ? "bg-primary text-primary-foreground"
-                : "bg-muted text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </div>
+      <section>
+        <SectionHeading>apps and extensions</SectionHeading>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {shipped.map((project) => (
+            <Link
+              key={project.slug}
+              href={`/projects/${project.slug}`}
+              className="group relative block aspect-[16/10] overflow-hidden rounded-xl border border-border no-underline"
+            >
+              {(project.cardImage ?? project.shots?.[0]?.src) && (
+                <Image
+                  src={(project.cardImage ?? project.shots?.[0]?.src) as string}
+                  alt=""
+                  width={2000}
+                  height={1406}
+                  sizes="(max-width: 640px) 100vw, 336px"
+                  className={cn(
+                    "absolute inset-0 h-full w-full object-cover object-top",
+                    "transition-[scale] duration-300 ease-out group-hover:scale-[1.03]",
+                    "motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                  )}
+                />
+              )}
 
-      {/* Projects Grid */}
-      <div className="grid gap-6 sm:grid-cols-2">
-        {filteredProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-      </div>
+              {/* The label sits on the artwork, so it needs its own ground to
+                  stay legible whatever the screenshot happens to be. */}
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-background/95 via-background/70 to-transparent"
+              />
 
-      {filteredProjects.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">
-          No projects in this category yet.
-        </p>
-      )}
+              <span className="relative flex h-full flex-col p-3.5">
+                <span className="font-mono text-[11px] text-muted-foreground">
+                  {project.platforms?.[0] ?? project.status}
+                </span>
+                <span className="mt-0.5 font-semibold text-[15px] text-foreground">
+                  {project.title}
+                </span>
+
+                <span className="mt-auto flex items-end justify-end">
+                  <ArrowRight
+                    aria-hidden="true"
+                    className={cn(
+                      "size-4 shrink-0 -translate-x-1.5 text-primary opacity-0",
+                      "transition-[opacity,translate] duration-200 ease-out",
+                      "group-hover:translate-x-0 group-hover:opacity-100",
+                      "motion-reduce:translate-x-0 motion-reduce:transition-none"
+                    )}
+                  />
+                </span>
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <SectionHeading>repositories</SectionHeading>
+        <div>
+          {rest.map((project) => (
+            <a
+              key={project.slug}
+              href={project.github ?? project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hairline group flex items-center gap-3 px-2 py-3 no-underline transition-colors duration-150 ease-out hover:bg-background-soft motion-reduce:transition-none"
+            >
+              <GithubIcon
+                aria-hidden="true"
+                className="size-4 shrink-0 text-faint transition-colors group-hover:text-foreground motion-reduce:transition-none"
+              />
+              <span className="min-w-0 flex-1">
+                <span className="block font-medium text-[15px] text-foreground transition-colors group-hover:text-primary motion-reduce:transition-none">
+                  {project.title}
+                </span>
+                <span className="mt-0.5 block text-[13px] text-muted-foreground">
+                  {project.tagline}
+                </span>
+              </span>
+              <span className="label-mono hidden shrink-0 sm:block">
+                {project.status}
+              </span>
+              <ArrowRight
+                aria-hidden="true"
+                className={cn(
+                  "size-4 shrink-0 -translate-x-1.5 text-primary opacity-0",
+                  "transition-[opacity,translate] duration-200 ease-out",
+                  "group-hover:translate-x-0 group-hover:opacity-100",
+                  "motion-reduce:translate-x-0 motion-reduce:transition-none"
+                )}
+              />
+            </a>
+          ))}
+        </div>
+      </section>
     </PageWrapper>
   );
 }
-
-function ProjectCard({ project }: { project: Project }) {
-  return (
-    <div className="group relative overflow-hidden rounded-xl bg-muted/30">
-      {/* Image */}
-      {project.image ? (
-        <div className="aspect-16/10 overflow-hidden">
-          <Image
-            src={project.image}
-            alt={project.title}
-            width={600}
-            height={375}
-            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        </div>
-      ) : (
-        <div className="flex aspect-16/10 items-center justify-center bg-linear-to-br from-muted to-muted/50">
-          <span className="text-4xl opacity-30">🔧</span>
-        </div>
-      )}
-
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/20 to-transparent" />
-
-      {/* Content */}
-      <div className="absolute inset-x-0 bottom-0 p-4">
-        <div className="mb-1 font-medium text-[10px] text-primary uppercase tracking-wider">
-          {project.category === "dev" && "Development"}
-          {project.category === "side" && "Side Project"}
-          {project.category === "homelab" && "Homelab"}
-          {project.category === "3dprint" && "3D Printing"}
-        </div>
-        <h2 className="mb-1 font-medium">{project.title}</h2>
-        <p className="mb-3 line-clamp-2 text-muted-foreground text-sm">
-          {project.description}
-        </p>
-
-        {/* Tags */}
-        <div className="mb-3 flex flex-wrap gap-1.5">
-          {project.tags.slice(0, 4).map((tag) => (
-            <span
-              key={tag}
-              className="rounded bg-background/50 px-2 py-0.5 text-[10px] text-muted-foreground"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Links */}
-        <div className="flex items-center gap-3">
-          {project.github && (
-            <Link
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-foreground"
-            >
-              <GithubIcon className="size-3.5" />
-              <span>Code</span>
-            </Link>
-          )}
-          {project.url && (
-            <Link
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-muted-foreground text-xs transition-colors hover:text-foreground"
-            >
-              <ExternalLink className="size-3.5" />
-              <span>View</span>
-            </Link>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Project data - replace with your actual projects
-const projects: Project[] = [
-  // Development Projects
-  {
-    id: "portfolio",
-    title: "Personal Portfolio",
-    description:
-      "This website you're looking at. Built with Next.js 15, TypeScript, and Tailwind CSS.",
-    category: "dev",
-    tags: ["Next.js", "TypeScript", "Tailwind", "MDX"],
-    github: "https://github.com/byurhannurula/portfolio",
-    url: "https://byurhannurula.com",
-  },
-  {
-    id: "recheck",
-    title: "ReCheck Platform",
-    description:
-      "Blockchain-based document verification and secure data exchange platform.",
-    category: "dev",
-    tags: ["React", "TypeScript", "Blockchain", "Web3"],
-  },
-
-  // Side Projects
-  {
-    id: "dotfiles",
-    title: "Dotfiles",
-    description:
-      "My personal dotfiles for macOS - Neovim, Zsh, Tmux, and more.",
-    category: "side",
-    tags: ["Shell", "Neovim", "Lua", "Zsh"],
-    github: "https://github.com/byurhannurula/dotfiles",
-  },
-
-  // Homelab
-  {
-    id: "homelab",
-    title: "Homelab Infrastructure",
-    description:
-      "Self-hosted services running on Proxmox - media server, DNS, monitoring, and more.",
-    category: "homelab",
-    tags: ["Proxmox", "Docker", "Networking", "Linux"],
-  },
-  {
-    id: "pihole",
-    title: "Pi-hole DNS",
-    description:
-      "Network-wide ad blocking and local DNS resolution for all devices.",
-    category: "homelab",
-    tags: ["Pi-hole", "DNS", "Raspberry Pi", "Networking"],
-  },
-
-  // 3D Printing
-  {
-    id: "desk-organizer",
-    title: "Desk Organizer",
-    description:
-      "Custom designed desk organizer for cables, pens, and small items.",
-    category: "3dprint",
-    tags: ["Fusion 360", "PLA", "Functional"],
-  },
-  {
-    id: "phone-stand",
-    title: "Phone Stand",
-    description: "Minimalist phone stand with cable management.",
-    category: "3dprint",
-    tags: ["Fusion 360", "PETG", "Functional"],
-  },
-];
