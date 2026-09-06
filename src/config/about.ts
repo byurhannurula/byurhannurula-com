@@ -43,28 +43,28 @@ export const CAPABILITIES: Capability[] = [
   {
     name: "web development",
     description:
-      "Full-stack apps end to end — React/Next.js front-ends, Node services, the databases underneath.",
+      "Full-stack apps end to end: React/Next.js front-ends, Node services, the databases underneath.",
     why: "From empty repo to deployed product.",
   },
   {
     name: "api design",
     description:
-      "REST and GraphQL APIs that other people can actually build on — SDKs, auth flows, integrations.",
+      "REST and GraphQL APIs that other people can actually build on: SDKs, auth flows, integrations.",
   },
   {
     name: "system design",
     description:
-      "Data models, service boundaries, caching — systems that stay understandable end to end.",
+      "Data models, service boundaries, caching. Systems that stay understandable end to end.",
   },
   {
     name: "infra & self-hosting",
     description:
-      "Proxmox, Docker, reverse proxies, VLANs, backups with restore drills — run like production, at home.",
+      "Proxmox, Docker, reverse proxies, VLANs, backups with restore drills. Run like production, at home.",
   },
   {
     name: "automation",
     description:
-      "CI/CD pipelines, config-as-code, Home Assistant + ESPHome — if it happens twice, it gets scripted.",
+      "CI/CD pipelines, config-as-code, Home Assistant and ESPHome. If it happens twice, it gets scripted.",
   },
 ];
 
@@ -112,7 +112,7 @@ export const WORK: CareerItem[] = [
   {
     role: "Team Lead / Full-Stack Engineer",
     org: "ReCheck",
-    orgUrl: "https://recheck.io",
+    orgUrl: "https://recheck.io/",
     years: "2020 — now",
     description:
       "Six years and every layer of it: from intern to leading the team.",
@@ -149,7 +149,7 @@ export const WORK: CareerItem[] = [
     org: "freelance / student era",
     years: "~2018 — 2020",
     description:
-      "Gatsby & GitLab era — published gatsby-source-gitlab, built small tools, learned in public.",
+      "Gatsby and GitLab era. Published gatsby-source-gitlab, built small tools, learned in public.",
     stack: ["javascript", "react", "graphql", "html-css"],
   },
 ];
