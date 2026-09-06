@@ -161,7 +161,7 @@ function KeyValueTable({ rows }: { rows: KeyValueRow[] }) {
           key={row.label}
           // px-2 matches the mockup's `.kv td { padding: 9px 8px }`: the text
           // is inset from the section heading while the rule spans the row.
-          className="flex flex-col gap-0.5 border-border-dash border-b border-dashed px-2 py-[9px] sm:flex-row sm:gap-4"
+          className="hairline flex flex-col gap-0.5 px-2 py-[9px] sm:flex-row sm:gap-4"
         >
           <dt className="shrink-0 font-mono text-[12.5px] text-primary sm:w-40">
             {row.label}

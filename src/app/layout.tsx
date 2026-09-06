@@ -1,5 +1,4 @@
-import { GeistSans } from "geist/font/sans";
-import { JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import type React from "react";
 
 import "./globals.css";
@@ -12,17 +11,25 @@ import { MobileNav } from "@/components/mobile-nav";
 import { Navigation } from "@/components/navigation";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { ShortcutsDialog } from "@/components/shortcuts-dialog";
+import { SoundLayer } from "@/components/sound";
 import { ThemeProvider } from "@/components/theme-provider";
 import { GlobalShortcuts } from "@/components/theme-shortcut";
 import { Toaster } from "@/components/toaster";
 import { UmamiAnalytics } from "@/components/umami-analytics";
 import { createMetadata } from "@/config";
 import { LIGHT_MODE_SCRIPT, LIGHT_MODES } from "@/config/light-modes";
+import { RULES_SCRIPT } from "@/config/page-rules";
 import { getAllPosts, getAllTags } from "@/lib/server";
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -42,7 +49,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${jetBrainsMono.variable}`}
+      className={`${inter.variable} ${jetBrainsMono.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
@@ -51,6 +58,8 @@ export default function RootLayout({
             clock said last visit, so it is corrected from the current hour
             before anything paints. */}
         <script dangerouslySetInnerHTML={{ __html: LIGHT_MODE_SCRIPT }} />
+        {/* Same reason: the rules are drawn by the first frame. */}
+        <script dangerouslySetInnerHTML={{ __html: RULES_SCRIPT }} />
       </head>
       <body className="relative min-h-dvh bg-background font-sans">
         <ThemeProvider
@@ -74,6 +83,7 @@ export default function RootLayout({
           <Toaster />
           <ScrollToTop />
           <GlobalShortcuts />
+          <SoundLayer />
         </ThemeProvider>
         <UmamiAnalytics />
       </body>

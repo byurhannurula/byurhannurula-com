@@ -24,6 +24,7 @@ import {
 } from "@/components/mdx/table";
 import { TOCFloating } from "@/components/mdx/toc-floating";
 import { PageWrapper } from "@/components/page-wrapper";
+import { RulesToggle } from "@/components/rules-toggle";
 import { SocialCards } from "@/components/social-cards";
 import {
   Button,
@@ -327,8 +328,15 @@ export default async function DesignSystemPage() {
         <Spec
           index="04"
           title="borders and radii"
-          intro="Dashed separates, solid contains. That one rule decides every border here, and a dashed accent border is the house hover state for any bordered object."
+          intro="Dashed separates, solid contains. That one rule decides every border here, and a dashed accent border is the house hover state for any bordered object. The separating rules are painted rather than bordered, so their dash and gap are set by --rule-dash and --rule-gap, and one switch turns every one of them off."
         >
+          <div className="mb-5 flex items-center gap-3">
+            <RulesToggle />
+            <span className="text-[13px] text-muted-foreground">
+              the page reads as a plain column with them off
+            </span>
+          </div>
+
           <div className="grid gap-3 sm:grid-cols-2">
             <Sample label="1px dashed border-dash — separates">
               <span className="text-[13px] text-muted-foreground">
@@ -941,7 +949,7 @@ export default async function DesignSystemPage() {
         <Spec
           index="20"
           title="social previews"
-          intro="One card that travels between the icons instead of one card per icon. Hover the row; the GitHub graph is live, the other two are written down."
+          intro="One card that travels between the icons instead of one card per icon. The homepage row carries them, /about keeps the plain tiles, and the tile itself is the same in both. Hover the row; the GitHub graph is live, the other two are written down."
         >
           <VariantToggles
             bare
@@ -949,8 +957,8 @@ export default async function DesignSystemPage() {
             initial="row"
             label="social row"
             options={[
-              { id: "row", label: "icon row" },
-              { id: "cards", label: "hover cards" },
+              { id: "row", label: "plain, on /about" },
+              { id: "cards", label: "with cards, on /" },
             ]}
             variants={{
               row: <HeroLinks />,

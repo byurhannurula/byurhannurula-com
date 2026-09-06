@@ -11,10 +11,7 @@ export function SectionHeading({ children, action }: SectionHeadingProps) {
       <h2 className="font-mono font-semibold text-[14px] text-muted-foreground">
         {children}
       </h2>
-      <span
-        aria-hidden="true"
-        className="flex-1 border-border-dash border-t border-dashed"
-      />
+      <span aria-hidden="true" className="hairline-t flex-1" />
       {action}
     </div>
   );

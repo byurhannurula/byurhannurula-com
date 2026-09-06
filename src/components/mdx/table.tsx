@@ -52,10 +52,10 @@ export function TableRow({
     <tr
       {...props}
       className={cn(
-        // Separators between rows only. A border on the last row would sit a
+        // Separators between rows only. A rule on the last row would sit a
         // hairline above the wrapper's own edge and read as an empty strip.
-        "transition-colors last:border-0 hover:bg-background-soft/60",
-        "border-border-dash border-b border-dashed",
+        "transition-colors last:bg-none hover:bg-background-soft/60",
+        "hairline",
         className
       )}
     >

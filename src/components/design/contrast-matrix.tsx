@@ -148,7 +148,7 @@ function ModePanel({ mode }: { mode: LightMode }) {
 
       <table className="w-full border-collapse font-mono text-[11px]">
         <thead>
-          <tr className="hairline hairline-t">
+          <tr className="hairline-y">
             <th scope="col" className="px-3.5 py-1.5 text-left font-normal">
               token
             </th>

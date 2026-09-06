@@ -38,7 +38,10 @@ export function CareerItem({
       </p>
 
       {roles ? (
-        <ol className="mt-3 border-border-dash border-l border-dashed pl-3 font-mono text-[12px]">
+        // pl-[13px], not pl-3: the rule down the left is painted rather
+        // than bordered, so the padding has to carry the pixel the
+        // border used to contribute, or the dots land half off it.
+        <ol className="hairline-l mt-3 pl-[13px] font-mono text-[12px]">
           {roles.map((step, index) => {
             const isCurrent = index === roles.length - 1;
             return (

@@ -26,7 +26,7 @@ export function ShortcutsDialog() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-[440px] gap-0 border-border p-0 font-mono text-[13px] shadow-2xl outline-none [&>button]:hidden">
-        <div className="hairline-b flex items-center justify-between px-4 py-3">
+        <div className="hairline flex items-center justify-between px-4 py-3">
           <DialogTitle className="font-semibold text-[13px]">
             <span className="text-primary">{"// "}</span>keyboard shortcuts
           </DialogTitle>

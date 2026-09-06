@@ -10,7 +10,7 @@
 /* ============================================ */
 
 @theme inline {
-  --font-sans: var(--font-geist-sans), -apple-system, system-ui, sans-serif;
+  --font-sans: var(--font-sans), -apple-system, system-ui, sans-serif;
   --font-mono:
     var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 
@@ -48,6 +48,12 @@
   --container-editorial: 720px;
   /* Pitch of the backdrop dot grid. The theme wipe steps on this too. */
   --grid-pitch: 28px;
+
+  /* Rhythm of every structural rule on the page. A dashed border's dash and
+     gap are the browser's to pick and cannot be set, so the rules are painted
+     as repeating gradients instead and these two are the knobs. */
+  --rule-dash: 3px;
+  --rule-gap: 6px;
 }
 
 :root {
@@ -286,6 +292,29 @@
 /* Editorial primitives                          */
 /* ============================================ */
 
+/* One dash, one gap, repeated: the column's two side rules, every hairline and
+   the prose divider are all drawn from these, so the verticals and the
+   horizontals keep the same rhythm and one declaration can switch them off. */
+:root {
+  --rule-step: calc(var(--rule-dash) + var(--rule-gap));
+  --rule-v: repeating-linear-gradient(
+    to bottom,
+    var(--border-dash) 0 var(--rule-dash),
+    transparent var(--rule-dash) var(--rule-step)
+  );
+  --rule-h: repeating-linear-gradient(
+    to right,
+    var(--border-dash) 0 var(--rule-dash),
+    transparent var(--rule-dash) var(--rule-step)
+  );
+}
+
+/* Set from the footer switch, and from the head script before first paint. */
+[data-rules="off"] {
+  --rule-v: none;
+  --rule-h: none;
+}
+
 @utility container-editorial {
   position: relative;
   z-index: 1;
@@ -293,8 +322,13 @@
   max-width: var(--container-editorial);
   margin-inline: auto;
   padding-inline: 24px;
-  background: var(--background);
-  border-inline: 1px dashed var(--border-dash);
+  background-color: var(--background);
+  background-image: var(--rule-v), var(--rule-v);
+  background-repeat: no-repeat;
+  background-position:
+    left top,
+    right top;
+  background-size: 1px 100%;
 }
 
 /* A link that stays on the site. Departs from the one-accent rule on purpose:
@@ -305,11 +339,41 @@
 }
 
 @utility hairline {
-  border-bottom: 1px dashed var(--border-dash);
+  /* A rule painted as a background needs a box to paint in. Empty separator
+     spans have no intrinsic height, where a border would still have drawn. */
+  min-height: 1px;
+  background-image: var(--rule-h);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 1px;
 }
 
 @utility hairline-t {
-  border-top: 1px dashed var(--border-dash);
+  min-height: 1px;
+  background-image: var(--rule-h);
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 100% 1px;
+}
+
+@utility hairline-l {
+  min-width: 1px;
+  background-image: var(--rule-v);
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 1px 100%;
+}
+
+/* Both edges. Two classes on one element would fight over background-image,
+   which is a single property, so the pair gets a name of its own. */
+@utility hairline-y {
+  min-height: 1px;
+  background-image: var(--rule-h), var(--rule-h);
+  background-repeat: no-repeat;
+  background-position:
+    left top,
+    left bottom;
+  background-size: 100% 1px;
 }
 
 /* "// section" heading; the trailing dashed rule is a child so an action can sit after it */
@@ -374,6 +438,12 @@
 
 @utility label-mono {
   @apply font-mono text-[12px] text-faint;
+}
+
+/* A date or a status, set as a small hard-edged tag beside a row title. Solid
+   rather than dashed: it contains a value, it does not separate anything. */
+@utility label-pill {
+  @apply rounded-full border border-border px-2 py-px font-mono text-[10.5px] text-faint uppercase leading-[1.7] tracking-[0.08em] tabular-nums;
 }
 
 /* ============================================ */
@@ -611,7 +681,8 @@ code[data-theme*=" "] span {
 
 .prose hr {
   border: 0;
-  border-top: 1px dashed var(--border-dash);
+  height: 1px;
+  background-image: var(--rule-h);
   margin: 32px 0;
 }
 
