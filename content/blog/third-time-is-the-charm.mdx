@@ -1,0 +1,85 @@
+---
+title: "Third time is the charm"
+date: "2026-09-11"
+excerpt: "Two years, three rebuilds, one lesson: ship it unfinished. Why I tore the site down and why this version stays."
+coverImage: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&q=80"
+tags: ["meta", "writing", "playground"]
+toc: true
+featured: true
+---
+
+I redid everything because I stopped liking the old one. It looked like a starter template. Same orange accent as everyone else, same fade-in on scroll, no choices. It worked, but I never wanted to write in it.
+
+So I tore it down to one narrow column, two fonts, one green accent. Mono for structure, sans for prose. If it looks plain, that is the point. I want the words to do the work.
+
+This is the third iteration. Each time I made real progress, then I looked at it for a week and stopped liking it. Too generic. Too dark. Too clever. Wrong font. Wrong green. I told myself one more pass and then I will ship. That loop ran for almost two years.
+
+The pattern was always the same: build 80%, doubt 100%, shelve it. Work got busy, homelab broke, life happened in Ruse, and the site sat there unfinished because unfinished felt safer than done-but-imperfect.
+
+> Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.
+> -- Antoine de Saint-Exupéry
+
+What I actually like this time is what I removed. No hero animation. No card grid shouting for attention. Dashed hairlines instead of shadows. Lowercase section labels with a `//` in green. A dot grid you only see in the margins. A light switcher that follows the day — warm in the morning, plain at noon, lamp-lit at dusk, dark at night — instead of a blunt light/dark toggle. Small choices, but they feel like mine.
+
+And I finally accepted the real idea: this thing is never going to be done. So I am shipping it unfinished on purpose and polishing along the way. A typo fix counts. A better sentence counts. Version four, then five. The `byurhan.` wordmark survived a name change and three rebuilds already — some things stay, the rest can move.
+
+## What I want from this site
+
+Three things, in order:
+
+- **A place to think out loud.** Homelab notes, Next.js notes, small things I learn at work. Short is fine.
+- **A playground.** I want to try ideas in public without a redesign each time. New section? Just add it to the footer and see if it sticks.
+- **Proof of work.** Not a resume. Just a log that I build and maintain things.
+
+<Callout type="info" title="No CMS on purpose">
+  Posts are MDX files in the repo. No editor, no dashboard. If writing takes more than opening a file, I will stop writing.
+</Callout>
+
+## The playground plan
+
+For now the nav stays tiny: home, notes, uses, about. The rest lives in the footer or behind links while I test it:
+
+- `/homelab` — machines, services, topology tree
+- `/projects` — open source, tools, early stuff
+- `/shorts` — snippets too small for a full post
+- `/colophon` — how this is built and why it looks this way
+
+Some of that will ship. Some will get deleted. That is allowed here.
+
+<MDXImage
+  src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=1200&q=80"
+  alt="Desk with notebook and coffee"
+  caption="The whole setup: a notebook, coffee, and no more excuses."
+/>
+
+## How I will push myself to write more
+
+I am bad at writing regularly. Big essays stall me. So the rule is small:
+
+1. **One idea per post.** No ultimate guides unless I really mean it.
+2. **Publish rough.** A 300-word note beats a perfect draft that never ships.
+3. **Write what I just fixed.** If I debugged it at 1am, someone else will hit it too.
+
+> You do not have to be good. You do not have to walk on your knees for a hundred miles through the desert repenting.
+> -- Mary Oliver
+
+That quote is not about blogs, but it helps. Start ugly, keep going.
+
+## Taste, systems, and the details in between
+
+There is something else driving this rebuild: I want better taste, and I want to know where it comes from.
+
+It happens a lot. I open a site or a photo and I like it instantly, but I cannot say why. Is it the spacing? The type? The way the green shows up exactly twice and never a third time? I have opinions but no vocabulary. So I copy the surface and miss the decision underneath. That is how you end up with a template that looks right and feels like nothing.
+
+This site is my way to study that. Every choice here is small enough to explain: why the rule is dashed and not solid, why the column is 720px, why hover is a border change and never a shadow. Writing the reason down forces me to actually have one. Over time I hope the vocabulary sticks and I start seeing faster — in other people's work first, then in my own.
+
+Direction-wise, this year and the next one I want to go deeper in two places that rarely meet. On one side, system design and architecture: how services fit together, where state lives, what breaks at scale, how to keep something running that I actually depend on. My homelab is the lab for that. On the other side, design engineering: motion, typography, spacing, the tiny interactions that make software feel alive instead of assembled. This site is the lab for that.
+
+> Taste is the ability to discern what is excellent. It is not a gift but a skill, sharpened by attention.
+> -- Roughly after Ira Glass
+
+They sound separate, but to me they are the same habit: notice the detail, ask why it is there, try it yourself. A clean API boundary and a clean margin come from the same instinct. I am behind on both, and that is fine. That is what the playground is for.
+
+## What is next
+
+Next up is probably a real homelab post — what actually runs in Ruse right now, what broke, what I would not buy again. No promises on dates. But this time the site feels like mine, so I might actually follow through.
