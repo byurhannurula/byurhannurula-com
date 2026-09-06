@@ -26,8 +26,17 @@ export function TechChip({ item, showLabel = false }: TechChipProps) {
       className="group inline-flex h-8 items-center rounded-md border border-border border-dashed bg-background-soft px-2 transition-colors hover:border-primary focus-visible:border-primary"
     >
       <Logo className="size-4 shrink-0" aria-hidden="true" />
-      <span className="max-w-0 overflow-hidden whitespace-nowrap font-mono text-[12px] text-foreground opacity-0 transition-[max-width,margin,opacity] duration-200 group-hover:ml-2 group-hover:max-w-32 group-hover:opacity-100 group-focus-visible:ml-2 group-focus-visible:max-w-32 group-focus-visible:opacity-100">
-        {name}
+      {/*
+       * 0fr to 1fr, the same reveal ui/chip.tsx uses and for the same reason:
+       * max-width eases toward a width the label may never reach, so the last
+       * part of the animation is spent going nowhere.
+       */}
+      <span className="grid grid-cols-[0fr] transition-[grid-template-columns] duration-200 ease-out group-hover:grid-cols-[1fr] group-focus-visible:grid-cols-[1fr] motion-reduce:transition-none">
+        <span className="min-w-0 overflow-hidden">
+          <span className="whitespace-nowrap pl-2 font-mono text-[12px] text-foreground">
+            {name}
+          </span>
+        </span>
       </span>
     </span>
   );

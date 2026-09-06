@@ -83,7 +83,11 @@ export function UsesFilter({ categories }: { categories: UseCategory[] }) {
     initial: {},
     enter: {
       transition: animate
-        ? { staggerChildren: 0.022, delayChildren: 0.03 + index * 0.05 }
+        ? // 40ms apart, and only the first section waits. A filter tab is
+          // pressed tens of times, and the compounding per-section delay put
+          // the last row half a second behind the click with a spring still
+          // to settle.
+          { staggerChildren: 0.04, delayChildren: index === 0 ? 0.03 : 0 }
         : INSTANT,
     },
     exit: {
@@ -93,9 +97,15 @@ export function UsesFilter({ categories }: { categories: UseCategory[] }) {
     },
   });
 
+  // `transform` rather than the `y` shorthand: y is animated through rAF on
+  // the main thread, where a transform string is handed to the compositor.
   const itemVariants = {
-    initial: { opacity: 0, y: animate ? 8 : 0 },
-    enter: { opacity: 1, y: 0, transition: animate ? ENTER : INSTANT },
+    initial: { opacity: 0, transform: animate ? "translateY(8px)" : "none" },
+    enter: {
+      opacity: 1,
+      transform: "translateY(0px)",
+      transition: animate ? ENTER : INSTANT,
+    },
   };
 
   return (
@@ -142,12 +152,19 @@ export function UsesFilter({ categories }: { categories: UseCategory[] }) {
       <div className="relative">
         <AnimatePresence mode="popLayout">
           {visible.length === 0 && (
+            // An empty shelf is the one state on this page rare enough to
+            // spend a beat on, and it arrives as the outgoing sections leave.
+            // The populated case gets nothing: it is pressed far too often.
             <motion.p
               key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0, transform: "translateY(6px)" }}
+              animate={{ opacity: 1, transform: "translateY(0px)" }}
               exit={{ opacity: 0 }}
-              transition={animate ? { duration: 0.2 } : INSTANT}
+              transition={
+                animate
+                  ? { duration: 0.24, delay: 0.13, ease: "easeOut" }
+                  : INSTANT
+              }
               className="font-mono text-[12.5px] text-faint"
             >
               Nothing on this shelf yet.

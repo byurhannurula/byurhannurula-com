@@ -70,7 +70,7 @@ const resourceLinks: LinkItem[] = [
 export default function LinksPage() {
   return (
     <PageWrapper>
-      <div className="mb-12 animate-fade-in text-center">
+      <div className="mb-12 text-center">
         <h1>{SITE_CONFIG.name}</h1>
         <p className="mt-2 text-muted-foreground">
           Developer, Tech Geek & Thinker
@@ -139,7 +139,7 @@ function LinkCard({
   return (
     <Component
       href={link.url}
-      className="group flex items-center gap-4 rounded-xl border border-border/50 bg-muted/30 p-4 transition-all duration-200 hover:border-primary/30 hover:bg-muted/50"
+      className="group flex items-center gap-4 rounded-xl border border-border/50 bg-muted/30 p-4 transition-colors duration-200 hover:border-primary/30 hover:bg-muted/50"
       {...externalProps}
     >
       {link.icon && (

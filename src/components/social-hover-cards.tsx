@@ -152,7 +152,7 @@ export function SocialHoverCards({
           aria-label={item.label}
           // The same tile as the plain hero row: the card is the addition, not
           // a different kind of control.
-          className="group z-10 inline-flex size-9 items-center justify-center rounded-lg border border-border bg-background-soft text-muted-foreground transition-colors hover:border-primary hover:border-dashed hover:text-foreground focus-visible:border-primary focus-visible:text-foreground"
+          className="pressable icon-tile group z-10"
           href={item.href}
           key={item.label}
           onFocus={(event) => point(itemIndex, event.currentTarget)}
@@ -172,16 +172,20 @@ export function SocialHoverCards({
         <div
           aria-hidden="true"
           className={cn(
-            "absolute bottom-[calc(100%+0.5rem)] overflow-hidden rounded-xl border border-border bg-surface-raised shadow-xl",
-            "animate-fade-in",
+            "card-appear absolute bottom-[calc(100%+0.5rem)] left-0 overflow-hidden rounded-xl border border-border bg-surface-raised shadow-xl",
             animate &&
-              "transition-[left,width,height] duration-300 ease-out motion-reduce:transition-none"
+              "transition-[transform,width,height] duration-300 ease-out motion-reduce:transition-none"
           )}
           style={{
-            left: box.left,
+            /*
+             * The travel along the row is a transform, not `left`. This
+             * retargets on every icon the pointer crosses, and `left` lays out
+             * and paints the card each time where a transform composites.
+             * The -50% centring rides along in the same value.
+             */
+            transform: `translateX(calc(${box.left}px - 50%))`,
             width: box.width || undefined,
             height: box.height || undefined,
-            transform: "translateX(-50%)",
           }}
         >
           {swap ? (

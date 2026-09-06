@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { usePrefersReducedMotion } from "@/hooks";
 import { scrollToHeading } from "@/lib/scroll-to-heading";
 import { cn } from "@/lib/utils";
 
@@ -17,12 +18,18 @@ interface TOCFloatingProps {
   className?: string;
 }
 
-/** Matches the island easing from the reference: fast out, long settle. */
-const ISLAND_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+/** The house ease-out. Named here because these transitions are inline styles. */
+const ISLAND_EASE = "var(--ease-out)";
 const ISLAND_MS = 460;
 const COLLAPSED_WIDTH = 300;
 const OPEN_WIDTH = 420;
 const LINE_HEIGHT = 20;
+
+function rowTransition(delayMs: number, reduced: boolean) {
+  const travel = reduced ? 0 : 260;
+  const delay = reduced ? 0 : delayMs;
+  return `opacity ${travel}ms ${ISLAND_EASE} ${delay}ms, transform ${travel}ms ${ISLAND_EASE} ${delay}ms, background-color 150ms, color 150ms`;
+}
 
 export function TOCFloating({ className = "" }: TOCFloatingProps) {
   const [tocItems, setTocItems] = useState<TOCItem[]>([]);
@@ -30,6 +37,10 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  // Every transition below is an inline style, which a motion-reduce class
+  // cannot override, so the query is read here and folded into the durations.
+  const reduced = usePrefersReducedMotion();
+  const islandMs = reduced ? 0 : ISLAND_MS;
   const panelId = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -151,15 +162,12 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
           isVisible
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-16 opacity-0",
-          "motion-reduce:transition-none",
           className
         )}
         style={{
-          transition: `transform ${ISLAND_MS}ms ${ISLAND_EASE}, opacity 240ms ease-out`,
+          transition: `transform ${islandMs}ms ${ISLAND_EASE}, opacity ${reduced ? 0 : 240}ms ease-out`,
         }}
       >
-        {/* Explicit widths, so the island can actually animate its width —
-            w-auto has nothing to interpolate from. */}
         {/* surface-raised, not background-soft: the island sits over the footer
             dot field, where anything close to the page colour reads as
             translucent in both themes. */}
@@ -167,21 +175,27 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
             pill while short and as a panel once tall, so nothing needs to
             animate: interpolating border-radius fights the height clamp and
             bulges the corners mid-transition. */}
+        {/* Explicit widths, so the island can actually animate its width:
+            w-auto has nothing to interpolate from. Width and
+            grid-template-rows easing together is two layout properties per
+            frame under a backdrop-blur, which is why `contain` is here: it
+            keeps that work inside the island instead of letting it reach the
+            rest of the page. */}
         <nav
           id={panelId}
-          className="overflow-hidden rounded-3xl border border-border bg-surface-raised shadow-2xl motion-reduce:transition-none"
+          className="contain-[layout_paint] overflow-hidden rounded-3xl border border-border bg-surface-raised shadow-2xl"
           style={{
             width: `min(${isOpen ? OPEN_WIDTH : COLLAPSED_WIDTH}px, calc(100vw - 2rem))`,
-            transition: `width ${ISLAND_MS}ms ${ISLAND_EASE}`,
+            transition: `width ${islandMs}ms ${ISLAND_EASE}`,
           }}
         >
           {/* 0fr to 1fr animates to the content's real height, unlike max-h,
               which eases across a range the content never fills. */}
           <div
-            className="grid motion-reduce:transition-none"
+            className="grid"
             style={{
               gridTemplateRows: isOpen ? "1fr" : "0fr",
-              transition: `grid-template-rows ${ISLAND_MS}ms ${ISLAND_EASE}`,
+              transition: `grid-template-rows ${islandMs}ms ${ISLAND_EASE}`,
             }}
           >
             <div className="overflow-hidden">
@@ -192,9 +206,7 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
                 )}
               >
                 <div className="mb-1.5 flex items-center justify-between px-2">
-                  <span className="font-mono text-[11px] text-faint uppercase tracking-[0.08em]">
-                    on this page
-                  </span>
+                  <span className="label-micro">on this page</span>
                   <button
                     type="button"
                     onClick={close}
@@ -229,7 +241,13 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
                         item.level === 3 && "pl-7"
                       )}
                       style={{
-                        transition: `opacity 260ms ${ISLAND_EASE} ${isOpen ? 90 + index * 18 : 0}ms, transform 260ms ${ISLAND_EASE} ${isOpen ? 90 + index * 18 : 0}ms, background-color 150ms, color 150ms`,
+                        // 40ms apart so it reads as a cascade rather than a
+                        // smear, capped so a twenty-heading post does not
+                        // still be arriving most of a second after the tap.
+                        transition: rowTransition(
+                          isOpen ? Math.min(90 + index * 40, 300) : 0,
+                          reduced
+                        ),
                         opacity: isOpen ? 1 : 0,
                         transform: isOpen ? "none" : "translateY(6px)",
                       }}
@@ -275,10 +293,10 @@ export function TOCFloating({ className = "" }: TOCFloatingProps) {
 
             <span className="relative h-5 min-w-0 flex-1 overflow-hidden">
               <span
-                className="absolute inset-x-0 top-0 block motion-reduce:transition-none"
+                className="absolute inset-x-0 top-0 block"
                 style={{
                   transform: `translateY(-${activeIndex * LINE_HEIGHT}px)`,
-                  transition: `transform ${ISLAND_MS}ms ${ISLAND_EASE}`,
+                  transition: `transform ${islandMs}ms ${ISLAND_EASE}`,
                 }}
               >
                 {tocItems.map((item) => (

@@ -3,6 +3,8 @@
 import { Check, Copy } from "lucide-react";
 import { useRef, useState } from "react";
 
+import { cn } from "@/lib/utils";
+
 interface CodeBlockProps {
   children: React.ReactNode;
   "data-language"?: string;
@@ -39,20 +41,34 @@ export function CodeBlock({ children, raw, ...props }: CodeBlockProps) {
       <button
         type="button"
         onClick={copyToClipboard}
-        className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 rounded-sm border border-border bg-background px-2 py-1 font-mono text-[11px] text-muted-foreground opacity-0 transition-opacity hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
+        className="pressable absolute top-2.5 right-2.5 z-10 grid place-items-center rounded-sm border border-border bg-background px-2 py-1 font-mono text-[11px] text-muted-foreground opacity-0 hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
         aria-label="Copy code"
       >
-        {copied ? (
-          <>
-            <Check className="size-3 text-primary" />
-            <span className="text-primary">copied</span>
-          </>
-        ) : (
-          <>
-            <Copy className="size-3" />
-            <span>copy</span>
-          </>
-        )}
+        {/*
+         * Both states stacked in one grid cell, so the button is already the
+         * width of the wider word and does not resize under the pointer as it
+         * swaps. Each fades and lifts a few pixels rather than cutting.
+         */}
+        <span
+          className={cn(
+            "col-start-1 row-start-1 flex items-center gap-1.5 text-primary transition-[opacity,translate] duration-150 ease-out motion-reduce:transition-[opacity]",
+            copied
+              ? "translate-y-0 opacity-100"
+              : "-translate-y-[3px] opacity-0"
+          )}
+        >
+          <Check className="size-3" />
+          copied
+        </span>
+        <span
+          className={cn(
+            "col-start-1 row-start-1 flex items-center gap-1.5 transition-[opacity,translate] duration-150 ease-out motion-reduce:transition-[opacity]",
+            copied ? "translate-y-[3px] opacity-0" : "translate-y-0 opacity-100"
+          )}
+        >
+          <Copy className="size-3" />
+          copy
+        </span>
       </button>
 
       {/* rehype-pretty-code renders the title as a sibling figcaption, so the

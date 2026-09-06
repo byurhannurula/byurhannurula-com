@@ -30,13 +30,16 @@ export function ReadingProgress() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 z-50 h-1 w-full">
+    <div aria-hidden="true" className="fixed top-0 left-0 z-50 h-1 w-full">
+      {/*
+       * scaleX rather than width: this is written on every scroll frame, and a
+       * width change lays out and paints a full-width bar each time where a
+       * transform only composites. No transition either, since the value is
+       * already following the scroll.
+       */}
       <div
-        className="h-full bg-primary"
-        style={{
-          width: `${progress}%`,
-          transition: "width 50ms linear",
-        }}
+        className="h-full w-full origin-left bg-primary"
+        style={{ scale: `${progress / 100} 1` }}
       />
     </div>
   );

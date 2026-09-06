@@ -49,6 +49,20 @@
   /* Pitch of the backdrop dot grid. The theme wipe steps on this too. */
   --grid-pitch: 28px;
 
+  /*
+   * Motion, tokenised like everything else on this site. --ease-* is a Tailwind
+   * namespace, so these are the `ease-out` and `ease-in-out` utilities as well
+   * as the values hand-written CSS reaches for: one curve, named once.
+   *
+   * Durations are the three the interface actually uses. Anything slower than
+   * --duration-slow is a deliberate exception and should say why.
+   */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+
   /* Rhythm of every structural rule on the page. A dashed border's dash and
      gap are the browser's to pick and cannot be set, so the rules are painted
      as repeating gradients instead and these two are the knobs. */
@@ -248,7 +262,7 @@
   }
 
   h1 {
-    @apply text-[26px] tracking-[-0.5px];
+    @apply text-[26px] leading-[1.35] tracking-[-0.5px];
   }
 
   :focus-visible {
@@ -278,12 +292,26 @@
     html {
       scroll-behavior: auto;
     }
+
+    /*
+     * Gentled, not deleted. Movement is dropped by rewriting what is allowed
+     * to transition; colour and opacity still run, because a control that
+     * stops responding at all reads as broken rather than as calm.
+     *
+     * Nothing here carries !important. The blanket rule used to, which beat
+     * the two hand-written fallbacks further down this file and left the
+     * light-switch crossfade and the hover-card swap as dead code. A component
+     * that needs something other than this now simply says so.
+     */
     *,
     *::before,
     *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      animation-duration: 1ms;
+      animation-delay: 0ms;
+      animation-iteration-count: 1;
+      transition-property:
+        opacity, color, background-color, border-color, outline-color,
+        text-decoration-color, fill, stroke, box-shadow, filter;
     }
   }
 }
@@ -436,8 +464,101 @@
   }
 }
 
+/*
+ * Press feedback. The site had three :active states in the whole tree, all of
+ * them in the mobile nav, so a click anywhere else landed with nothing
+ * acknowledging it. Small on purpose: this fires tens of times a day.
+ *
+ * The scale stays on for touch, where press feedback matters most, and is
+ * dropped under reduced motion rather than snapping.
+ */
+@utility pressable {
+  /* One declaration owns the whole transition. A separate transition-colors on
+     the same element would replace this list rather than add to it. */
+  transition:
+    scale var(--duration-fast) var(--ease-out),
+    color var(--duration-fast),
+    background-color var(--duration-fast),
+    border-color var(--duration-fast),
+    filter var(--duration-fast);
+
+  &:active {
+    scale: 0.97;
+  }
+
+  /* Nested rather than written as a separate block, so it is guaranteed to sit
+     later in the same layer as the rule it overrides. */
+  @media (prefers-reduced-motion: reduce) {
+    &:active {
+      scale: 1;
+    }
+  }
+}
+
 @utility label-mono {
   @apply font-mono text-[12px] text-faint;
+}
+
+/* The smaller of the two: section eyebrows, panel headers, spec captions. */
+@utility label-micro {
+  @apply font-mono text-[11px] text-faint uppercase tracking-[0.08em];
+}
+
+/* A 36px square holding one icon: the social row, and anything that joins it.
+   The dashed accent edge is the house hover state for a bordered object. */
+@utility icon-tile {
+  @apply inline-flex size-9 items-center justify-center rounded-lg border border-border bg-background-soft text-muted-foreground;
+  @apply hover:border-primary hover:border-dashed hover:text-foreground;
+  @apply focus-visible:border-primary focus-visible:text-foreground;
+}
+
+/*
+ * The header's surface, once the page has moved under it.
+ *
+ * Painted by a pseudo-element that spans the viewport, not by the header's own
+ * background. The header lives inside the editorial column, and a band that
+ * stopped at the column edge cut a visible rectangle out of any full-bleed
+ * figure scrolling behind it.
+ *
+ * The blur is only switched on with the surface. Held at zero opacity it would
+ * still cost a compositing pass on every frame of every page, including the
+ * top of every page, where there is nothing behind it to blur. It snaps on
+ * under the cover of the fade, which is where nobody can see it arrive.
+ */
+@utility nav-surface {
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    left: 50%;
+    width: 100vw;
+    translate: -50% 0;
+    opacity: 0;
+    /* Opaque enough to read against a photograph. Glass that you can still
+       make out the picture through is glass you cannot read the nav on. */
+    background: color-mix(in oklab, var(--background) 88%, transparent);
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+
+  &[data-scrolled="true"]::before {
+    opacity: 1;
+    /* Unprefixed only: the transformer adds what the browser targets need,
+       and hand-writing the pair made it emit the -webkit- alias alone. */
+    backdrop-filter: blur(16px) saturate(140%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      transition: none;
+    }
+  }
+}
+
+/* The full-width row that ends a list: "all notes", "all projects". */
+@utility row-button {
+  @apply flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-background-soft px-3 py-2.5 font-mono text-[12.5px] text-muted-foreground no-underline transition-colors;
+  @apply hover:border-primary hover:border-dashed hover:text-foreground;
 }
 
 /* A date or a status, set as a small hard-edged tag beside a row title. Solid
@@ -757,19 +878,34 @@ code[data-theme*=" "] span {
 }
 
 .animate-fade-in,
-.animate-fade-in-delayed,
+.animate-fade-in-delayed {
+  animation: fade-in var(--duration-base) var(--ease-out) forwards;
+}
+
+/* Named for a scale it did not have: it mapped to the opacity-only keyframe. */
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
 .animate-fade-in-scale {
-  animation: fade-in 0.25s ease-out forwards;
+  animation: fade-in-scale var(--duration-base) var(--ease-out) forwards;
 }
 
 .animate-fade-in-up,
 .animate-fade-in-item {
-  animation: fade-in-up 0.25s ease-out forwards;
+  animation: fade-in-up var(--duration-base) var(--ease-out) forwards;
 }
 
 .stagger-children > * {
   opacity: 0;
-  animation: fade-in-up 0.25s ease-out forwards;
+  animation: fade-in-up var(--duration-base) var(--ease-out) forwards;
 }
 
 .stagger-children > :nth-child(n) {
@@ -802,6 +938,93 @@ code[data-theme*=" "] span {
 }
 .stagger-children > :nth-child(n + 9) {
   --i: 9;
+}
+
+/*
+ * The like button's kick.
+ *
+ * Declared once here rather than in two <style jsx global> blocks, which both
+ * mounted on notes/[slug] and fought over the same name. Short enough to be
+ * press feedback: the old 0.6s ease-in-out was four times the budget and
+ * started slow, which is the frame the reader is actually watching.
+ */
+@keyframes like {
+  40% {
+    scale: 1.25;
+  }
+  70% {
+    scale: 0.95;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+.animate-like {
+  animation: like var(--duration-slow) var(--ease-out);
+}
+
+/*
+ * The page arriving, on a real page load only.
+ *
+ * Gated on data-first-load, which the head script sets before first paint and
+ * removes once this has played (see config/page-enter.ts). Moving between
+ * routes inside the site keeps the same document, so it should read as the
+ * same page changing rather than as arriving somewhere new every time.
+ *
+ * The header goes first, then the page column a step behind it, then each row
+ * a step behind the one above.
+ *
+ * An element held at zero opacity does not count for Largest Contentful Paint,
+ * so the heading costs one step of delay and nothing more: the metric lands
+ * when it starts becoming visible, not when the fade finishes.
+ *
+ * `backwards` rather than a static `opacity: 0`. If the animation never runs
+ * the children keep their own opacity instead of staying invisible, which is
+ * how the old .stagger-children rule failed: the content was gone rather than
+ * unanimated. Under reduced motion the blanket rule collapses the duration and
+ * the delay, and the page simply appears.
+ */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+/* .enter-step is for anything outside the page column that should join the
+   cascade, which today is the site header at step 0. */
+[data-first-load] .enter-step,
+[data-first-load] .page-enter > * {
+  animation: page-enter var(--duration-slow) var(--ease-out) backwards;
+  animation-delay: calc(var(--enter-i, 0) * 55ms);
+}
+
+/* Step index only; the rule above decides whether anything uses it. */
+.page-enter > :nth-child(1) {
+  --enter-i: 1;
+}
+.page-enter > :nth-child(2) {
+  --enter-i: 2;
+}
+.page-enter > :nth-child(3) {
+  --enter-i: 3;
+}
+.page-enter > :nth-child(4) {
+  --enter-i: 4;
+}
+.page-enter > :nth-child(5) {
+  --enter-i: 5;
+}
+.page-enter > :nth-child(6) {
+  --enter-i: 6;
+}
+.page-enter > :nth-child(7) {
+  --enter-i: 7;
+}
+/* Capped: a long page should never be waiting on its own entrance. */
+.page-enter > :nth-child(n + 8) {
+  --enter-i: 8;
 }
 
 /* Terminal caret: 404 prompt, and the hero experiment in /lab. */
@@ -887,8 +1110,7 @@ html[data-light-switching]::view-transition-new(root) {
   mask-repeat: no-repeat;
   /* Strong ease-out: the circle leaves the control fast and settles at the
      edges, so the switch feels answered rather than played back. */
-  animation: light-open var(--light-switch-duration)
-    cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: light-open var(--light-switch-duration) var(--ease-out) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -900,6 +1122,22 @@ html[data-light-switching]::view-transition-new(root) {
   html[data-light-switching]::view-transition-new(root) {
     mask-image: none;
     animation: fade-in 160ms ease-out both;
+  }
+}
+
+/* The two bio lengths differ by a screen and a half, so the outgoing block
+   leaves quickly and the incoming one waits for the gap to close. */
+::view-transition-old(about-bio) {
+  animation: fade-out 120ms ease-out both;
+}
+
+::view-transition-new(about-bio) {
+  animation: fade-in var(--duration-base) 60ms var(--ease-out) both;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
   }
 }
 
@@ -931,12 +1169,31 @@ html[data-light-switching]::view-transition-new(root) {
   }
 }
 
+/* The card belongs to the icon under it, so it grows from that edge rather
+   than fading in over it. Scale, not transform: the element already carries a
+   translateX in its inline transform, and the two must not fight. */
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.card-appear {
+  transform-origin: bottom;
+  animation: card-appear var(--duration-base) var(--ease-out) both;
+}
+
 .card-body-in {
-  animation: card-body-in 300ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  animation: card-body-in var(--duration-slow) var(--ease-out) both;
 }
 
 .card-body-out {
-  animation: card-body-out 300ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  animation: card-body-out var(--duration-slow) var(--ease-out) both;
 }
 
 @media (prefers-reduced-motion: reduce) {

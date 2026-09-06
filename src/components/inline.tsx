@@ -8,15 +8,21 @@ interface ChipProps {
   className?: string;
 }
 
-/** Small inline pill for highlighting a word inside running text. */
+/**
+ * Small inline pill for highlighting a word inside running text.
+ *
+ * The accent tone carries no border. A green ring around a word in the middle
+ * of a paragraph read as a focused control rather than as emphasis, and the
+ * border plus its padding made the box tall enough to crowd the line above.
+ */
 export function Chip({ children, tone = "default", className }: ChipProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-sm border px-1.5 py-px align-[0.1em] font-mono text-[0.78em] transition-colors",
+        "inline-flex items-center rounded-sm px-1.5 align-[0.08em] font-mono text-[0.78em] leading-[1.5] transition-colors",
         tone === "accent"
-          ? "border-primary/40 bg-primary-soft text-primary"
-          : "border-border bg-background-soft text-muted-foreground hover:border-primary/50 hover:text-foreground",
+          ? "bg-primary-soft text-primary"
+          : "border border-border bg-background-soft text-muted-foreground hover:border-primary/50 hover:text-foreground",
         className
       )}
     >
@@ -43,7 +49,7 @@ export function HoverNote({ children, note }: HoverNoteProps) {
       </button>
       <span
         role="tooltip"
-        className="pointer-events-none absolute top-full left-1/2 z-20 mt-2 w-56 -translate-x-1/2 translate-y-1 rounded-md border border-border bg-background-soft px-3 py-2 font-mono text-[11.5px] text-muted-foreground leading-snug opacity-0 shadow-lg transition-[opacity,transform] duration-200 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100"
+        className="pointer-events-none absolute top-full left-1/2 z-20 mt-2 w-56 -translate-x-1/2 translate-y-1 rounded-md border border-border bg-background-soft px-3 py-2 font-mono text-[11.5px] text-muted-foreground leading-snug opacity-0 shadow-lg transition-[opacity,translate] duration-200 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100"
       >
         {note}
       </span>

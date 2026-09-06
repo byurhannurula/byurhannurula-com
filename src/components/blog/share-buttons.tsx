@@ -11,6 +11,9 @@ interface ShareButtonsProps {
   className?: string;
 }
 
+const SHARE_BUTTON =
+  "pressable rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground";
+
 export function ShareButtons({ title, url, className }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [shareUrl, setShareUrl] = useState(url || "");
@@ -44,7 +47,7 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
           href={twitterUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className={SHARE_BUTTON}
           aria-label="Share on Twitter"
         >
           <TwitterIcon className="h-4 w-4" />
@@ -53,7 +56,7 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
           href={linkedinUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className={SHARE_BUTTON}
           aria-label="Share on LinkedIn"
         >
           <LinkedinIcon className="h-4 w-4" />
@@ -61,7 +64,7 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
         <button
           type="button"
           onClick={copyToClipboard}
-          className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className={SHARE_BUTTON}
           aria-label="Copy link"
         >
           {copied ? (

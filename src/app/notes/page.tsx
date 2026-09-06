@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BlogPostItem } from "@/components/blog";
 import { RssIcon } from "@/components/icons";
 import { PageWrapper } from "@/components/page-wrapper";
+import { EmptyState } from "@/components/ui";
 import { createMetadata } from "@/config";
 import { getPostsGroupedByDate } from "@/lib/server";
 
@@ -17,7 +18,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <PageWrapper>
-      <div className="mb-8 animate-fade-in">
+      <div className="mb-8">
         <div className="flex items-center justify-between gap-4">
           <h1>Notes</h1>
           <Link
@@ -33,7 +34,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         </p>
       </div>
 
-      <div className="stagger-children space-y-10">
+      <div className="space-y-10">
         {groupedPosts?.length ? (
           groupedPosts.map((yearGroup) => {
             const firstMonthWithPostsIndex = yearGroup.months.findIndex(
@@ -87,9 +88,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             );
           })
         ) : (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
+          <EmptyState>
             <h2 className="mb-4 font-semibold text-xl">No posts yet</h2>
-          </div>
+          </EmptyState>
         )}
       </div>
     </PageWrapper>

@@ -45,12 +45,19 @@ async function getStatistics() {
   };
 }
 
+/* The two numeric columns, repeated per header and per row. */
+const NUM_HEAD =
+  "w-24 px-4 py-3 text-right font-medium text-muted-foreground text-xs uppercase tracking-wider";
+const NUM_CELL =
+  "px-4 py-3 text-right font-mono text-muted-foreground text-sm tabular-nums";
+const NUM_CELL_STRONG = "px-4 py-3 text-right font-mono text-sm tabular-nums";
+
 export default async function StatisticsPage() {
   const stats = await getStatistics();
 
   return (
     <PageWrapper>
-      <div className="mb-10 animate-fade-in">
+      <div className="mb-10">
         <div className="flex items-center gap-2">
           <BarChart3 className="size-5 text-primary" />
           <h1>Statistics</h1>
@@ -62,7 +69,7 @@ export default async function StatisticsPage() {
 
       {/* Summary Cards */}
       <div className="mb-10 grid gap-3 sm:grid-cols-3">
-        <div className="group relative overflow-hidden rounded-lg border border-border/50 bg-gradient-to-br from-primary/5 to-transparent p-5 transition-all hover:border-primary/30">
+        <div className="group relative overflow-hidden rounded-lg border border-border/50 bg-gradient-to-br from-primary/5 to-transparent p-5 transition-colors hover:border-primary/30">
           <Eye className="absolute -top-2 -right-2 size-16 text-primary/5" />
           <p className="font-bold text-3xl tabular-nums">
             {stats.totalViews.toLocaleString()}
@@ -70,7 +77,7 @@ export default async function StatisticsPage() {
           <p className="mt-1 text-muted-foreground text-sm">Total Views</p>
         </div>
 
-        <div className="group relative overflow-hidden rounded-lg border border-border/50 bg-gradient-to-br from-red-500/5 to-transparent p-5 transition-all hover:border-red-500/30">
+        <div className="group relative overflow-hidden rounded-lg border border-border/50 bg-gradient-to-br from-red-500/5 to-transparent p-5 transition-colors hover:border-red-500/30">
           <Heart className="absolute -top-2 -right-2 size-16 text-red-500/5" />
           <p className="font-bold text-3xl tabular-nums">
             {stats.totalLikes.toLocaleString()}
@@ -78,7 +85,7 @@ export default async function StatisticsPage() {
           <p className="mt-1 text-muted-foreground text-sm">Total Likes</p>
         </div>
 
-        <div className="group relative overflow-hidden rounded-lg border border-border/50 bg-gradient-to-br from-blue-500/5 to-transparent p-5 transition-all hover:border-blue-500/30">
+        <div className="group relative overflow-hidden rounded-lg border border-border/50 bg-gradient-to-br from-blue-500/5 to-transparent p-5 transition-colors hover:border-blue-500/30">
           <FileText className="absolute -top-2 -right-2 size-16 text-blue-500/5" />
           <p className="font-bold text-3xl tabular-nums">{stats.totalPosts}</p>
           <p className="mt-1 text-muted-foreground text-sm">Published Notes</p>
@@ -99,10 +106,10 @@ export default async function StatisticsPage() {
                 <th className="px-4 py-3 text-left font-medium text-muted-foreground text-xs uppercase tracking-wider">
                   Title
                 </th>
-                <th className="w-24 px-4 py-3 text-right font-medium text-muted-foreground text-xs uppercase tracking-wider">
+                <th className={NUM_HEAD}>
                   <Eye className="ml-auto size-3.5" />
                 </th>
-                <th className="w-24 px-4 py-3 text-right font-medium text-muted-foreground text-xs uppercase tracking-wider">
+                <th className={NUM_HEAD}>
                   <Heart className="ml-auto size-3.5" />
                 </th>
               </tr>
@@ -121,21 +128,17 @@ export default async function StatisticsPage() {
                       {post.title}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-muted-foreground text-sm tabular-nums">
-                    {post.views.toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono text-muted-foreground text-sm tabular-nums">
-                    {post.likes.toLocaleString()}
-                  </td>
+                  <td className={NUM_CELL}>{post.views.toLocaleString()}</td>
+                  <td className={NUM_CELL}>{post.likes.toLocaleString()}</td>
                 </tr>
               ))}
               {/* Total Row */}
               <tr className="border-border border-t-2 bg-muted/50 font-medium">
                 <td className="px-4 py-3 text-sm">Total</td>
-                <td className="px-4 py-3 text-right font-mono text-sm tabular-nums">
+                <td className={NUM_CELL_STRONG}>
                   {stats.totalViews.toLocaleString()}
                 </td>
-                <td className="px-4 py-3 text-right font-mono text-sm tabular-nums">
+                <td className={NUM_CELL_STRONG}>
                   {stats.totalLikes.toLocaleString()}
                 </td>
               </tr>

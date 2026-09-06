@@ -25,7 +25,8 @@ export function ShortcutsDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-[440px] gap-0 border-border p-0 font-mono text-[13px] shadow-2xl outline-none [&>button]:hidden">
+      {/* Behind ?, and the same argument as the palette: no open animation. */}
+      <DialogContent className="max-w-110 gap-0 border-border p-0 font-mono text-[13px] shadow-2xl outline-none data-[state=closed]:animate-none data-[state=open]:animate-none [&>button]:hidden">
         <div className="hairline flex items-center justify-between px-4 py-3">
           <DialogTitle className="font-semibold text-[13px]">
             <span className="text-primary">{"// "}</span>keyboard shortcuts

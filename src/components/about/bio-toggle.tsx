@@ -11,6 +11,11 @@ const LENGTHS = [
 
 type Length = (typeof LENGTHS)[number]["id"];
 
+/* Both carry the same name: only one is ever visible, so the transition sees
+   one element leaving and one arriving rather than two of each. */
+const SHORT_TRANSITION = { viewTransitionName: "about-bio" };
+const LONG_TRANSITION = { viewTransitionName: "about-bio" };
+
 /**
  * Two lengths of the same story, with a switch between them.
  *
@@ -65,9 +70,19 @@ export function BioToggle({
         ))}
       </fieldset>
 
-      <div style={{ viewTransitionName: "about-bio" }}>
-        <div hidden={length !== "short"}>{short}</div>
-        <div hidden={length !== "long"}>{long}</div>
+      {/*
+       * The name goes on the two versions, not on the box holding both. Named
+       * on the parent, the browser cross-fades one element whose height jumps
+       * by a screen and a half; named on the leaves it has an old and a new to
+       * morph between, and the height animates instead of snapping.
+       */}
+      <div>
+        <div hidden={length !== "short"} style={SHORT_TRANSITION}>
+          {short}
+        </div>
+        <div hidden={length !== "long"} style={LONG_TRANSITION}>
+          {long}
+        </div>
       </div>
     </>
   );

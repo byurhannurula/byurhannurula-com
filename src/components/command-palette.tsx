@@ -32,6 +32,8 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
+  DRAWER_OVERLAY,
+  DrawerGrabber,
 } from "@/components/ui";
 import type { LightMode } from "@/config/light-modes";
 import { SITE_CONFIG } from "@/config/site";
@@ -270,9 +272,9 @@ export function CommandPalette({ notes, tags }: CommandPaletteProps) {
         repositionInputs={false}
       >
         <Drawer.Portal>
-          <Drawer.Overlay className="fixed inset-0 z-50 bg-background/60 backdrop-blur-[2px]" />
+          <Drawer.Overlay className={DRAWER_OVERLAY} />
           <Drawer.Content className="fixed right-0 bottom-0 left-0 z-50 flex max-h-[85dvh] flex-col rounded-t-2xl border-border border-t bg-background pb-[env(safe-area-inset-bottom)] outline-none">
-            <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-border" />
+            <DrawerGrabber />
             <Drawer.Title className="sr-only">Command palette</Drawer.Title>
             <Drawer.Description className="sr-only">
               Search pages, notes, and actions
@@ -286,8 +288,13 @@ export function CommandPalette({ notes, tags }: CommandPaletteProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      {/*
+       * No open animation. This is reached by a key, a hundred times a day by
+       * anyone who uses it, and a palette that eases in is a palette you wait
+       * for. The overlay still fades, so the page behind it does not snap.
+       */}
       <DialogContent
-        className="data-[state=closed]:slide-out-to-top-[2%] data-[state=open]:slide-in-from-top-[2%] top-[18%] max-w-[640px] translate-y-0 gap-0 overflow-hidden border-border p-0 shadow-2xl outline-none [&>button]:hidden"
+        className="top-[18%] max-w-[640px] translate-y-0 gap-0 overflow-hidden border-border p-0 shadow-2xl outline-none data-[state=closed]:animate-none data-[state=open]:animate-none [&>button]:hidden"
         aria-describedby={undefined}
       >
         <DialogTitle className="sr-only">Command palette</DialogTitle>

@@ -1,6 +1,7 @@
 import { ArrowRight, Code2 } from "lucide-react";
 import Link from "next/link";
 import { PageWrapper } from "@/components/page-wrapper";
+import { EmptyState } from "@/components/ui";
 import { getAllShorts } from "@/lib/server";
 
 export default function ShortsPage() {
@@ -8,7 +9,7 @@ export default function ShortsPage() {
 
   return (
     <PageWrapper>
-      <div className="mb-12 animate-fade-in">
+      <div className="mb-12">
         <h1>Shorts</h1>
         <p className="mt-2 text-muted-foreground">
           Quick code snippets, tips, and mini-tutorials.
@@ -16,20 +17,20 @@ export default function ShortsPage() {
       </div>
 
       {shorts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
+        <EmptyState>
           <Code2 className="mb-4 size-12 text-muted-foreground/50" />
           <h2 className="mb-2 font-medium text-lg">No shorts yet</h2>
           <p className="text-muted-foreground text-sm">
             Check back later for code snippets and tips.
           </p>
-        </div>
+        </EmptyState>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {shorts.map((short) => (
             <Link
               key={short.slug}
               href={`/shorts/${short.slug}`}
-              className="group rounded-xl border border-border/50 bg-muted/30 p-5 transition-all hover:border-primary/30 hover:bg-muted/50"
+              className="group rounded-xl border border-border/50 bg-muted/30 p-5 transition-colors hover:border-primary/30 hover:bg-muted/50"
             >
               <div className="mb-3 flex items-center gap-2">
                 <Code2 className="size-4 text-primary" />
