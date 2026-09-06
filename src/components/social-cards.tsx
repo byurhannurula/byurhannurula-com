@@ -150,7 +150,7 @@ export async function SocialCards({ className }: { className?: string }) {
     {
       label: "GitHub",
       href: SITE_CONFIG.social.github,
-      icon: <GithubIcon className="size-[18px]" />,
+      icon: <GithubIcon className="size-4" />,
       content: contributions ? (
         <GithubCard total={contributions.total} weeks={contributions.weeks} />
       ) : (
@@ -162,13 +162,13 @@ export async function SocialCards({ className }: { className?: string }) {
     {
       label: "LinkedIn",
       href: SITE_CONFIG.social.linkedin,
-      icon: <LinkedinIcon className="size-[18px]" />,
+      icon: <LinkedinIcon className="size-4" />,
       content: <LinkedinCard />,
     },
     {
       label: "X",
       href: SITE_CONFIG.social.twitter,
-      icon: <TwitterIcon className="size-[18px]" />,
+      icon: <TwitterIcon className="size-4" />,
       content: <TwitterCard />,
     },
   ];

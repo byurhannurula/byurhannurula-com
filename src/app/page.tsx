@@ -2,17 +2,27 @@ import Link from "next/link";
 
 import { HeroLinks } from "@/components/hero-links";
 import { RssIcon } from "@/components/icons";
+import { Brand } from "@/components/inline";
 import { PersonJsonLd, WebsiteJsonLd } from "@/components/json-ld";
 import { PageWrapper } from "@/components/page-wrapper";
 import { RowLink } from "@/components/row-link";
 import { SectionHeading } from "@/components/section-heading";
+import { SocialCards } from "@/components/social-cards";
 import { createMetadata } from "@/config";
 import { getFeaturedProjects, hasDetailPage } from "@/config/projects";
+import { getStackItem } from "@/config/stack";
+import { shortDate } from "@/lib/date";
 import { getAllPosts } from "@/lib/server";
 
 export const metadata = createMetadata("/");
 
 const LATEST_NOTES_COUNT = 3;
+
+const DAY_JOB = [
+  getStackItem("react"),
+  getStackItem("typescript"),
+  getStackItem("node"),
+];
 
 export default function Home() {
   const projects = getFeaturedProjects();
@@ -24,21 +34,35 @@ export default function Home() {
       <PersonJsonLd />
       <PageWrapper>
         <h1 className="mb-4 text-[26px] leading-[1.35] tracking-[-0.5px]">
-          Hi, I&apos;m Byurhan —{" "}
-          <span className="text-primary">a developer who tinkers.</span>
+          Hi, I&apos;m Byurhan,{" "}
+          <span className="text-primary">a developer.</span>
         </h1>
         <p className="mb-3.5">
-          I&apos;m a full-stack engineer who&apos;s been writing code since 6th
-          grade. Days are React, TypeScript and Node; nights are soldering
-          irons, 3D printers, and another self-hosted service nobody asked for.
+          I started writing code when I was 12 and have been learning ever
+          since. Currently Team Lead at{" "}
+          <a
+            className="link-inline"
+            href="https://recheck.io/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            ReCheck
+          </a>
+          , where I have worked since 2020.
+        </p>
+        <p className="mb-3.5">
+          I mostly work with <Brand logo={DAY_JOB[0].icon}>React</Brand>,{" "}
+          <Brand logo={DAY_JOB[1].icon}>TypeScript</Brand> and{" "}
+          <Brand logo={DAY_JOB[2].icon}>Node</Brand>. I also look after the
+          infrastructure the apps run on.
         </p>
         <p className="mb-3.5 text-muted-foreground">
-          I care about software that&apos;s small, private, owned, and
-          repairable — the kind you run on a machine you can actually touch.
-          Building from Ruse, Bulgaria — on the Danube.
+          Outside work I try to be a more conscious user of technology. I care
+          about privacy, so I self-host most of the services I use, which is
+          also how I experiment and learn.
         </p>
 
-        <HeroLinks />
+        <HeroLinks socials={<SocialCards />} />
 
         {notes.length > 0 ? (
           <>
@@ -55,14 +79,18 @@ export default function Home() {
             >
               latest notes
             </SectionHeading>
-            <div className="[&>*:last-child]:border-b-0">
-              {notes.map((post, index) => (
+            <div>
+              {notes.map((post) => (
                 <RowLink
-                  key={post.slug}
                   href={`/notes/${post.slug}`}
+                  key={post.slug}
+                  meta={
+                    <time dateTime={post.frontmatter.date}>
+                      {shortDate(post.frontmatter.date)}
+                    </time>
+                  }
+                  subtitle={post.frontmatter.excerpt}
                   title={post.frontmatter.title}
-                  subtitle={index === 0 ? post.frontmatter.excerpt : undefined}
-                  meta={post.frontmatter.date}
                 />
               ))}
             </div>
@@ -77,7 +105,7 @@ export default function Home() {
         ) : null}
 
         <SectionHeading>selected projects</SectionHeading>
-        <div className="[&>*:last-child]:border-b-0">
+        <div>
           {projects.map((project) => (
             <RowLink
               key={project.slug}

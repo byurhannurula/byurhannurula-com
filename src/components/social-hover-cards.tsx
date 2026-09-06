@@ -139,7 +139,7 @@ export function SocialHoverCards({
        covered by onBlur below, so no role would make this more operable.
        biome-ignore lint/a11y/noStaticElementInteractions: see above */
     <div
-      className={cn("relative flex items-center", className)}
+      className={cn("relative flex items-center gap-2", className)}
       ref={containerRef}
       onBlur={(event) => {
         // Only when focus has actually left the row, not moved along it.
@@ -150,7 +150,9 @@ export function SocialHoverCards({
       {items.map((item, itemIndex) => (
         <a
           aria-label={item.label}
-          className="group z-10 inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground"
+          // The same tile as the plain hero row: the card is the addition, not
+          // a different kind of control.
+          className="group z-10 inline-flex size-9 items-center justify-center rounded-lg border border-border bg-background-soft text-muted-foreground transition-colors hover:border-primary hover:border-dashed hover:text-foreground focus-visible:border-primary focus-visible:text-foreground"
           href={item.href}
           key={item.label}
           onFocus={(event) => point(itemIndex, event.currentTarget)}

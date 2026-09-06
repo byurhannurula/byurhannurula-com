@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { MailIcon } from "@/components/icons";
 import { SITE_CONFIG, SOCIAL_LINKS } from "@/config/site";
@@ -9,18 +10,25 @@ const HERO_SOCIALS = new Set(["GitHub", "Twitter", "LinkedIn"]);
 interface HeroLinksProps {
   /** Show every social link instead of the short hero set. */
   all?: boolean;
+  /**
+   * Replaces the plain icon row. The homepage passes <SocialCards />, which is
+   * the same three tiles with a preview of each destination over them.
+   */
+  socials?: ReactNode;
   className?: string;
 }
 
-export function HeroLinks({ all = false, className }: HeroLinksProps) {
-  const iconLinks = SOCIAL_LINKS.filter(
-    (link) => link.name !== "Email" && (all || HERO_SOCIALS.has(link.name))
-  );
+export function HeroLinks({ all = false, socials, className }: HeroLinksProps) {
+  const iconLinks = socials
+    ? []
+    : SOCIAL_LINKS.filter(
+        (link) => link.name !== "Email" && (all || HERO_SOCIALS.has(link.name))
+      );
 
   return (
     <div
       className={cn(
-        "mt-[22px] mb-1.5 flex flex-wrap items-center gap-2",
+        "mt-5.5 mb-1.5 flex flex-wrap items-center gap-2",
         className
       )}
     >
@@ -31,6 +39,7 @@ export function HeroLinks({ all = false, className }: HeroLinksProps) {
         <MailIcon className="size-3.5" />
         email me
       </a>
+      {socials}
       {iconLinks.map((link) => {
         const rel =
           "rel" in link
