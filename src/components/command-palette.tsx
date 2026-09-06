@@ -20,6 +20,7 @@ import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { Drawer } from "vaul";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/icons";
 import { OPEN_SHORTCUTS_EVENT } from "@/components/shortcuts-dialog";
+import { useOpenSound } from "@/components/sound";
 import {
   Command,
   CommandEmpty,
@@ -61,6 +62,7 @@ const VIM_QUIT = new Set([":q", ":q!", ":wq", ":x", ":qa", ":quit"]);
 export function CommandPalette({ notes, tags }: CommandPaletteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
+  useOpenSound(isOpen);
   const router = useRouter();
   const { resolvedTheme, setTheme } = useTheme();
   const isMobile = useIsMobile();

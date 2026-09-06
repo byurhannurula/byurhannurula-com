@@ -1,5 +1,6 @@
 "use client";
 
+import { CommandIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
@@ -39,7 +40,12 @@ export function Navigation() {
   // carries dead space. On sm+ it collapses to a single row, logo left and nav
   // plus button right.
   return (
-    <header className="hairline flex flex-wrap items-center gap-x-2 gap-y-3 py-5 font-mono text-[13px] sm:flex-nowrap">
+    // data-sound: the nav is the one place on the site where the pointer
+    // travels along a row of links, which is what the tick is for.
+    <header
+      className="hairline flex flex-wrap items-center gap-x-2 gap-y-3 py-5 font-mono text-[13px] sm:flex-nowrap"
+      data-sound=""
+    >
       <Link
         href="/"
         className="order-1 font-semibold text-[15px] text-foreground no-underline"
@@ -82,7 +88,7 @@ export function Navigation() {
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "grid transition-[grid-template-columns] duration-[180ms] ease-out",
+                      "grid transition-[grid-template-columns] duration-180 ease-out",
                       active ? "grid-cols-[1fr]" : "grid-cols-[0fr]"
                     )}
                   >
@@ -90,7 +96,7 @@ export function Navigation() {
                           -translate-x-px to the standalone translate property. */}
                     <span
                       className={cn(
-                        "min-w-0 overflow-hidden transition-[opacity,translate] duration-[180ms] ease-out",
+                        "min-w-0 overflow-hidden transition-[opacity,translate] duration-180 ease-out",
                         active ? "opacity-60" : "-translate-x-px opacity-0"
                       )}
                     >
@@ -110,10 +116,10 @@ export function Navigation() {
         onClick={() =>
           window.dispatchEvent(new Event(OPEN_COMMAND_PALETTE_EVENT))
         }
-        className="order-2 ml-auto hidden appearance-none rounded-sm border border-border bg-transparent px-2.5 py-1 font-mono text-[12px] text-muted-foreground leading-normal transition-colors hover:border-muted-foreground hover:text-foreground sm:order-3 sm:ml-0 sm:inline-flex"
+        className="order-2 ml-auto hidden appearance-none items-center rounded-sm border border-border bg-transparent px-2.5 py-1 font-mono text-[12px] text-muted-foreground leading-normal transition-colors hover:border-muted-foreground hover:text-foreground sm:order-3 sm:ml-0 sm:inline-flex"
         aria-label="⌘K, open command palette"
       >
-        ⌘k
+        <CommandIcon className="size-2.5" />k
       </button>
     </header>
   );
