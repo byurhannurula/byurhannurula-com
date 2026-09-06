@@ -3,12 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 
 import {
-  HOVER_VOLUME,
-  isSoundOn,
-  playSound,
-  setSoundOn,
-  subscribeSound,
-} from "@/lib/sound";
+  DEFAULT_HOVER_SOUND,
+  DEFAULT_TRIGGER,
+  HOVER_DETUNE,
+  INTERACTIVE,
+  isSoundName,
+  isTrigger,
+  MUTE_ATTRIBUTE,
+  SCOPE_ATTRIBUTE,
+  SOUNDS,
+  type SoundTrigger,
+  TARGET_ATTRIBUTE,
+  TRIGGER_ATTRIBUTE,
+} from "@/config/sound";
+import { isSoundOn, playSound, setSoundOn, subscribeSound } from "@/lib/sound";
 import { cn } from "@/lib/utils";
 
 /** Reads the shared preference and re-renders when any toggle changes it. */
@@ -25,26 +33,15 @@ function useSoundEnabled() {
 }
 
 /**
- * What counts as something you can point at.
- *
- * The two roles are there for the overlays: cmdk gives its rows role="option"
- * and Radix gives its menu rows role="menuitem", so a selector of tags alone
- * would leave any marked menu silent.
- */
-const INTERACTIVE =
-  "a, button, [role='button'], [role='menuitem'], [role='option']";
-
-/** Nothing ticks unless it is inside one of these. */
-const SCOPE = "[data-sound]";
-
-/**
  * The hover tick, for the few places that ask for it.
  *
  * Opt in rather than out: a tick under every link and button on the site was
  * more sound than the site has interactions, and layering it under the click
  * of the same control made one press into two noises. Put data-sound on a
- * container and everything in it ticks; put it on one element for just that
- * one. data-no-sound takes a single element back out of a marked container.
+ * container and everything in it ticks; give it a value to choose the sample.
+ * data-no-sound takes a single element back out of a marked container.
+ *
+ * The names, levels and selectors are all in config/sound.ts.
  *
  * Delegated from the document and mounted once in the root layout, so the
  * whole idea is this file: unmount it and the site is exactly as it was.
@@ -52,7 +49,26 @@ const SCOPE = "[data-sound]";
 export function SoundLayer() {
   useEffect(() => {
     const target = (event: Event) =>
-      (event.target as HTMLElement | null)?.closest?.(INTERACTIVE) ?? null;
+      (event.target as HTMLElement | null)?.closest?.(
+        `${INTERACTIVE}, [${TARGET_ATTRIBUTE}]`
+      ) ?? null;
+
+    /**
+     * What this element should play, and when, read off the nearest scope.
+     * Null when nothing has opted it in.
+     */
+    const settings = (el: Element) => {
+      if (el.hasAttribute(MUTE_ATTRIBUTE)) return null;
+      const scope = el.closest(`[${SCOPE_ATTRIBUTE}]`);
+      if (!scope) return null;
+
+      const named = scope.getAttribute(SCOPE_ATTRIBUTE) ?? "";
+      const on = scope.getAttribute(TRIGGER_ATTRIBUTE) ?? "";
+      return {
+        name: isSoundName(named) ? named : DEFAULT_HOVER_SOUND,
+        trigger: (isTrigger(on) ? on : DEFAULT_TRIGGER) as SoundTrigger,
+      };
+    };
 
     let last: Element | null = null;
 
@@ -60,9 +76,15 @@ export function SoundLayer() {
       const el = target(event);
       if (!el || el === last) return;
       last = el;
-      if (el.hasAttribute("data-no-sound") || !el.closest(SCOPE)) return;
+      const found = settings(el);
+      if (!found || found.trigger === "click") return;
+
       // Detuned up: a tick at the sample's own pitch reads as a press.
-      playSound("click", { hover: true, volume: HOVER_VOLUME, detune: 260 });
+      playSound(found.name, {
+        hover: true,
+        volume: SOUNDS[found.name].hover,
+        detune: HOVER_DETUNE,
+      });
     };
 
     const onOut = (event: PointerEvent) => {
@@ -76,11 +98,21 @@ export function SoundLayer() {
       last = null;
     };
 
+    const onClick = (event: MouseEvent) => {
+      const el = target(event);
+      if (!el) return;
+      const found = settings(el);
+      if (!found || found.trigger === "hover") return;
+      playSound(found.name);
+    };
+
     document.addEventListener("pointerover", onOver);
     document.addEventListener("pointerout", onOut);
+    document.addEventListener("click", onClick);
     return () => {
       document.removeEventListener("pointerover", onOver);
       document.removeEventListener("pointerout", onOut);
+      document.removeEventListener("click", onClick);
     };
   }, []);
 
@@ -116,10 +148,13 @@ function Speaker({ on }: { on: boolean }) {
     <span aria-hidden="true" className="flex items-end gap-[2px]">
       {[5, 9, 6].map((height, index) => (
         <span
-          className="w-[2px] rounded-full bg-current transition-[height] duration-200 ease-out motion-reduce:transition-none"
+          // Drawn at full height and scaled down, so the bars grow on the
+          // compositor rather than laying the row out three times per toggle.
+          className="w-[2px] origin-bottom rounded-full bg-current transition-transform duration-200 ease-out motion-reduce:transition-none"
           key={height}
           style={{
-            height: on ? height : 2,
+            height,
+            scale: on ? "1 1" : `1 ${2 / height}`,
             transitionDelay: `${index * 40}ms`,
           }}
         />

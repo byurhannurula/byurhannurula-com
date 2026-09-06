@@ -42,9 +42,8 @@ export default function BooksPage() {
           aspect-ratio: var(--bk-ratio);
           transform-style: preserve-3d;
           rotate: y 0deg;
-          transition: rotate 420ms cubic-bezier(0.22, 0.8, 0.28, 1);
+          transition: rotate 220ms var(--ease-out);
         }
-        .bk:hover .bk-body,
         .bk:focus-within .bk-body { rotate: y -11deg; }
 
         /* The page block only exists to be seen through the opened cover. */
@@ -71,11 +70,27 @@ export default function BooksPage() {
           box-shadow:
             0 1px 2px rgb(0 0 0 / 0.28),
             0 10px 26px -14px rgb(0 0 0 / 0.5);
-          transition: rotate 460ms cubic-bezier(0.22, 0.8, 0.28, 1);
-          will-change: rotate;
+          transition: rotate 220ms var(--ease-out);
         }
+        /*
+         * Opening is the deliberate act and closing is the shelf letting go,
+         * so only the opening half takes its time. will-change is scoped with
+         * it: unconditional, every cover on the page holds a compositor layer
+         * for the life of the page.
+         */
+        .bk:hover .bk-body,
         .bk:hover .bk-cover,
+        .bk:focus-within .bk-body,
+        .bk:focus-within .bk-cover {
+          will-change: rotate;
+          transition-duration: 460ms;
+        }
         .bk:focus-within .bk-cover { rotate: y -46deg; }
+        /* Gated: a tap on a touch screen leaves the book stuck open. */
+        @media (hover: hover) and (pointer: fine) {
+          .bk:hover .bk-body { rotate: y -11deg; }
+          .bk:hover .bk-cover { rotate: y -46deg; }
+        }
         .bk-photo {
           display: block;
           width: 100%;
@@ -144,10 +159,11 @@ export default function BooksPage() {
           .bk-body, .bk-cover { transition: none; }
           .bk:hover .bk-cover, .bk:focus-within .bk-cover { rotate: y -12deg; }
         }
+
       `}</style>
 
       <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-[26px] leading-[1.35] tracking-[-0.5px]">
+        <h1>
           Books <span className="text-primary">/ the shelf.</span>
         </h1>
         <SoundToggle />
@@ -167,8 +183,11 @@ export default function BooksPage() {
         return (
           <section key={status}>
             <SectionHeading>{STATUS_LABEL[status]}</SectionHeading>
+            {/* data-sound="page": pointing at a book turns a page rather than
+                ticking. The value names the sample; see config/sound.ts. */}
             <div
               className="bk-shelf grid grid-cols-2 items-start gap-x-6 gap-y-9 sm:grid-cols-3"
+              data-sound="page"
               style={{ "--bk-tallest": TALLEST_TRIM } as React.CSSProperties}
             >
               {books.map((book) => (

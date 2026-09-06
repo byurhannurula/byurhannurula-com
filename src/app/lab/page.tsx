@@ -52,9 +52,12 @@ export default function LabPage() {
         .sf-board, .reel {
           transition: translate 160ms ease-out;
         }
-        .sf-board:hover, .sf-board:focus-visible,
-        .reel:hover, .reel:focus-visible {
+        .sf-board:focus-visible, .reel:focus-visible {
           translate: 0 -1px;
+        }
+        /* Gated: on a touch screen a tap fires a hover that then sticks. */
+        @media (hover: hover) and (pointer: fine) {
+          .sf-board:hover, .reel:hover { translate: 0 -1px; }
         }
         @media (prefers-reduced-motion: reduce) {
           .sf-board, .reel { transition: none; }
@@ -230,6 +233,7 @@ export default function LabPage() {
         @media (prefers-reduced-motion: reduce) {
           .sf-fall, .sf-rise { animation: none; }
           .lab-pulse { animation: none; }
+          .lp-caret { animation: none; }
         }
       `}</style>
 
@@ -237,7 +241,7 @@ export default function LabPage() {
         className="mb-2 flex flex-wrap items-center justify-between gap-3"
         data-sound=""
       >
-        <h1 className="text-[26px] leading-[1.35] tracking-[-0.5px]">
+        <h1>
           Lab <span className="text-primary">/ three sketches.</span>
         </h1>
         <SoundToggle />

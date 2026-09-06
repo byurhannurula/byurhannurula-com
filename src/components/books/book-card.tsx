@@ -3,7 +3,6 @@
 import Image from "next/image";
 
 import { type Book, coverRatio } from "@/config/books";
-import { playSound } from "@/lib/sound";
 
 /**
  * The drawn jacket.
@@ -61,10 +60,7 @@ export function BookCard({ book }: { book: Book }) {
        * its floor. Sizing the card to the book instead would step the titles up
        * and down the page by an inch a time.
        */}
-      <span
-        className="bk-stage"
-        onPointerEnter={() => playSound("page", { hover: true, volume: 0.7 })}
-      >
+      <span className="bk-stage" data-sound-target="">
         <span
           className="bk-body"
           style={

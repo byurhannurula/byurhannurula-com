@@ -1,3 +1,5 @@
+import { HOVER_THROTTLE_MS, SOUNDS, type SoundName } from "@/config/sound";
+
 declare global {
   interface Window {
     /** Safari before 14.1 only exposes the prefixed constructor. */
@@ -5,48 +7,7 @@ declare global {
   }
 }
 
-export type SoundName = "click" | "open" | "close" | "flipper" | "page";
-
 const STORAGE_KEY = "sound";
-const SOURCES: Record<SoundName, string> = {
-  click: "/sounds/click.webm",
-  open: "/sounds/open.webm",
-  close: "/sounds/close.webm",
-  flipper: "/sounds/flipper.webm",
-  page: "/sounds/page.webm",
-};
-
-/**
- * Per-sound gain, over samples that all peak within 2 dB of full scale.
- *
- * click, open, close and page were mastered around -21 dBFS, which left a
- * hover tick near -32 dBFS once this gain was applied: inaudible in a room
- * with anything else happening in it. They are peak-normalised now, so these
- * numbers are the mix rather than a rescue. click is a dry tick and open/close
- * carry a tail, so one volume across the two makes the tail dominate; flipper
- * came in loud already and is held down instead.
- */
-const GAIN: Record<SoundName, number> = {
-  click: 0.8,
-  open: 0.55,
-  close: 0.55,
-  flipper: 0.35,
-  page: 0.45,
-};
-
-/**
- * Hover, as a fraction of the click it borrows its sample from.
- *
- * Kept under 1 on purpose: pointing at a link should read as lighter than
- * committing to it.
- */
-export const HOVER_VOLUME = 0.32;
-
-/**
- * Hover fires far more often than a click and can retrigger on every pixel of
- * travel along a row. Anything below this is dropped rather than queued.
- */
-const HOVER_THROTTLE_MS = 90;
 
 /** How long a sound waits for a suspended context before giving up on itself. */
 const RESUME_TIMEOUT_MS = 250;
@@ -145,7 +106,7 @@ async function load(name: SoundName): Promise<AudioBuffer | null> {
     const ctx = ensureContext();
     if (!ctx) return null;
     try {
-      const response = await fetch(SOURCES[name]);
+      const response = await fetch(SOUNDS[name].src);
       const buffer = await ctx.decodeAudioData(await response.arrayBuffer());
       buffers.set(name, buffer);
       return buffer;
@@ -191,7 +152,7 @@ export function playSound(name: SoundName, options: PlayOptions = {}) {
     if (options.detune) source.detune.value = options.detune;
 
     const gain = ctx.createGain();
-    gain.gain.value = (options.volume ?? 1) * GAIN[name];
+    gain.gain.value = (options.volume ?? 1) * SOUNDS[name].gain;
 
     source.connect(gain).connect(ctx.destination);
     source.start();
@@ -227,7 +188,7 @@ export function playLoop(
     if (!(await ready(ctx))) return;
     if (stopped) return;
 
-    const peak = volume * GAIN[name];
+    const peak = volume * SOUNDS[name].gain;
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     source.loop = true;
