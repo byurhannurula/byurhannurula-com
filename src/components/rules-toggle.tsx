@@ -48,9 +48,7 @@ export function RulesToggle() {
       >
         <span
           className={cn(
-            // translate, not transform: Tailwind v4 emits the discrete
-            // translate property, which transition-transform does not cover.
-            "absolute top-px left-px size-2 rounded-full transition-[translate] duration-150 ease-out motion-reduce:transition-none",
+            "absolute top-px left-px size-2 rounded-full transition-transform duration-150 ease-out motion-reduce:transition-none",
             on ? "translate-x-2.5 bg-primary" : "bg-muted-foreground"
           )}
         />
