@@ -18,6 +18,7 @@ import { Toaster } from "@/components/toaster";
 import { UmamiAnalytics } from "@/components/umami-analytics";
 import { createMetadata } from "@/config";
 import { LIGHT_MODE_SCRIPT, LIGHT_MODES } from "@/config/light-modes";
+import { PAGE_ENTER_SCRIPT } from "@/config/page-enter";
 import { RULES_SCRIPT } from "@/config/page-rules";
 import { getAllPosts, getAllTags } from "@/lib/server";
 
@@ -60,6 +61,8 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: LIGHT_MODE_SCRIPT }} />
         {/* Same reason: the rules are drawn by the first frame. */}
         <script dangerouslySetInnerHTML={{ __html: RULES_SCRIPT }} />
+        {/* Marks this as a real page load, so only it gets the entrance. */}
+        <script dangerouslySetInnerHTML={{ __html: PAGE_ENTER_SCRIPT }} />
       </head>
       <body className="relative min-h-dvh bg-background font-sans">
         <ThemeProvider

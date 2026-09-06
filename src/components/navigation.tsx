@@ -8,6 +8,7 @@ import { useRef } from "react";
 import { openBuildInfo } from "@/components/build-info";
 import { OPEN_COMMAND_PALETTE_EVENT } from "@/components/command-palette";
 import { NAVIGATION_ITEMS, SITE_CONFIG } from "@/config/site";
+import { useNavVisibility } from "@/hooks";
 import { cn } from "@/lib/utils";
 
 function isActive(pathname: string, path: string) {
@@ -19,6 +20,7 @@ const LONG_PRESS_MS = 700;
 
 export function Navigation() {
   const pathname = usePathname();
+  const { scrolled, hidden } = useNavVisibility();
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const didLongPressRef = useRef(false);
 
@@ -40,10 +42,24 @@ export function Navigation() {
   // carries dead space. On sm+ it collapses to a single row, logo left and nav
   // plus button right.
   return (
-    // data-sound: the nav is the one place on the site where the pointer
-    // travels along a row of links, which is what the tick is for.
+    /*
+     * Sticky rather than fixed: it stays inside container-editorial, so it
+     * keeps the column's width and its dashed side rules run behind it.
+     *
+     * The surface only appears once the page has moved, and spans the viewport
+     * rather than the column: see nav-surface in globals.css. The dashed rule
+     * under it stays column-width, because that rule belongs to the column.
+     *
+     * data-sound: the nav is the one place on the site where the pointer
+     * travels along a row of links, which is what the tick is for.
+     */
     <header
-      className="hairline flex flex-wrap items-center gap-x-2 gap-y-3 py-5 font-mono text-[13px] sm:flex-nowrap"
+      className={cn(
+        "enter-step nav-surface hairline relative sticky top-0 z-40 flex flex-wrap items-center gap-x-2 gap-y-3 py-5 font-mono text-[13px] sm:flex-nowrap",
+        "transition-[translate] duration-300 ease-out motion-reduce:transition-none",
+        hidden && "-translate-y-full"
+      )}
+      data-scrolled={scrolled}
       data-sound=""
     >
       <Link
