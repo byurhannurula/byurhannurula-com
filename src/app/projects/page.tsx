@@ -89,7 +89,7 @@ export default function ProjectsPage() {
               href={project.github ?? project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="hairline group flex items-center gap-3 px-2 py-3 no-underline transition-colors duration-150 ease-out hover:bg-background-soft motion-reduce:transition-none"
+              className="group -mx-2.5 flex items-center gap-3 rounded-lg px-2.5 py-3 no-underline transition-colors duration-150 ease-out hover:bg-background-soft motion-reduce:transition-none"
             >
               <GithubIcon
                 aria-hidden="true"

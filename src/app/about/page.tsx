@@ -20,14 +20,14 @@ export default function AboutPage() {
       <BioToggle long={<LongBio />} short={<ShortBio />} />
 
       <SectionHeading>work</SectionHeading>
-      <div className="[&>*:last-child]:border-b-0">
+      <div>
         {WORK.map((item) => (
           <CareerItem key={`${item.role}-${item.org}`} {...item} />
         ))}
       </div>
 
       <SectionHeading>education</SectionHeading>
-      <div className="[&>*:last-child]:border-b-0">
+      <div>
         {EDUCATION.map((item) => (
           <CareerItem key={`${item.role}-${item.org}`} {...item} />
         ))}

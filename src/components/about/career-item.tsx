@@ -25,7 +25,9 @@ export function CareerItem({
   );
 
   return (
-    <div className="hairline px-1 py-4">
+    /* No rule between entries. The spacing and the mono year on the right are
+       enough to tell one from the next, and a stack of rules read as a table. */
+    <div className="px-1 py-5">
       <div className="flex items-baseline justify-between gap-4">
         <span className="font-semibold">
           {role} <span className="font-normal text-muted-foreground">at</span>{" "}

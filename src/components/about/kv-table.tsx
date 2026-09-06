@@ -14,14 +14,16 @@ export function KvTable({ rows }: KvTableProps) {
     <table className="w-full border-collapse text-[14px]">
       <tbody>
         {rows.map((row) => (
-          <tr key={row.key} className="last:*:border-b-0">
+          // No rule between rows: the mono key in primary is already the thing
+          // that starts a row, so a line under each one only adds weight.
+          <tr key={row.key}>
             <th
+              className="w-40 whitespace-nowrap py-3 pr-2 pl-2 text-left align-top font-mono font-normal text-[12.5px] text-primary max-sm:w-auto"
               scope="row"
-              className="hairline w-40 whitespace-nowrap py-2.5 pr-2 pl-2 text-left align-top font-mono font-normal text-[12.5px] text-primary max-sm:w-auto"
             >
               {row.key}
             </th>
-            <td className="hairline px-2 py-2.5 align-top">{row.value}</td>
+            <td className="px-2 py-3 align-top">{row.value}</td>
           </tr>
         ))}
       </tbody>
