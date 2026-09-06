@@ -59,6 +59,27 @@ const sizeClasses: Record<ImageSize, string> = {
   full: `${BLEED} w-screen !rounded-none`,
 };
 
+/** The `sizes` hint per bleed. A table, where this used to be three ternaries. */
+const sizeHints: Record<ImageSize, string> = {
+  default: "(max-width: 768px) 100vw, 768px",
+  wide: "(max-width: 1024px) 100vw, 1024px",
+  wider: "(max-width: 1536px) 84vw, 1536px",
+  full: "100vw",
+};
+
+function Caption({ children, size }: { children: string; size: ImageSize }) {
+  return (
+    <span
+      className={cn(
+        "mt-3 block text-center text-muted-foreground text-xs",
+        size === "full" && "px-6"
+      )}
+    >
+      {children}
+    </span>
+  );
+}
+
 export function MDXImage({
   src,
   alt,
@@ -102,18 +123,10 @@ export function MDXImage({
               alt={alt}
               width={Number(width) || 1200}
               height={Number(height) || 800}
-              sizes={
-                size === "full"
-                  ? "100vw"
-                  : size === "wider"
-                    ? "(max-width: 1536px) 84vw, 1536px"
-                    : size === "wide"
-                      ? "(max-width: 1024px) 100vw, 1024px"
-                      : "(max-width: 768px) 100vw, 768px"
-              }
+              sizes={sizeHints[size]}
               className={cn(
-                "h-auto w-full transition-all duration-500",
-                !(isLoaded || priority) && "scale-105 blur-lg",
+                "h-auto w-full transition-[filter,scale] duration-300 ease-out",
+                !(isLoaded || priority) && "scale-105 blur-md",
                 isLoaded && "scale-100 blur-0"
               )}
               priority={priority}
@@ -124,17 +137,9 @@ export function MDXImage({
             />
           </span>
 
-          {/* Caption below image */}
-          {(caption || alt) && (
-            <span
-              className={cn(
-                "mt-3 block text-center text-muted-foreground text-xs",
-                size === "full" && "px-6"
-              )}
-            >
-              {caption || alt}
-            </span>
-          )}
+          {caption || alt ? (
+            <Caption size={size}>{caption || alt}</Caption>
+          ) : null}
         </span>
       </span>
 

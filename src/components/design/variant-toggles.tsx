@@ -12,6 +12,70 @@ export interface ToggleOption {
   disabledBy?: string[];
 }
 
+/** One row of the toggle list, pulled out to keep the list itself readable. */
+function Option({
+  option,
+  checked,
+  disabled,
+  exclusive,
+  name,
+  onChange,
+}: {
+  option: ToggleOption;
+  checked: boolean;
+  disabled: boolean;
+  exclusive?: boolean;
+  name?: string;
+  onChange: (next: boolean) => void;
+}) {
+  return (
+    <label
+      className={cn(
+        "flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.06em]",
+        disabled
+          ? "cursor-not-allowed text-faint/50"
+          : "cursor-pointer text-muted-foreground"
+      )}
+    >
+      <input
+        checked={checked}
+        className="sr-only"
+        disabled={disabled}
+        name={name}
+        onChange={(event) => onChange(event.target.checked)}
+        type={exclusive ? "radio" : "checkbox"}
+      />
+      <span
+        aria-hidden
+        className={cn(
+          "flex size-4 items-center justify-center border transition-colors",
+          exclusive ? "rounded-full" : "rounded-[4px]",
+          checked
+            ? "border-primary bg-primary text-primary-foreground"
+            : "border-border"
+        )}
+      >
+        <Mark checked={checked} exclusive={exclusive} />
+      </span>
+      {option.label}
+    </label>
+  );
+}
+
+function Mark({
+  checked,
+  exclusive,
+}: {
+  checked: boolean;
+  exclusive?: boolean;
+}) {
+  if (!checked) return null;
+  if (exclusive) {
+    return <span className="size-1.5 rounded-full bg-primary-foreground" />;
+  }
+  return <Check className="size-3" />;
+}
+
 /**
  * Checkbox row that switches between pre-rendered variants of one component.
  *
@@ -71,57 +135,26 @@ export function VariantToggles({
       <div className="[&>*]:my-0">{variants[key] ?? variants[""]}</div>
 
       <div className="flex flex-col items-center gap-3">
-        <span className="font-mono text-[11px] text-faint uppercase tracking-[0.08em]">
-          {label}
-        </span>
+        <span className="label-micro">{label}</span>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-3">
           {options.map((option) => {
             const disabled = isDisabled(option);
-            const checked = Boolean(active[option.id]) && !disabled;
             return (
-              <label
-                className={cn(
-                  "flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.06em]",
-                  disabled
-                    ? "cursor-not-allowed text-faint/50"
-                    : "cursor-pointer text-muted-foreground"
-                )}
+              <Option
+                checked={Boolean(active[option.id]) && !disabled}
+                disabled={disabled}
+                exclusive={exclusive}
                 key={option.id}
-              >
-                <input
-                  checked={checked}
-                  className="sr-only"
-                  disabled={disabled}
-                  name={exclusive ? label : undefined}
-                  onChange={(event) =>
-                    setActive((current) =>
-                      exclusive
-                        ? { [option.id]: event.target.checked }
-                        : { ...current, [option.id]: event.target.checked }
-                    )
-                  }
-                  type={exclusive ? "radio" : "checkbox"}
-                />
-                <span
-                  aria-hidden
-                  className={cn(
-                    "flex size-4 items-center justify-center border transition-colors",
-                    exclusive ? "rounded-full" : "rounded-[4px]",
-                    checked
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border"
-                  )}
-                >
-                  {checked ? (
-                    exclusive ? (
-                      <span className="size-1.5 rounded-full bg-primary-foreground" />
-                    ) : (
-                      <Check className="size-3" />
-                    )
-                  ) : null}
-                </span>
-                {option.label}
-              </label>
+                name={exclusive ? label : undefined}
+                onChange={(next) =>
+                  setActive((current) =>
+                    exclusive
+                      ? { [option.id]: next }
+                      : { ...current, [option.id]: next }
+                  )
+                }
+                option={option}
+              />
             );
           })}
         </div>

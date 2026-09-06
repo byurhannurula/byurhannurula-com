@@ -1,7 +1,8 @@
 "use client";
 
 import { Eye, Heart } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+
+import { usePostLike } from "@/hooks";
 import { cn } from "@/lib/utils";
 
 interface PostStatsProps {
@@ -11,88 +12,23 @@ interface PostStatsProps {
   initialLikes?: number;
 }
 
+/**
+ * The compact pair in a post header.
+ *
+ * This is the one that counts the view: it mounts once per post page, where
+ * PostLike sits further down and would double the number.
+ */
 export function PostStats({
   slug,
   className,
   initialViews = 0,
   initialLikes = 0,
 }: PostStatsProps) {
-  const [views, setViews] = useState<number>(initialViews);
-  const [likes, setLikes] = useState<number>(initialLikes);
-  const [hasLiked, setHasLiked] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  useEffect(() => {
-    // Check if user has already liked this post
-    const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]");
-    setHasLiked(likedPosts.includes(slug));
-
-    // Increment view count (fire and forget)
-    fetch(`/api/posts/${slug}/stats`, { method: "POST" })
-      .then((res) => res.json())
-      .then((data) => {
-        setViews(data.views);
-        setLikes(data.likes);
-      })
-      .catch(console.error);
-  }, [slug]);
-
-  const handleLike = async () => {
-    // Prevent rapid clicks - debounce
-    if (isLoading) return;
-
-    // Cancel any pending request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    abortControllerRef.current = new AbortController();
-    setIsLoading(true);
-    setIsAnimating(true);
-    setTimeout(() => setIsAnimating(false), 600);
-
-    // Optimistic update
-    const wasLiked = hasLiked;
-    setHasLiked(!wasLiked);
-    setLikes((prev) => (wasLiked ? Math.max(0, prev - 1) : prev + 1));
-
-    try {
-      const endpoint = wasLiked ? "unlike" : "like";
-      const res = await fetch(`/api/posts/${slug}/${endpoint}`, {
-        method: "POST",
-        signal: abortControllerRef.current.signal,
-      });
-
-      if (!res.ok) throw new Error("Request failed");
-
-      const data = await res.json();
-      setLikes(data.likes);
-
-      // Update localStorage
-      const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]");
-      if (wasLiked) {
-        localStorage.setItem(
-          "likedPosts",
-          JSON.stringify(likedPosts.filter((s: string) => s !== slug))
-        );
-      } else {
-        localStorage.setItem(
-          "likedPosts",
-          JSON.stringify([...likedPosts, slug])
-        );
-      }
-    } catch (error) {
-      // Revert optimistic update on error (unless aborted)
-      if (error instanceof Error && error.name !== "AbortError") {
-        setHasLiked(wasLiked);
-        setLikes((prev) => (wasLiked ? prev + 1 : Math.max(0, prev - 1)));
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { views, likes, hasLiked, kicking, toggle } = usePostLike(slug, {
+    countView: true,
+    initialLikes,
+    initialViews,
+  });
 
   return (
     <div
@@ -101,53 +37,32 @@ export function PostStats({
         className
       )}
     >
-      {/* Views */}
-      <div className="flex items-center gap-1.5">
-        <Eye className="h-4 w-4" />
-        <span>{views.toLocaleString()}</span>
-      </div>
+      <span className="flex items-center gap-1.5">
+        <Eye aria-hidden="true" className="h-4 w-4" />
+        <span className="sr-only">Views: </span>
+        {views.toLocaleString()}
+      </span>
 
-      {/* Likes */}
       <button
-        type="button"
-        onClick={handleLike}
         className={cn(
-          "flex items-center gap-1.5 transition-colors",
+          "pressable flex items-center gap-1.5",
           hasLiked ? "text-red-500" : "hover:text-red-500"
         )}
+        onClick={toggle}
+        type="button"
       >
         <Heart
           className={cn(
-            "h-4 w-4 transition-transform",
+            "h-4 w-4",
             hasLiked && "fill-current",
-            isAnimating && "animate-like"
+            kicking && "animate-like"
           )}
         />
-        <span>{likes.toLocaleString()}</span>
+        <span className="sr-only">
+          {hasLiked ? "Unlike this post. " : "Like this post. "}
+        </span>
+        {likes.toLocaleString()}
       </button>
-
-      <style jsx global>{`
-        @keyframes like {
-          0% {
-            transform: scale(1);
-          }
-          25% {
-            transform: scale(1.3);
-          }
-          50% {
-            transform: scale(0.9);
-          }
-          75% {
-            transform: scale(1.15);
-          }
-          100% {
-            transform: scale(1);
-          }
-        }
-        .animate-like {
-          animation: like 0.6s ease-in-out;
-        }
-      `}</style>
     </div>
   );
 }

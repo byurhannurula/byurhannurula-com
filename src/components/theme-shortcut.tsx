@@ -35,66 +35,108 @@ function isTyping(event: KeyboardEvent) {
 /** Window in which a second `g` counts as the `gg` motion, matching vim's default. */
 const CHORD_TIMEOUT_MS = 600;
 
+const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+/** Shift plus these. Arrow keys are matched raw, letters after lowercasing. */
+const SHIFT_ACTIONS: Record<string, () => void> = {
+  ArrowUp: toTop,
+  ArrowDown: () =>
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }),
+  e: copyEmail,
+  l: copyPageLink,
+};
+
+/**
+ * `?` opens the shortcuts sheet.
+ *
+ * Runs before the modifier guard below: `?` sits behind AltGr on several
+ * non-US layouts, and Windows reports AltGr as ctrl and alt together. `code`
+ * covers layouts that remap the character itself.
+ */
+function tryHelp(event: KeyboardEvent) {
+  const isHelpKey =
+    event.key === "?" || (event.code === "Slash" && event.shiftKey);
+  if (!isHelpKey || event.metaKey) return false;
+  window.dispatchEvent(new Event(OPEN_SHORTCUTS_EVENT));
+  return true;
+}
+
+function tryShift(event: KeyboardEvent) {
+  if (!event.shiftKey) return false;
+  const key = event.key.toLowerCase();
+
+  const action = SHIFT_ACTIONS[event.key] ?? SHIFT_ACTIONS[key];
+  if (action) {
+    action();
+    return true;
+  }
+  if (key in SHIFT_LINKS) {
+    openExternal(SHIFT_LINKS[key]);
+    return true;
+  }
+  return false;
+}
+
+function tryChord(event: KeyboardEvent, pendingG: { current: number }) {
+  if (event.key.toLowerCase() !== "g") return false;
+  const now = Date.now();
+  const isSecond = now - pendingG.current < CHORD_TIMEOUT_MS;
+  pendingG.current = isSecond ? 0 : now;
+  if (isSecond) toTop();
+  return true;
+}
+
+function tryPlain(
+  event: KeyboardEvent,
+  actions: { cycle: () => void; go: (href: string) => void }
+) {
+  const key = event.key.toLowerCase();
+  if (key === "t") {
+    actions.cycle();
+    return true;
+  }
+  if (key in NAV_KEYS) {
+    actions.go(NAV_KEYS[key]);
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Built here rather than inside the effect so each step is a named function at
+ * the top level, which is also what keeps any one of them small enough to read.
+ */
+function keyHandler(
+  pendingG: { current: number },
+  actions: { cycle: () => void; go: (href: string) => void }
+) {
+  return (event: KeyboardEvent) => {
+    if (isTyping(event)) return;
+
+    const handled =
+      tryHelp(event) ||
+      (!(event.metaKey || event.ctrlKey || event.altKey) &&
+        (tryShift(event) ||
+          tryChord(event, pendingG) ||
+          tryPlain(event, actions)));
+
+    if (handled) event.preventDefault();
+    // Any other key breaks the chord, including the ones handled above. A
+    // half-typed `gg` should not survive a cmd+K or a shift+E in between.
+    if (event.key.toLowerCase() !== "g") pendingG.current = 0;
+  };
+}
+
 export function GlobalShortcuts() {
   const { resolvedTheme, setTheme } = useTheme();
   const router = useRouter();
   const pendingGRef = useRef(0);
 
   useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (isTyping(event)) return;
-
-      // `?` sits behind AltGr on several non-US layouts, and Windows reports
-      // AltGr as ctrl+alt together, so this has to run before the modifier
-      // guard below. `code` covers layouts that remap the character itself.
-      const isHelpKey =
-        event.key === "?" || (event.code === "Slash" && event.shiftKey);
-      if (isHelpKey && !event.metaKey) {
-        event.preventDefault();
-        window.dispatchEvent(new Event(OPEN_SHORTCUTS_EVENT));
-        return;
-      }
-
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
-      const key = event.key.toLowerCase();
-
-      if (event.shiftKey) {
-        if (key === "e") copyEmail();
-        else if (key === "l") copyPageLink();
-        else if (key in SHIFT_LINKS) openExternal(SHIFT_LINKS[key]);
-        else if (event.key === "ArrowUp") {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        } else if (event.key === "ArrowDown") {
-          window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: "smooth",
-          });
-        } else return;
-        event.preventDefault();
-        return;
-      }
-
-      if (key === "g") {
-        event.preventDefault();
-        const now = Date.now();
-        if (now - pendingGRef.current < CHORD_TIMEOUT_MS) {
-          pendingGRef.current = 0;
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        } else {
-          pendingGRef.current = now;
-        }
-        return;
-      }
-      pendingGRef.current = 0;
-
-      if (key === "t") {
-        event.preventDefault();
-        cycleLightMode(resolvedTheme as LightMode, setTheme);
-      } else if (key in NAV_KEYS) {
-        event.preventDefault();
-        router.push(NAV_KEYS[key]);
-      }
-    }
+    const onKeyDown = keyHandler(pendingGRef, {
+      cycle: () => cycleLightMode(resolvedTheme as LightMode, setTheme),
+      go: (href) => router.push(href),
+    });
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
