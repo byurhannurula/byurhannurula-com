@@ -73,7 +73,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       {/* Posts */}
                       <div className="space-y-0.5">
                         {monthGroup.posts.map((post) => (
-                          <BlogPostItem key={post.slug} post={post} />
+                          <BlogPostItem
+                            inYearGroup
+                            key={post.slug}
+                            post={post}
+                          />
                         ))}
                       </div>
                     </div>
