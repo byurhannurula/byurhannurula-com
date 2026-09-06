@@ -54,15 +54,15 @@ export const SOCIAL_LINKS = [
     external: false,
   },
   {
-    name: "LinkedIn",
-    href: SITE_CONFIG.social.linkedin,
-    icon: LinkedinIcon,
-    external: true,
-  },
-  {
     name: "GitHub",
     href: SITE_CONFIG.social.github,
     icon: GithubIcon,
+    external: true,
+  },
+  {
+    name: "LinkedIn",
+    href: SITE_CONFIG.social.linkedin,
+    icon: LinkedinIcon,
     external: true,
   },
   {
@@ -179,6 +179,19 @@ export const PAGE_METADATA: Record<string, PageMeta> = {
     description:
       "View analytics and statistics for blog posts, including views, likes, and claps.",
     keywords: ["statistics", "analytics", "blog stats", "metrics"],
+    noIndex: true,
+  },
+  "/books": {
+    title: "Books | Byurhan",
+    description:
+      "What I am reading, what I finished, and what is still waiting.",
+    keywords: ["books", "reading", "shelf", "design books"],
+    noIndex: true,
+  },
+  "/lab": {
+    title: "Lab | Byurhan",
+    description: "Interaction experiments that have not earned a place yet.",
+    keywords: ["lab", "experiments", "prototypes"],
     noIndex: true,
   },
   "/shorts": {
