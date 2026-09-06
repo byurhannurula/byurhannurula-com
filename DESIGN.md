@@ -587,11 +587,22 @@ turn accent on hover; the RSS link is the one place `rss` orange appears.
 
 ### Motion
 
-CSS only, no animation library. Entry is `opacity 0 → 1` with `translateY(4px)`
-over 0.25s. Hover transitions run 0.15s on `border-color`, `color`, and
-`opacity`. The theme change is a view-transition dot bloom keyed to
-`spacing.grid-pitch`, which degrades to a 160ms cross-dissolve under
-`prefers-reduced-motion`, where every other animation is cut to 0.01ms.
+CSS first. Entry is `opacity 0 -> 1` with `translateY(4px)` over 0.25s. Hover
+transitions run 0.15s on `border-color`, `color`, and `opacity`. The theme change
+is a view-transition dot bloom keyed to `spacing.grid-pitch`, which degrades to a
+160ms cross-dissolve under `prefers-reduced-motion`, where every other animation
+is cut to 0.01ms.
+
+`motion` (v13) is allowed where CSS genuinely cannot do the job: `layoutId`
+shared elements, FLIP reflow, interruptible springs, drag. It must stay
+**route-scoped**, imported from a leaf client component and never from
+`layout.tsx` or anything shared, or its 41 KB lands on every route instead of
+one. It is on `/uses` today. Fades, hovers and entrance staggers stay on
+`animate-fade-in-up` and `.stagger-children`, which cost nothing.
+
+Note that Tailwind v4 compiles `translate-*` and `scale-*` to the discrete
+`translate` and `scale` properties, so `transition-transform` is a silent no-op;
+name the property the utility actually sets.
 
 ## Do's and Don'ts
 

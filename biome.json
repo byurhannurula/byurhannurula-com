@@ -72,7 +72,10 @@
         "noUselessTernary": "error",
         "useFlatMap": "error",
         "useOptionalChain": "error",
-        "useSimplifiedLogicExpression": "error"
+        "useSimplifiedLogicExpression": "error",
+        "noExcessiveCognitiveComplexity": {
+          "level": "error"
+        }
       },
       "correctness": {
         "noChildrenProp": "error",
