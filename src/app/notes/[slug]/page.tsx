@@ -2,7 +2,6 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
 import {
   PostLike,
   PostStats,
@@ -13,6 +12,7 @@ import { HashScroll } from "@/components/hash-scroll";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
 import { MDXRenderer, TOCFloating } from "@/components/mdx";
 import { PageWrapper } from "@/components/page-wrapper";
+import { BackLink } from "@/components/ui";
 import { createBlogMetadata, SITE_CONFIG } from "@/config";
 import { getAllPosts, getSinglePost, type Post } from "@/lib/server";
 
@@ -85,13 +85,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Header section */}
         <div>
           <div className="mb-5">
-            <Link
-              href="/notes"
-              className="group inline-flex items-center gap-1.5 font-mono text-[12.5px] text-muted-foreground no-underline transition-colors hover:text-primary"
-            >
-              <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-1" />
-              back to notes
-            </Link>
+            <BackLink href="/notes">back to notes</BackLink>
           </div>
 
           <div className="mb-8">

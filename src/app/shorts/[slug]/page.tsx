@@ -1,9 +1,7 @@
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-
 import { MDXRenderer } from "@/components/mdx";
 import { PageWrapper } from "@/components/page-wrapper";
+import { BackLink } from "@/components/ui";
 import { getAllShorts, getSingleShort } from "@/lib/server";
 import type { Short } from "@/types";
 
@@ -29,13 +27,7 @@ export default async function ShortPage({
   return (
     <PageWrapper>
       <div className="mb-8">
-        <Link
-          href="/shorts"
-          className="group inline-flex items-center gap-1 font-medium text-foreground text-xs uppercase tracking-wider transition-colors hover:text-primary"
-        >
-          <ArrowLeft className="size-3 transition-transform group-hover:-translate-x-1" />
-          Back to shorts
-        </Link>
+        <BackLink href="/shorts">back to shorts</BackLink>
       </div>
 
       <div className="mb-8">

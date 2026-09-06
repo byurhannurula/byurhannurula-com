@@ -1,6 +1,5 @@
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -9,6 +8,7 @@ import { BreadcrumbJsonLd } from "@/components/json-ld";
 import { PageWrapper } from "@/components/page-wrapper";
 import { ProjectGallery } from "@/components/projects/project-gallery";
 import { SectionHeading } from "@/components/section-heading";
+import { BackLink } from "@/components/ui";
 import { createMetadata } from "@/config";
 import { getProject, hasDetailPage, PROJECTS } from "@/config/projects";
 import { cn } from "@/lib/utils";
@@ -107,13 +107,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       />
       <PageWrapper>
         <div className="mb-4">
-          <Link
-            href="/projects"
-            className="group inline-flex items-center gap-1.5 font-mono text-[12.5px] text-muted-foreground no-underline transition-colors hover:text-primary motion-reduce:transition-none"
-          >
-            <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-1 motion-reduce:transition-none" />
-            back to projects
-          </Link>
+          <BackLink href="/projects">back to projects</BackLink>
         </div>
 
         <div className="mb-6">

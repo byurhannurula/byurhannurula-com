@@ -34,7 +34,7 @@ export function HeroLinks({ all = false, socials, className }: HeroLinksProps) {
     >
       <a
         href={SITE_CONFIG.social.email}
-        className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 font-mono font-semibold text-[12.5px] text-primary-foreground no-underline transition-[filter] hover:brightness-110"
+        className="pressable inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 font-mono font-semibold text-[12.5px] text-primary-foreground no-underline hover:brightness-110"
       >
         <MailIcon className="size-3.5" />
         email me
@@ -55,9 +55,9 @@ export function HeroLinks({ all = false, socials, className }: HeroLinksProps) {
             rel={rel}
             aria-label={link.name}
             title={link.name.toLowerCase()}
-            className="group inline-flex size-9 items-center justify-center rounded-lg border border-border bg-background-soft transition-colors hover:border-primary hover:border-dashed"
+            className="pressable icon-tile"
           >
-            <link.icon className="size-4 text-muted-foreground transition-colors group-hover:text-foreground group-focus-visible:text-foreground" />
+            <link.icon className="size-4" />
           </Link>
         );
       })}

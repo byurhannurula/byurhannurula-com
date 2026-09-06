@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Drawer } from "vaul";
 
 import { OPEN_COMMAND_PALETTE_EVENT } from "@/components/command-palette";
+import { DRAWER_OVERLAY, DrawerGrabber } from "@/components/ui";
 import { NAVIGATION_ITEMS } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,9 @@ function isActive(pathname: string, path: string) {
  * Always visible, not revealed on scroll: with the header nav gone there would
  * otherwise be no way to navigate from the top of a page.
  */
+const SHEET_ROW =
+  "flex items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors active:bg-background-soft";
+
 export function MobileNav() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -43,10 +47,10 @@ export function MobileNav() {
       </Drawer.Trigger>
 
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-50 bg-background/60 backdrop-blur-[2px]" />
+        <Drawer.Overlay className={DRAWER_OVERLAY} />
         <Drawer.Content className="fixed right-0 bottom-0 left-0 z-50 flex flex-col rounded-t-2xl border-border border-t bg-background pb-[env(safe-area-inset-bottom)] outline-none">
-          <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-border" />
-          <Drawer.Title className="px-5 pt-4 pb-2 font-mono text-[11px] text-faint uppercase tracking-[0.08em]">
+          <DrawerGrabber />
+          <Drawer.Title className="label-micro px-5 pt-4 pb-2">
             go to
           </Drawer.Title>
           <Drawer.Description className="sr-only">
@@ -80,7 +84,7 @@ export function MobileNav() {
                 close();
                 window.dispatchEvent(new Event(OPEN_COMMAND_PALETTE_EVENT));
               }}
-              className="flex items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors active:bg-background-soft"
+              className={SHEET_ROW}
             >
               <Search aria-hidden className="size-4" />
               search
@@ -91,7 +95,7 @@ export function MobileNav() {
                 close();
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="flex items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors active:bg-background-soft"
+              className={SHEET_ROW}
             >
               <ArrowUp aria-hidden className="size-4" />
               back to top

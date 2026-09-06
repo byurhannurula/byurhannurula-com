@@ -72,10 +72,7 @@ export function TableHead({
   return (
     <th
       {...props}
-      className={cn(
-        "px-3.5 py-2.5 text-left font-mono text-[11px] text-faint uppercase tracking-[0.08em]",
-        className
-      )}
+      className={cn("label-micro px-3.5 py-2.5 text-left", className)}
     >
       {children}
     </th>

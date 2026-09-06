@@ -1,11 +1,10 @@
-import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
 import { BlogPostItem } from "@/components/blog";
 import { BreadcrumbJsonLd } from "@/components/json-ld";
 import { PageWrapper } from "@/components/page-wrapper";
 import { SectionHeading } from "@/components/section-heading";
+import { BackLink } from "@/components/ui";
 import { createMetadata } from "@/config";
 import { getAllPosts, getAllTags } from "@/lib/server";
 import { cn } from "@/lib/utils";
@@ -50,13 +49,7 @@ export default async function TagPage({ params }: TagPageProps) {
       />
       <PageWrapper>
         <div className="mb-4">
-          <Link
-            href="/notes"
-            className="group inline-flex items-center gap-1.5 font-mono text-[12.5px] text-muted-foreground no-underline transition-colors hover:text-primary"
-          >
-            <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-1 motion-reduce:transition-none" />
-            back to notes
-          </Link>
+          <BackLink href="/notes">back to notes</BackLink>
         </div>
 
         <div className="mb-8">

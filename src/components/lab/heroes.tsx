@@ -35,12 +35,21 @@ const node = getStackItem("node");
  * The restraint is the design: marks are grey until hovered, only three phrases
  * hold anything, and the copy is the copy that was already on the homepage.
  */
+/* These are h2 elements standing in for a page title, so the h1 base rule
+   in globals.css does not reach them. */
+const HERO_TITLE = "text-[26px] leading-[1.35] tracking-[-0.5px]";
+
+/* The four mechanism rows in HeroText are the same shape four times over. */
+const SPEC_ROW = "hairline flex flex-wrap items-baseline gap-x-4 gap-y-2 py-4";
+const SPEC_KEY = "w-24 shrink-0 font-mono text-[12px] text-primary";
+const SPEC_NOTE = "w-full text-[13px] text-muted-foreground leading-snug";
+
 export function HeroLiving() {
   const years = new Date().getFullYear() - CODING_SINCE;
 
   return (
     <div>
-      <h2 className="mb-4 text-[26px] leading-[1.35] tracking-[-0.5px]">
+      <h2 className={cn(HERO_TITLE, "mb-4")}>
         Hi, I&apos;m Byurhan, a developer who{" "}
         <SplitFlap className="text-primary" words={LAB_FLIP_WORDS} />
       </h2>
@@ -102,7 +111,7 @@ export function HeroSpec() {
 
   return (
     <div>
-      <h2 className="mb-4 text-[26px] leading-[1.35] tracking-[-0.5px]">
+      <h2 className={cn(HERO_TITLE, "mb-4")}>
         Hi, I&apos;m Byurhan, a developer who tinkers.
       </h2>
 
@@ -141,9 +150,7 @@ export function HeroSpec() {
                 className="hairline flex gap-4 py-2 text-[13.5px]"
                 key={row.key}
               >
-                <dt className="w-24 shrink-0 font-mono text-[12px] text-primary">
-                  {row.key}
-                </dt>
+                <dt className={SPEC_KEY}>{row.key}</dt>
                 <dd className="text-foreground">{row.value}</dd>
               </div>
             ))}
@@ -207,51 +214,33 @@ const TERMINAL_LINES = [
 export function HeroText() {
   return (
     <div>
-      <h2 className="mb-5 text-[26px] leading-[1.35] tracking-[-0.5px]">
-        Four ways to change a word.
-      </h2>
+      <h2 className={cn(HERO_TITLE, "mb-5")}>Four ways to change a word.</h2>
 
       <div className="hairline-t">
-        <div className="hairline flex flex-wrap items-baseline gap-x-4 gap-y-2 py-4">
-          <span className="w-24 shrink-0 font-mono text-[12px] text-primary">
-            {MECHANISMS[0].name}
-          </span>
+        <div className={SPEC_ROW}>
+          <span className={SPEC_KEY}>{MECHANISMS[0].name}</span>
           <SplitFlap className="text-foreground" words={LAB_FLIP_WORDS} />
-          <p className="w-full text-[13px] text-muted-foreground leading-snug">
-            {MECHANISMS[0].note}
-          </p>
+          <p className={SPEC_NOTE}>{MECHANISMS[0].note}</p>
         </div>
 
-        <div className="hairline flex flex-wrap items-baseline gap-x-4 gap-y-2 py-4">
-          <span className="w-24 shrink-0 font-mono text-[12px] text-primary">
-            {MECHANISMS[1].name}
-          </span>
+        <div className={SPEC_ROW}>
+          <span className={SPEC_KEY}>{MECHANISMS[1].name}</span>
           <Reel className="text-[26px] text-foreground" word="rebuilds" />
-          <p className="w-full text-[13px] text-muted-foreground leading-snug">
-            {MECHANISMS[1].note}
-          </p>
+          <p className={SPEC_NOTE}>{MECHANISMS[1].note}</p>
         </div>
 
-        <div className="hairline flex flex-wrap items-baseline gap-x-4 gap-y-2 py-4">
-          <span className="w-24 shrink-0 font-mono text-[12px] text-primary">
-            {MECHANISMS[2].name}
-          </span>
+        <div className={SPEC_ROW}>
+          <span className={SPEC_KEY}>{MECHANISMS[2].name}</span>
           <Scramble className="text-[20px] text-foreground">
             over-engineers
           </Scramble>
-          <p className="w-full text-[13px] text-muted-foreground leading-snug">
-            {MECHANISMS[2].note}
-          </p>
+          <p className={SPEC_NOTE}>{MECHANISMS[2].note}</p>
         </div>
 
-        <div className="hairline flex flex-wrap items-baseline gap-x-4 gap-y-2 py-4">
-          <span className="w-24 shrink-0 font-mono text-[12px] text-primary">
-            {MECHANISMS[3].name}
-          </span>
+        <div className={SPEC_ROW}>
+          <span className={SPEC_KEY}>{MECHANISMS[3].name}</span>
           <TerminalChip lines={TERMINAL_LINES} />
-          <p className="w-full text-[13px] text-muted-foreground leading-snug">
-            {MECHANISMS[3].note}
-          </p>
+          <p className={SPEC_NOTE}>{MECHANISMS[3].note}</p>
         </div>
       </div>
     </div>

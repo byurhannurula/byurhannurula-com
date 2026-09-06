@@ -13,9 +13,7 @@ function Column({ items, kind }: { items: string[]; kind: "pro" | "con" }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <span className="font-mono text-[11px] text-faint uppercase tracking-[0.08em]">
-        {isPro ? "pros" : "cons"}
-      </span>
+      <span className="label-micro">{isPro ? "pros" : "cons"}</span>
       <ul className="flex list-none flex-col gap-2.5 p-0">
         {items.map((item) => (
           <li className="flex items-start gap-2.5 text-[13.5px]" key={item}>

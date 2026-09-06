@@ -255,9 +255,7 @@ export default async function DesignSystemPage() {
               ] as const
             ).map(([group, items]) => (
               <div key={group}>
-                <p className="mb-2 font-mono text-[11px] text-faint uppercase tracking-[0.08em]">
-                  {group}
-                </p>
+                <p className="label-micro mb-2">{group}</p>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                   {items.map((swatch) => (
                     <Swatch key={swatch.token} {...swatch} outlined />
@@ -878,9 +876,7 @@ export default async function DesignSystemPage() {
             ))}
           </div>
           <div className="mt-5">
-            <p className="mb-2 font-mono text-[11px] text-faint uppercase tracking-[0.08em]">
-              stagger-children
-            </p>
+            <p className="label-micro mb-2">stagger-children</p>
             <Replay label="replay stagger">
               <ul className="stagger-children flex list-none flex-col gap-1.5 p-0">
                 {["first", "second", "third", "fourth", "fifth"].map((item) => (

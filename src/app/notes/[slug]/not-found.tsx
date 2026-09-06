@@ -1,26 +1,17 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { PageWrapper } from "@/components/page-wrapper";
+import { BackLink, EmptyState } from "@/components/ui";
 
 export default function NotFound() {
   return (
     <PageWrapper>
-      <div className="mb-8 animate-fade-in">
-        <Link
-          href="/notes"
-          className="group inline-flex items-center gap-1 font-medium text-foreground text-xs uppercase tracking-wider transition-colors hover:text-primary"
-        >
-          <ArrowLeft className="size-3 transition-transform group-hover:-translate-x-1" />
-          Back to thoughts
-        </Link>
+      <div className="mb-8">
+        <BackLink href="/notes">back to notes</BackLink>
       </div>
 
-      <div
-        className="flex animate-fade-in flex-col items-center justify-center py-16 text-center"
-        style={{ animationDelay: "0.2s" }}
-      >
+      <EmptyState>
         <div className="mb-8">
           <div className="mb-4 text-6xl">🔍</div>
           <h1 className="mb-4 font-semibold text-xl">Post not found</h1>
@@ -35,7 +26,7 @@ export default function NotFound() {
         >
           Back to Blog
         </Link>
-      </div>
+      </EmptyState>
     </PageWrapper>
   );
 }
