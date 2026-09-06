@@ -1,7 +1,8 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "project": ["src/**/*.{ts,tsx}"],
-  "ignoreDependencies": ["tailwindcss"],
+  "ignore": ["src/components/ui/**"],
+  "ignoreDependencies": ["tailwindcss", "geist"],
   "rules": {
     "files": "warn",
     "exports": "warn",
