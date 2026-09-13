@@ -44,14 +44,16 @@ export function Navigation() {
   return (
     /*
      * Sticky rather than fixed: it stays inside container-editorial, so it
-     * keeps the column's width and its dashed side rules run behind it.
+     * keeps the column's width.
      *
      * The surface only appears once the page has moved, and spans the viewport
-     * rather than the column: see nav-surface in globals.css. The dashed rule
+     * rather than the column: see nav-surface in globals.css. The hairline
      * under it stays column-width, because that rule belongs to the column.
      *
-     * data-sound: the nav is the one place on the site where the pointer
-     * travels along a row of links, which is what the tick is for.
+     * data-sound with no trigger, so the nav takes the site default and sounds
+     * when a link is chosen. Routing here is client-side, so the sound and the
+     * page that follows it are the same document; there is nothing to land in
+     * the wrong place.
      */
     <header
       className={cn(

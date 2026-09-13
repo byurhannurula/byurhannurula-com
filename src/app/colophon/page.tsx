@@ -73,11 +73,20 @@ const TYPE_AND_COLOR: KeyValueRow[] = [
     value: (
       <Detail
         lead="JetBrains Mono"
-        rest="headings, metadata, anything structural"
+        rest="section headings, metadata, anything structural"
       />
     ),
   },
-  { label: "sans", value: <Detail lead="Geist" rest="body text" /> },
+  {
+    label: "sans",
+    value: <Detail lead="Inter" rest="body text, page titles" />,
+  },
+  {
+    label: "pixel",
+    value: (
+      <Detail lead="Geist Pixel Square" rest="the name on the home page" />
+    ),
+  },
   {
     label: "palette",
     value:
@@ -185,19 +194,19 @@ export default function ColophonPage() {
 
       <h2 className="section-heading">
         stack
-        <span className="hairline flex-1" />
+        <span className="hairline-dashed flex-1" />
       </h2>
       <KeyValueTable rows={STACK} />
 
       <h2 className="section-heading">
         type &amp; color
-        <span className="hairline flex-1" />
+        <span className="hairline-dashed flex-1" />
       </h2>
       <KeyValueTable rows={TYPE_AND_COLOR} />
 
       <h2 className="section-heading">
         inspiration
-        <span className="hairline flex-1" />
+        <span className="hairline-dashed flex-1" />
       </h2>
       <p className="text-[14px] text-muted-foreground">
         Sites that shaped this one, in ways big and small:{" "}
@@ -220,7 +229,7 @@ export default function ColophonPage() {
 
       <h2 className="section-heading">
         lineage
-        <span className="hairline flex-1" />
+        <span className="hairline-dashed flex-1" />
       </h2>
       <div className="space-y-4">
         {LINEAGE.map((entry) => (
@@ -240,7 +249,7 @@ export default function ColophonPage() {
 
       <h2 className="section-heading">
         process
-        <span className="hairline flex-1" />
+        <span className="hairline-dashed flex-1" />
       </h2>
       <p className="text-[13.5px] text-muted-foreground">
         Design direction explored in conversation with Claude; every decision

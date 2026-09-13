@@ -50,7 +50,7 @@ export function RowLink({
                 as the rest of the site, so the footer switch takes it too. */}
             <span
               aria-hidden="true"
-              className="hairline-t min-w-5 flex-1 -translate-y-1"
+              className="hairline-dashed min-w-5 flex-1 -translate-y-1"
             />
             <span className="label-pill shrink-0 transition-colors group-hover:border-primary group-hover:text-primary">
               {meta}

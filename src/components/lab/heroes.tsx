@@ -12,7 +12,7 @@ import {
 import { TerminalChip } from "@/components/lab/loose-parts";
 import { Reel } from "@/components/lab/reel";
 import { SplitFlap } from "@/components/lab/split-flap";
-import { Scramble } from "@/components/lab/text-effects";
+import { Scramble } from "@/components/scramble";
 import { LAB_FLIP_WORDS, LAB_SPEC } from "@/config/lab";
 import { getStackItem } from "@/config/stack";
 import { playSound } from "@/lib/sound";

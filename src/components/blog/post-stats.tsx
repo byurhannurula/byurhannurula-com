@@ -48,6 +48,7 @@ export function PostStats({
           "pressable flex items-center gap-1.5",
           hasLiked ? "text-red-500" : "hover:text-red-500"
         )}
+        data-sound=""
         onClick={toggle}
         type="button"
       >

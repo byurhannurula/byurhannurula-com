@@ -12,7 +12,10 @@
  *      data-sound             turn sound on inside here; the value names the
  *                             sample, so data-sound="page" turns the tick into
  *                             a page turn. Empty means click.
- *      data-sound-on          "hover" (the default), "click", or "both".
+ *      data-sound-on          "click" (the default), "hover", or "both".
+ *                             Hover is the trigger people switch a site's
+ *                             sound off over, so it is opted into, never
+ *                             inherited.
  *      data-sound-target      this element sounds even though it is not a
  *                             link or a button.
  *      data-no-sound          take one element back out.
@@ -37,26 +40,34 @@ export interface SoundSpec {
    * Level in the mix, over samples that all peak within 2 dB of full scale.
    * click is a dry tick and open/close carry a tail, so one volume across
    * both makes the tail dominate.
+   *
+   * The reference is 0.26, the level the nav was judged at and the level a
+   * press sits at now. Nothing here is meant to be more than a shade above
+   * it, and a hover sits a shade under.
    */
   gain: number;
   /**
    * Level when this is a hover rather than a deliberate act, as a fraction of
    * `gain`. Under 1 on purpose: pointing at a thing should read as lighter
-   * than reaching it.
+   * than reaching it. Absent on the samples no hover scope ever plays.
    */
-  hover: number;
+  hover?: number;
 }
 
 export const SOUNDS: Record<SoundName, SoundSpec> = {
-  click: { src: "/sounds/click.webm", gain: 0.8, hover: 0.32 },
-  open: { src: "/sounds/open.webm", gain: 0.55, hover: 0.5 },
-  close: { src: "/sounds/close.webm", gain: 0.55, hover: 0.5 },
-  flipper: { src: "/sounds/flipper.webm", gain: 0.35, hover: 0.5 },
-  page: { src: "/sounds/page.webm", gain: 0.45, hover: 0.9 },
+  click: { src: "/sounds/click.webm", gain: 0.26, hover: 0.8 },
+  open: { src: "/sounds/open.webm", gain: 0.3 },
+  close: { src: "/sounds/close.webm", gain: 0.3 },
+  // A bed that runs for as long as the board does, so under the one-offs.
+  flipper: { src: "/sounds/flipper.webm", gain: 0.22 },
+  page: { src: "/sounds/page.webm", gain: 0.28, hover: 0.8 },
 };
 
 /** What the delegated layer plays when a scope does not name a sound. */
-export const DEFAULT_HOVER_SOUND: SoundName = "click";
+export const DEFAULT_SOUND: SoundName = "click";
+
+/** Hover level for a sample that does not set one. */
+export const HOVER_LEVEL = 0.5;
 
 /**
  * Detune in cents for the hover tick, so it sits above the pitch of the same
@@ -93,12 +104,21 @@ export const SCOPE_ATTRIBUTE = "data-sound";
  */
 export const TARGET_ATTRIBUTE = "data-sound-target";
 
-/** Set beside a scope to change when it fires. Hover unless it says otherwise. */
+/** Set beside a scope to change when it fires. Click unless it says otherwise. */
 export const TRIGGER_ATTRIBUTE = "data-sound-on";
 
 export type SoundTrigger = "hover" | "click" | "both";
 
-export const DEFAULT_TRIGGER: SoundTrigger = "hover";
+/**
+ * Click, not hover.
+ *
+ * A click sound confirms something the visitor chose to do. A hover sound
+ * reports the pointer, which is not news, fires far more often, and is silent
+ * on touch anyway. Defaulting to hover meant every new scope was irritating
+ * until someone remembered to say otherwise; this way the noisy one has to be
+ * asked for by name.
+ */
+export const DEFAULT_TRIGGER: SoundTrigger = "click";
 
 export function isTrigger(value: string): value is SoundTrigger {
   return value === "hover" || value === "click" || value === "both";

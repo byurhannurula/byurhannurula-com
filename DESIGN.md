@@ -54,22 +54,22 @@ typography:
     fontWeight: "600"
     lineHeight: 1.4
   body:
-    fontFamily: Geist Sans
+    fontFamily: Inter
     fontSize: 15px
     fontWeight: "400"
     lineHeight: 1.65
   lede:
-    fontFamily: Geist Sans
+    fontFamily: Inter
     fontSize: 16px
     fontWeight: "400"
     lineHeight: 1.6
   row-title:
-    fontFamily: Geist Sans
+    fontFamily: Inter
     fontSize: 15px
     fontWeight: "500"
     lineHeight: 1.5
   row-subtitle:
-    fontFamily: Geist Sans
+    fontFamily: Inter
     fontSize: 13px
     fontWeight: "400"
     lineHeight: 1.5
@@ -346,20 +346,25 @@ Supersedes `docs/site-audit-and-direction.md` (June 2026).
 ## Overview
 
 A dark-first, monospace-accented editorial page. One narrow column of text on a
-dotted field, cut by dashed hairlines, with a single green accent. It must read
+dotted field, ruled by thin hairlines, with a single green accent. It must read
 like a well-set document, not like an app.
 
 Six rules hold everywhere:
 
-1. **Mono is structural.** Headings, metadata, labels, dates, table keys, chips,
-   and the footer are all mono. Body prose is sans. If text carries meaning
-   about the page rather than in the page, it is mono.
-2. **Dashed for structure, solid for objects.** Every separator, gutter, and
-   section rule is `1px dashed border-dash`. Cards, code blocks, and inputs get a
-   solid `1px border`.
-3. **One accent, used sparingly.** Green marks the `//` on a section heading, the
-   key column of a table, links, the active nav item, and up-state dots. Never a
-   large filled area except the single mail button.
+1. **Mono is structural, and the page title is not.** Section headings,
+   metadata, labels, dates, table keys, chips, and the footer are all mono.
+   Body prose is sans, and so is `h1`: the first line read should introduce a
+   person, not a terminal. If text carries meaning about the page rather than
+   in the page, it is mono.
+2. **Dashed joins, solid separates.** Dashed is a leader only: the fill between
+   a section heading and the edge of the column, and the one between a row
+   title and its date. Every real divider is a solid hairline in `border`.
+   Cards, code blocks, and inputs get a solid `1px border`. Dashed used to do
+   both jobs, which put a draft texture on five things at once and made a
+   finished page look like a wireframe.
+3. **One accent, used sparingly.** Green marks the key column of a table, links,
+   the active nav item, and up-state dots. Never a large filled area except the
+   single mail button, which is the only green above the fold on the home page.
 4. **Hover is a dashed accent border.** The house hover state for any bordered
    object is a dashed `primary` border plus a lift from `muted-foreground` to
    `foreground`. No shadows, no scale.
@@ -414,13 +419,19 @@ callout is about 5:1 in both themes.
 
 ## Typography
 
-Two families, no third: **JetBrains Mono** for structure and **Geist Sans** for
+Two families for the site: **JetBrains Mono** for structure and **Inter** for
 prose. Fifteen levels, all listed in the frontmatter.
+
+One exception, used once: **Geist Pixel Square** sets the name in the homepage
+hero and nothing else. It is loaded by that page alone, so no other route
+preloads it. It carries the developer feel the page title lost when it moved
+out of mono, in the one place a stranger looks first.
 
 - `hero` and `page-title` are the only negative-tracked levels.
 - `section-heading` is the most repeated element on the site: mono 14px,
-  lowercase, `muted-foreground`, prefixed `//` in `primary`, followed by a dashed
-  rule that fills the remaining width.
+  lowercase, `muted-foreground`, followed by a dashed leader that fills the
+  remaining width. Lowercase and mono are signal enough; it carried a `//` in
+  `primary` as well, which was three marks on one 12px element.
 - `meta` covers dates, read times, view counts, and the mono footer.
 - `table-header` is the only uppercase level, at `0.08em` tracking.
 - Prose paragraphs are separated by `spacing.paragraph` (14px), not by
@@ -434,9 +445,10 @@ starts at `h2`, so the prefix always mirrors the real markdown level.
 
 - **Column:** `spacing.column-max` (720px), centered, with
   `spacing.column-padding` (24px) inline padding.
-- **Gutters:** the column carries `border-inline: 1px dashed border-dash` over an
-  opaque `background` fill. This is the signature of the design — the dot field
-  shows only outside the column.
+- **Gutters:** the column is an opaque `background` fill, with no side rules.
+  The dot field shows only outside it, and the change in ground is what marks
+  the edge. It used to carry `border-inline: 1px dashed border-dash`, which
+  framed the column like a terminal window.
 - **Dot field:** fixed full-viewport `radial-gradient(border-dash 1px,
   transparent 1px)` at `spacing.grid-pitch` (28px), `opacity: 0.35`,
   `pointer-events: none`, painted behind the column.
@@ -463,8 +475,8 @@ grids of 2, 3, or 4 at `spacing.grid-gap` with `aspect-ratio: 4/3` (`1/1` at
 Depth comes from border style and fill, never from shadow — with one exception.
 
 - **Level 0** — the dot field, fixed behind everything.
-- **Level 1** — the column, an opaque `background` fill with dashed side gutters.
-  This is what makes the dots read as a margin.
+- **Level 1** — the column, an opaque `background` fill. This is what makes the
+  dots read as a margin.
 - **Level 2** — inline objects on `background-soft` with a solid `border`: chips,
   service cards, code blocks, the terminal tree.
 - **Level 3** — floating chrome on `surface-raised`: the TOC pill and its panel.
@@ -491,9 +503,10 @@ than in the frontmatter; `hairline` and `object-outline` carry the two values as
 
 Border language:
 
-- `1px dashed border-dash` — column gutters, row separators, table cells, section
-  rules, code-block header strip, default image frame.
-- `1px solid border` — anything that behaves as an object with a fill.
+- `1px dashed border-dash` — leaders only: the section-heading fill and the row
+  leader running out to a date.
+- `1px solid border` — every divider, table cell, the code-block header strip,
+  the default image frame, and anything that behaves as an object with a fill.
 - `1px dashed primary` — the universal hover state for a bordered object.
 - `2px solid primary` on the left edge — callouts and highlighted code lines.
 
@@ -508,7 +521,7 @@ behaviour that tokens cannot express.
 
 ### Header
 
-Flex row: wordmark, nav, theme toggle, over a dashed bottom hairline. The
+Flex row: wordmark, nav, theme toggle, over a solid bottom hairline. The
 wordmark is `byurhan.` with the period in `primary` — it has survived a name
 change and three rebuilds; do not restyle it. The active nav item turns
 `primary` and gains a `./` prefix at 60% opacity. Detail routes mark their
@@ -517,10 +530,11 @@ parent, so a post marks `notes` and a project marks `projects`.
 ### Row
 
 The list primitive for notes and projects. Flex, space-between, baseline-aligned,
-with a dashed bottom hairline: `row-title` on the left, optional `row-subtitle`
-beneath it, and `row-meta` on the right holding a date, a year, or a short label
-such as `oss`. Hover fills the whole row. Rows are anchors, never click-handled
-divs.
+with no rule under it: `row-title` on the left, optional `row-subtitle` beneath
+it, and `row-meta` on the right holding a date, a year, or a short label such as
+`oss`, joined to the title by a dashed leader. A stack of ruled rows read as a
+table rather than a list. Hover fills the whole row. Rows are anchors, never
+click-handled divs.
 
 ### Key-value table
 
@@ -581,7 +595,7 @@ rather than appearing at zero width.
 
 ### Footer
 
-A dashed top hairline over two mono groups: copyright and "built by hand in
+A solid top hairline over two mono groups: copyright and "built by hand in
 Ruse" on the left, a `·`-separated list of secondary routes on the right. Links
 turn accent on hover; the RSS link is the one place `rss` orange appears.
 
@@ -608,13 +622,15 @@ name the property the utility actually sets.
 
 **Do**
 
-- Use `border-dash` for anything that separates and `border` for anything that
-  contains.
+- Use `border` for anything that separates or contains. `border-dash` is for
+  leaders, and nothing else.
 - Give every bordered object the same hover: a dashed `primary` border and a
   lift to `foreground`.
 - Keep `faint` for metadata only, and never as the only copy of an idea.
-- Put the `//` marker and the trailing dashed rule on every section heading, and
-  keep the rule as a child element so an action link can sit after it.
+- Put the trailing dashed leader on every section heading, and keep it as a
+  child element so an action link can sit after it. The homepage is the one
+  exception: its headings drop the leader and carry the "all notes" and "all
+  projects" links on the right instead.
 - Write a `kv-why` line wherever a key-value row deserves an opinion.
 - Preserve `:focus-visible` as a 2px `ring` outline at 2px offset.
 - Use semantic HTML: `header`, `nav`, `main`, `footer`, `table`, `figure`,
@@ -624,7 +640,8 @@ name the property the utility actually sets.
 
 **Don't**
 
-- Don't add a third font family, or set body prose in mono.
+- Don't add a fourth font family, use Geist Pixel anywhere but the homepage
+  name, or set body prose in mono.
 - Don't fill a large area with `primary`. The mail button is the only exception.
 - Don't add shadows outside the floating TOC, and don't scale or translate on
   hover.

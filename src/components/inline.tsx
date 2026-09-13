@@ -42,7 +42,10 @@ export function HoverNote({ children, note }: HoverNoteProps) {
     <span className="group relative inline-block">
       <button
         type="button"
+        // Hover: the note opens under the pointer and the button is never
+        // pressed, so a click sound would be a sound for nothing.
         data-sound=""
+        data-sound-on="hover"
         className="cursor-help appearance-none border-muted-foreground border-b border-dashed bg-transparent p-0 font-inherit text-inherit"
       >
         {children}

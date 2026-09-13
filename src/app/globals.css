@@ -254,15 +254,17 @@
     overflow-x: clip;
   }
 
-  h1,
   h2,
   h3,
   h4 {
     @apply font-mono font-semibold text-foreground;
   }
 
+  /* Sans, unlike the rest of the headings. The page title is the first thing
+     read and in mono it introduced a terminal rather than a person. Sans sets
+     smaller at the same value, hence the larger size and tighter tracking. */
   h1 {
-    @apply text-[26px] leading-[1.35] tracking-[-0.5px];
+    @apply font-sans font-semibold text-[30px] text-foreground leading-[1.25] tracking-[-0.8px];
   }
 
   :focus-visible {
@@ -320,27 +322,28 @@
 /* Editorial primitives                          */
 /* ============================================ */
 
-/* One dash, one gap, repeated: the column's two side rules, every hairline and
-   the prose divider are all drawn from these, so the verticals and the
-   horizontals keep the same rhythm and one declaration can switch them off. */
+/* Dashed has one job now: the leader that fills the space between a label and
+   whatever sits at the end of its line, in a section heading and in a row.
+   Carried on every divider as well it was five simultaneous uses of a draft
+   texture, and the page read as a wireframe. Structural rules, which separate
+   things rather than join them, are solid instead. One declaration still
+   switches the lot off for the footer switch. */
 :root {
   --rule-step: calc(var(--rule-dash) + var(--rule-gap));
-  --rule-v: repeating-linear-gradient(
-    to bottom,
-    var(--border-dash) 0 var(--rule-dash),
-    transparent var(--rule-dash) var(--rule-step)
-  );
-  --rule-h: repeating-linear-gradient(
+  --rule-dashed: repeating-linear-gradient(
     to right,
     var(--border-dash) 0 var(--rule-dash),
     transparent var(--rule-dash) var(--rule-step)
   );
+  --rule-v: linear-gradient(var(--border) 0 0);
+  --rule-h: linear-gradient(var(--border) 0 0);
 }
 
 /* Set from the footer switch, and from the head script before first paint. */
 [data-rules="off"] {
   --rule-v: none;
   --rule-h: none;
+  --rule-dashed: none;
 }
 
 @utility container-editorial {
@@ -351,12 +354,6 @@
   margin-inline: auto;
   padding-inline: 24px;
   background-color: var(--background);
-  background-image: var(--rule-v), var(--rule-v);
-  background-repeat: no-repeat;
-  background-position:
-    left top,
-    right top;
-  background-size: 1px 100%;
 }
 
 /* A link that stays on the site. Departs from the one-accent rule on purpose:
@@ -373,6 +370,16 @@
   background-image: var(--rule-h);
   background-repeat: no-repeat;
   background-position: left bottom;
+  background-size: 100% 1px;
+}
+
+/* The leader. Only ever fills space inside a line; never separates two
+   things, which is what the solid hairlines below are for. */
+@utility hairline-dashed {
+  min-height: 1px;
+  background-image: var(--rule-dashed);
+  background-repeat: no-repeat;
+  background-position: left top;
   background-size: 100% 1px;
 }
 
@@ -404,15 +411,11 @@
   background-size: 100% 1px;
 }
 
-/* "// section" heading; the trailing dashed rule is a child so an action can sit after it */
+/* Section heading; the trailing dashed rule is a child so an action can sit
+   after it. Lowercase and mono are signal enough without a "//" in front. */
 @utility section-heading {
   @apply flex items-center gap-2.5 font-mono font-semibold text-[14px] text-muted-foreground lowercase;
   margin: 36px 0 14px;
-
-  &::before {
-    content: "//";
-    color: var(--primary);
-  }
 }
 
 @utility link-inline {
@@ -555,10 +558,13 @@
   }
 }
 
-/* The full-width row that ends a list: "all notes", "all projects". */
+/* The way to a full list: "all notes", "all projects", at the right of the
+   homepage headings. It used to be a full-width bordered slab under each list,
+   which made the least important thing in the section the heaviest object in
+   it. Quiet, the weight stays on the rows. margin-left: auto pushes it right. */
 @utility row-button {
-  @apply flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-background-soft px-3 py-2.5 font-mono text-[12.5px] text-muted-foreground no-underline transition-colors;
-  @apply hover:border-primary hover:border-dashed hover:text-foreground;
+  @apply ml-auto flex w-fit items-center gap-1.5 py-1 font-mono text-[12.5px] text-faint no-underline transition-colors;
+  @apply hover:text-foreground;
 }
 
 /* A date or a status, set as a small hard-edged tag beside a row title. Solid
@@ -1205,5 +1211,196 @@ html[data-light-switching]::view-transition-new(root) {
   }
   .card-body-out {
     animation-direction: reverse;
+  }
+}
+
+/* ============================================ */
+/* Home hero                                     */
+/* ============================================ */
+
+/* The name is the one place the pixel face appears. Loaded by the homepage
+   itself (see page.tsx), so no other route preloads it. */
+.hero-name {
+  font-family: var(--font-geist-pixel-square), var(--font-mono);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.hero-word {
+  position: relative;
+  white-space: nowrap;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+/* Sized in em so the glyphs follow the line down to phone size. */
+.hero-glyph {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin: 0 0.28em 0 0.08em;
+  vertical-align: -0.2em;
+  color: var(--muted-foreground);
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.hero-led {
+  fill: color-mix(in oklab, var(--primary) 22%, var(--background));
+  transition: fill var(--duration-fast) var(--ease-out);
+}
+
+/* A trace runs out from the chip to a solder pad. Drawn with a normalised
+   pathLength, so the dash offset is 1 whatever width the word sets at. */
+.hero-trace {
+  position: absolute;
+  left: 1.4em;
+  right: -0.35em;
+  bottom: -0.34em;
+  height: 0.36em;
+  pointer-events: none;
+}
+
+.hero-trace svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hero-trace path {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 450ms var(--ease-out);
+}
+
+/* The pad is HTML rather than an SVG circle: the trace SVG stretches to the
+   word, and a circle inside it would stretch into an oval. */
+.hero-trace-pad {
+  position: absolute;
+  right: -2px;
+  bottom: calc(25% - 2.5px);
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--primary);
+  scale: 0;
+  transition: scale var(--duration-base) var(--ease-out);
+}
+
+/* The card of what runs at home. Hidden until pointed at or focused. */
+.hero-services {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 10px);
+  z-index: 20;
+  /* Absolutely placed inside a one-word link, so without this the card is
+     squeezed to the word's width and its flex items shrink to nothing. */
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--muted-foreground);
+  opacity: 0;
+  translate: 0 4px;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+.hero-services-dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--primary);
+}
+
+.hero-services img {
+  flex-shrink: 0;
+}
+
+.hero-selfhost:focus-visible .hero-glyph {
+  color: var(--primary);
+}
+
+.hero-selfhost:focus-visible .hero-services {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* Tilted at rest, straight when reached. The overshoot curve is the one
+   deliberate spring on the page: it is what makes the mark feel set down. */
+.hero-recheck-mark {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  margin: 0 0.3em 0 0.1em;
+  vertical-align: -0.24em;
+  border-radius: 0.3em;
+  rotate: -14deg;
+  transition:
+    rotate 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    scale 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hero-recheck:focus-visible .hero-recheck-mark {
+  rotate: 0deg;
+  scale: 1.06;
+}
+
+/* Hover only where hover is real. On touch a tap would leave the state stuck
+   on until the next tap somewhere else. */
+@media (hover: hover) {
+  .hero-electronics:hover .hero-glyph,
+  .hero-selfhost:hover .hero-glyph {
+    color: var(--primary);
+  }
+
+  .hero-electronics:hover .hero-led {
+    fill: var(--primary);
+    filter: drop-shadow(0 0 3px var(--primary));
+  }
+
+  .hero-electronics:hover .hero-trace path {
+    stroke-dashoffset: 0;
+  }
+
+  .hero-electronics:hover .hero-trace-pad {
+    scale: 1;
+    transition-delay: 350ms;
+  }
+
+  .hero-selfhost:hover .hero-services {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .hero-recheck:hover .hero-recheck-mark {
+    rotate: 0deg;
+    scale: 1.06;
+  }
+}
+
+/* End states only: the trace is drawn, the mark is straight, the card is
+   there. Nothing travels to get to them. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-trace path,
+  .hero-trace-pad,
+  .hero-services,
+  .hero-recheck-mark {
+    transition: none;
   }
 }

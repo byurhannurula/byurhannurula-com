@@ -34,9 +34,9 @@ interface MDXImageProps {
 }
 
 /**
- * A bled figure crosses container-editorial's dashed side rules. Painting the
- * page background behind it, with vertical padding, cuts those rules cleanly a
- * few pixels clear of the image rather than leaving them clipped at its edge.
+ * A bled figure reaches past container-editorial into the gutter, where the
+ * body dot grid shows. Painting the page background behind it, with vertical
+ * padding, keeps the grid from running up against the picture's edges.
  * Written out per variant: Tailwind only scans literal class strings, and a
  * responsive prefix applies to one class, not to an interpolated group.
  */

@@ -89,7 +89,7 @@ export function Spec({
         <a className="no-underline" data-toc-text href={`#${id}`}>
           {title}
         </a>
-        <span aria-hidden className="hairline-t flex-1" />
+        <span aria-hidden className="hairline-dashed flex-1" />
       </h2>
       <p className="mb-5 max-w-[62ch] text-[13.5px] text-muted-foreground">
         {intro}

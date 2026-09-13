@@ -2,14 +2,19 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { usePrefersReducedMotion } from "@/hooks";
 import { cn } from "@/lib/utils";
-
-/* ------------------------------------------------------------------ *
- * Scramble
- * ------------------------------------------------------------------ */
 
 const NOISE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@$*";
 const FRAME_MS = 34;
+
+/**
+ * Texts that have finished playing. Module scope outlives a client-side
+ * navigation but not a reload, so going back to a page does not replay it and
+ * a fresh visit does. Marked on completion, not on start: an effect that is
+ * torn down mid-run (Strict Mode does this on purpose) has not played.
+ */
+const played = new Set<string>();
 
 /**
  * Text that resolves out of noise, left to right.
@@ -21,19 +26,26 @@ const FRAME_MS = 34;
  *
  * The label is carried by an `sr-only` copy of the real text. Announcing the
  * noise as it churns would be unusable, so the churn is `aria-hidden`.
+ *
+ * Under reduced motion the text never churns: noise standing in for a word is
+ * the whole effect, and there is no gentler version of it to fall back to.
  */
 export function Scramble({
   children,
   className,
   as: Tag = "span",
   auto = false,
+  replayOnHover = true,
 }: {
   children: string;
   className?: string;
   as?: "span" | "h1" | "h2" | "p";
-  /** Run once on mount instead of waiting for a pointer. */
+  /** Run once when the page first loads, instead of waiting for a pointer. */
   auto?: boolean;
+  /** Run again whenever the pointer arrives. */
+  replayOnHover?: boolean;
 }) {
+  const reduced = usePrefersReducedMotion();
   const [display, setDisplay] = useState(children);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -43,7 +55,7 @@ export function Scramble({
   }, []);
 
   const run = useCallback(() => {
-    if (timer.current) return;
+    if (timer.current || reduced) return;
     const text = children;
     const total = Math.ceil(text.length * 1.6);
     let frame = 0;
@@ -62,17 +74,21 @@ export function Scramble({
       if (frame >= total) {
         stop();
         setDisplay(text);
+        played.add(text);
       }
     }, FRAME_MS);
-  }, [children, stop]);
+  }, [children, reduced, stop]);
 
   useEffect(() => {
-    if (auto) run();
+    if (auto && !played.has(children)) run();
     return stop;
-  }, [auto, run, stop]);
+  }, [auto, children, run, stop]);
 
   return (
-    <Tag className={cn("scramble", className)} onPointerEnter={run}>
+    <Tag
+      className={cn("scramble", className)}
+      onPointerEnter={replayOnHover ? run : undefined}
+    >
       <span className="sr-only">{children}</span>
       <span aria-hidden="true">{display}</span>
     </Tag>

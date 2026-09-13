@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 
 import {
-  DEFAULT_HOVER_SOUND,
+  DEFAULT_SOUND,
   DEFAULT_TRIGGER,
   HOVER_DETUNE,
+  HOVER_LEVEL,
   INTERACTIVE,
   isSoundName,
   isTrigger,
@@ -33,12 +34,12 @@ function useSoundEnabled() {
 }
 
 /**
- * The hover tick, for the few places that ask for it.
+ * The click, for the few places that ask for it.
  *
- * Opt in rather than out: a tick under every link and button on the site was
- * more sound than the site has interactions, and layering it under the click
- * of the same control made one press into two noises. Put data-sound on a
- * container and everything in it ticks; give it a value to choose the sample.
+ * Opt in rather than out: a sound under every link and button on the site was
+ * more sound than the site has interactions. Put data-sound on a control or a
+ * container and it sounds when chosen; give it a value to pick the sample, and
+ * data-sound-on="hover" where pointing at the thing is the whole interaction.
  * data-no-sound takes a single element back out of a marked container.
  *
  * The names, levels and selectors are all in config/sound.ts.
@@ -65,7 +66,7 @@ export function SoundLayer() {
       const named = scope.getAttribute(SCOPE_ATTRIBUTE) ?? "";
       const on = scope.getAttribute(TRIGGER_ATTRIBUTE) ?? "";
       return {
-        name: isSoundName(named) ? named : DEFAULT_HOVER_SOUND,
+        name: isSoundName(named) ? named : DEFAULT_SOUND,
         trigger: (isTrigger(on) ? on : DEFAULT_TRIGGER) as SoundTrigger,
       };
     };
@@ -82,7 +83,7 @@ export function SoundLayer() {
       // Detuned up: a tick at the sample's own pitch reads as a press.
       playSound(found.name, {
         hover: true,
-        volume: SOUNDS[found.name].hover,
+        volume: SOUNDS[found.name].hover ?? HOVER_LEVEL,
         detune: HOVER_DETUNE,
       });
     };

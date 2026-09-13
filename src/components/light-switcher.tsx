@@ -103,7 +103,11 @@ export function LightSwitcher() {
         <span className="tabular-nums">{label}</span>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" side="top">
+      {/* The scope is on the content, not the trigger. Radix opens the menu on
+          pointerdown and swallows the click, so a trigger scope is silent, and
+          opening a menu is not a decision worth a sound anyway: the mode that
+          gets chosen is. Portalled content needs its own scope regardless. */}
+      <DropdownMenuContent align="end" data-sound="" side="top">
         <DropdownMenuLabel>change the light</DropdownMenuLabel>
         {CHOICES.map((choice) => (
           <DropdownMenuItem

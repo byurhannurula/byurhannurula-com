@@ -188,6 +188,7 @@ export default function BooksPage() {
             <div
               className="bk-shelf grid grid-cols-2 items-start gap-x-6 gap-y-9 sm:grid-cols-3"
               data-sound="page"
+              data-sound-on="hover"
               style={{ "--bk-tallest": TALLEST_TRIM } as React.CSSProperties}
             >
               {books.map((book) => (

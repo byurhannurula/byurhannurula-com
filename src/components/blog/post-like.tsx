@@ -28,6 +28,7 @@ export function PostLike({ slug, initialLikes = 0 }: PostLikeProps) {
             ? "border-red-500/30 bg-red-500/10 text-red-500"
             : "border-border hover:border-red-500/50 hover:bg-red-500/5 hover:text-red-500"
         )}
+        data-sound=""
         onClick={toggle}
         type="button"
       >

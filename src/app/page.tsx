@@ -1,29 +1,38 @@
+import { ChevronRight } from "lucide-react";
+import localFont from "next/font/local";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { HeroLinks } from "@/components/hero-links";
+import {
+  ElectronicsWord,
+  ReCheckLink,
+  SelfHostingLink,
+} from "@/components/home/hero-words";
 import { RssIcon } from "@/components/icons";
-import { Brand } from "@/components/inline";
 import { PersonJsonLd, WebsiteJsonLd } from "@/components/json-ld";
 import { PageWrapper } from "@/components/page-wrapper";
-import { Reveal, RevealTrigger } from "@/components/reveal";
 import { RowLink } from "@/components/row-link";
-import { SectionHeading } from "@/components/section-heading";
+import { Scramble } from "@/components/scramble";
 import { SocialCards } from "@/components/social-cards";
 import { createMetadata } from "@/config";
 import { getFeaturedProjects, hasDetailPage } from "@/config/projects";
-import { getStackItem } from "@/config/stack";
 import { shortDate } from "@/lib/date";
 import { getAllPosts } from "@/lib/server";
+import { cn } from "@/lib/utils";
 
 export const metadata = createMetadata("/");
 
 const LATEST_NOTES_COUNT = 3;
 
-const DAY_JOB = [
-  getStackItem("react"),
-  getStackItem("typescript"),
-  getStackItem("node"),
-];
+// Straight from the geist package rather than `geist/font/pixel`: that module
+// declares all five pixel variants, and every one of them gets preloaded on
+// any page that imports it. Only Square is used, and only for the name.
+const pixel = localFont({
+  src: "../../node_modules/geist/dist/fonts/geist-pixel/GeistPixel-Square.woff2",
+  variable: "--font-geist-pixel-square",
+  display: "swap",
+});
 
 export default function Home() {
   const projects = getFeaturedProjects();
@@ -34,75 +43,55 @@ export default function Home() {
       <WebsiteJsonLd />
       <PersonJsonLd />
       <PageWrapper>
-        <h1 className="mb-4">
-          Hi, I&apos;m Byurhan,{" "}
-          <span className="text-primary">a developer.</span>
-        </h1>
-        <Reveal
-          detail={
-            <>
-              Intern in January 2020, then software developer, then full-stack,
-              then team lead in 2024. Six years is long enough to have shipped
-              every layer of it: the apps, the services under them, and the
-              deployments and monitoring under those.
-            </>
-          }
+        <Scramble
+          as="h1"
+          auto
+          replayOnHover={false}
+          className={cn(
+            pixel.variable,
+            "hero-name mb-6 text-[42px] leading-[1.1] sm:mb-7 sm:text-[56px]"
+          )}
         >
-          <p className="mb-3.5">
-            I started writing code when I was 12 and have been learning ever
-            since. Currently Team Lead at{" "}
-            <a
-              className="link-inline"
-              href="https://recheck.io/"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              ReCheck
-            </a>
-            , where I have <RevealTrigger>worked since 2020</RevealTrigger>.
+          Byurhan Nurula.
+        </Scramble>
+        {/*
+         * Four plain statements, one per line on a desktop. On a phone every
+         * line wraps, so the gap between them is what keeps four sentences from
+         * reading as one paragraph.
+         */}
+        <div className="space-y-2.5 text-[18px] text-foreground leading-[1.55] tracking-[-0.2px] sm:space-y-0.5 sm:text-[21px] sm:leading-[1.7] sm:tracking-[-0.4px]">
+          <p>I&apos;m an engineer with a passion for design and technology.</p>
+          <p>
+            I like tinkering with <ElectronicsWord />, <SelfHostingLink /> and
+            more.
           </p>
-        </Reveal>
-        <p className="mb-3.5">
-          I mostly work with <Brand logo={DAY_JOB[0].icon}>React</Brand>,{" "}
-          <Brand logo={DAY_JOB[1].icon}>TypeScript</Brand> and{" "}
-          <Brand logo={DAY_JOB[2].icon}>Node</Brand>. I also look after the
-          infrastructure the apps run on.
-        </p>
-        <Reveal
-          detail={
-            <>
-              Proxmox and Docker on hardware I can reach with a screwdriver, a
-              reverse proxy in front, VLANs behind, and backups I restore from
-              twice a year. Home Assistant and ESPHome handle the rest of the
-              house.
-            </>
-          }
-        >
-          <p className="mb-3.5 text-muted-foreground">
-            Outside work I try to be a more conscious user of technology. I care
-            about privacy, so I{" "}
-            <RevealTrigger>self-host most of the services I use</RevealTrigger>,
-            which is also how I experiment and learn.
+          <p>
+            Here I write about the things I try and what I learn along the way.
           </p>
-        </Reveal>
+          <p>
+            Currently team lead at <ReCheckLink />.
+          </p>
+        </div>
 
-        <HeroLinks socials={<SocialCards />} />
+        <HeroLinks className="mt-8" socials={<SocialCards />} />
 
         {notes.length > 0 ? (
           <>
-            <SectionHeading
-              action={
+            <HomeSectionHeading
+              extra={
                 <Link
+                  aria-label="RSS feed"
+                  className="text-rss no-underline transition-opacity hover:opacity-80"
                   href="/rss.xml"
-                  className="inline-flex items-center gap-1 font-mono font-semibold text-[11px] text-rss uppercase tracking-[0.08em] no-underline transition-opacity hover:opacity-80"
                 >
-                  rss
-                  <RssIcon className="size-3.5" />
+                  <RssIcon className="size-4" />
                 </Link>
               }
+              href="/notes"
+              linkLabel="all notes"
             >
               latest notes
-            </SectionHeading>
+            </HomeSectionHeading>
             <div>
               {notes.map((post) => (
                 <RowLink
@@ -118,14 +107,12 @@ export default function Home() {
                 />
               ))}
             </div>
-            <Link href="/notes" className="row-button mt-3">
-              all notes
-              <span aria-hidden="true">→</span>
-            </Link>
           </>
         ) : null}
 
-        <SectionHeading>selected projects</SectionHeading>
+        <HomeSectionHeading href="/projects" linkLabel="all projects">
+          projects
+        </HomeSectionHeading>
         <div>
           {projects.map((project) => (
             <RowLink
@@ -142,11 +129,46 @@ export default function Home() {
             />
           ))}
         </div>
-        <Link href="/projects" className="row-button mt-3">
-          all projects
-          <span aria-hidden="true">→</span>
-        </Link>
       </PageWrapper>
     </>
+  );
+}
+
+interface HomeSectionHeadingProps {
+  children: ReactNode;
+  href: string;
+  linkLabel: string;
+  /** Sits against the title, such as the feed icon beside "latest notes". */
+  extra?: ReactNode;
+}
+
+/**
+ * The homepage's own heading: no leader, the way to the full list on the right.
+ *
+ * The list pages keep the dashed leader from SectionHeading. Here the rule gave
+ * way to the link, which used to sit under the list and was easy to miss.
+ */
+function HomeSectionHeading({
+  children,
+  href,
+  linkLabel,
+  extra,
+}: HomeSectionHeadingProps) {
+  return (
+    <div className="section-heading justify-between">
+      <div className="flex items-center gap-2">
+        <h2 className="font-mono font-semibold text-[14px] text-muted-foreground">
+          {children}
+        </h2>
+        {extra}
+      </div>
+      <Link className="group row-button" href={href}>
+        {linkLabel}
+        <ChevronRight
+          aria-hidden="true"
+          className="size-3.5 transition-[translate] duration-200 ease-out group-hover:translate-x-0.5 motion-reduce:transition-none"
+        />
+      </Link>
+    </div>
   );
 }

@@ -120,6 +120,7 @@ export function UsesFilter({ categories }: { categories: UseCategory[] }) {
               key={tab.id}
               type="button"
               aria-pressed={selected}
+              data-sound=""
               onClick={() => setFilter(tab.id)}
               className={cn(
                 "relative rounded-sm border border-border bg-background-soft px-2.5 py-1 font-mono text-[11px] transition-colors duration-150",
@@ -172,7 +173,11 @@ export function UsesFilter({ categories }: { categories: UseCategory[] }) {
           )}
           {visible.map((category, index) => (
             <motion.section
+              // An anchor for links from elsewhere, such as the homepage's
+              // "self-hosting". Clear of the sticky header when scrolled to.
+              id={toAnchor(category.title)}
               key={category.title}
+              className="scroll-mt-24"
               layout={animate}
               variants={sectionVariants(index)}
               initial="initial"
@@ -199,4 +204,11 @@ export function UsesFilter({ categories }: { categories: UseCategory[] }) {
       </div>
     </LayoutGroup>
   );
+}
+
+function toAnchor(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }

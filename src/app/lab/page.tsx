@@ -237,10 +237,7 @@ export default function LabPage() {
         }
       `}</style>
 
-      <div
-        className="mb-2 flex flex-wrap items-center justify-between gap-3"
-        data-sound=""
-      >
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
         <h1>
           Lab <span className="text-primary">/ three sketches.</span>
         </h1>
@@ -251,8 +248,9 @@ export default function LabPage() {
         built to be swapped into{" "}
         <code className="font-mono text-[0.9em]">/</code> as they stand; the
         last is a bench for the text mechanisms. Sound is off until you turn it
-        on; after that the nav above ticks under the pointer, and so do the
-        small parts here.
+        on; after that the small parts here tick under the pointer, and the rest
+        of the site sounds when you choose something rather than when you pass
+        over it.
       </p>
       <p className="mb-8 font-mono text-[12px] text-faint">
         the shelf moved to /books
@@ -267,6 +265,7 @@ export default function LabPage() {
           <div
             className="rounded-xl border border-border border-dashed p-5 sm:p-7"
             data-sound=""
+            data-sound-on="hover"
           >
             {option.element}
           </div>

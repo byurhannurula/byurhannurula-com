@@ -451,11 +451,11 @@ export default async function DesignSystemPage() {
             <div>
               <h3 className="section-heading !mt-0">
                 latest notes
-                <span aria-hidden className="hairline-t flex-1" />
+                <span aria-hidden className="hairline-dashed flex-1" />
               </h3>
               <span className="font-mono text-[11.5px] text-faint">
-                section-heading — the {"//"} marker, then a dashed rule filling
-                the width
+                section-heading — lowercase mono, then the one dashed rule on
+                the page filling the width
               </span>
             </div>
 
@@ -711,7 +711,7 @@ export default async function DesignSystemPage() {
         <Spec
           index="13"
           title="images"
-          intro="Real images, at the sizes content can ask for. All four are measured from the column rather than the viewport, and a bled figure paints the page background behind it so the column's dashed side rules are cut cleanly instead of running through the picture."
+          intro="Real images, at the sizes content can ask for. All four are measured from the column rather than the viewport, and a bled figure paints the page background behind it so the gutter's dot grid stops clear of the picture."
         >
           <dl className="mb-6 flex flex-col font-mono text-[12px]">
             {IMAGE_SIZES.map(([name, use]) => (

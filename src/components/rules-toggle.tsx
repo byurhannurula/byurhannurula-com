@@ -34,6 +34,7 @@ export function RulesToggle() {
     <button
       aria-checked={on}
       className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-transparent px-2.5 py-1 font-mono text-[12px] text-muted-foreground leading-normal transition-colors hover:border-muted-foreground hover:text-foreground"
+      data-sound=""
       onClick={toggle}
       role="switch"
       type="button"

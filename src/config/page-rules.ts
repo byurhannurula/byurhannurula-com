@@ -1,6 +1,6 @@
 /**
- * The dashed rules that draw the page: the column's two side lines, the
- * hairlines between rows, and the prose divider.
+ * The rules that draw the page: the hairlines between rows, the dividers, and
+ * the dashed fill beside a section heading.
  *
  * They are on by default. Turning them off leaves the same layout as a plain
  * typographic column, which is a real second look at the site rather than a

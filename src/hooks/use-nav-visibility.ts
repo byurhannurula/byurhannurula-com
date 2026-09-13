@@ -56,9 +56,19 @@ export function useNavVisibility(): NavVisibility {
       const travelled = Math.abs(y - pivot);
       setState((current) => {
         const scrolled = y > SURFACE_AT;
-        let hidden = current.hidden;
-        if (!reduced && travelled > DIRECTION_SLACK) {
-          hidden = goingDown && y > HIDE_AFTER;
+        /*
+         * Near the top the header always shows, as a rule and not only as the
+         * outcome of the last direction change.
+         *
+         * It used to be left to `current.hidden` there, which let the flag
+         * outlive the page that set it: leave a long list hidden, land at the
+         * top of a post, and the turn from down to up puts the pivot at 0, so
+         * nothing has travelled, nothing re-decides, and the header stays gone
+         * with no room left above to scroll up in and bring it back.
+         */
+        let hidden = false;
+        if (!reduced && y > HIDE_AFTER) {
+          hidden = travelled > DIRECTION_SLACK ? goingDown : current.hidden;
         }
         if (scrolled === current.scrolled && hidden === current.hidden) {
           return current;
