@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "sortTailwindcss": { "stylesheet": "./src/app/globals.css" },
+  "ignorePatterns": [
+    ".next/**",
+    ".open-next/**",
+    ".wrangler/**",
+    ".lighthouseci/**",
+    "public/**",
+    "*.md",
+    "pnpm-lock.yaml",
+    "next-env.d.ts",
+    "cloudflare-env.d.ts"
+  ]
+}

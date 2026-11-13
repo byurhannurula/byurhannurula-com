@@ -1,0 +1,122 @@
+/*
+ * Design tokens: the only place colours, radius, shadow and easing are set.
+ * Components use the Tailwind names mapped in globals.css (`bg-bg`,
+ * `text-soft`, `border-line`, `text-accent`), never a hex value.
+ *
+ * Colour follows `data-light` (morning, day, evening, night), set on <html>
+ * before first paint. `data-theme` (light or dark) is derived from it.
+ */
+:root {
+  --bg: #fafafa;
+  --card: #ffffff;
+  --sunk: #f1f1f1;
+  --ink: #1a1a1a;
+  --soft: #515151;
+  --faint: #8c8c8c;
+  --line: rgb(0 0 0 / 0.09);
+  --line-strong: rgb(0 0 0 / 0.16);
+
+  --accent: #15803d;
+  --accent-bright: #22c55e;
+  --accent-soft: rgb(34 197 94 / 0.13);
+  --amber: #b45309;
+  --danger: #dc2626;
+
+  /* Section and layer hues. One per idea, never decoration alone. */
+  --hue-1: #db2777;
+  --hue-2: #2563eb;
+  --hue-3: #7c3aed;
+  --hue-4: #0891b2;
+  --hue-5: #ea580c;
+  --hue-6: #16a34a;
+  --hue-7: #ca8a04;
+
+  --shadow-soft:
+    0 1px 2px rgb(0 0 0 / 0.05), 0 10px 28px -14px rgb(0 0 0 / 0.18);
+  --shadow-lift:
+    0 2px 4px rgb(0 0 0 / 0.05), 0 28px 56px -24px rgb(0 0 0 / 0.28);
+
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 26px;
+
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  color-scheme: light;
+}
+
+[data-light='morning'] {
+  --bg: #faf6f0;
+  --card: #fffdf9;
+  --sunk: #f2ece3;
+  --ink: #241f1a;
+  --soft: #554d45;
+  --faint: #8f867b;
+  --line: rgb(70 45 10 / 0.1);
+  --line-strong: rgb(70 45 10 / 0.19);
+}
+
+[data-theme='dark'] {
+  --bg: #0a0a0a;
+  --card: #141414;
+  --sunk: #1c1c1c;
+  --ink: #e6e6e6;
+  --soft: #9e9e9e;
+  --faint: #6c6c6c;
+  --line: rgb(255 255 255 / 0.09);
+  --line-strong: rgb(255 255 255 / 0.18);
+
+  --accent: #4ade80;
+  --accent-bright: #4ade80;
+  --accent-soft: rgb(74 222 128 / 0.13);
+  --amber: #fbbf24;
+  --danger: #f87171;
+
+  --hue-1: #f472b6;
+  --hue-2: #60a5fa;
+  --hue-3: #a78bfa;
+  --hue-4: #22d3ee;
+  --hue-5: #fb923c;
+  --hue-6: #4ade80;
+  --hue-7: #facc15;
+
+  --shadow-soft: 0 0 0 1px rgb(255 255 255 / 0.04);
+  --shadow-lift: 0 28px 56px -24px rgb(0 0 0 / 0.9);
+
+  color-scheme: dark;
+}
+
+[data-light='evening'] {
+  --bg: #1c1815;
+  --card: #241f1a;
+  --sunk: #2b241d;
+  --ink: #ede4d8;
+  --soft: #b4a899;
+  --faint: #7f756a;
+  --line: rgb(255 232 205 / 0.09);
+  --line-strong: rgb(255 232 205 / 0.19);
+  --accent: #5ecf8b;
+  --accent-bright: #5ecf8b;
+  --accent-soft: rgb(94 207 139 / 0.13);
+}
+
+:root {
+  /* shadcn/ui names, mapped onto the tokens above. */
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --popover: var(--card);
+  --popover-foreground: var(--ink);
+  --card-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--bg);
+  --secondary: var(--sunk);
+  --secondary-foreground: var(--ink);
+  --muted: var(--sunk);
+  --muted-foreground: var(--soft);
+  --accent-foreground: var(--bg);
+  --destructive: var(--danger);
+  --border: var(--line);
+  --input: var(--line-strong);
+  --ring: var(--accent-bright);
+  --radius: var(--r-md);
+}

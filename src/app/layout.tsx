@@ -1,0 +1,67 @@
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
+
+import './globals.css';
+
+import { Analytics } from '@/components/analytics';
+import { CommandMenu } from '@/components/command/command-menu';
+import { ConfigPanel } from '@/components/config/config-panel';
+import { LightClock } from '@/components/config/light-clock';
+import {
+  defaultHtmlAttributes,
+  OptionsScript,
+} from '@/components/config/options-script';
+import { JsonLd, person, website } from '@/components/json-ld';
+import { SiteFooter } from '@/components/layout/site-footer';
+import { SiteNav } from '@/components/layout/site-nav';
+import { RevealObserver } from '@/components/shared/reveal-observer';
+import { SOCIALS } from '@/content/socials';
+import { brand } from '@/lib/brand';
+import { fontVariables } from '@/lib/fonts';
+import { siteUrl } from '@/lib/site';
+
+export const metadata: Metadata = {
+  metadataBase: siteUrl,
+  title: {
+    default: `${brand.name}, full-stack engineer`,
+    template: `%s · ${brand.name}`,
+  },
+  description: brand.description,
+  applicationName: brand.name,
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    // The head script rewrites the option attributes before hydration.
+    <html
+      lang="en"
+      className={fontVariables}
+      suppressHydrationWarning
+      {...defaultHtmlAttributes}
+    >
+      <head>
+        <OptionsScript />
+      </head>
+      <body className="min-h-dvh">
+        <a
+          href="#main"
+          className="sr-only z-50 rounded-full bg-ink px-4 py-2 text-bg focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+        >
+          Skip to content
+        </a>
+        <SiteNav />
+        <main id="main" tabIndex={-1} className="wrap outline-none">
+          {children}
+        </main>
+        <SiteFooter />
+        <CommandMenu />
+        {/* Design tool. Delete it, and src/components/config, at launch. */}
+        <ConfigPanel />
+        <RevealObserver />
+        <LightClock />
+        <JsonLd data={[person(SOCIALS.map((s) => s.href)), website()]} />
+        <Analytics />
+      </body>
+    </html>
+  );
+}

@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '../styles/tokens.css';
+@import '../styles/options.css';
+@import '../styles/motion.css';
+@import '../styles/shell.css';
+@import '../styles/home.css';
+@import '../styles/about.css';
+@import '../styles/notes.css';
+@import '../styles/work.css';
+@import '../styles/homelab.css';
+
+@custom-variant dark (&:where([data-theme='dark'] *));
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-sunk: var(--sunk);
+  --color-ink: var(--ink);
+  --color-soft: var(--soft);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-soft: var(--accent-soft);
+  --color-amber: var(--amber);
+  --color-danger: var(--danger);
+  --color-hue: var(--hue);
+  --color-hue-1: var(--hue-1);
+  --color-hue-2: var(--hue-2);
+  --color-hue-3: var(--hue-3);
+  --color-hue-4: var(--hue-4);
+  --color-hue-5: var(--hue-5);
+  --color-hue-6: var(--hue-6);
+  --color-hue-7: var(--hue-7);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-pixel: var(--font-geist-pixel), var(--font-geist-mono), monospace;
+
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+
+  --shadow-soft: var(--shadow-soft);
+  --shadow-lift: var(--shadow-lift);
+
+  --ease-soft: var(--ease-out-soft);
+}
+
+/* Page column. Width follows the `width` option through --wrap. */
+@utility wrap {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--wrap);
+  padding-inline: 1.25rem;
+}
+
+/* Small mono text for labels, dates and meta. */
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+@layer base {
+  * {
+    @apply border-line;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    overflow-x: clip;
+  }
+
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+    overflow-x: clip;
+    line-height: 1.6;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+
+  /* One focus style for everything; components do not set their own. */
+  :focus-visible {
+    outline: 2px solid var(--accent-bright);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

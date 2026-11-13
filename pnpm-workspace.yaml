@@ -1,0 +1,10 @@
+minimumReleaseAge: 2880
+
+allowBuilds:
+  '@parcel/watcher': false
+  '@swc/core': false
+  esbuild: true
+  lefthook: true
+  sharp: true
+  unrs-resolver: false
+  workerd: true

@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "byurhan-next",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+  // Serves /_next/image through Cloudflare Images.
+  "images": {
+    "binding": "IMAGES",
+  },
+  // OpenNext calls its own worker for some internal requests.
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "byurhan-next",
+    },
+  ],
+  "observability": {
+    "enabled": true,
+  },
+  // Runtime values and secrets live in the dashboard (Settings > Variables
+  // and Secrets); without this a deploy deletes the plain ones.
+  "keep_vars": true,
+}

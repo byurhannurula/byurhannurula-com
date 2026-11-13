@@ -1,0 +1,227 @@
+/*
+ * Global options. Each rule turns a `data-<key>` on <html> into a CSS
+ * variable; components read the variable and do not know the option exists.
+ * Options that change markup live in the component, as `in-data-[...]:`
+ * classes. Registry: src/config/options.ts.
+ */
+
+/* accent */
+[data-accent='blue'] {
+  --accent: #1d4ed8;
+  --accent-bright: #3b82f6;
+  --accent-soft: rgb(59 130 246 / 0.13);
+}
+[data-accent='orange'] {
+  --accent: #c2410c;
+  --accent-bright: #f97316;
+  --accent-soft: rgb(249 115 22 / 0.14);
+}
+[data-accent='violet'] {
+  --accent: #6d28d9;
+  --accent-bright: #8b5cf6;
+  --accent-soft: rgb(139 92 246 / 0.14);
+}
+[data-accent='ink'] {
+  --accent: var(--ink);
+  --accent-bright: var(--ink);
+  --accent-soft: var(--sunk);
+}
+[data-theme='dark'][data-accent='blue'] {
+  --accent: #60a5fa;
+  --accent-bright: #60a5fa;
+}
+[data-theme='dark'][data-accent='orange'] {
+  --accent: #fb923c;
+  --accent-bright: #fb923c;
+}
+[data-theme='dark'][data-accent='violet'] {
+  --accent: #a78bfa;
+  --accent-bright: #a78bfa;
+}
+
+/* font */
+:root {
+  --font-body: var(--font-instrument);
+}
+[data-font='geist'] {
+  --font-body: var(--font-geist);
+}
+[data-font='hanken'] {
+  --font-body: var(--font-hanken);
+}
+
+/* heading: the second half of a two-part title */
+:root {
+  --title-em: var(--faint);
+}
+[data-heading='one'] {
+  --title-em: inherit;
+}
+[data-heading='accent'] {
+  --title-em: var(--accent);
+}
+
+/* page width */
+:root {
+  --wrap: 64rem;
+}
+[data-width='narrow'] {
+  --wrap: 50rem;
+}
+[data-width='wide'] {
+  --wrap: 74rem;
+}
+
+/* corners */
+[data-radius='small'] {
+  --r-md: 8px;
+  --r-lg: 10px;
+  --r-xl: 12px;
+}
+[data-radius='large'] {
+  --r-md: 16px;
+  --r-lg: 26px;
+  --r-xl: 38px;
+}
+
+/* title size */
+:root {
+  --title-size: clamp(2.25rem, 5.2vw, 3.9rem);
+  --page-title-size: clamp(2rem, 4.4vw, 3.25rem);
+}
+[data-top='wide'] {
+  --title-size: clamp(2.4rem, 6.4vw, 4.75rem);
+  --page-title-size: clamp(2.4rem, 6.4vw, 4.75rem);
+}
+[data-h1='small'] {
+  --title-size: clamp(1.9rem, 3.8vw, 2.75rem);
+  --page-title-size: clamp(1.9rem, 3.8vw, 2.75rem);
+}
+[data-h1='large'] {
+  --title-size: clamp(2.5rem, 6.2vw, 4.75rem);
+  --page-title-size: clamp(2.5rem, 6.2vw, 4.75rem);
+}
+
+/* spacing */
+:root {
+  --section-gap: 5rem;
+  --hero-gap: 4.5rem;
+}
+[data-density='compact'] {
+  --section-gap: 3.25rem;
+  --hero-gap: 3rem;
+}
+[data-density='roomy'] {
+  --section-gap: 7rem;
+  --hero-gap: 6.5rem;
+}
+@media (max-width: 860px) {
+  :root {
+    --section-gap: 3.5rem;
+    --hero-gap: 3rem;
+  }
+}
+
+/* divider lines: components draw them with `border-rule` */
+:root {
+  --rule: var(--line);
+}
+[data-lines='off'] {
+  --rule: transparent;
+}
+
+/* section marks: a small shape in the section's own hue */
+[data-section] {
+  --hue: var(--hue-2);
+}
+[data-section]:nth-of-type(5n + 2) {
+  --hue: var(--hue-5);
+}
+[data-section]:nth-of-type(5n + 3) {
+  --hue: var(--hue-6);
+}
+[data-section]:nth-of-type(5n + 4) {
+  --hue: var(--hue-1);
+}
+[data-section]:nth-of-type(5n) {
+  --hue: var(--hue-3);
+}
+[data-colour='sections'] [data-section-title]::before {
+  content: '';
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-right: 0.6rem;
+  vertical-align: 0.06em;
+  border-radius: 50%;
+  background: var(--hue);
+}
+[data-colour='sections']
+  [data-section]:nth-of-type(5n + 2)
+  [data-section-title]::before {
+  border-radius: 0.2rem;
+}
+[data-colour='sections']
+  [data-section]:nth-of-type(5n + 3)
+  [data-section-title]::before {
+  border-radius: 0.15rem;
+  rotate: 45deg;
+  scale: 0.85;
+}
+[data-colour='sections']
+  [data-section]:nth-of-type(5n + 4)
+  [data-section-title]::before {
+  border-radius: 0.7rem 0.7rem 0 0;
+}
+[data-colour='sections']
+  [data-section]:nth-of-type(5n)
+  [data-section-title]::before {
+  border-radius: 0;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+/* background texture at the page top; flat colour is the default */
+body {
+  position: relative;
+}
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: 36rem;
+  pointer-events: none;
+}
+[data-bg='dots'] body::before {
+  background: radial-gradient(var(--line-strong) 1px, transparent 1.5px) 0 0 /
+    22px 22px;
+  mask-image: linear-gradient(#000, transparent);
+}
+[data-bg='grid'] body::before {
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 3rem,
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 50% 0 / 3rem 100%;
+  mask-image: linear-gradient(#000, transparent);
+}
+[data-bg='grain'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.085;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* motion off: the reader asked for a still page */
+[data-motion='off'] *,
+[data-motion='off'] ::before,
+[data-motion='off'] ::after {
+  animation: none !important;
+}
+[data-motion='off'] [data-reveal] {
+  opacity: 1 !important;
+  translate: none !important;
+  scale: 1 !important;
+  transition: none !important;
+}
