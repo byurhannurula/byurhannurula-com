@@ -1,1 +1,13 @@
 /* shell: keyframes and rules that Tailwind classes cannot express. Keep it small. */
+
+/* The label swap after a copy ("Copied to clipboard"). */
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+
+@theme {
+  --animate-blur-in: blur-in 0.22s var(--ease-out-soft) both;
+}
