@@ -1,1 +1,42 @@
 /* notes: keyframes and rules that Tailwind classes cannot express. Keep it small. */
+
+/* `toc: side` applies only on screens wide enough for a side column. One
+   variant keeps the island's class list readable (toc-side:hidden). */
+@custom-variant toc-side {
+  @media (min-width: 1240px) {
+    :where([data-toc='side']) & {
+      @slot;
+    }
+  }
+}
+
+/* The island label, when the current heading changes. */
+@keyframes island-swap {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+/* The heart of the like button. */
+@keyframes like-pop {
+  40% {
+    transform: scale(1.5) rotate(-12deg);
+  }
+}
+
+@theme {
+  --animate-island-swap: island-swap 0.35s var(--ease-out-soft);
+  --animate-like-pop: like-pop 0.45s var(--ease-out-soft);
+}
+
+/* rehype-pretty-code gives each token both theme colours as variables in an
+   inline style, so only a stylesheet rule can pick one. */
+code[data-theme*=' '],
+code[data-theme*=' '] span {
+  color: var(--shiki-light);
+}
+[data-theme='dark'] code[data-theme*=' '],
+[data-theme='dark'] code[data-theme*=' '] span {
+  color: var(--shiki-dark);
+}

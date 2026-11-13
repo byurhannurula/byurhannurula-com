@@ -1,0 +1,62 @@
+import 'server-only';
+
+import { open } from 'node:fs/promises';
+import path from 'node:path';
+import { cache } from 'react';
+
+interface ImageSize {
+  width: number;
+  height: number;
+}
+
+const HEAD_BYTES = 256 * 1024;
+
+function pngSize(head: Buffer): ImageSize | null {
+  if (head.toString('ascii', 1, 4) !== 'PNG') return null;
+  return { width: head.readUInt32BE(16), height: head.readUInt32BE(20) };
+}
+
+function jpegSize(head: Buffer): ImageSize | null {
+  if (head[0] !== 0xff || head[1] !== 0xd8) return null;
+  let at = 2;
+  while (at + 9 < head.length && head[at] === 0xff) {
+    const marker = head[at + 1];
+    // SOF0 to SOF15 hold the size; C4, C8 and CC are other tables.
+    const isFrame =
+      marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker);
+    if (isFrame) {
+      return {
+        height: head.readUInt16BE(at + 5),
+        width: head.readUInt16BE(at + 7),
+      };
+    }
+    at += 2 + head.readUInt16BE(at + 2);
+  }
+  return null;
+}
+
+/**
+ * Pixel size of a PNG or JPEG in /public, or null (remote, other format,
+ * missing file). next/image needs the size; notes should not have to state it.
+ */
+export const publicImageSize = cache(
+  async (src: string): Promise<ImageSize | null> => {
+    if (!src.startsWith('/') || src.startsWith('//')) return null;
+    const publicDir = path.join(process.cwd(), 'public');
+    const file = path.join(publicDir, src);
+    if (!file.startsWith(publicDir + path.sep)) return null;
+    try {
+      const handle = await open(file, 'r');
+      try {
+        const head = Buffer.alloc(HEAD_BYTES);
+        const { bytesRead } = await handle.read(head, 0, HEAD_BYTES, 0);
+        const bytes = head.subarray(0, bytesRead);
+        return pngSize(bytes) ?? jpegSize(bytes);
+      } finally {
+        await handle.close();
+      }
+    } catch {
+      return null;
+    }
+  },
+);

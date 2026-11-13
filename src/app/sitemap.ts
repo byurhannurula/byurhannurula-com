@@ -4,7 +4,8 @@ import { getNotes } from '@/lib/notes';
 import { absoluteUrl, routes } from '@/lib/site';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const notes = await getNotes();
+  // Sample notes are placeholders: keep them away from crawlers.
+  const notes = (await getNotes()).filter((note) => !note.sample);
   return [
     ...routes.map((path) => ({ url: absoluteUrl(path) })),
     ...notes.map((note) => ({

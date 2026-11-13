@@ -1,0 +1,161 @@
+---
+title: 'Post components'
+date: '2026-09-01'
+excerpt: 'Every block a note can use, shown once: pictures, grids, code, callouts, a table, pairs and a link card.'
+cover: '/assets/projects/jotter/desktop.png'
+coverAlt: 'Jotter on a macOS desktop'
+tags: ['meta', 'reference']
+keywords: ['mdx', 'components', 'callout', 'figure', 'code']
+sample: true
+---
+
+This note is a sample. It shows each component a post can use, one time. The pictures are my own project screenshots.
+
+## Text
+
+A paragraph with **bold text**, _italic text_, `inline code`, a link to [another page](/notes) and a link to [another site](https://jotter.byurhannurula.com).
+
+- A list item with a point.
+- A second item, with `code` in it.
+- A third item.
+
+1. A numbered step.
+2. The next step.
+3. The last step.
+
+> One idea per post, publish rough, and write what you just fixed.
+> -- A note to myself
+
+---
+
+## Images in three widths
+
+<Figure
+  src="/assets/projects/jotter/editor-light.png"
+  alt="Jotter in light mode"
+  label="default"
+  caption="stays inside the reading column"
+/>
+
+<Figure
+  src="/assets/projects/jotter/desktop.png"
+  alt="Jotter on a macOS desktop"
+  width="wide"
+  label="wide"
+  caption="breaks out of the column, for screenshots and diagrams"
+/>
+
+<Figure
+  src="/assets/projects/jotter/desktop.png"
+  alt="Jotter on a macOS desktop"
+  width="full"
+  label="full"
+  caption="runs edge to edge, for the one picture that earns it"
+/>
+
+A plain Markdown picture works too, and gets the default width:
+
+![Jotter settings](/assets/projects/jotter/settings.png)
+
+## Image grids
+
+<ImageGrid columns="2" label="grid of 2" caption="light and dark, side by side">
+  <GridImage
+    src="/assets/projects/jotter/editor-light.png"
+    alt="Jotter light mode"
+  />
+  <GridImage
+    src="/assets/projects/jotter/editor-dark.png"
+    alt="Jotter dark mode"
+  />
+</ImageGrid>
+
+<ImageGrid
+  columns="3"
+  width="wide"
+  label="grid of 3, wide"
+  caption="click a picture to zoom"
+>
+  <GridImage src="/assets/projects/ogee/overlay.png" alt="OGee overlay" />
+  <GridImage
+    src="/assets/projects/ogee/og-preview.png"
+    alt="OGee image preview"
+  />
+  <GridImage
+    src="/assets/projects/ogee/twitter-card.png"
+    alt="OGee Twitter card tab"
+  />
+</ImageGrid>
+
+## Code
+
+```ts title="src/lib/drafts.ts"
+// keep every draft, even when a new note starts
+export async function saveDraft(text: string) {
+  const id = crypto.randomUUID();
+  await store.set(id, { text, savedAt: Date.now() });
+  return id;
+}
+```
+
+A block without a file name shows its language:
+
+```bash
+pnpm add next-mdx-remote
+```
+
+## Callouts
+
+<Callout type="info" title="Info">
+  Posts are MDX files in the repo. No editor, no dashboard.
+</Callout>
+
+<Callout type="ok" title="Success">
+  The restore drill passed. The backup is a real backup now.
+</Callout>
+
+<Callout type="warn" title="Warning">
+  Label the cables before the rack is full, not after.
+</Callout>
+
+<Callout type="danger" title="Do not do this">
+  Do not open a port on the router to reach one service.
+</Callout>
+
+## Table
+
+| App      | Type        | Runs on                      | Licence  |
+| -------- | ----------- | ---------------------------- | -------- |
+| Jotter   | Desktop app | macOS, Windows, Linux        | AGPL-3.0 |
+| OGee     | Extension   | Chrome, Brave, Edge, Firefox | MIT      |
+| FullShot | Extension   | Chrome, Brave, Edge, Firefox | MIT      |
+
+## Do and do not, pros and cons
+
+<DoDont>
+  <Do>- One idea per post. - Publish rough.</Do>
+  <Dont>- Wait for the perfect draft. - Start with an ultimate guide.</Dont>
+</DoDont>
+
+<ProsCons>
+  <Pros>
+    - Files in the repo, no service to run. - Components where plain text is not
+    enough.
+  </Pros>
+  <Cons>- No editor on a phone. - A build for each typo.</Cons>
+</ProsCons>
+
+## Link card
+
+<LinkEmbed
+  href="https://jotter.byurhannurula.com"
+  title="Jotter"
+  description="A fast, minimal notepad: a quiet place for quick thoughts."
+  image="/assets/projects/jotter/editor-dark.png"
+/>
+
+A small link inside a sentence: <LinkChip href="https://github.com/byurhannurula" title="GitHub" />.
+
+## Diagram
+
+<Mermaid chart="flowchart LR; note[MDX file] --> build --> page" />
