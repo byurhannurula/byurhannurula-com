@@ -24,6 +24,11 @@ import { cn } from '@/lib/utils';
 const GROUPS = Object.keys(OPTION_GROUPS) as OptionGroup[];
 const OPEN_KEY = 'site-options-panel';
 
+/** Opens the panel from outside it, for example from the command menu. */
+export function openConfigPanel() {
+  writeOpen(true);
+}
+
 /** The group that matches the page, so the useful settings are in front. */
 function groupForPath(pathname: string): OptionGroup {
   if (pathname.startsWith('/about')) return 'About';

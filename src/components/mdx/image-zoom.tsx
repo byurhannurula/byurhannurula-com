@@ -11,6 +11,7 @@ export function ImageZoom() {
   return (
     <dialog
       ref={dialogRef}
+      data-zoom
       aria-label="Picture, large"
       className="size-full max-h-none max-w-none bg-transparent p-0 backdrop:bg-black/78 backdrop:backdrop-blur-[6px]"
     >
@@ -24,9 +25,19 @@ export function ImageZoom() {
           // The original file at full size, from any host.
           // oxlint-disable-next-line nextjs/no-img-element
           <img
+            key={picture.src}
             src={picture.src}
             alt={picture.alt}
-            className="max-h-[94vh] max-w-[94vw] rounded-md"
+            // The box has its final size before the file loads, and shows the
+            // small file meanwhile: the travel needs both from the first frame.
+            style={{
+              aspectRatio: `${picture.width} / ${picture.height}`,
+              width: `min(94vw, 94vh * ${picture.width / picture.height}, ${picture.width}px)`,
+              backgroundImage: picture.thumb
+                ? `url("${picture.thumb}")`
+                : undefined,
+            }}
+            className="rounded-md bg-cover bg-center [view-transition-name:zoom-picture]"
           />
         ) : null}
       </button>

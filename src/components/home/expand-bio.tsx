@@ -2,6 +2,7 @@
 
 import { useId, type ReactNode } from 'react';
 
+import { MarkedWord } from '@/components/shared/marked-word';
 import type { ExpandKey, ExpandPart } from '@/content/home';
 import { useExpandable } from '@/hooks/use-expandable';
 import { playSound } from '@/hooks/use-sound';
@@ -31,18 +32,16 @@ export function ExpandBio({ sentences, panels, hint }: ExpandBioProps) {
                 typeof part === 'string' ? (
                   part
                 ) : (
-                  <button
+                  <MarkedWord
                     key={part.key}
-                    type="button"
-                    aria-expanded={isOpen(part.key)}
-                    aria-controls={`${id}-${part.key}`}
-                    onClick={() =>
+                    open={isOpen(part.key)}
+                    controls={`${id}-${part.key}`}
+                    onToggle={() =>
                       playSound(toggle(part.key) ? 'open' : 'close')
                     }
-                    className="rounded-[0.4em] bg-sunk px-[0.35em] py-[0.02em] transition-[background-color,color,box-shadow] duration-200 hover:bg-accent-soft hover:text-accent aria-expanded:bg-transparent aria-expanded:shadow-[inset_0_-2px_0_var(--accent-bright)] aria-expanded:hover:bg-transparent"
                   >
                     {part.text}
-                  </button>
+                  </MarkedWord>
                 ),
               )}
             </p>

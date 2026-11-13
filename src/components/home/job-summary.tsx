@@ -13,7 +13,7 @@ interface JobSummaryProps {
 export function JobSummary({ roles, stack }: JobSummaryProps) {
   const current = roles.find((role) => role.current) ?? roles.at(-1);
   return (
-    <div className="hidden grid-cols-[auto_1fr] items-start gap-x-5 gap-y-1.5 in-data-[job=summary]:grid md:grid-cols-[auto_1fr_auto]">
+    <div className="hidden items-start gap-x-5 gap-y-1.5 in-data-[job=summary]:grid min-[23rem]:grid-cols-[auto_1fr] md:grid-cols-[auto_1fr_auto]">
       <AppIcon src={EMPLOYER.logo} className="size-12 rounded-[0.85rem] p-1" />
       <div>
         <h3 className="text-[1.375rem] leading-[1.3] font-semibold tracking-[-0.025em]">
@@ -39,7 +39,7 @@ export function JobSummary({ roles, stack }: JobSummaryProps) {
             >
               <span
                 className={cn(
-                  'flex items-center gap-1.5',
+                  'flex items-center gap-1.5 whitespace-nowrap',
                   role.current &&
                     'rounded-full bg-accent-soft px-[0.6rem] py-[0.2rem] text-accent',
                 )}
@@ -59,7 +59,7 @@ export function JobSummary({ roles, stack }: JobSummaryProps) {
         </ol>
         <TechPile names={stack} />
       </div>
-      <p className="col-start-2 label-mono leading-[1.6] text-faint md:col-start-3 md:text-right">
+      <p className="label-mono leading-[1.6] text-faint min-[23rem]:col-start-2 md:col-start-3 md:text-right">
         {EMPLOYER.period}
         <br />
         {JOB_SECTION.years}

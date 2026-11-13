@@ -38,7 +38,12 @@ function Meta({ note, onPicture }: NoteItemProps & { onPicture?: boolean }) {
           {note.tags[0]}
         </b>
       ) : null}
-      {note.sample ? <SampleTag /> : null}
+      {note.sample ? (
+        // The amber of a light page does not show on the dark shade.
+        <SampleTag
+          className={onPicture ? 'bg-white/16 text-white' : undefined}
+        />
+      ) : null}
     </div>
   );
 }
@@ -78,6 +83,7 @@ export function NoteItem({ note }: NoteItemProps) {
         {cover ? (
           <NoteCover
             src={cover}
+            sizes="(min-width: 768px) 11rem, 100vw"
             className="aspect-4/3 w-full rounded-lg shadow-soft transition-[rotate,scale,box-shadow] duration-500 ease-soft group-hover/note:scale-108 group-hover/note:-rotate-1 group-hover/note:shadow-lift md:w-44 md:rotate-3"
           />
         ) : null}
@@ -94,6 +100,7 @@ export function NoteItem({ note }: NoteItemProps) {
         {cover ? (
           <NoteCover
             src={cover}
+            sizes="(min-width: 768px) 8.5rem, 5.5rem"
             className="aspect-square w-full rounded-lg shadow-[0_0_0_1px_var(--line)] transition-[scale] duration-500 ease-soft group-hover/note:scale-104"
           />
         ) : null}
@@ -165,6 +172,7 @@ export function NoteItem({ note }: NoteItemProps) {
           {cover ? (
             <NoteCover
               src={cover}
+              sizes="17rem"
               className="mb-7 hidden aspect-4/3 w-full rounded-md md:block"
             />
           ) : null}
@@ -184,15 +192,17 @@ export function NoteItem({ note }: NoteItemProps) {
         className="hidden in-data-[note=leaders]:flex"
       />
 
-      {/* a: cover */}
+      {/* a: cover. On a narrow screen the text is taller than the dark part
+          of the picture, so the shade there goes higher. */}
       <Link
         href={href}
         data-reveal
-        className="group/note relative hidden overflow-hidden rounded-xl text-white no-underline shadow-[0_0_0_1px_var(--line)] after:absolute after:inset-0 after:bg-linear-to-t after:from-black/85 after:to-transparent after:to-70% in-data-[note=a]:block"
+        className="group/note relative hidden overflow-hidden rounded-xl text-white no-underline shadow-[0_0_0_1px_var(--line)] after:absolute after:inset-0 after:bg-linear-to-t after:from-black/85 after:to-transparent after:to-70% in-data-[note=a]:block max-md:after:via-black/60 max-md:after:via-60% max-md:after:to-100%"
       >
         {cover ? (
           <NoteCover
             src={cover}
+            sizes="(min-width: 1200px) 74rem, 100vw"
             className="aspect-21/9 min-h-88 w-full transition-[scale] duration-1400 ease-soft group-hover/note:scale-104"
           />
         ) : (

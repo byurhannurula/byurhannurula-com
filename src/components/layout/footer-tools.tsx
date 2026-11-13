@@ -11,7 +11,7 @@ import { FOOTER_COPY } from './footer-content';
 import { LightMenu } from './light-menu';
 
 const tool =
-  'hidden h-8 items-center gap-[0.4rem] rounded-full border border-line-strong bg-card px-[0.7rem] text-soft [transition:color_.2s,translate_.3s_var(--ease-out-soft)] hover:text-ink [&_svg]:size-3.5';
+  'hidden h-10 items-center md:h-8 gap-[0.4rem] rounded-full whitespace-nowrap border border-line-strong bg-card px-[0.7rem] text-soft [transition:color_.2s,translate_.3s_var(--ease-out-soft)] hover:text-ink [&_svg]:size-3.5';
 
 function scrollToTop() {
   const still =
@@ -34,7 +34,7 @@ export function FooterTools() {
   const soundOn = sound !== 'off';
 
   return (
-    <div className="ml-auto flex gap-[0.4rem] in-data-[footer=centre]:ml-0">
+    <div className="ml-auto flex flex-wrap gap-[0.4rem] in-data-[footer=centre]:ml-0 in-data-[footer=centre]:justify-center">
       <LightMenu>
         <button
           type="button"

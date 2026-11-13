@@ -19,8 +19,9 @@ export function SmallProjects({ projects }: SmallProjectsProps) {
             <span className="w-22 flex-none label-mono text-faint">
               {project.tag}
             </span>
-            <div>
-              <h3 className="text-lg leading-[1.3] font-semibold tracking-[-0.015em] transition-[translate] duration-300 ease-soft group-hover/row:in-[a]:translate-x-1">
+            {/* A long name with no space must wrap, not push the arrow out. */}
+            <div className="min-w-0">
+              <h3 className="text-lg leading-[1.3] font-semibold tracking-[-0.015em] wrap-anywhere transition-[translate] duration-300 ease-soft group-hover/row:in-[a]:translate-x-1">
                 {project.name}
               </h3>
               <p className="mt-[0.1rem] text-[0.9375rem] text-soft">

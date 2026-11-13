@@ -52,7 +52,7 @@
 
 /* heading: the second half of a two-part title */
 :root {
-  --title-em: var(--faint);
+  --title-em: var(--faint-large);
 }
 [data-heading='one'] {
   --title-em: inherit;

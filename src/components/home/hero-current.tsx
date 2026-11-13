@@ -28,10 +28,11 @@ export function HeroCurrent() {
         I like tinkering with <HoverWord>electronics</HoverWord>,{' '}
         <HoverWord>
           self-hosting
-          {/* A pointer detail only: it adds nothing a reader must know. */}
+          {/* A pointer detail only: it adds nothing a reader must know. Hidden
+              on a phone, where it would run off the right edge. */}
           <span
             aria-hidden
-            className="pointer-events-none absolute top-[calc(100%+0.4rem)] left-0 z-3 flex -translate-y-1 items-center gap-1.5 rounded-[0.6rem] bg-card px-[0.6rem] py-[0.35rem] font-mono text-xs leading-none whitespace-nowrap text-soft opacity-0 shadow-[var(--shadow-lift),0_0_0_1px_var(--line)] [transition:opacity_0.2s,translate_0.3s_var(--ease-out-soft)] group-hover/hw:translate-y-0 group-hover/hw:opacity-100"
+            className="pointer-events-none absolute top-[calc(100%+0.4rem)] left-0 z-3 flex -translate-y-1 items-center gap-1.5 rounded-[0.6rem] bg-card px-[0.6rem] py-[0.35rem] font-mono text-xs leading-none whitespace-nowrap text-soft opacity-0 shadow-[var(--shadow-lift),0_0_0_1px_var(--line)] [transition:opacity_0.2s,translate_0.3s_var(--ease-out-soft)] group-hover/hw:translate-y-0 group-hover/hw:opacity-100 max-sm:hidden"
           >
             running at home
             {HOME_SERVICES.map((service) => (

@@ -39,6 +39,9 @@ export interface HomelabStatus {
 export const BEAT_COUNT = 30;
 
 const TIMEOUT_MS = 4000;
+// Also the refresh time of the homelab page: it has no `revalidate` of its
+// own and takes the lowest value of its fetches.
+const REVALIDATE_SECONDS = 60;
 const SLOW_PING_MS = 1500;
 
 // Uptime Kuma heartbeat states.
@@ -135,7 +138,7 @@ async function getJson(url: URL) {
   const response = await fetch(url, {
     headers: { accept: 'application/json' },
     signal: AbortSignal.timeout(TIMEOUT_MS),
-    next: { revalidate: 60 },
+    next: { revalidate: REVALIDATE_SECONDS },
   });
   if (!response.ok) throw new Error('status page request failed');
   return response.json() as Promise<unknown>;

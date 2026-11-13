@@ -95,10 +95,13 @@ export async function getNote(slug: string): Promise<Note | undefined> {
   return notes.find((note) => note.slug === slug);
 }
 
+// Front matter dates have no time: they parse as UTC midnight. Formatting in
+// UTC keeps the day the same on a server in any time zone.
 const dateFormat = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
+  timeZone: 'UTC',
 });
 
 export const formatNoteDate = (date: string) =>
@@ -108,6 +111,7 @@ const longDateFormat = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
+  timeZone: 'UTC',
 });
 
 /** For the note page, for example 11 September 2026. */
@@ -118,6 +122,7 @@ const shortDateFormat = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
   month: 'short',
   year: '2-digit',
+  timeZone: 'UTC',
 });
 
 /** For tight lists, for example 11 Sep, 26. */

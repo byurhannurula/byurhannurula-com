@@ -15,6 +15,8 @@ export const COMMAND_COPY = {
   soundOff: 'Sound off',
   linkCopied: 'Link copied',
   emailCopied: 'Email copied',
+  copyFailed: 'Could not copy. The browser blocked it.',
+  openConfig: 'Open the config',
 } as const;
 
 export const COMMAND_GROUPS = [

@@ -14,6 +14,7 @@ import {
 } from './footer-content';
 import { FooterTools } from './footer-tools';
 import { SocialCardBody } from './social-card';
+import { getContributions } from './social-data';
 import { SocialIcon } from './social-icon';
 import { SocialRow } from './social-row';
 
@@ -27,7 +28,7 @@ const heading =
   'mb-[0.8rem] font-mono text-xs leading-none font-normal text-faint in-data-[footer=centre]:hidden in-data-[footer=line]:hidden in-data-[footer=sentence]:hidden';
 // A column by default. The line, centre and sentence layouts lay it in a row.
 const list =
-  'in-data-[footer=centre]:flex in-data-[footer=centre]:flex-wrap in-data-[footer=centre]:justify-center in-data-[footer=centre]:gap-5 in-data-[footer=line]:flex in-data-[footer=line]:gap-5 in-data-[footer=sentence]:flex in-data-[footer=sentence]:flex-wrap in-data-[footer=sentence]:gap-5';
+  'in-data-[footer=centre]:flex in-data-[footer=centre]:flex-wrap in-data-[footer=centre]:justify-center in-data-[footer=centre]:gap-x-5 in-data-[footer=centre]:gap-y-1 in-data-[footer=line]:flex in-data-[footer=line]:gap-5 in-data-[footer=sentence]:flex in-data-[footer=sentence]:flex-wrap in-data-[footer=sentence]:gap-x-5 in-data-[footer=sentence]:gap-y-1';
 const link =
   'inline-block py-[0.2rem] text-soft no-underline [transition:color_.2s,translate_.3s_var(--ease-out-soft)] hover:translate-x-[3px] hover:text-ink';
 
@@ -38,7 +39,9 @@ const fallbackCard = (name: string): SocialCard => ({
 });
 
 /** The footer. `footer`, `fmark`, `socials`, `fmeta`, `fctl`, `ftop` shape it. */
-export function SiteFooter() {
+export async function SiteFooter() {
+  const contributions = await getContributions();
+
   return (
     <footer className="wrap">
       <div className="mt-24 mb-26 grid grid-cols-1 gap-8 border-t border-rule pt-9 in-data-[footer=big]:border-t-0 in-data-[footer=centre]:justify-items-center in-data-[footer=centre]:gap-[1.4rem] in-data-[footer=centre]:text-center in-data-[footer=line]:mt-20 in-data-[footer=line]:items-center in-data-[footer=sentence]:items-center in-data-[footer=sentence]:border-t-0 md:grid-cols-[1.4fr_1fr_1fr] md:in-data-[footer=centre]:grid-cols-1 md:in-data-[footer=line]:grid-cols-[1fr_auto] md:in-data-[footer=sentence]:grid-cols-[1fr_auto]">
@@ -52,14 +55,16 @@ export function SiteFooter() {
           </span>
         </div>
 
-        <p className="col-span-full mb-6 hidden max-w-[26ch] text-[clamp(1.7rem,3.8vw,2.75rem)] leading-[1.18] font-semibold tracking-[-0.035em] text-ink in-data-[footer=sentence]:block">
+        {/* Below 390 px the size follows the screen, so the email fits on one
+            line at 320 px. */}
+        <p className="col-span-full mb-6 hidden max-w-[26ch] text-[clamp(1.4rem,7vw,1.7rem)] leading-[1.18] font-semibold tracking-[-0.035em] text-ink in-data-[footer=sentence]:block md:text-[clamp(1.7rem,3.8vw,2.75rem)]">
           {FOOTER_COPY.sentenceStart}{' '}
           <span className="text-faint">{FOOTER_COPY.sentenceMid}</span>{' '}
           <EmailCopy variant="inline" />{' '}
           <span className="text-faint">{FOOTER_COPY.sentenceEnd}</span>
         </p>
 
-        <div className="in-data-[footer=line]:flex in-data-[footer=line]:items-baseline in-data-[footer=line]:gap-6 in-data-[footer=sentence]:hidden">
+        <div className="in-data-[footer=line]:flex in-data-[footer=line]:flex-wrap in-data-[footer=line]:items-baseline in-data-[footer=line]:gap-x-6 in-data-[footer=line]:gap-y-3 in-data-[footer=sentence]:hidden">
           <span className="text-xl font-bold tracking-[-0.02em] in-data-[footer=big]:hidden">
             {brand.wordmark}
             <span className="text-accent">.</span>
@@ -100,6 +105,8 @@ export function SiteFooter() {
               card: (
                 <SocialCardBody
                   card={SOCIAL_CARDS[name] ?? fallbackCard(name)}
+                  href={href}
+                  contributions={contributions}
                 />
               ),
             }))}

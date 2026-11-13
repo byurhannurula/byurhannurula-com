@@ -42,7 +42,8 @@ async function Picture({ src, alt, sizes, className }: PictureProps) {
       data-zoom-src={src}
       data-zoom-alt={alt}
       aria-label={alt ? `Enlarge picture: ${alt}` : 'Enlarge picture'}
-      className="block w-full cursor-zoom-in"
+      // While it is open large, the picture here hides: one picture that moved.
+      className="block w-full cursor-zoom-in [&[data-zoomed]>img]:invisible"
     >
       {size ? (
         <Image

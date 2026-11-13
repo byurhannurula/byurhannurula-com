@@ -25,7 +25,9 @@ export function FilmStrip({ shots, label, contained }: FilmStripProps) {
       tabIndex={0}
       aria-label={label}
       className={cn(
-        '-ml-1 flex snap-x snap-proximity gap-4 overflow-x-auto pt-1 pb-4 pl-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+        // scroll-pl-1: without it the snap pulls the first shot over the
+        // left padding, out of line with the text and partly clipped.
+        '-ml-1 flex snap-x snap-proximity scroll-pl-1 gap-4 overflow-x-auto pt-1 pb-4 pl-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
         contained
           ? 'pr-1'
           : 'mr-[calc((100%-100vw)/2)] pr-[calc((100vw-100%)/2)]',
@@ -40,7 +42,10 @@ export function FilmStrip({ shots, label, contained }: FilmStripProps) {
             src={shot.src}
             alt={shot.caption}
             {...shotSize(shot.src)}
-            sizes="(min-width: 768px) 34rem, 78vw"
+            // `auto` takes the width from layout, so `shots: small` gets a
+            // smaller file. It works for lazy pictures only; a browser
+            // without it reads the rest of the list.
+            sizes="auto, (min-width: 768px) 34rem, 78vw"
             className="aspect-16/10 w-full rounded-lg object-cover object-top shadow-[0_0_0_1px_var(--line)] transition-[translate,box-shadow] duration-400 ease-soft group-hover/shot:-translate-y-1 group-hover/shot:shadow-[0_0_0_1px_var(--line),var(--shadow-lift)]"
           />
           <figcaption className="mt-[0.7rem] label-mono text-faint">

@@ -2,6 +2,7 @@
 
 import { Fragment, type ReactNode } from 'react';
 
+import { MarkedWord } from '@/components/shared/marked-word';
 import { BIO_EXPAND, BIO_EXPAND_HINT, type BioPanelKey } from '@/content/about';
 import { useOpenSet } from '@/hooks/use-open-set';
 import { playSound } from '@/hooks/use-sound';
@@ -24,16 +25,16 @@ export function ExpandBio({ panels }: ExpandBioProps) {
               typeof part === 'string' ? (
                 part
               ) : (
-                <button
+                <MarkedWord
                   key={part.key}
-                  type="button"
-                  aria-expanded={isOpen(part.key)}
-                  aria-controls={`bio-panel-${part.key}`}
-                  onClick={() => playSound(toggle(part.key) ? 'open' : 'close')}
-                  className="rounded-[0.4em] bg-sunk px-[0.35em] py-[0.02em] transition-[background-color,color,box-shadow] duration-200 hover:bg-accent-soft hover:text-accent aria-expanded:bg-transparent aria-expanded:shadow-[inset_0_-2px_0_var(--accent-bright)] aria-expanded:hover:bg-transparent"
+                  open={isOpen(part.key)}
+                  controls={`bio-panel-${part.key}`}
+                  onToggle={() =>
+                    playSound(toggle(part.key) ? 'open' : 'close')
+                  }
                 >
                   {part.text}
-                </button>
+                </MarkedWord>
               ),
             )}
           </p>

@@ -13,9 +13,12 @@ export const metadata = pageMetadata({
     'One mini PC, one Raspberry Pi and a 10 inch rack: what runs on them, how a request gets in, and the rules I keep.',
 });
 
-// The status section reads live data when it is set up. One minute is as
-// fresh as the status page itself.
-export const revalidate = 60;
+// No `revalidate` export here, on purpose. A segment value must be a literal,
+// so it cannot depend on the environment. The status fetch carries its own
+// 60 s (src/lib/homelab-status.ts) and Next takes the page's refresh time
+// from it. With no status URL there is no fetch, and the page is fully
+// static: on Cloudflare through OpenNext a timed refresh needs a cache
+// binding, and sample data needs neither.
 
 export default function HomelabPage() {
   return (

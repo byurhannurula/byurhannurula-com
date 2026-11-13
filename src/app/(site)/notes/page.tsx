@@ -25,6 +25,8 @@ export default async function NotesPage() {
         art={<NotesArt />}
       />
       <Section>
+        {/* The note titles are h3: this keeps the heading order whole. */}
+        <h2 className="sr-only">All notes</h2>
         {notes.map((note) => (
           <NoteItem key={note.slug} note={note} />
         ))}

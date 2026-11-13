@@ -7,7 +7,7 @@ import { playSound } from '@/hooks/use-sound';
 
 export interface RackPickerDevice<Id extends string> {
   id: Id;
-  /** Accessible name of the device button. */
+  /** Name of the device: on its chip, and for the drawing's button. */
   label: string;
   /** SVG content of the device. */
   shape: ReactNode;
@@ -27,18 +27,35 @@ const playClick = () => playSound('click');
 /**
  * The rack drawing with selectable devices and the text of the selected
  * one. Only the selection lives here: shapes and panels come from the server.
+ * A narrow screen gets a row of chips in place of the drawing: its devices
+ * are too small to hit with a finger.
  */
 export function RackPicker<Id extends string>({
   devices,
   initial,
   backdrop,
 }: RackPickerProps<Id>) {
-  const { picked, buttonProps } = usePick(initial, playClick);
+  const { picked, pick, buttonProps } = usePick(initial, playClick);
   const current = devices.find((device) => device.id === picked);
 
   return (
-    <div className="grid items-center gap-8 md:grid-cols-[minmax(0,25rem)_1fr] md:gap-14">
-      <div data-reveal className="max-w-80 md:max-w-none">
+    <div className="grid items-center gap-6 md:grid-cols-[minmax(0,25rem)_1fr] md:gap-14">
+      {/* min-w-0: a fieldset is as wide as its content by default. */}
+      <fieldset className="flex min-w-0 flex-wrap gap-2 md:hidden">
+        <legend className="sr-only">Devices. Select one.</legend>
+        {devices.map((device) => (
+          <button
+            key={device.id}
+            type="button"
+            aria-pressed={picked === device.id}
+            onClick={() => pick(device.id)}
+            className="min-h-10 rounded-full border border-line-strong px-[0.9rem] text-[0.9375rem] font-medium text-soft transition-colors duration-200 aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-bg"
+          >
+            {device.label}
+          </button>
+        ))}
+      </fieldset>
+      <div data-reveal className="hidden md:block">
         <svg
           viewBox="0 0 400 440"
           fill="none"

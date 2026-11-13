@@ -11,6 +11,7 @@ interface IndicatorBox {
 export function useNavIndicator() {
   const listRef = useRef<HTMLUListElement>(null);
   const [box, setBox] = useState<IndicatorBox>();
+  const [slides, setSlides] = useState(false);
 
   const measure = useCallback(() => {
     const link = listRef.current?.querySelector<HTMLElement>('[aria-current]');
@@ -39,5 +40,13 @@ export function useNavIndicator() {
     return () => observer.disconnect();
   }, [measure]);
 
-  return { listRef, box };
+  // The first box must show in place. With the transition on from the start,
+  // the indicator grows out of the left edge on every page load.
+  useEffect(() => {
+    if (!box || slides) return;
+    const frame = requestAnimationFrame(() => setSlides(true));
+    return () => cancelAnimationFrame(frame);
+  }, [box, slides]);
+
+  return { listRef, box, slides };
 }

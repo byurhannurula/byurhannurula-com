@@ -104,7 +104,7 @@ function rehypeNoteStructure(headings: NoteHeading[]) {
 const prettyCodeOptions: PrettyCodeOptions = {
   // Each token carries both colours as CSS variables; notes.css picks the
   // side from data-theme. The block surface comes from our own tokens.
-  theme: { light: 'github-light', dark: 'github-dark-dimmed' },
+  theme: { light: 'github-light-default', dark: 'github-dark-dimmed' },
   keepBackground: false,
   // Blocks only: inline code keeps its own small box.
   defaultLang: { block: 'plaintext' },

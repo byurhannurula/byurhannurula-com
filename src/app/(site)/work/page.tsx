@@ -25,6 +25,8 @@ export default function WorkPage() {
         art={<WorkArt />}
       />
       <Section id="projects">
+        {/* The project names are h3: this keeps the heading order whole. */}
+        <h2 className="sr-only">Projects</h2>
         <div className="hidden in-data-[work=strips]:block">
           <ProjectStrips projects={PROJECTS} />
         </div>

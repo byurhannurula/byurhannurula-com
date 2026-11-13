@@ -75,7 +75,9 @@ export function ProjectPanels({ projects }: ProjectPanelsProps) {
               <AppIcon src={project.icon} />
               {project.name}
             </h3>
-            <p className="min-w-72 text-white/82">{project.short}</p>
+            {/* The width is held from md up, so the text does not reflow while a
+                panel grows. A phone panel is already full width. */}
+            <p className="text-white/82 md:min-w-72">{project.short}</p>
             <span className="mt-[0.6rem] block font-mono text-[0.8125rem] leading-[1.6] text-white/55">
               {project.tags.slice(0, 3).join(', ')}
             </span>

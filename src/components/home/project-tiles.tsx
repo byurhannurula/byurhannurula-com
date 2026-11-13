@@ -10,12 +10,13 @@ import { PROJECTS } from '@/content/projects';
  */
 export function ProjectTiles() {
   return (
+    // A fixed height on a phone: at 4/3 a narrow tile is too short for the text.
     <div className="hidden grid-cols-1 gap-4 in-data-[projects=tiles]:grid md:grid-cols-3">
       {PROJECTS.map((project) => (
         <Link
           key={project.slug}
           href="/work"
-          className="group/tile relative aspect-4/3 overflow-hidden rounded-xl bg-neutral-900 text-white no-underline shadow-[0_0_0_1px_var(--line)] md:aspect-3/4"
+          className="group/tile relative h-72 overflow-hidden rounded-xl bg-neutral-900 text-white no-underline shadow-[0_0_0_1px_var(--line)] sm:aspect-4/3 sm:h-auto md:aspect-3/4"
         >
           <Image
             src={project.cover}
@@ -26,7 +27,7 @@ export function ProjectTiles() {
           />
           <span
             aria-hidden
-            className="absolute inset-0 bg-linear-to-b from-black/80 to-transparent to-55%"
+            className="absolute inset-0 bg-linear-to-b from-black/80 to-transparent to-75% md:to-55%"
           />
           <div className="absolute inset-x-[1.4rem] top-[1.4rem] z-1">
             <small className="font-mono text-xs leading-none text-white/70">

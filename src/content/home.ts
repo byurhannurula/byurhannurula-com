@@ -30,6 +30,9 @@ export const HERO_ACTIONS = {
   secondary: { label: 'Read the notes', href: '/notes' },
 } as const;
 
+/** The h1 for screen readers in the heroes that are one long sentence. */
+export const HERO_HEADING = 'Byurhan Nurula, full-stack engineer and team lead';
+
 /** The name in the `current` hero. It resolves out of noise. */
 export const HERO_NAME = 'Byurhan Nurula.';
 
@@ -77,10 +80,10 @@ export const EXPAND_DAILY_STACK = [
 
 /** Upper hour limit (exclusive) and the greeting until then. */
 export const GREETINGS: [before: number, text: string][] = [
-  [5, 'good night'],
-  [12, 'good morning'],
-  [18, 'good afternoon'],
-  [24, 'good evening'],
+  [5, 'Good night'],
+  [12, 'Good morning'],
+  [18, 'Good afternoon'],
+  [24, 'Good evening'],
 ];
 
 export const PROJECTS_SECTION = {

@@ -23,7 +23,7 @@ export function TechPile({ names, className }: TechPileProps) {
     <button
       type="button"
       aria-expanded={open}
-      aria-label={`${names.length} tools: ${names.join(', ')}`}
+      aria-label={`${names.length} ${names.length === 1 ? 'tool' : 'tools'}: ${names.join(', ')}`}
       onClick={() => {
         setOpen(!open);
         play(open ? 'close' : 'open');
@@ -41,7 +41,7 @@ export function TechPile({ names, className }: TechPileProps) {
             style={{ transitionDelay: `${index * 18}ms` }}
             className={cn(
               'inline-flex h-8.5 min-w-8.5 items-center justify-center rounded-full bg-card px-2 shadow-[0_0_0_1px_var(--line-strong)] transition-[margin,padding] duration-450 ease-soft',
-              open ? 'mr-1.5 gap-1.5 px-3' : '-ml-2',
+              open ? 'mr-1.5 gap-1.5 px-3' : '-ml-2 group-hover/pile:-ml-1.5',
             )}
           >
             {icon ? (
@@ -66,10 +66,11 @@ export function TechPile({ names, className }: TechPileProps) {
       <span
         className={cn(
           'label-mono ml-3 text-faint transition-opacity group-hover/pile:text-ink',
-          open && 'opacity-0',
+          // No width when open, so the last name does not leave a gap.
+          open && 'ml-0 w-0 overflow-hidden opacity-0',
         )}
       >
-        {names.length} tools
+        {names.length} {names.length === 1 ? 'tool' : 'tools'}
       </span>
     </button>
   );

@@ -4,26 +4,23 @@ import { useSyncExternalStore } from 'react';
 
 import { GREETINGS } from '@/content/home';
 
-const REFRESH_MS = 30_000;
+// The greeting changes a few times a day, so a slow check is enough.
+const REFRESH_MS = 60_000;
 
 function subscribe(onChange: () => void) {
   const timer = setInterval(onChange, REFRESH_MS);
   return () => clearInterval(timer);
 }
 
-const pad = (value: number) => String(value).padStart(2, '0');
-
 function getGreeting() {
-  const now = new Date();
-  const hour = now.getHours();
-  const part = GREETINGS.find(([before]) => hour < before)?.[1] ?? '';
-  return `${pad(hour)}:${pad(now.getMinutes())}, ${part}`;
+  const hour = new Date().getHours();
+  return GREETINGS.find(([before]) => hour < before)?.[1] ?? '';
 }
 
 // The server does not know the reader's clock, so it renders nothing.
 const getServerGreeting = () => '';
 
-/** The reader's local time and a greeting for it, for example "09:12, good morning". */
+/** A greeting for the reader's local time of day, for example "Good morning". No clock time. */
 export function useGreeting(): string {
   return useSyncExternalStore(subscribe, getGreeting, getServerGreeting);
 }

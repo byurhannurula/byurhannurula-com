@@ -24,15 +24,22 @@ export const FOOTER_COPY = {
 export const RSS_LINK = { name: 'RSS', href: RSS_PATH } as const;
 
 export type SocialCard =
-  | { kind: 'github'; handle: string; line: string }
   | {
-      kind: 'profile';
-      /** The network's own brand colour, for the banner and the button. */
-      brandColour: string;
-      name: string;
+      kind: 'github';
+      handle: string;
+      /** Follows the count: "1,204 contributions in the last year". */
       line: string;
+      /** Shown when there is no contribution data. */
+      fallback: string;
+    }
+  | {
+      kind: 'linkedin';
+      name: string;
+      /** Each entry is one line under the name. */
+      lines: string[];
       cta: string;
     }
+  | { kind: 'x'; handle: string; bio: string; cta: string }
   | { kind: 'small'; title: string; line: string };
 
 /** Hover card for each social link, by `Social.name`. */
@@ -40,20 +47,19 @@ export const SOCIAL_CARDS: Record<string, SocialCard> = {
   GitHub: {
     kind: 'github',
     handle: 'byurhannurula',
-    line: 'contributions in the last year (sample data)',
+    line: 'contributions in the last year',
+    fallback: 'on GitHub',
   },
   LinkedIn: {
-    kind: 'profile',
-    brandColour: '#0a66c2',
+    kind: 'linkedin',
     name: 'Byurhan Nurula',
-    line: 'Team Lead / Full-Stack Engineer',
+    lines: ['Team Lead / Full-Stack Engineer', 'Ruse, Bulgaria'],
     cta: 'Connect',
   },
   X: {
-    kind: 'profile',
-    brandColour: '#2a2a2e',
-    name: '@byurhannurula',
-    line: 'Full-stack engineer. Privacy, homelabs, and things that outlive their hype cycle.',
+    kind: 'x',
+    handle: '@byurhannurula',
+    bio: 'Full-stack engineer. Privacy, homelabs, and things that outlive their hype cycle.',
     cta: 'Follow',
   },
   Mastodon: {
@@ -63,12 +69,3 @@ export const SOCIAL_CARDS: Record<string, SocialCard> = {
   },
   RSS: { kind: 'small', title: 'Notes feed', line: RSS_PATH },
 };
-
-const GRID_WEEKS = 26;
-const LEVEL_PATTERN = [0, 0, 1, 0, 2, 1, 0, 3, 0, 1, 2, 0, 0, 1];
-
-/** SAMPLE DATA: a fixed pattern, not real GitHub contributions. */
-export const SAMPLE_CONTRIBUTION_LEVELS = Array.from(
-  { length: GRID_WEEKS * 7 },
-  (_, i) => LEVEL_PATTERN[(i * 7 + (i >> 3) * 3) % LEVEL_PATTERN.length],
-);

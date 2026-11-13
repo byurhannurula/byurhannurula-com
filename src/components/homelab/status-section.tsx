@@ -15,7 +15,8 @@ const STATE_DOT: Record<ServiceState, string> = {
 };
 
 const BEAT_BAR: Record<Beat, string> = {
-  up: 'bg-hue-6 opacity-75',
+  // Full strength on a light page: at 75% the green is under 3:1 there.
+  up: 'bg-hue-6 dark:opacity-75',
   slow: 'bg-hue-7',
   down: 'bg-hue-1',
   none: 'bg-line-strong',

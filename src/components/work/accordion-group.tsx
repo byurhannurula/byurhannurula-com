@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 
 import { useSingleOpen } from '@/hooks/use-single-open';
 import { playSound } from '@/hooks/use-sound';
+import { cn } from '@/lib/utils';
 
 export interface AccordionEntry {
   id: string;
@@ -60,7 +61,17 @@ export function AccordionGroup({ items, defaultOpen }: AccordionGroupProps) {
               className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-550 ease-soft data-open:grid-rows-[1fr]"
               data-open={open ? '' : undefined}
             >
-              <div className="min-h-0 overflow-hidden">{body}</div>
+              {/* Closed content is not rendered at all, so its lazy pictures
+                  do not load. The discrete transition keeps it rendered
+                  until the row has closed. */}
+              <div
+                className={cn(
+                  'min-h-0 overflow-hidden transition-[content-visibility] duration-550 transition-discrete',
+                  !open && '[content-visibility:hidden]',
+                )}
+              >
+                {body}
+              </div>
             </div>
           </article>
         );

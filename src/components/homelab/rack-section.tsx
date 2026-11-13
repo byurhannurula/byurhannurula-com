@@ -13,7 +13,8 @@ export function RackSection() {
       sub={
         <>
           Select a device to see what runs on it.{' '}
-          <SampleTag>drawing, not to scale</SampleTag>
+          {/* The drawing is hidden on a narrow screen, and so is its tag. */}
+          <SampleTag className="max-md:hidden">drawing, not to scale</SampleTag>
         </>
       }
     >

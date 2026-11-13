@@ -2,7 +2,7 @@
 
 import { useGreeting } from '@/hooks/use-greeting';
 
-/** The reader's time and a greeting, above the title. Option: `greeting`. */
+/** A greeting for the reader's time of day, above the title. Option: `greeting`. */
 export function HeroGreeting() {
   const greeting = useGreeting();
   return (

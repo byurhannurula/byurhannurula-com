@@ -10,11 +10,59 @@
   }
 }
 
-/* The island label, when the current heading changes. */
-@keyframes island-swap {
-  from {
+/* motion off and reduced motion cut durations, not delays: without this the
+   island rows would still arrive one by one. */
+[data-motion='off'] [data-island],
+[data-motion='off'] [data-island] * {
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-island] * {
+    transition-delay: 0s !important;
+  }
+}
+
+/* Picture zoom with view transitions (src/hooks/use-image-zoom.ts): the
+   picture travels between its place in the text and the centre. Both
+   snapshots fill the moving box, so a cropped picture does not stretch. */
+::view-transition-group(zoom-picture) {
+  animation-duration: 0.42s;
+  animation-timing-function: var(--ease-island);
+}
+::view-transition-old(zoom-picture),
+::view-transition-new(zoom-picture) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Picture zoom without view transitions: fade and scale. `allow-discrete`
+   keeps the dialog in the top layer until the fade out ends. */
+dialog[data-zoom][data-fade],
+dialog[data-zoom][data-fade]::backdrop {
+  opacity: 0;
+  transition:
+    opacity 0.25s var(--ease-out-soft),
+    scale 0.25s var(--ease-out-soft),
+    display 0.25s allow-discrete,
+    overlay 0.25s allow-discrete;
+}
+dialog[data-zoom][data-fade] {
+  scale: 0.96;
+}
+dialog[data-zoom][data-fade][open],
+dialog[data-zoom][data-fade][open]::backdrop {
+  opacity: 1;
+  scale: 1;
+}
+@starting-style {
+  dialog[data-zoom][data-fade][open],
+  dialog[data-zoom][data-fade][open]::backdrop {
     opacity: 0;
-    translate: 0 6px;
+  }
+  dialog[data-zoom][data-fade][open] {
+    scale: 0.96;
   }
 }
 
@@ -26,7 +74,8 @@
 }
 
 @theme {
-  --animate-island-swap: island-swap 0.35s var(--ease-out-soft);
+  /* The island's own curve: a long, soft landing. */
+  --ease-island: cubic-bezier(0.22, 1, 0.36, 1);
   --animate-like-pop: like-pop 0.45s var(--ease-out-soft);
 }
 

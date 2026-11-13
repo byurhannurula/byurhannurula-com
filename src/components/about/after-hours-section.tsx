@@ -29,7 +29,8 @@ export function AfterHoursSection() {
               >
                 <Link
                   href={link.href}
-                  className="underline decoration-line-strong underline-offset-[0.25em] transition-colors hover:decoration-accent-bright"
+                  // The padding makes the tap target taller; the margin keeps the layout.
+                  className="-my-2 inline-block py-2 underline decoration-line-strong underline-offset-[0.25em] transition-colors hover:decoration-accent-bright"
                 >
                   {link.label}
                 </Link>

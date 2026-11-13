@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Figure } from '@/components/mdx/figure';
 import { ImageZoom } from '@/components/mdx/image-zoom';
 import { BackLink } from '@/components/notes/back-link';
 import { LikeButton } from '@/components/notes/like-button';
 import { NOTE_COLUMN, NoteHeader } from '@/components/notes/note-header';
+import { NoteHeroCover } from '@/components/notes/note-hero-cover';
 import { NoteRelated } from '@/components/notes/note-related';
 import { ReadingProgress } from '@/components/notes/reading-progress';
 import { TocIsland } from '@/components/notes/toc-island';
@@ -76,7 +76,7 @@ export default async function NotePage({ params }: NotePageProps) {
         )}
       >
         {note.cover ? (
-          <Figure src={note.cover} alt={note.coverAlt} width="wide" />
+          <NoteHeroCover src={note.cover} alt={note.coverAlt} />
         ) : null}
         {content}
       </article>

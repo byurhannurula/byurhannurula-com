@@ -1,5 +1,6 @@
 'use client';
 
+import { openConfigPanel } from '@/components/config/config-panel';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
@@ -30,10 +31,11 @@ export interface CommandEntry {
 const copy = (text: string, message: string) => async () => {
   try {
     await navigator.clipboard.writeText(text);
+    showToast(message);
   } catch {
-    // No clipboard permission. The toast still names what was tried.
+    // No clipboard permission, or the page is not in a secure context.
+    showToast(COMMAND_COPY.copyFailed);
   }
-  showToast(message);
 };
 
 /** Every row of the command menu, in display order. */
@@ -88,6 +90,14 @@ export function useCommandItems(notes: CommandNote[]): CommandEntry[] {
         icon: 'gear',
         hint: '',
         run: () => setOption('sound', soundOff ? 'click' : 'off'),
+      },
+      {
+        group: 'Actions',
+        name: COMMAND_COPY.openConfig,
+        keywords: 'design options settings panel preset',
+        icon: 'gear',
+        hint: '',
+        run: openConfigPanel,
       },
       ...(['auto', ...LIGHT_MODES] as const).map((mode): CommandEntry => ({
         group: 'Light',

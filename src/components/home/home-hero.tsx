@@ -8,7 +8,12 @@ import { HeroLogos } from '@/components/home/hero-logos';
 import { CopyVariant } from '@/components/shared/copy-variant';
 import { PageTitle } from '@/components/shared/page-hero';
 import { Button } from '@/components/ui/button';
-import { HERO_ACTIONS, HERO_LEAD, HERO_TITLE } from '@/content/home';
+import {
+  HERO_ACTIONS,
+  HERO_HEADING,
+  HERO_LEAD,
+  HERO_TITLE,
+} from '@/content/home';
 
 function TitleParts({ parts }: { parts: [start: string, end: string] }) {
   return (
@@ -39,6 +44,11 @@ export function HomeHero() {
       <p className="mt-6 hidden max-w-[34rem] text-[1.1875rem] leading-[1.55] text-pretty text-soft in-data-[hero=text]:block">
         <CopyVariant a={HERO_LEAD.a} b={HERO_LEAD.b} c={HERO_LEAD.c} />
       </p>
+      {/* The logos and expand heroes are sentences, not titles. This keeps one
+          h1 on the page for them. */}
+      <h1 className="sr-only hidden in-data-[hero=expand]:block in-data-[hero=logos]:block">
+        {HERO_HEADING}
+      </h1>
       <HeroLogos />
       <HeroExpand />
       <HeroCurrent />
