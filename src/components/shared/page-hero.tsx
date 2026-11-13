@@ -80,8 +80,11 @@ export function PageTitle({ title, titleEnd, className }: PageTitleProps) {
   return (
     <h1
       className={cn(
-        'leading-[1.04] font-semibold tracking-[-0.035em] text-balance',
+        'font-semibold tracking-[-0.035em] text-balance',
         className,
+        // Last on purpose: the class merger drops a line height that comes
+        // before a font size class.
+        'leading-[1.04]',
       )}
     >
       {title}

@@ -24,7 +24,7 @@ function TitleParts({ parts }: { parts: [start: string, end: string] }) {
  */
 export function HomeHero() {
   return (
-    <header className="pt-(--hero-gap) pb-4">
+    <header className="-order-2 pt-(--hero-gap) pb-4">
       <HeroGreeting />
       <PageTitle
         className="hidden max-w-[19ch] text-(length:--title-size) in-data-[hero=text]:block in-data-[top=wide]:max-w-none"
