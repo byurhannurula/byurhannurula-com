@@ -84,6 +84,8 @@ export function ConfigPanel() {
     );
   };
 
+  // On a note the contents island owns the bottom of a small screen.
+  const lift = pathname.startsWith('/notes/') && 'max-md:bottom-20';
   const changed = changedKeys(options);
   const rows = Object.entries(OPTION_GROUPS[group]) as [OptionKey, OptionDef][];
 
@@ -94,7 +96,10 @@ export function ConfigPanel() {
         type="button"
         aria-expanded={false}
         onClick={() => toggle(true)}
-        className="fixed bottom-4 left-4 z-60 inline-flex h-10.5 items-center gap-2.5 rounded-full bg-[#17171a] px-4 font-mono text-[0.8125rem] text-[#e9e9ec] shadow-[0_18px_44px_-10px_rgb(0_0_0/0.6),0_0_0_1px_rgb(255_255_255/0.09)] transition-transform duration-200 hover:-translate-y-0.5"
+        className={cn(
+          lift,
+          'fixed bottom-4 left-4 z-60 inline-flex h-10.5 items-center gap-2.5 rounded-full bg-[#17171a] px-4 font-mono text-[0.8125rem] text-[#e9e9ec] shadow-[0_18px_44px_-10px_rgb(0_0_0/0.6),0_0_0_1px_rgb(255_255_255/0.09)] transition-transform duration-200 hover:-translate-y-0.5',
+        )}
       >
         <SlidersHorizontal aria-hidden className="size-4" />
         Config
@@ -114,7 +119,10 @@ export function ConfigPanel() {
       onKeyDown={(event) => {
         if (event.key === 'Escape') toggle(false);
       }}
-      className="fixed inset-auto bottom-4 left-4 z-60 m-0 w-132 max-w-[calc(100vw-2rem)] origin-bottom-left animate-pop-in overflow-hidden rounded-[1.25rem] border-0 bg-[#17171a] p-0 font-mono text-[0.8125rem] leading-tight text-[#e9e9ec] shadow-[0_18px_44px_-10px_rgb(0_0_0/0.6),0_0_0_1px_rgb(255_255_255/0.09)]"
+      className={cn(
+        lift,
+        'fixed inset-auto bottom-4 left-4 z-60 m-0 w-132 max-w-[calc(100vw-2rem)] origin-bottom-left animate-pop-in overflow-hidden rounded-[1.25rem] border-0 bg-[#17171a] p-0 font-mono text-[0.8125rem] leading-tight text-[#e9e9ec] shadow-[0_18px_44px_-10px_rgb(0_0_0/0.6),0_0_0_1px_rgb(255_255_255/0.09)]',
+      )}
     >
       <div className="flex items-center gap-2.5 py-2.5 pr-2.5 pl-4">
         <b className="text-[0.9375rem] font-medium">Config</b>
