@@ -1,0 +1,48 @@
+import { LabLists } from '@/components/homelab/lab-lists';
+import { RackSection } from '@/components/homelab/rack-section';
+import { RequestHops } from '@/components/homelab/request-hops';
+import { RulesList } from '@/components/homelab/rules-list';
+import { StatusSection } from '@/components/homelab/status-section';
+import { PageHero } from '@/components/shared/page-hero';
+import { pageMetadata } from '@/lib/seo';
+
+export const metadata = pageMetadata({
+  path: '/homelab',
+  title: 'Homelab',
+  description:
+    'One mini PC, one Raspberry Pi and a 10 inch rack: what runs on them, how a request gets in, and the rules I keep.',
+});
+
+// The status section reads live data when it is set up. One minute is as
+// fresh as the status page itself.
+export const revalidate = 60;
+
+export default function HomelabPage() {
+  return (
+    <>
+      <PageHero
+        eyebrow={
+          <>
+            <span
+              aria-hidden
+              className="size-2 rounded-full bg-accent-bright shadow-[0_0_0_0_var(--accent-bright)] motion-safe:animate-lab-pulse"
+            />
+            hobby, not my job
+          </>
+        }
+        title="A small homelab"
+        titleEnd="that I run like production."
+        lead="One mini PC, one Raspberry Pi and a 10 inch rack. It is where I learn about networks, backups and failure, with my own data as the test."
+      />
+      <div className="hidden in-data-[lab=lists]:block">
+        <LabLists />
+      </div>
+      <div className="hidden in-data-[lab=rack]:block">
+        <RackSection />
+        <StatusSection />
+        <RequestHops />
+      </div>
+      <RulesList />
+    </>
+  );
+}

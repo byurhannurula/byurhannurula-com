@@ -1,0 +1,43 @@
+import { PageHero } from '@/components/shared/page-hero';
+import { Section } from '@/components/shared/section';
+import { ProjectAccordion } from '@/components/work/project-accordion';
+import { ProjectGrid } from '@/components/work/project-grid';
+import { ProjectStrips } from '@/components/work/project-strips';
+import { SmallProjects } from '@/components/work/small-projects';
+import { WorkArt } from '@/components/work/work-art';
+import { PROJECTS, SMALL_PROJECTS } from '@/content/projects';
+import { pageMetadata } from '@/lib/seo';
+
+export const metadata = pageMetadata({
+  path: '/work',
+  title: 'Work',
+  description:
+    'Small tools that do one job well: Jotter, OGee and FullShot. Open source, built on my own time, with no data collection.',
+});
+
+export default function WorkPage() {
+  return (
+    <>
+      <PageHero
+        title="Small tools"
+        titleEnd="that do one job well."
+        lead="I build these on my own time. Each one started as a problem I had. All of them are open source, and none of them collect data."
+        art={<WorkArt />}
+      />
+      <Section id="projects">
+        <div className="hidden in-data-[work=strips]:block">
+          <ProjectStrips projects={PROJECTS} />
+        </div>
+        <div className="hidden in-data-[work=accordion]:block">
+          <ProjectAccordion projects={PROJECTS} />
+        </div>
+        <div className="hidden in-data-[work=grid]:block">
+          <ProjectGrid projects={PROJECTS} />
+        </div>
+      </Section>
+      <Section title="Also">
+        <SmallProjects projects={SMALL_PROJECTS} />
+      </Section>
+    </>
+  );
+}
