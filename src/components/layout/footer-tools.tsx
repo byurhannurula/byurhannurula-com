@@ -47,7 +47,7 @@ export function FooterTools() {
       <button
         type="button"
         aria-pressed={soundOn}
-        onClick={() => setOption('sound', soundOn ? 'off' : 'click')}
+        onClick={() => setOption('sound', soundOn ? 'off' : 'on')}
         className={`${tool} in-data-[fctl=on]:inline-flex`}
       >
         <Volume1 aria-hidden />

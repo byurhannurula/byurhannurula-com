@@ -15,6 +15,7 @@ import { JsonLd, person, website } from '@/components/json-ld';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteNav } from '@/components/layout/site-nav';
 import { RevealObserver } from '@/components/shared/reveal-observer';
+import { SoundHover } from '@/components/shared/sound-hover';
 import { SOCIALS } from '@/content/socials';
 import { brand } from '@/lib/brand';
 import { fontVariables } from '@/lib/fonts';
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Design tool. Delete it, and src/components/config, at launch. */}
         <ConfigPanel />
         <RevealObserver />
+        <SoundHover />
         <LightClock />
         <JsonLd data={[person(SOCIALS.map((s) => s.href)), website()]} />
         <Analytics />

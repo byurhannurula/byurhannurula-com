@@ -4,7 +4,9 @@ import { getOptions } from '@/lib/options-store';
 
 /** One place that says which file plays for which event, and how loud. */
 const SOUNDS = {
-  click: ['click.webm', 0.26],
+  // A real click gets no sound: it was irritating. The same file, very
+  // quiet, is the tick when the pointer enters a link or a button.
+  hover: ['click.webm', 0.09],
   open: ['open.webm', 0.3],
   close: ['close.webm', 0.3],
   page: ['page.webm', 0.28],

@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useOption } from '@/hooks/use-options';
-import { playSound } from '@/hooks/use-sound';
 import { LIGHT_MODES, type LightPreference } from '@/lib/light';
 import { setOption } from '@/lib/options-store';
 import { cn } from '@/lib/utils';
@@ -57,7 +56,6 @@ export function LightMenu({ children }: LightMenuProps) {
           value={light}
           onValueChange={(value) => {
             setOption('light', value);
-            playSound('click');
           }}
         >
           {LIGHT_CHOICES.map((choice) => (

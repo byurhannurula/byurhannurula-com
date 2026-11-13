@@ -89,7 +89,7 @@ export function useCommandItems(notes: CommandNote[]): CommandEntry[] {
         keywords: 'audio click mute',
         icon: 'gear',
         hint: '',
-        run: () => setOption('sound', soundOff ? 'click' : 'off'),
+        run: () => setOption('sound', soundOff ? 'on' : 'off'),
       },
       {
         group: 'Actions',

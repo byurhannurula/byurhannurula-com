@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import { playSound } from '@/hooks/use-sound';
-
 /** A like that lives in this page only: nothing is stored or sent. */
 export function LikeButton() {
   const [liked, setLiked] = useState(false);
@@ -13,7 +11,6 @@ export function LikeButton() {
       aria-pressed={liked}
       onClick={() => {
         setLiked(!liked);
-        playSound('click');
       }}
       className="inline-flex h-11 items-center gap-2 rounded-full border border-line-strong px-[1.1rem] font-medium transition-[border-color,color,scale] duration-200 ease-soft active:scale-94 aria-pressed:border-danger aria-pressed:text-danger"
     >

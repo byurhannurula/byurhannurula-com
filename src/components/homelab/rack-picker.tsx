@@ -3,7 +3,6 @@
 import type { ReactNode } from 'react';
 
 import { usePick } from '@/hooks/use-pick';
-import { playSound } from '@/hooks/use-sound';
 
 export interface RackPickerDevice<Id extends string> {
   id: Id;
@@ -22,8 +21,6 @@ interface RackPickerProps<Id extends string> {
   backdrop: ReactNode;
 }
 
-const playClick = () => playSound('click');
-
 /**
  * The rack drawing with selectable devices and the text of the selected
  * one. Only the selection lives here: shapes and panels come from the server.
@@ -35,7 +32,7 @@ export function RackPicker<Id extends string>({
   initial,
   backdrop,
 }: RackPickerProps<Id>) {
-  const { picked, pick, buttonProps } = usePick(initial, playClick);
+  const { picked, pick, buttonProps } = usePick(initial);
   const current = devices.find((device) => device.id === picked);
 
   return (
