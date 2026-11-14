@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { DotPuzzleSlot } from '@/components/shared/dot-puzzle-slot';
 import { PageTitle } from '@/components/shared/page-hero';
 import { Button } from '@/components/ui/button';
 
@@ -27,6 +28,7 @@ export default function NotFound() {
           <Link href="/">Go to the home page</Link>
         </Button>
       </div>
+      <DotPuzzleSlot />
     </section>
   );
 }

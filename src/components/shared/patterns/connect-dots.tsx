@@ -8,6 +8,8 @@ import {
   useCanvasLoop,
 } from '@/hooks/use-canvas-loop';
 
+import { LINE_COLOURS } from './palette';
+
 /** Same spacing as the `dots` background, so the two read as one family. */
 const STEP = 22;
 const DOT = 1;
@@ -17,16 +19,6 @@ const END = 3.5;
 const SPEED = 7;
 const HOLD = 2.2;
 const FADE = 0.9;
-const COLOURS = [
-  '#f97316',
-  '#3b82f6',
-  '#06b6d4',
-  '#ec4899',
-  '#eab308',
-  '#22c55e',
-  '#ef4444',
-  '#a855f7',
-];
 const DIRS = [
   [1, 0],
   [-1, 0],
@@ -117,7 +109,7 @@ function createScene(): CanvasScene {
     for (let tries = 0; tries < 12; tries++) {
       const path = walk(cols, rows, used);
       if (path) {
-        flows.push({ path, colour: pick(COLOURS), age: 0 });
+        flows.push({ path, colour: pick(LINE_COLOURS), age: 0 });
         return;
       }
     }
