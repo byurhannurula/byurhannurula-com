@@ -1,10 +1,10 @@
 import 'server-only';
 
-import { open } from 'node:fs/promises';
+import { open, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { cache } from 'react';
 
-interface ImageSize {
+export interface ImageSize {
   width: number;
   height: number;
 }
@@ -58,5 +58,46 @@ export const publicImageSize = cache(
     } catch {
       return null;
     }
+  },
+);
+
+const MANIFEST = path.join(process.cwd(), 'content', '.image-sizes.json');
+const PROBE_BYTES = 64 * 1024;
+
+/**
+ * Sizes of remote pictures, committed so builds stay offline. A grid must
+ * know each shape before it lays out a row; the browser learns it too late.
+ */
+const remoteManifest = cache(async (): Promise<Record<string, ImageSize>> => {
+  try {
+    return JSON.parse(await readFile(MANIFEST, 'utf8'));
+  } catch {
+    return {};
+  }
+});
+
+async function probeRemote(src: string): Promise<ImageSize | null> {
+  try {
+    const res = await fetch(src, {
+      headers: { Range: `bytes=0-${PROBE_BYTES - 1}` },
+      cache: 'force-cache',
+    });
+    if (!res.ok) return null;
+    const head = Buffer.from(await res.arrayBuffer());
+    return pngSize(head) ?? jpegSize(head);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Pixel size of any picture a note links: files in /public are measured,
+ * remote ones come from content/.image-sizes.json, else from their first
+ * bytes. Null when nothing works; callers then pick a fixed shape.
+ */
+export const imageSize = cache(
+  async (src: string): Promise<ImageSize | null> => {
+    if (!/^https?:\/\//.test(src)) return publicImageSize(src);
+    return (await remoteManifest())[src] ?? probeRemote(src);
   },
 );
