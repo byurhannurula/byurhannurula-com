@@ -49,39 +49,16 @@ function Filter() {
 
 function Tile({ item }: { item: ShelfItem }) {
   const status = statusLabel(item);
-  const wide = item.kind === 'show';
   return (
-    <li
-      data-kind={item.kind}
-      style={toneStyle(item)}
-      className={cn('group/tile', wide && 'col-span-2')}
-    >
+    <li data-kind={item.kind} style={toneStyle(item)} className="group/tile">
       <div
         className={cn(
-          'relative overflow-hidden rounded-xl border border-line',
-          wide ? 'aspect-[8/5]' : 'aspect-[4/5]',
+          'relative aspect-[4/5] overflow-hidden rounded-xl border border-line',
           tinted,
         )}
       >
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-[radial-gradient(ellipse_at_50%_100%,color-mix(in_oklab,var(--tone)_40%,transparent),transparent_70%)] opacity-70 transition-opacity duration-500 group-hover/tile:opacity-100"
-        />
-        <div
-          className={cn(
-            'absolute flex items-center justify-center transition-[translate,rotate] duration-500 ease-soft group-hover/tile:-translate-y-1.5 motion-reduce:transition-none',
-            wide ? 'inset-[10%_8%]' : 'inset-[13%_16%]',
-            !wide && 'group-hover/tile:-rotate-1',
-          )}
-        >
-          <Cover
-            item={item}
-            sizes={
-              wide
-                ? '(min-width: 1024px) 420px, 90vw'
-                : '(min-width: 1024px) 180px, 40vw'
-            }
-          />
+        <div className="absolute inset-[13%_16%] flex items-center justify-center transition-[translate,rotate] duration-500 ease-soft group-hover/tile:-translate-y-1.5 group-hover/tile:-rotate-1 motion-reduce:transition-none">
+          <Cover item={item} sizes="(min-width: 1024px) 180px, 40vw" />
         </div>
         {status ? (
           <span className="absolute top-3 left-3 rounded-full bg-bg/80 px-2 py-1 font-mono text-[0.6875rem] leading-none text-soft backdrop-blur-sm">

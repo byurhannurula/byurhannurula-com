@@ -23,11 +23,6 @@ export function ShelfNow() {
                 tinted,
               )}
             >
-              {/* A soft light from the cover side. */}
-              <span
-                aria-hidden
-                className="pointer-events-none absolute top-1/2 -left-16 size-64 -translate-y-1/2 rounded-full bg-[color-mix(in_oklab,var(--tone)_45%,transparent)] blur-3xl"
-              />
               <div className="relative grid h-36 w-28 shrink-0 place-items-center sm:w-36">
                 <Cover item={item} sizes="160px" className="max-h-36" />
               </div>
