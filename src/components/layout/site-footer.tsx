@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { SampleTag } from '@/components/shared/sample-tag';
-import { NAV_ITEMS } from '@/content/nav';
+import { FOOTER_ITEMS, NAV_ITEMS } from '@/content/nav';
 import { SOCIALS } from '@/content/socials';
 import { brand } from '@/lib/brand';
 
@@ -18,7 +18,10 @@ import { getContributions } from './social-data';
 import { SocialIcon } from './social-icon';
 import { SocialRow } from './social-row';
 
-const SITE_LINKS = NAV_ITEMS.filter(({ href }) => href !== '/');
+const SITE_LINKS = [
+  ...NAV_ITEMS.filter(({ href }) => href !== '/'),
+  ...FOOTER_ITEMS,
+];
 const ELSEWHERE = [...SOCIALS, RSS_LINK];
 
 const heading =

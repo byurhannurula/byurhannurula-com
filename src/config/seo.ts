@@ -31,7 +31,8 @@ export type ShareKind =
   | 'notes'
   | 'note'
   | 'uses'
-  | 'homelab';
+  | 'homelab'
+  | 'colophon';
 
 export interface PageSeo {
   path: string;
@@ -130,6 +131,19 @@ export const PAGES = {
       title: 'A small homelab that I run like production.',
       meta: 'A hobby, not my job.',
       alt: `The homelab of ${brand.name}`,
+    },
+  },
+  colophon: {
+    path: '/colophon',
+    title: 'Colophon',
+    description:
+      'How this site is made and why it looks like this: the stack, the type, the four light modes, the sites I learned from and the four versions so far.',
+    share: {
+      kind: 'colophon',
+      eyebrow: 'colophon',
+      title: 'How this site is made, and why it looks like this.',
+      meta: 'Stack, type, colour and credits.',
+      alt: `How the site of ${brand.name} is made`,
     },
   },
   designSystem: {

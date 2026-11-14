@@ -25,6 +25,7 @@ export const routes = [
   '/about',
   '/uses',
   '/homelab',
+  '/colophon',
 ] as const;
 
 export const absoluteUrl = (path: string) => new URL(path, siteUrl).href;

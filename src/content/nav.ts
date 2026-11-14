@@ -24,3 +24,12 @@ export const NAV_ITEMS: NavItem[] = [
     when: 'homelab:on',
   },
 ];
+
+/** In the footer and the command menu, but not in the nav bar. */
+export const FOOTER_ITEMS: NavItem[] = [
+  {
+    label: 'Colophon',
+    href: '/colophon',
+    keywords: 'how this site is made stack fonts colours credits',
+  },
+];

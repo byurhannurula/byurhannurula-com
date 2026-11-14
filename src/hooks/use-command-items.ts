@@ -10,7 +10,7 @@ import {
   type CommandNote,
 } from '@/components/command/command-content';
 import type { CommandIconName } from '@/components/command/command-icon';
-import { NAV_ITEMS } from '@/content/nav';
+import { FOOTER_ITEMS, NAV_ITEMS } from '@/content/nav';
 import { SOCIALS } from '@/content/socials';
 import { forgetCommandOpener } from '@/hooks/use-command-menu';
 import { useOptions } from '@/hooks/use-options';
@@ -45,7 +45,7 @@ export function useCommandItems(notes: CommandNote[]): CommandEntry[] {
   const { homelab, sound, light } = useOptions();
 
   return useMemo(() => {
-    const pages = NAV_ITEMS.filter(
+    const pages = [...NAV_ITEMS, ...FOOTER_ITEMS].filter(
       ({ when }) => when !== 'homelab:on' || homelab === 'on',
     );
     const soundOff = sound === 'off';

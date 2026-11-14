@@ -26,6 +26,7 @@ const HUES = {
   note: '#fb923c',
   uses: '#a78bfa',
   homelab: '#22d3ee',
+  colophon: '#facc15',
 } as const;
 
 export type ShareKind = keyof typeof HUES;
