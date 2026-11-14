@@ -12,6 +12,7 @@ import {
   OptionsScript,
 } from '@/components/config/options-script';
 import { JsonLd, person, website } from '@/components/json-ld';
+import { ScrollTop } from '@/components/layout/scroll-top';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteNav } from '@/components/layout/site-nav';
 import { RevealObserver } from '@/components/shared/reveal-observer';
@@ -79,6 +80,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {children}
         </main>
         <SiteFooter />
+        <ScrollTop />
         <CommandMenu />
         {/* Design tool. Delete it, and src/components/config, at launch. */}
         <ConfigPanel />

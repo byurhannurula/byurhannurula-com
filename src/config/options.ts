@@ -61,6 +61,12 @@ export const OPTION_GROUPS = {
     density: def('spacing', ['normal'], ['compact'], ['roomy']),
     lines: def('divider lines', ['on'], ['off']),
     motion: def('motion', ['on'], ['off']),
+    totop: def(
+      'back to top',
+      ['off'],
+      ['button', 'round button'],
+      ['ring', 'button with progress ring'],
+    ),
   },
   Home: {
     hero: def(

@@ -6,19 +6,13 @@ import { CommandIcon } from '@/components/command/command-icon';
 import { useLightMode } from '@/hooks/use-light-mode';
 import { useOption } from '@/hooks/use-options';
 import { setOption } from '@/lib/options-store';
+import { scrollToTop } from '@/lib/scroll-to-top';
 
 import { FOOTER_COPY } from './footer-content';
 import { LightMenu } from './light-menu';
 
 const tool =
   'hidden h-10 items-center md:h-8 gap-[0.4rem] rounded-full whitespace-nowrap border border-line-strong bg-card px-[0.7rem] text-soft [transition:color_.2s,translate_.3s_var(--ease-out-soft)] hover:text-ink [&_svg]:size-3.5';
-
-function scrollToTop() {
-  const still =
-    document.documentElement.dataset.motion === 'off' ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  window.scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' });
-}
 
 /** Footer buttons: light, sound and back to top. Options show or hide each. */
 export function FooterTools() {
