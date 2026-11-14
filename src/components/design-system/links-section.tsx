@@ -162,28 +162,28 @@ export function LinksSection() {
 
       <Group title="on their own line">
         <Specimen
-          name="LinkCard, side"
-          use="The default card in a note. The path shows after the domain on hover."
+          name="LinkCard, compact"
+          use="Picture beside the text, for a dense note. The path shows after the domain on hover."
         >
           <LinkCard
             href={JOTTER}
             title="Jotter"
             description="A fast, minimal notepad: a quiet place for quick thoughts."
             image="/assets/projects/jotter/editor-dark.png"
-            className="my-0"
+            compact
+            className="my-0 max-w-xl"
           />
         </Specimen>
 
         <Specimen
-          name="LinkCard, top"
-          use="When the picture is the reason for the link."
+          name="LinkCard"
+          use="The default card in a note: the picture above the text. In a note, an address alone is enough; the rest is fetched from the target."
         >
           <LinkCard
             href="https://github.com/byurhannurula/jotter"
             title="Jotter on GitHub"
             description="The source, the releases and the issues."
             image="/assets/projects/jotter/desktop.png"
-            layout="top"
             className="my-0 max-w-md"
           />
         </Specimen>

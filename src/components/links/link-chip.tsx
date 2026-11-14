@@ -48,13 +48,13 @@ export function LinkBar({ href, icon, className }: LinkBarProps) {
     <BaseLink
       href={href}
       className={cn(
-        'group/link my-6 flex items-center gap-3 rounded-lg border border-line p-[0.6rem] pr-4 no-underline transition-[border-color,background-color] duration-200 hover:border-accent-bright hover:bg-card focus-visible:border-accent-bright',
+        'group/link my-6 flex items-center gap-3 rounded-md border border-line p-3 no-underline transition-colors hover:border-accent focus-visible:border-accent',
         className,
       )}
     >
       <SiteIcon href={href} icon={icon} />
-      <span className="min-w-0 flex-1 truncate font-mono text-[0.8125rem]">
-        <span className="transition-colors group-hover/link:text-accent">
+      <span className="min-w-0 flex-1 truncate font-mono text-[12.5px] tracking-[0.06em] uppercase">
+        <span className="text-ink transition-colors group-hover/link:text-accent">
           {hostOf(href)}
         </span>
         {path ? <span className="text-faint">{path}</span> : null}
@@ -62,7 +62,7 @@ export function LinkBar({ href, icon, className }: LinkBarProps) {
       {isExternal(href) ? <ExternalMark hideArrow /> : null}
       <ArrowUpRight
         aria-hidden
-        className="size-4 shrink-0 text-faint transition-[color,translate] duration-200 ease-soft group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:text-accent in-data-[motion=off]:transition-none motion-reduce:transition-none"
+        className="size-4 shrink-0 text-faint transition-colors group-hover/link:text-accent"
       />
     </BaseLink>
   );

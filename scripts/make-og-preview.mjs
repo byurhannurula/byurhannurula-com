@@ -621,7 +621,362 @@ function designJ(page, c = DARK) {
   );
 }
 
+// ---- designs after a look at ogimage.org/inspiration (portfolio set) ----
+
+// K: one giant word on a flat colour, as type-led portfolios do. The word
+// is the page name; the title is small below it.
+function designK(page) {
+  const ink = '#0a0a0a';
+  const word = page.eyebrow === 'home' ? 'byurhan' : page.eyebrow;
+  const size = Math.min(330, Math.floor(1850 / word.length));
+  return frameBox(
+    { bg: page.hue, ink },
+    [
+      row(
+        { alignItems: 'center', justifyContent: 'space-between', fontSize: 26 },
+        [row({ fontWeight: 700 }, 'byurhan.'), row({}, 'Byurhan Nurula')],
+      ),
+      row(
+        {
+          fontSize: size,
+          fontWeight: 700,
+          letterSpacing: -size * 0.05,
+          lineHeight: 0.9,
+          marginLeft: -8,
+        },
+        word,
+      ),
+      row({ fontSize: 30, lineHeight: 1.25, maxWidth: 900 }, page.title),
+    ],
+    { flexDirection: 'column', justifyContent: 'space-between', padding: 64 },
+  );
+}
+
+// L: a mostly empty image with the wordmark very large and cut by the
+// bottom edge, like the big name in the site footer.
+function designL(page, c = DARK) {
+  return frameBox(c, [
+    el(
+      'div',
+      {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 18,
+        padding: '64px 72px 0',
+        flex: 1,
+      },
+      [
+        row({ alignItems: 'center', gap: 14, fontSize: 26, color: c.soft }, [
+          mark(page, 22),
+          page.eyebrow,
+        ]),
+        row(
+          {
+            fontSize: titleSize(page.title, 0.62),
+            fontWeight: 700,
+            letterSpacing: -1.5,
+            lineHeight: 1.1,
+            maxWidth: 900,
+          },
+          page.title,
+        ),
+      ],
+    ),
+    row(
+      {
+        position: 'absolute',
+        left: 56,
+        bottom: -84,
+        width: 1400,
+        whiteSpace: 'nowrap',
+        fontSize: 286,
+        fontWeight: 700,
+        letterSpacing: -16,
+        lineHeight: 1,
+        color: c.ink,
+      },
+      ['byurhan', el('span', { color: page.hue }, '.')],
+    ),
+  ]);
+}
+
+// M: the title on top and a strip of pictures that rises from the bottom
+// edge. Notes use the cover; other pages use blocks in the site hues.
+function designM(page, c = DARK) {
+  const hues = ['#f472b6', '#60a5fa', '#a78bfa', '#22d3ee', '#fb923c'];
+  const tile = (index) =>
+    page.cover && index === 2
+      ? img(COVER, {
+          width: 250,
+          height: 250,
+          objectFit: 'cover',
+          borderRadius: 22,
+        })
+      : el(
+          'div',
+          {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: index === 2 ? 250 : 200,
+            height: index === 2 ? 250 : 190,
+            borderRadius: 22,
+            background:
+              index === 2 ? page.hue : mix(hues[index], '#0a0a0a', 0.3),
+          },
+          index === 2 ? [mark(page, 96, '#0a0a0a')] : [],
+        );
+  return frameBox(
+    c,
+    [
+      el(
+        'div',
+        {
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 20,
+          padding: '56px 90px 0',
+        },
+        [
+          row(
+            { fontSize: 24, color: c.faint, letterSpacing: 4 },
+            'BYURHAN NURULA',
+          ),
+          row(
+            {
+              fontSize: titleSize(page.title, 0.7),
+              fontWeight: 700,
+              letterSpacing: -2,
+              lineHeight: 1.08,
+              textAlign: 'center',
+            },
+            page.title,
+          ),
+        ],
+      ),
+      row(
+        {
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+          gap: 22,
+          marginBottom: -60,
+        },
+        [0, 1, 2, 3, 4].map(tile),
+      ),
+    ],
+    { flexDirection: 'column', justifyContent: 'space-between' },
+  );
+}
+
+// N: text at the left, a small product panel at the right: a window with
+// lines in the page colour, or the cover for a note.
+function designN(page, c = WARM) {
+  const line = (width, color = c.line) =>
+    el('div', {
+      display: 'flex',
+      width,
+      height: 16,
+      borderRadius: 8,
+      background: color,
+    });
+  const panel = page.cover
+    ? img(COVER, { width: 420, height: 300, objectFit: 'cover' })
+    : el(
+        'div',
+        {
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 18,
+          padding: 32,
+          width: 420,
+          height: 300,
+        },
+        [
+          row({ alignItems: 'center', gap: 14 }, [
+            mark(page, 34),
+            line(150, c.ink),
+          ]),
+          line(330),
+          line(280),
+          row({ gap: 12 }, [
+            line(120, page.hue),
+            line(90, mix(page.hue, c.bg, 0.35)),
+          ]),
+          line(300),
+          line(200),
+        ],
+      );
+  return frameBox(
+    c,
+    [
+      el(
+        'div',
+        {
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          flex: 1,
+          paddingRight: 48,
+        },
+        [
+          wordmark(c, 34),
+          title(page, 0.78),
+          row({ fontSize: 26, color: c.soft }, page.meta),
+        ],
+      ),
+      el(
+        'div',
+        {
+          display: 'flex',
+          flexDirection: 'column',
+          alignSelf: 'center',
+          borderRadius: 26,
+          overflow: 'hidden',
+          background: c.card,
+          border: `2px solid ${c.line}`,
+        },
+        [
+          row(
+            {
+              gap: 10,
+              padding: '16px 20px',
+              borderBottom: `2px solid ${c.line}`,
+            },
+            ['#f472b6', '#facc15', '#4ade80'].map((color) =>
+              el('div', {
+                display: 'flex',
+                width: 14,
+                height: 14,
+                borderRadius: 7,
+                background: color,
+              }),
+            ),
+          ),
+          panel,
+        ],
+      ),
+    ],
+    { padding: 64 },
+  );
+}
+
+// O: a field of small squares, some lit in the page colour, like the
+// status bars and the contribution graph on the site. Title on top.
+function designO(page, c = DARK) {
+  const cols = 30;
+  // Fewer rows under a long title, so the field never meets the text.
+  const rows = page.title.length > 44 ? 5 : page.title.length > 24 ? 6 : 8;
+  let state = page.title.length * 97;
+  const next = () => {
+    state = (state * 1103515245 + 12345) % 2147483648;
+    return state / 2147483648;
+  };
+  const cells = Array.from({ length: cols * rows }, (_, i) => {
+    const depth = Math.floor(i / cols) / rows;
+    const lit = next() < 0.1 + depth * 0.5;
+    const strong = lit && next() < 0.45;
+    return el('div', {
+      display: 'flex',
+      width: 28,
+      height: 28,
+      borderRadius: 7,
+      background: strong ? page.hue : lit ? mix(page.hue, c.bg, 0.35) : c.card,
+    });
+  });
+  return frameBox(
+    c,
+    [
+      row({ alignItems: 'center', justifyContent: 'space-between' }, [
+        wordmark(c, 34, page.hue),
+        row({ fontSize: 26, color: c.soft }, page.eyebrow),
+      ]),
+      title(page, 0.74, { maxWidth: 980, marginTop: 34 }),
+      row({ flexWrap: 'wrap', gap: 7, width: 1050, marginTop: 'auto' }, cells),
+    ],
+    { flexDirection: 'column', padding: '60px 72px 54px' },
+  );
+}
+
+// P: the title in the centre and a pointer with a name tag in the page
+// colour, as if someone points at the page.
+function designP(page, c = DARK) {
+  return frameBox(
+    c,
+    [
+      wordmark(c, 34),
+      el(
+        'div',
+        {
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          position: 'relative',
+        },
+        [
+          row(
+            {
+              fontSize: titleSize(page.title, 0.86),
+              fontWeight: 700,
+              letterSpacing: -2.5,
+              lineHeight: 1.06,
+              textAlign: 'center',
+              maxWidth: 940,
+            },
+            page.title,
+          ),
+          el(
+            'div',
+            {
+              display: 'flex',
+              alignItems: 'flex-start',
+              position: 'absolute',
+              right: 40,
+              bottom: -86,
+            },
+            [
+              el('div', {
+                display: 'flex',
+                width: 0,
+                height: 0,
+                borderRight: '30px solid transparent',
+                borderTop: `40px solid ${page.hue}`,
+              }),
+              row(
+                {
+                  marginTop: 26,
+                  marginLeft: -4,
+                  padding: '10px 20px',
+                  borderRadius: 14,
+                  background: page.hue,
+                  color: '#0a0a0a',
+                  fontSize: 28,
+                  fontWeight: 700,
+                },
+                page.eyebrow,
+              ),
+            ],
+          ),
+        ],
+      ),
+      row({ fontSize: 26, color: c.soft }, page.meta),
+    ],
+    {
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: 64,
+    },
+  );
+}
+
 const DESIGNS = {
+  k: designK,
+  l: designL,
+  m: designM,
+  n: designN,
+  o: designO,
+  p: designP,
   a: designA,
   b: designB,
   c: designC,

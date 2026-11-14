@@ -7,15 +7,18 @@ interface LinkOriginProps {
 }
 
 /**
- * The domain at rest, the full path on hover or focus. Put it inside a link
- * with the class `group/link`.
+ * The domain at rest, the full path on hover or focus.
+ *
+ * The domain answers "where does this go" at a glance; the path only matters
+ * once someone decides to click, so it stays out of the way until then. Put
+ * it inside a link with the class `group/link`.
  */
 export function LinkOrigin({ href, className }: LinkOriginProps) {
   const path = pathOf(href);
   return (
     <span
       className={cn(
-        'flex min-w-0 font-mono text-xs leading-[1.5] text-faint',
+        'flex min-w-0 font-mono text-[11px] tracking-[0.06em] uppercase',
         className,
       )}
     >
@@ -24,7 +27,7 @@ export function LinkOrigin({ href, className }: LinkOriginProps) {
         // A grid from 0fr to 1fr, because `width: auto` does not transition.
         <span className="grid grid-cols-[0fr] transition-[grid-template-columns] duration-300 ease-out group-hover/link:grid-cols-[1fr] group-focus-visible/link:grid-cols-[1fr] in-data-[motion=off]:transition-none motion-reduce:transition-none">
           <span className="min-w-0 overflow-hidden">
-            <span className="block truncate">{path}</span>
+            <span className="block truncate text-faint">{path}</span>
           </span>
         </span>
       ) : null}
@@ -45,19 +48,21 @@ export function SiteIcon({ href, icon, className }: SiteIconProps) {
     <span
       aria-hidden
       className={cn(
-        'flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-[0.5rem] bg-sunk font-mono text-sm font-semibold text-soft uppercase',
+        'flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-sm bg-sunk font-mono text-sm font-semibold text-soft uppercase',
         className,
       )}
     >
       {icon ? (
-        // An icon from any host, in a fixed box: see tech.tsx.
+        // An icon from any host, in a fixed box, so it is not routed through
+        // the image optimiser (that would be an open image proxy).
         // oxlint-disable-next-line nextjs/no-img-element
         <img
           src={icon}
           alt=""
           loading="lazy"
           decoding="async"
-          className="size-[62%] object-contain"
+          referrerPolicy="no-referrer"
+          className="size-full object-contain p-1"
         />
       ) : (
         hostOf(href).charAt(0)
