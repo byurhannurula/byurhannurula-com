@@ -1,5 +1,10 @@
 import Image from 'next/image';
-import { Children, isValidElement, type ReactNode } from 'react';
+import {
+  Children,
+  type CSSProperties,
+  isValidElement,
+  type ReactNode,
+} from 'react';
 
 import { imageSize, publicImageSize } from '@/components/mdx/image-size';
 import { remoteSrcSet } from '@/components/notes/note-cover';
@@ -43,7 +48,20 @@ interface PictureProps {
   height?: number;
   /** The first picture of a page: it loads at once, before the rest. */
   priority?: boolean;
+  /** Round corners on the frame, to match a rounded picture. */
+  round?: boolean;
   className?: string;
+}
+
+/**
+ * A tiny file of the same picture, for the `imgload: blur` option. Scaled
+ * up, the browser smooths it into a soft preview. Local files go through the
+ * optimiser (32 px wide); Unsplash makes its own; other hosts get none.
+ */
+function previewUrl(src: string, local: boolean) {
+  if (local) return `/_next/image?url=${encodeURIComponent(src)}&w=32&q=75`;
+  const first = remoteSrcSet(src)?.split(' ')[0];
+  return first ?? null;
 }
 
 /**
@@ -59,9 +77,11 @@ async function Picture({
   width,
   height,
   priority,
+  round = true,
   className,
 }: PictureProps) {
   const size = await publicImageSize(src);
+  const preview = previewUrl(src, Boolean(size));
   const loading = priority
     ? ({ loading: 'eager', fetchPriority: 'high' } as const)
     : ({ loading: 'lazy' } as const);
@@ -76,7 +96,17 @@ async function Picture({
       data-zoom-alt={alt}
       aria-label={alt ? `Enlarge picture: ${alt}` : 'Enlarge picture'}
       // While it is open large, the picture here hides: one picture that moved.
-      className="block w-full cursor-zoom-in [&[data-zoomed]>img]:invisible"
+      className={cn(
+        'block w-full cursor-zoom-in [&[data-zoomed]>img]:invisible',
+        round && 'rounded-lg',
+      )}
+      // The frame shows a preview or a shimmer until the picture covers it.
+      data-pic
+      style={
+        preview
+          ? ({ '--pic-preview': `url("${preview}")` } as CSSProperties)
+          : undefined
+      }
     >
       {size ? (
         <Image
@@ -177,6 +207,7 @@ export function Figure({
         width={asPixels(imgWidth) ?? asPixels(width)}
         height={asPixels(imgHeight) ?? asPixels(height)}
         priority={priority}
+        round={w !== 'full'}
         className={cn(
           'w-full',
           w === 'full'

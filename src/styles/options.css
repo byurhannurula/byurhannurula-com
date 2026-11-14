@@ -312,3 +312,30 @@ body::before {
     filter: blur(6px);
   }
 }
+
+/* picture loading (`imgload`): what the frame shows before the picture */
+[data-imgload='blur'] [data-pic] {
+  background: var(--pic-preview, none) center / cover no-repeat var(--sunk);
+}
+[data-imgload='shimmer'] [data-pic] {
+  background:
+    linear-gradient(
+        100deg,
+        transparent 30%,
+        color-mix(in oklab, var(--ink) 8%, transparent) 50%,
+        transparent 70%
+      )
+      0 0 / 300% 100% no-repeat,
+    var(--sunk);
+  /* A loaded picture covers the shimmer. It stops after a few rounds, so a
+     hidden one does not repaint forever. */
+  animation: pic-shimmer 1.4s linear 8;
+}
+@keyframes pic-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
