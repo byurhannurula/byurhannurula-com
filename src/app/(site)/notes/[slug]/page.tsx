@@ -9,6 +9,7 @@ import { NOTE_COLUMN, NoteHeader } from '@/components/notes/note-header';
 import { NoteJsonLd } from '@/components/notes/note-json-ld';
 import { NoteRelated } from '@/components/notes/note-related';
 import { ReadingProgress } from '@/components/notes/reading-progress';
+import { Sidenotes } from '@/components/notes/sidenotes';
 import { Toc } from '@/components/notes/toc';
 import { RELATED_SAMPLE } from '@/content/notes';
 import { renderNote } from '@/lib/mdx';
@@ -88,6 +89,7 @@ export default async function NotePage({ params }: NotePageProps) {
         className={cn(NOTE_COLUMN, 'hidden pt-12 in-data-[related=on]:block')}
       />
       <Toc headings={headings} title={note.title} target={BODY} />
+      <Sidenotes target={BODY} />
       <ImageZoom />
     </div>
   );

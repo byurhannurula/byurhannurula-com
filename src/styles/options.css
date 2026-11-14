@@ -339,3 +339,34 @@ body::before {
     background-position: -50% 0;
   }
 }
+
+/* footnotes in the margin (`fnote: side`), placed by sidenotes.tsx */
+[data-sidenotes] {
+  position: relative;
+}
+[data-sidenotes] [data-footnotes] {
+  display: none;
+}
+[data-sidenote] {
+  position: absolute;
+  width: 13rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--faint);
+}
+[data-sidenotes='right'] [data-sidenote] {
+  left: calc(100% + 2.5rem);
+}
+[data-sidenotes='left'] [data-sidenote] {
+  right: calc(100% + 2.5rem);
+  text-align: right;
+}
+[data-sidenote] p {
+  display: inline;
+  margin: 0;
+}
+[data-sidenote-mark] {
+  margin-right: 0.4em;
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
