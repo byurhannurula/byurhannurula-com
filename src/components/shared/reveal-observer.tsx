@@ -37,7 +37,11 @@ export function RevealObserver() {
       frame ||= requestAnimationFrame(check);
     };
 
-    schedule();
+    // What is in view now is shown at once, then hiding starts for the
+    // rest. Content on the first screen never waits for this script: a
+    // hidden headline would hold back the first paint (LCP).
+    check();
+    document.documentElement.classList.add('reveal');
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     // An option change can show a variant that is already in view.

@@ -26,15 +26,15 @@
   }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .js [data-reveal] > .track-fill {
+  .reveal [data-reveal] > .track-fill {
     transform: scaleY(0);
     transition: transform 1.2s 0.2s var(--ease-out-soft);
   }
-  .js [data-reveal][data-in] > .track-fill {
+  .reveal [data-reveal][data-in] > .track-fill {
     transform: none;
   }
   @media (min-width: 48rem) {
-    .js [data-reveal]:not([data-in]) > .track-fill {
+    .reveal [data-reveal]:not([data-in]) > .track-fill {
       transform: scaleX(0);
     }
   }

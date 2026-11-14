@@ -10,6 +10,7 @@ import {
   type CommandNote,
 } from '@/components/command/command-content';
 import type { CommandIconName } from '@/components/command/command-icon';
+import { OPTIONS_PANEL } from '@/config/options';
 import { FOOTER_ITEMS, NAV_ITEMS } from '@/content/nav';
 import { SOCIALS } from '@/content/socials';
 import { forgetCommandOpener } from '@/hooks/use-command-menu';
@@ -96,14 +97,18 @@ export function useCommandItems(notes: CommandNote[]): CommandEntry[] {
         hint: '',
         run: () => setOption('sound', soundOff ? 'on' : 'off'),
       },
-      {
-        group: 'Actions',
-        name: COMMAND_COPY.openConfig,
-        keywords: 'design options settings panel preset',
-        icon: 'gear',
-        hint: '',
-        run: openConfigPanel,
-      },
+      ...(OPTIONS_PANEL
+        ? [
+            {
+              group: 'Actions',
+              name: COMMAND_COPY.openConfig,
+              keywords: 'design options settings panel preset',
+              icon: 'gear',
+              hint: '',
+              run: openConfigPanel,
+            } satisfies CommandEntry,
+          ]
+        : []),
       ...(['auto', ...LIGHT_MODES] as const).map((mode): CommandEntry => ({
         group: 'Light',
         name: `Light: ${mode}`,

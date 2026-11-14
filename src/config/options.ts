@@ -7,6 +7,15 @@
  * other variants, then delete the option from this file.
  */
 
+/**
+ * The config panel: on in dev, off in a production build so visitors get
+ * the defaults and none of its code. NEXT_PUBLIC_OPTIONS_PANEL=on at build
+ * time keeps it, for a preview deploy.
+ */
+export const OPTIONS_PANEL =
+  process.env.NODE_ENV !== 'production' ||
+  process.env.NEXT_PUBLIC_OPTIONS_PANEL === 'on';
+
 type Choice = readonly [value: string, label?: string];
 
 export interface OptionDef {

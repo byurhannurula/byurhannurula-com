@@ -5,7 +5,7 @@ import './globals.css';
 
 import { Analytics } from '@/components/analytics';
 import { CommandMenu } from '@/components/command/command-menu';
-import { ConfigPanel } from '@/components/config/config-panel';
+import { ConfigPanelSlot } from '@/components/config/config-panel-slot';
 import { LightClock } from '@/components/config/light-clock';
 import {
   defaultHtmlAttributes,
@@ -88,7 +88,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <PageTransitions />
         <CommandMenu />
         {/* Design tool. Delete it, and src/components/config, at launch. */}
-        <ConfigPanel />
+        <ConfigPanelSlot />
         <RevealObserver />
         <SoundHover />
         <TabAwayIcon />
