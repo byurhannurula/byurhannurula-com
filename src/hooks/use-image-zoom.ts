@@ -47,6 +47,25 @@ export function useImageZoom() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLElement>(null);
   const [picture, setPicture] = useState<ZoomedPicture | null>(null);
+  // The pictures of the same figure, for `zoomnav: browse`.
+  const groupRef = useRef<HTMLElement[]>([]);
+  const [place, setPlace] = useState({ index: 0, count: 1 });
+
+  const step = useCallback((delta: number) => {
+    const group = groupRef.current;
+    const current = triggerRef.current;
+    if (group.length < 2 || !current) return;
+    const index =
+      (group.indexOf(current) + delta + group.length) % group.length;
+    const next = group[index];
+    const src = next.dataset.zoomSrc;
+    if (!src) return;
+    current.removeAttribute('data-zoomed');
+    next.dataset.zoomed = '';
+    triggerRef.current = next;
+    setPicture(describe(next, src));
+    setPlace({ index, count: group.length });
+  }, []);
 
   const close = useCallback(() => {
     const dialog = dialogRef.current;
@@ -79,6 +98,19 @@ export function useImageZoom() {
     const open = (trigger: HTMLElement, src: string) => {
       if (dialog.open) return;
       triggerRef.current = trigger;
+      const group =
+        getOptions().zoomnav === 'browse'
+          ? [
+              ...(trigger
+                .closest('figure')
+                ?.querySelectorAll<HTMLElement>('[data-zoom-src]') ?? []),
+            ]
+          : [];
+      groupRef.current = group;
+      setPlace({
+        index: Math.max(0, group.indexOf(trigger)),
+        count: Math.max(1, group.length),
+      });
       const next = describe(trigger, src);
       const thumb = trigger.querySelector('img');
 
@@ -117,15 +149,43 @@ export function useImageZoom() {
     // come back.
     const onClose = () => triggerRef.current?.removeAttribute('data-zoomed');
 
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight') step(1);
+      if (event.key === 'ArrowLeft') step(-1);
+    };
+    // A sideways swipe of more than 50 px goes to the next or last picture.
+    let swipeFrom: number | null = null;
+    const onDown = (event: PointerEvent) => {
+      swipeFrom = event.clientX;
+    };
+    const onUp = (event: PointerEvent) => {
+      if (swipeFrom === null) return;
+      const dx = event.clientX - swipeFrom;
+      swipeFrom = null;
+      if (Math.abs(dx) <= 50 || groupRef.current.length < 2) return;
+      step(dx < 0 ? 1 : -1);
+      // The click that ends a swipe must not close the picture.
+      dialog.addEventListener('click', (click) => click.stopPropagation(), {
+        capture: true,
+        once: true,
+      });
+    };
+
     document.addEventListener('click', onClick);
     dialog.addEventListener('cancel', onCancel);
     dialog.addEventListener('close', onClose);
+    dialog.addEventListener('keydown', onKey);
+    dialog.addEventListener('pointerdown', onDown);
+    dialog.addEventListener('pointerup', onUp);
     return () => {
       document.removeEventListener('click', onClick);
       dialog.removeEventListener('cancel', onCancel);
       dialog.removeEventListener('close', onClose);
+      dialog.removeEventListener('keydown', onKey);
+      dialog.removeEventListener('pointerdown', onDown);
+      dialog.removeEventListener('pointerup', onUp);
     };
-  }, [close]);
+  }, [close, step]);
 
-  return { dialogRef, picture, close };
+  return { dialogRef, picture, close, step, place };
 }
