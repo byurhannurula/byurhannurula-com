@@ -435,6 +435,17 @@ export const SHELF: ShelfItem[] = [
     note: 'Apple ad work from the inside. One idea: say no to the extra option.',
   }),
   film({
+    slug: 'art-of-racing-in-the-rain',
+    title: 'The Art of Racing in the Rain',
+    by: 'Simon Curtis',
+    year: 2019,
+    width: 406,
+    tone: '#7f8a3a',
+    status: 'done',
+    rating: 4,
+    note: 'A race driver, told by his dog. Enzo learns that the car goes where the eyes go.',
+  }),
+  film({
     slug: 'moneyball',
     title: 'Moneyball',
     by: 'Bennett Miller',

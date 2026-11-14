@@ -1,3 +1,4 @@
+import { BookOpen, Clapperboard, Tv } from 'lucide-react';
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
 
@@ -12,7 +13,44 @@ export const toneStyle = (item: ShelfItem) =>
 export const tinted =
   'bg-[color-mix(in_oklab,var(--tone)_14%,var(--card))] dark:bg-[color-mix(in_oklab,var(--tone)_22%,var(--card))]';
 
-const isWide = (item: ShelfItem) => item.cover.width > item.cover.height;
+/**
+ * A book shows its page edges at the right and bottom, a film is a flat
+ * poster, a show has the round corners of a screen.
+ */
+const SHAPE = {
+  book: 'rounded-[0.15rem_0.3rem_0.3rem_0.15rem] shadow-[1px_1px_0_#e9e4d8,2px_2px_0_#f7f4ee,3px_3px_0_#ddd7c9,4px_4px_0_#f7f4ee,5px_5px_0_#d3ccbc,var(--shadow-lift)]',
+  film: 'rounded-[0.2rem] shadow-lift',
+  show: 'rounded-lg shadow-lift',
+} as const;
+
+const KIND = {
+  book: { icon: BookOpen, name: 'Book' },
+  film: { icon: Clapperboard, name: 'Film' },
+  show: { icon: Tv, name: 'Show' },
+} as const;
+
+/** A small round mark with the icon of the kind. */
+export function KindMark({
+  item,
+  className,
+}: {
+  item: ShelfItem;
+  className?: string;
+}) {
+  const { icon: Icon, name } = KIND[item.kind];
+  return (
+    <span
+      title={name}
+      className={cn(
+        'grid size-7 place-items-center rounded-full bg-bg/80 text-soft backdrop-blur-sm',
+        className,
+      )}
+    >
+      <Icon aria-hidden className="size-3.5" />
+      <span className="sr-only">{name}</span>
+    </span>
+  );
+}
 
 /** The cover at its own shape, never cropped. */
 export function Cover({
@@ -32,9 +70,8 @@ export function Cover({
       height={item.cover.height}
       sizes={sizes}
       className={cn(
-        'h-auto max-h-full w-auto max-w-full shadow-lift',
-        // A jacket has a spine, a show card is a screen.
-        isWide(item) ? 'rounded-md' : 'rounded-[0.25rem_0.4rem_0.4rem_0.25rem]',
+        'h-auto max-h-full w-auto max-w-full',
+        SHAPE[item.kind],
         className,
       )}
     />

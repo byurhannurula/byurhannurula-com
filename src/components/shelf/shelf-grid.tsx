@@ -8,7 +8,14 @@ import {
 } from '@/content/shelf';
 import { cn } from '@/lib/utils';
 
-import { Cover, Rating, statusLabel, tinted, toneStyle } from './shelf-parts';
+import {
+  Cover,
+  KindMark,
+  Rating,
+  statusLabel,
+  tinted,
+  toneStyle,
+} from './shelf-parts';
 
 const KIND_NAME = { book: 'Book', film: 'Film', show: 'Show' } as const;
 
@@ -60,6 +67,7 @@ function Tile({ item }: { item: ShelfItem }) {
         <div className="absolute inset-[13%_16%] flex items-center justify-center transition-[translate,rotate] duration-500 ease-soft group-hover/tile:-translate-y-1.5 group-hover/tile:-rotate-1 motion-reduce:transition-none">
           <Cover item={item} sizes="(min-width: 1024px) 180px, 40vw" />
         </div>
+        <KindMark item={item} className="absolute top-2.5 right-2.5" />
         {status ? (
           <span className="absolute top-3 left-3 rounded-full bg-bg/80 px-2 py-1 font-mono text-[0.6875rem] leading-none text-soft backdrop-blur-sm">
             {status}
