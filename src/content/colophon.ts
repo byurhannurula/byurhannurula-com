@@ -26,10 +26,10 @@ export interface Score {
  * `pnpm lighthouse`.
  */
 export const SITE_SCORES = {
-  ranOn: '14 November 2026',
+  ranOn: '15 November 2026',
   sub: 'Lighthouse on a simulated slow phone. The median of eight pages.',
   scores: [
-    { label: 'Performance', value: 91, tone: 'stroke-hue-6' },
+    { label: 'Performance', value: 93, tone: 'stroke-hue-6' },
     { label: 'Accessibility', value: 100, tone: 'stroke-hue-2' },
     { label: 'Best practices', value: 100, tone: 'stroke-hue-3' },
     { label: 'SEO', value: 100, tone: 'stroke-hue-5' },
