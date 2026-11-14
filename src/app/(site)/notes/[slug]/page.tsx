@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Figure } from '@/components/mdx/figure';
 import { ImageZoom } from '@/components/mdx/image-zoom';
 import { BackLink } from '@/components/notes/back-link';
+import { FinishConfetti } from '@/components/notes/finish-confetti';
 import { LikeButton } from '@/components/notes/like-button';
 import { NOTE_COLUMN, NoteHeader } from '@/components/notes/note-header';
 import { NoteJsonLd } from '@/components/notes/note-json-ld';
@@ -90,6 +91,7 @@ export default async function NotePage({ params }: NotePageProps) {
       />
       <Toc headings={headings} title={note.title} target={BODY} />
       <Sidenotes target={BODY} />
+      <FinishConfetti slug={note.slug} target={BODY} />
       <ImageZoom />
     </div>
   );

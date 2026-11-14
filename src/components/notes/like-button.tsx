@@ -2,15 +2,30 @@
 
 import { useState } from 'react';
 
-/** A like that lives in this page only: nothing is stored or sent. */
+import { getOptions } from '@/lib/options-store';
+import { confetti } from '@/lib/confetti';
+
+/**
+ * A like that lives in this page only: nothing is stored or sent. With
+ * `likefx: confetti` a small burst flies out from the heart.
+ */
 export function LikeButton() {
   const [liked, setLiked] = useState(false);
   return (
     <button
       type="button"
       aria-pressed={liked}
-      onClick={() => {
+      onClick={(event) => {
         setLiked(!liked);
+        if (liked || getOptions().likefx !== 'confetti') return;
+        const heart = event.currentTarget.querySelector('svg');
+        const box = (heart ?? event.currentTarget).getBoundingClientRect();
+        confetti(box.left + box.width / 2, box.top + box.height / 2, {
+          count: 18,
+          reach: 64,
+          fall: 18,
+          duration: 950,
+        });
       }}
       className="inline-flex h-11 items-center gap-2 rounded-full border border-line-strong px-[1.1rem] font-medium transition-[border-color,color,scale] duration-200 ease-soft active:scale-94 aria-pressed:border-danger aria-pressed:text-danger"
     >
