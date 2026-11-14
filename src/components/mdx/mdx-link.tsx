@@ -24,6 +24,7 @@ export function MdxLink({ href = '', children, ...rest }: ComponentProps<'a'>) {
   return (
     <a {...rest} href={href} rel="noopener noreferrer" className={LINK}>
       {children}
+      <span className="sr-only"> (another site)</span>
       <ArrowUpRight
         aria-hidden
         className="ml-[0.1em] inline size-[0.8em] align-baseline text-faint"

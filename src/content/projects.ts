@@ -1,4 +1,10 @@
-export interface ProjectShot {
+/** Pixel size of a picture file, for next/image. */
+export interface ImageSize {
+  width: number;
+  height: number;
+}
+
+export interface ProjectShot extends ImageSize {
   src: string;
   caption: string;
 }
@@ -9,7 +15,9 @@ export interface Project {
   /** For example "desktop app" or "extension". */
   kind: string;
   icon: string;
+  iconSize: ImageSize;
   cover: string;
+  coverSize: ImageSize;
   /** One or two sentences for lists. */
   short: string;
   /** The full paragraph for the work page. */
@@ -26,7 +34,9 @@ export const PROJECTS: Project[] = [
     name: 'Jotter',
     kind: 'desktop app',
     icon: '/assets/icons/jotter.png',
+    iconSize: { width: 128, height: 128 },
     cover: '/assets/projects/jotter/desktop.png',
+    coverSize: { width: 2000, height: 1128 },
     short:
       'A fast notepad for macOS, Windows and Linux. Open it and type. No account, no save dialog, about 9 MB.',
     text: 'A fast, minimal notepad. Every note is kept in a local drafts store, so you cannot lose one. Sync is optional and off by default: you deploy a small Cloudflare Worker to your own account, or Jotter never touches the network.',
@@ -34,22 +44,32 @@ export const PROJECTS: Project[] = [
     shots: [
       {
         src: '/assets/projects/jotter/desktop.png',
+        width: 2000,
+        height: 1128,
         caption: 'A fresh page at every launch.',
       },
       {
         src: '/assets/projects/jotter/editor-light.png',
+        width: 2000,
+        height: 1406,
         caption: 'Light mode.',
       },
       {
         src: '/assets/projects/jotter/editor-dark.png',
+        width: 2000,
+        height: 1406,
         caption: 'Dark mode. Both follow the system.',
       },
       {
         src: '/assets/projects/jotter/markdown-preview.png',
+        width: 2000,
+        height: 1406,
         caption: 'Markdown preview for each tab.',
       },
       {
         src: '/assets/projects/jotter/settings.png',
+        width: 2000,
+        height: 1406,
         caption: 'Settings: appearance, editor, cloud, shortcuts.',
       },
     ],
@@ -69,25 +89,35 @@ export const PROJECTS: Project[] = [
     name: 'OGee',
     kind: 'extension',
     icon: '/assets/projects/ogee/icon.png',
+    iconSize: { width: 128, height: 128 },
     cover: '/assets/projects/ogee/og-preview.png',
+    coverSize: { width: 1280, height: 800 },
     short: 'Shows the meta tags a crawler sees on any page, without DevTools.',
     text: 'Press Ctrl+E on any page and see what a crawler sees: Open Graph, Twitter Cards, JSON-LD and meta tags. I made it to debug generated share images and to find a missing tag before release.',
     tags: ['preact', 'typescript', 'esbuild', 'manifest v3', 'MIT'],
     shots: [
       {
         src: '/assets/projects/ogee/overlay.png',
+        width: 1280,
+        height: 800,
         caption: 'The overlay, pinned to a corner of the page.',
       },
       {
         src: '/assets/projects/ogee/og-preview.png',
+        width: 1280,
+        height: 800,
         caption: 'The share image as a crawler resolves it.',
       },
       {
         src: '/assets/projects/ogee/twitter-card.png',
+        width: 1280,
+        height: 800,
         caption: 'Tabs for OG, Twitter, meta, links and JSON-LD.',
       },
       {
         src: '/assets/projects/ogee/popup.png',
+        width: 1280,
+        height: 800,
         caption: 'Control for each site from the toolbar.',
       },
     ],
@@ -107,7 +137,9 @@ export const PROJECTS: Project[] = [
     name: 'FullShot',
     kind: 'extension',
     icon: '/assets/projects/fullshot/icon.png',
+    iconSize: { width: 128, height: 128 },
     cover: '/assets/projects/fullshot/crop.png',
+    coverSize: { width: 1280, height: 800 },
     short:
       'Full-page screenshots with an editor. Captures stay on your machine.',
     text: 'Full page, visible area and region screenshots, with an editor and a local library. It asks for the minimum permissions, so it cannot read a page you did not capture. No telemetry and no remote requests.',
@@ -115,14 +147,20 @@ export const PROJECTS: Project[] = [
     shots: [
       {
         src: '/assets/projects/fullshot/editor.png',
+        width: 1280,
+        height: 800,
         caption: 'The editor opens on an overview of the capture.',
       },
       {
         src: '/assets/projects/fullshot/crop.png',
+        width: 1280,
+        height: 800,
         caption: 'Crop with pull handles and a size badge.',
       },
       {
         src: '/assets/projects/fullshot/library.png',
+        width: 1280,
+        height: 800,
         caption: 'Captures stay in a local library.',
       },
     ],

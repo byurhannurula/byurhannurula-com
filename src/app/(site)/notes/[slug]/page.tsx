@@ -1,14 +1,15 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { Figure } from '@/components/mdx/figure';
 import { ImageZoom } from '@/components/mdx/image-zoom';
 import { BackLink } from '@/components/notes/back-link';
 import { LikeButton } from '@/components/notes/like-button';
 import { NOTE_COLUMN, NoteHeader } from '@/components/notes/note-header';
-import { NoteHeroCover } from '@/components/notes/note-hero-cover';
+import { NoteJsonLd } from '@/components/notes/note-json-ld';
 import { NoteRelated } from '@/components/notes/note-related';
 import { ReadingProgress } from '@/components/notes/reading-progress';
-import { TocIsland } from '@/components/notes/toc-island';
+import { Toc } from '@/components/notes/toc';
 import { RELATED_SAMPLE } from '@/content/notes';
 import { renderNote } from '@/lib/mdx';
 import { getNote, getNotes } from '@/lib/notes';
@@ -33,23 +34,15 @@ export async function generateMetadata({
   const { slug } = await params;
   const note = await getNote(slug);
   if (!note) return {};
-  const base = pageMetadata({
+  // No `images` here: opengraph-image.tsx next to this file draws the share
+  // picture, and a value set here would replace it.
+  return pageMetadata({
     path: `/notes/${note.slug}`,
     title: note.title,
     description: note.excerpt,
     noindex: note.sample,
+    article: { publishedTime: note.date, tags: note.tags },
   });
-  return {
-    ...base,
-    keywords: [...note.tags, ...note.keywords],
-    openGraph: {
-      ...base.openGraph,
-      type: 'article',
-      publishedTime: note.date,
-      tags: note.tags,
-      images: note.cover ? [note.cover] : undefined,
-    },
-  };
 }
 
 /** The reading progress and the contents list measure this element. */
@@ -64,6 +57,7 @@ export default async function NotePage({ params }: NotePageProps) {
 
   return (
     <div data-page="note" className="pb-16">
+      <NoteJsonLd note={note} />
       <ReadingProgress target={BODY} />
       <NoteHeader note={note} />
       <article
@@ -76,7 +70,7 @@ export default async function NotePage({ params }: NotePageProps) {
         )}
       >
         {note.cover ? (
-          <NoteHeroCover src={note.cover} alt={note.coverAlt} />
+          <Figure src={note.cover} alt={note.coverAlt} width="wide" priority />
         ) : null}
         {content}
       </article>
@@ -93,7 +87,7 @@ export default async function NotePage({ params }: NotePageProps) {
         items={RELATED_SAMPLE}
         className={cn(NOTE_COLUMN, 'hidden pt-12 in-data-[related=on]:block')}
       />
-      <TocIsland headings={headings} title={note.title} target={BODY} />
+      <Toc headings={headings} title={note.title} target={BODY} />
       <ImageZoom />
     </div>
   );

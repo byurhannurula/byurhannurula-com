@@ -15,7 +15,7 @@ interface ProjectStripsProps {
 export function ProjectStrips({ projects }: ProjectStripsProps) {
   return (
     <>
-      {projects.map((project) => (
+      {projects.map((project, index) => (
         <article
           key={project.slug}
           data-reveal
@@ -42,6 +42,7 @@ export function ProjectStrips({ projects }: ProjectStripsProps) {
           <FilmStrip
             shots={project.shots}
             label={`${project.name} screenshots`}
+            preloadFirst={index === 0}
           />
         </article>
       ))}

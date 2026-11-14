@@ -5,6 +5,7 @@ export const LIGHT_MENU_LABEL = 'Change the light';
 
 export const FOOTER_COPY = {
   siteHeading: 'Site',
+  siteNavLabel: 'Footer',
   elsewhereHeading: 'Elsewhere',
   sentenceStart: 'That is the end of the page.',
   sentenceMid: 'Write to me at',

@@ -13,11 +13,11 @@ export function ScrambleTitle({ text }: ScrambleTitleProps) {
   const { display, run } = useScramble(text, shown);
   return (
     <h1
+      // The label is the real text. The letters below are noise for a while.
+      aria-label={text}
       onPointerEnter={run}
       className="mb-7 font-pixel text-[clamp(2.6rem,5vw,3.5rem)] leading-[1.1] font-normal tracking-normal"
     >
-      {/* A screen reader gets the real text, not the noise. */}
-      <span className="sr-only">{text}</span>
       <span aria-hidden>{display}</span>
     </h1>
   );

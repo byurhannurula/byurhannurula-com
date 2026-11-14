@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { SampleTag } from '@/components/shared/sample-tag';
-import { EXTRA_PAGES, NAV_ITEMS } from '@/content/nav';
+import { NAV_ITEMS } from '@/content/nav';
 import { SOCIALS } from '@/content/socials';
 import { brand } from '@/lib/brand';
 
@@ -18,10 +18,7 @@ import { getContributions } from './social-data';
 import { SocialIcon } from './social-icon';
 import { SocialRow } from './social-row';
 
-const SITE_LINKS = [
-  ...NAV_ITEMS.filter(({ href }) => href !== '/'),
-  ...EXTRA_PAGES,
-];
+const SITE_LINKS = NAV_ITEMS.filter(({ href }) => href !== '/');
 const ELSEWHERE = [...SOCIALS, RSS_LINK];
 
 const heading =
@@ -30,7 +27,7 @@ const heading =
 const list =
   'in-data-[footer=centre]:flex in-data-[footer=centre]:flex-wrap in-data-[footer=centre]:justify-center in-data-[footer=centre]:gap-x-5 in-data-[footer=centre]:gap-y-1 in-data-[footer=line]:flex in-data-[footer=line]:gap-5 in-data-[footer=sentence]:flex in-data-[footer=sentence]:flex-wrap in-data-[footer=sentence]:gap-x-5 in-data-[footer=sentence]:gap-y-1';
 const link =
-  'inline-block py-[0.2rem] text-soft no-underline [transition:color_.2s,translate_.3s_var(--ease-out-soft)] hover:translate-x-[3px] hover:text-ink';
+  'inline-flex items-center text-soft max-md:min-h-10 md:py-[0.2rem] no-underline [transition:color_.2s,translate_.3s_var(--ease-out-soft)] hover:translate-x-[3px] hover:text-ink';
 
 const fallbackCard = (name: string): SocialCard => ({
   kind: 'small',
@@ -75,7 +72,10 @@ export async function SiteFooter() {
           <EmailCopy variant="link" />
         </div>
 
-        <div className="in-data-[footer=line]:hidden">
+        <nav
+          aria-label={FOOTER_COPY.siteNavLabel}
+          className="in-data-[footer=line]:hidden"
+        >
           <h2 className={heading}>{FOOTER_COPY.siteHeading}</h2>
           <ul className={list}>
             {SITE_LINKS.map(({ label, href, when }) => (
@@ -93,7 +93,7 @@ export async function SiteFooter() {
               </li>
             ))}
           </ul>
-        </div>
+        </nav>
 
         <div>
           <h2 className={heading}>{FOOTER_COPY.elsewhereHeading}</h2>

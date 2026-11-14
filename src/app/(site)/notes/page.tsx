@@ -1,4 +1,4 @@
-import { NoteItem } from '@/components/notes/note-item';
+import { NoteList } from '@/components/notes/note-list';
 import { NoteQueue } from '@/components/notes/note-queue';
 import { NotesArt } from '@/components/notes/notes-art';
 import { PageHero } from '@/components/shared/page-hero';
@@ -27,9 +27,7 @@ export default async function NotesPage() {
       <Section>
         {/* The note titles are h3: this keeps the heading order whole. */}
         <h2 className="sr-only">All notes</h2>
-        {notes.map((note) => (
-          <NoteItem key={note.slug} note={note} />
-        ))}
+        <NoteList notes={notes} />
       </Section>
       <Section title={NOTE_QUEUE_COPY.title} sub={NOTE_QUEUE_COPY.sub}>
         <NoteQueue items={NOTE_QUEUE} />

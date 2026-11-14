@@ -2,6 +2,7 @@ import Image from 'next/image';
 import type { ReactNode } from 'react';
 
 import { publicImageSize } from '@/components/mdx/image-size';
+import { remoteSrcSet } from '@/components/notes/note-cover';
 import { cn } from '@/lib/utils';
 
 export type FigureWidth = 'default' | 'wide' | 'full';
@@ -12,7 +13,11 @@ const BREAKOUT = 'ml-[50%] [transform:translateX(-50%)]';
 const FIGURE_WIDTH: Record<FigureWidth, string> = {
   default: '',
   wide: cn(BREAKOUT, 'w-[min(64rem,100vw-2.5rem)]'),
-  full: cn(BREAKOUT, 'w-screen'),
+  // 100vw counts the scrollbar, so the box can be wider than the page. The
+  // page root clips sideways (globals.css), so this cannot scroll. `cqw`
+  // falls back to the viewport today; it becomes the exact page width when
+  // an ancestor is an inline-size container.
+  full: cn(BREAKOUT, 'w-[100cqw] max-w-[100vw]'),
 };
 const SIZES: Record<FigureWidth, string> = {
   default: '(min-width: 768px) 44rem, 100vw',
@@ -23,19 +28,45 @@ const SIZES: Record<FigureWidth, string> = {
 const asWidth = (value: string | undefined): FigureWidth =>
   value === 'wide' || value === 'full' ? value : 'default';
 
+/** MDX attributes are strings; a note may also pass `{1200}`. */
+const asPixels = (value: string | number | undefined) => {
+  const pixels = Number(value);
+  return Number.isFinite(pixels) && pixels > 0 ? pixels : undefined;
+};
+
 interface PictureProps {
   src: string;
   alt: string;
   sizes: string;
+  /** Pixel size of a remote file. Local files are measured. */
+  width?: number;
+  height?: number;
+  /** The first picture of a page: it loads at once, before the rest. */
+  priority?: boolean;
   className?: string;
 }
 
 /**
  * A picture that opens large on click (<ImageZoom /> on the page handles
  * it). Local files go through next/image; remote ones stay a plain img.
+ * The box always has its shape before the file loads, so the text below
+ * does not jump.
  */
-async function Picture({ src, alt, sizes, className }: PictureProps) {
+async function Picture({
+  src,
+  alt,
+  sizes,
+  width,
+  height,
+  priority,
+  className,
+}: PictureProps) {
   const size = await publicImageSize(src);
+  const loading = priority
+    ? ({ loading: 'eager', fetchPriority: 'high' } as const)
+    : ({ loading: 'lazy' } as const);
+  const srcSet = size ? undefined : remoteSrcSet(src);
+  const known = width && height;
   return (
     <button
       type="button"
@@ -52,18 +83,28 @@ async function Picture({ src, alt, sizes, className }: PictureProps) {
           width={size.width}
           height={size.height}
           sizes={sizes}
+          {...loading}
           className={className}
         />
       ) : (
         // Remote hosts are not in next.config.ts, so the optimiser would
-        // refuse them. Notes may link any picture.
+        // refuse them. Notes may link any picture. With a stated size the
+        // box takes that shape; without one it is 16 / 9 and the picture
+        // fills it.
         // oxlint-disable-next-line nextjs/no-img-element
         <img
           src={src}
+          srcSet={srcSet}
+          sizes={srcSet ? sizes : undefined}
           alt={alt}
-          loading="lazy"
+          width={known ? width : undefined}
+          height={known ? height : undefined}
+          {...loading}
           decoding="async"
-          className={className}
+          className={cn(
+            known ? 'h-auto' : 'aspect-video object-cover',
+            className,
+          )}
         />
       )}
     </button>
@@ -94,19 +135,46 @@ export interface FigureProps {
   caption?: string;
   /** A short word before the caption, in the accent colour. */
   label?: string;
-  /** `default` stays in the column, `wide` breaks out, `full` is edge to edge. */
-  width?: string;
+  /**
+   * `default` stays in the column, `wide` breaks out, `full` is edge to edge.
+   * A number is the pixel width of a remote file instead (with `height`).
+   */
+  width?: string | number;
+  /** Pixel height of a remote file. */
+  height?: string | number;
+  /** Pixel size of a remote file that also sets `width` to wide or full. */
+  imgWidth?: string | number;
+  imgHeight?: string | number;
+  /** The cover of a note: loads at once and skips the scroll reveal. */
+  priority?: boolean;
 }
 
 /** A picture in a note, with an optional caption. Click to zoom. */
-export function Figure({ src, alt = '', caption, label, width }: FigureProps) {
-  const w = asWidth(width);
+export function Figure({
+  src,
+  alt = '',
+  caption,
+  label,
+  width,
+  height,
+  imgWidth,
+  imgHeight,
+  priority,
+}: FigureProps) {
+  const w = asWidth(typeof width === 'string' ? width : undefined);
   return (
-    <figure data-reveal className={cn('my-11', FIGURE_WIDTH[w])}>
+    <figure
+      // A hidden first picture would delay the largest paint of the page.
+      data-reveal={priority ? undefined : true}
+      className={cn('my-11', FIGURE_WIDTH[w])}
+    >
       <Picture
         src={src}
         alt={alt}
         sizes={SIZES[w]}
+        width={asPixels(imgWidth) ?? asPixels(width)}
+        height={asPixels(imgHeight) ?? asPixels(height)}
+        priority={priority}
         className={cn(
           'w-full',
           w === 'full'

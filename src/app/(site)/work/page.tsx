@@ -2,6 +2,8 @@ import { PageHero } from '@/components/shared/page-hero';
 import { Section } from '@/components/shared/section';
 import { ProjectAccordion } from '@/components/work/project-accordion';
 import { ProjectGrid } from '@/components/work/project-grid';
+import { ProjectRows } from '@/components/work/project-rows';
+import { ProjectStage } from '@/components/work/project-stage';
 import { ProjectStrips } from '@/components/work/project-strips';
 import { SmallProjects } from '@/components/work/small-projects';
 import { WorkArt } from '@/components/work/work-art';
@@ -35,6 +37,12 @@ export default function WorkPage() {
         </div>
         <div className="hidden in-data-[work=grid]:block">
           <ProjectGrid projects={PROJECTS} />
+        </div>
+        <div className="hidden in-data-[work=stage]:block">
+          <ProjectStage projects={PROJECTS} />
+        </div>
+        <div className="hidden in-data-[work=rows]:block">
+          <ProjectRows projects={PROJECTS} />
         </div>
       </Section>
       <Section title="Also">

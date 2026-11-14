@@ -63,9 +63,25 @@ function citeQuoteSource(quote: HastNode) {
 }
 
 /**
+ * A code block with the language `tree` becomes a <file-tree> element, which
+ * mdxComponents maps to <FileTree />. It must happen here, before the code
+ * highlighter takes the block.
+ */
+function treeBlockToFileTree(pre: HastNode) {
+  const code = pre.children?.find((c) => c.tagName === 'code');
+  const classes = code?.properties?.className;
+  if (!code || !Array.isArray(classes) || !classes.includes('language-tree')) {
+    return;
+  }
+  pre.tagName = 'file-tree';
+  pre.properties = { source: textOf(code) };
+  pre.children = [];
+}
+
+/**
  * One pass over the tree: stable ids on headings (and the list of them),
  * pictures lifted out of their paragraph (a figure cannot sit inside a p),
- * and quote sources marked up.
+ * quote sources marked up, and `tree` blocks turned into file trees.
  */
 function rehypeNoteStructure(headings: NoteHeading[]) {
   return () => (tree: HastNode) => {
@@ -93,6 +109,7 @@ function rehypeNoteStructure(headings: NoteHeading[]) {
           headings.push({ id, text, level: child.tagName === 'h2' ? 2 : 3 });
         }
         if (child.tagName === 'blockquote') citeQuoteSource(child);
+        if (child.tagName === 'pre') treeBlockToFileTree(child);
         visit(child);
       }
     };

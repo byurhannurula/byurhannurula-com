@@ -22,6 +22,8 @@ export interface NoteMeta {
   /** Words to match in the command menu, on top of title and tags. */
   keywords: string[];
   readingMinutes: number;
+  /** Words in the source, markup included: close enough for metadata. */
+  wordCount: number;
   /** Not real content: lists show a SampleTag for it. */
   sample?: boolean;
   /** The first plain paragraphs of the body, for the `file` note item. */
@@ -72,6 +74,7 @@ async function readNote(file: string): Promise<Note> {
     coverAlt: text(data.coverAlt) || undefined,
     keywords: list(data.keywords),
     readingMinutes: Math.max(1, Math.round(words / WORDS_PER_MINUTE)),
+    wordCount: words,
     sample: data.sample === true || undefined,
     intro: introOf(content),
     body: content,

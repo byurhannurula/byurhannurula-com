@@ -29,13 +29,14 @@ export function ProjectStrips() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="underline decoration-line-strong underline-offset-[0.25em] transition-colors hover:decoration-accent-bright"
+                  // The padding makes the tap target taller; the margin keeps the layout.
+                  className="-my-2 inline-block py-2 underline decoration-line-strong underline-offset-[0.25em] transition-colors hover:decoration-accent-bright"
                 >
                   {link.label}
                 </a>
               ))}
             </div>
-            <p className="col-start-2 max-w-2xl text-soft">
+            <p className="col-start-2 max-w-[34rem] text-soft">
               {project.text}{' '}
               <span className="font-mono text-[0.8125rem] leading-[1.6] text-faint">
                 {project.tags.join(', ')}

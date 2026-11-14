@@ -2,6 +2,7 @@ import { HomeHero } from '@/components/home/home-hero';
 import { HomeJob } from '@/components/home/home-job';
 import { HomeProjects } from '@/components/home/home-projects';
 import { HomeSite } from '@/components/home/home-site';
+import { HomeTil } from '@/components/home/home-til';
 import { NoteItem } from '@/components/notes/note-item';
 import { ArrowLink } from '@/components/shared/arrow-link';
 import { NowBlock } from '@/components/shared/now-block';
@@ -36,6 +37,7 @@ export default async function HomePage() {
           <NoteItem note={latest} />
         </Section>
       ) : null}
+      <HomeTil />
       <Section
         title={NOW_SECTION.title}
         sub={NOW_DATE}

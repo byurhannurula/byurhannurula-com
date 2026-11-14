@@ -17,10 +17,6 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Notes', href: '/notes', keywords: 'blog posts writing' },
   { label: 'About', href: '/about', keywords: 'cv career recheck stack job' },
   { label: 'Uses', href: '/uses', keywords: 'hardware software desk setup' },
-];
-
-/** Reachable from the footer and the command menu, not from the nav bar. */
-export const EXTRA_PAGES: NavItem[] = [
   {
     label: 'Homelab',
     href: '/homelab',

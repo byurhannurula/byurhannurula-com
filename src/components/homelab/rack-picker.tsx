@@ -37,16 +37,26 @@ export function RackPicker<Id extends string>({
 
   return (
     <div className="grid items-center gap-6 md:grid-cols-[minmax(0,25rem)_1fr] md:gap-14">
-      {/* min-w-0: a fieldset is as wide as its content by default. */}
-      <fieldset className="flex min-w-0 flex-wrap gap-2 md:hidden">
+      {/* One row that scrolls sideways to both screen edges: six chips
+          that wrap take three rows and push the text off the screen.
+          min-w-0: a fieldset is as wide as its content by default.
+          py-1.5: room for the focus ring, which the scroll box would cut. */}
+      <fieldset className="-mx-5 flex min-w-0 snap-x snap-proximity scroll-px-5 [scrollbar-width:none] gap-2 overflow-x-auto px-5 py-1.5 md:hidden [&::-webkit-scrollbar]:hidden">
         <legend className="sr-only">Devices. Select one.</legend>
         {devices.map((device) => (
           <button
             key={device.id}
             type="button"
             aria-pressed={picked === device.id}
-            onClick={() => pick(device.id)}
-            className="min-h-10 rounded-full border border-line-strong px-[0.9rem] text-[0.9375rem] font-medium text-soft transition-colors duration-200 aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-bg"
+            onClick={(event) => {
+              pick(device.id);
+              // A chip that is half off the screen comes into view.
+              event.currentTarget.scrollIntoView({
+                block: 'nearest',
+                inline: 'nearest',
+              });
+            }}
+            className="min-h-10 flex-none snap-start rounded-full border border-line-strong px-[0.9rem] text-[0.9375rem] font-medium whitespace-nowrap text-soft transition-colors duration-200 aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-bg"
           >
             {device.label}
           </button>
@@ -77,7 +87,12 @@ export function RackPicker<Id extends string>({
           ))}
         </svg>
       </div>
-      <div aria-live="polite">
+      <div>
+        {/* Only the name is announced. A live region around the full panel
+            reads the text and every service on each change. */}
+        <p aria-live="polite" className="sr-only">
+          {current ? `Selected: ${current.label}` : ''}
+        </p>
         {/* The key restarts the enter animation when the selection changes. */}
         <div key={picked} className="motion-safe:*:animate-rise-in">
           {current?.panel}

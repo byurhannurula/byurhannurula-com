@@ -17,6 +17,13 @@ interface NoteItemProps {
 
 const H3 = 'font-semibold text-ink';
 
+/**
+ * Put this on the element that holds the items: it sets the space between
+ * them for each `note` value, and the two columns of `grid`.
+ */
+export const NOTE_LIST =
+  'grid grid-cols-1 in-data-[note=a]:gap-y-6 in-data-[note=c]:gap-y-6 in-data-[note=grid]:max-w-[54rem] in-data-[note=grid]:gap-x-8 in-data-[note=grid]:gap-y-10 in-data-[note=tagged]:gap-y-9 in-data-[note=thumb]:gap-y-8 md:in-data-[note=grid]:grid-cols-2';
+
 function Meta({ note, onPicture }: NoteItemProps & { onPicture?: boolean }) {
   return (
     <div
@@ -50,14 +57,15 @@ function Meta({ note, onPicture }: NoteItemProps & { onPicture?: boolean }) {
 
 /**
  * One note in a list. The `note` option picks the form (row, thumb, file,
- * leaders or cover); all five are in the markup and CSS shows one.
+ * leaders, cover, compact, tagged or grid); all are in the markup and CSS
+ * shows one. The space between items comes from the list (NOTE_LIST).
  */
 export function NoteItem({ note }: NoteItemProps) {
   const href = `/notes/${note.slug}`;
   const { cover } = note;
 
   return (
-    <article className="group/item not-first:in-data-[note=a]:mt-6 not-first:in-data-[note=c]:mt-6 not-first:in-data-[note=thumb]:mt-8">
+    <article className="group/item min-w-0">
       {/* b: row */}
       <Link
         href={href}
@@ -191,6 +199,86 @@ export function NoteItem({ note }: NoteItemProps) {
         end={<time dateTime={note.date}>{formatNoteDateShort(note.date)}</time>}
         className="hidden in-data-[note=leaders]:flex"
       />
+
+      {/* compact: one line, for a long list */}
+      <Link
+        href={href}
+        className="group/note hidden items-baseline justify-between gap-6 py-[0.5rem] no-underline in-data-[note=compact]:flex"
+      >
+        <h3 className="min-w-0 text-[1.0625rem] leading-[1.4] font-medium text-ink transition-colors group-hover/note:text-accent">
+          {note.title}
+          {note.sample ? <SampleTag className="ml-2 align-middle" /> : null}
+        </h3>
+        <time
+          dateTime={note.date}
+          className="font-mono text-[0.8125rem] leading-none whitespace-nowrap text-faint"
+        >
+          {formatNoteDateShort(note.date)}
+        </time>
+      </Link>
+
+      {/* tagged: title, excerpt, then tags and reading time */}
+      <Link
+        href={href}
+        className="group/note hidden max-w-[44rem] no-underline in-data-[note=tagged]:block"
+      >
+        <h3
+          className={cn(
+            H3,
+            'text-[1.375rem] leading-[1.3] tracking-[-0.025em] transition-[translate] duration-350 ease-soft group-hover/note:translate-x-1.5',
+          )}
+        >
+          {note.title}
+        </h3>
+        <p className="mt-[0.3rem] text-soft">{note.excerpt}</p>
+        <div className="mt-[0.7rem] flex flex-wrap items-center gap-x-[0.9rem] gap-y-1 label-mono text-faint">
+          {note.tags.map((tag) => (
+            <b key={tag} className="font-medium text-accent">
+              {tag}
+            </b>
+          ))}
+          <span>{note.readingMinutes} min read</span>
+          <time dateTime={note.date}>{formatNoteDate(note.date)}</time>
+          {note.sample ? <SampleTag /> : null}
+        </div>
+      </Link>
+
+      {/* grid: a small cover on top, two columns on a wide screen */}
+      <Link
+        href={href}
+        className="group/note hidden max-w-[26rem] no-underline in-data-[note=grid]:block"
+      >
+        {cover ? (
+          <span className="block overflow-hidden rounded-lg shadow-[0_0_0_1px_var(--line)]">
+            <NoteCover
+              src={cover}
+              sizes="(min-width: 768px) 26rem, 100vw"
+              className="aspect-16/10 w-full transition-[scale] duration-700 ease-soft group-hover/note:scale-104"
+            />
+          </span>
+        ) : (
+          // No picture: the file name on a quiet sheet keeps the columns even.
+          <span
+            aria-hidden
+            className="grid aspect-16/10 place-items-center rounded-lg bg-sunk px-4 text-center font-mono text-xs text-faint"
+          >
+            notes/{note.slug}.mdx
+          </span>
+        )}
+        <h3
+          className={cn(
+            H3,
+            'mt-[0.9rem] text-[1.1875rem] leading-[1.3] tracking-[-0.02em] transition-colors group-hover/note:text-accent',
+          )}
+        >
+          {note.title}
+        </h3>
+        <div className="mt-[0.35rem] flex flex-wrap items-center gap-[0.9rem] label-mono text-faint">
+          <time dateTime={note.date}>{formatNoteDate(note.date)}</time>
+          <span>{note.readingMinutes} min read</span>
+          {note.sample ? <SampleTag /> : null}
+        </div>
+      </Link>
 
       {/* a: cover. On a narrow screen the text is taller than the dark part
           of the picture, so the shade there goes higher. */}

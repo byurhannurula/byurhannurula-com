@@ -1,23 +1,31 @@
 'use client';
 
-import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 
-import { CommandDialog } from '@/components/ui/command';
 import { toggleCommandMenu, useCommandMenu } from '@/hooks/use-command-menu';
 import { useHotkey } from '@/hooks/use-hotkey';
 import { playSound } from '@/hooks/use-sound';
 
-import { COMMAND_COPY, type CommandNote } from './command-content';
-import { CommandResults } from './command-results';
+import type { CommandNote } from './command-content';
 import { Toast } from './toast';
+
+// cmdk and the dialog stay out of first load. They come with the first open.
+const CommandDialogBody = dynamic(
+  () => import('./command-dialog-body').then((m) => m.CommandDialogBody),
+  { ssr: false },
+);
 
 interface CommandPaletteProps {
   notes: CommandNote[];
 }
 
-/** The command menu dialog, its shortcuts and its toast. */
+/** The command menu: its shortcuts, its toast and the lazy dialog. */
 export function CommandPalette({ notes }: CommandPaletteProps) {
-  const { open, setOpen } = useCommandMenu();
+  const { open } = useCommandMenu();
+  // Stays true after the first open, so the dialog can animate out.
+  const [wanted, setWanted] = useState(false);
+  if (open && !wanted) setWanted(true);
 
   useHotkey('k', toggleCommandMenu, { mod: true });
   useHotkey('/', toggleCommandMenu, { ignoreWhileTyping: true });
@@ -28,13 +36,7 @@ export function CommandPalette({ notes }: CommandPaletteProps) {
 
   return (
     <>
-      <CommandDialog
-        open={open}
-        onOpenChange={setOpen}
-        title={COMMAND_COPY.title}
-      >
-        <CommandResults notes={notes} />
-      </CommandDialog>
+      {wanted && <CommandDialogBody notes={notes} />}
       <Toast />
     </>
   );

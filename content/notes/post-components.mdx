@@ -26,6 +26,63 @@ A paragraph with **bold text**, _italic text_, `inline code`, a link to [another
 > One idea per post, publish rough, and write what you just fixed.
 > -- A note to myself
 
+A key in a sentence: press <Kbd>Cmd</Kbd> <Kbd>K</Kbd> to open the menu and <Kbd>Esc</Kbd> to close it.
+
+<Aside>
+  A side note. It sits in the margin on a wide screen and in the text on a small
+  one.
+</Aside>
+
+A side note belongs to the paragraph after it. It holds the detail that is good to know but would break the line of thought: a source, a number, a small story.
+
+## Pull quote
+
+<Quote cite="A note to myself" source="the third try">
+  The post that exists is better than the perfect post that does not.
+</Quote>
+
+## Steps
+
+<Steps>
+  <Step title="Write the file">
+    Make a new `.mdx` file in `content/notes`. The file name is the address.
+  </Step>
+  <Step title="Add the front matter">
+    A title, a date and one line for the lists.
+  </Step>
+  <Step title="Push">The build makes the page. There is no step four.</Step>
+</Steps>
+
+## File tree
+
+A code block with the language `tree` becomes a file tree. Two spaces per level.
+
+```tree
+content/
+  notes/
+    post-components.mdx  # this note
+    third-time-is-the-charm.mdx
+src/
+  components/
+    mdx/
+      figure.tsx
+      steps.tsx
+  lib/
+    mdx.tsx  # turns a note into a page
+package.json
+```
+
+## Video
+
+<Video
+  src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+  poster="/assets/projects/jotter/editor-dark.png"
+  title="A sample clip of a flower"
+  width="1920"
+  height="1080"
+  caption="nothing loads before you press play"
+/>
+
 ---
 
 ## Images in three widths

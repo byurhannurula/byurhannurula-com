@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 
 import './globals.css';
@@ -16,9 +16,10 @@ import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteNav } from '@/components/layout/site-nav';
 import { RevealObserver } from '@/components/shared/reveal-observer';
 import { SoundHover } from '@/components/shared/sound-hover';
-import { SOCIALS } from '@/content/socials';
+import { RSS_PATH, SOCIALS } from '@/content/socials';
 import { brand } from '@/lib/brand';
 import { fontVariables } from '@/lib/fonts';
+import { SHARE_VIDEO } from '@/lib/seo';
 import { siteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -29,6 +30,26 @@ export const metadata: Metadata = {
   },
   description: brand.description,
   applicationName: brand.name,
+  authors: [{ name: brand.name, url: siteUrl }],
+  alternates: {
+    types: { 'application/rss+xml': [{ url: RSS_PATH, title: brand.name }] },
+  },
+  openGraph: {
+    type: 'website',
+    siteName: brand.name,
+    locale: 'en',
+    videos: [SHARE_VIDEO],
+  },
+  twitter: { card: 'summary_large_image' },
+};
+
+// The browser bar follows the light mode the reader's system asks for; the
+// page itself follows its own clock (src/lib/light.ts).
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#fafafa' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -3,14 +3,18 @@
 import { useCallback, useState } from 'react';
 
 /**
- * Track which row of the layer drawing is in focus and how far each slab lifts.
+ * Track the selected row of the layer drawing, the row under the pointer or
+ * focus, and how far each slab lifts.
  *
  * Rows `0..layerCount-1` are layers. A higher index is a row that spans all
  * layers.
  */
 export function useLayerFocus(layerCount: number) {
-  const [active, setActive] = useState(0);
+  const [selected, select] = useState(0);
+  // A look, not a choice: hover and focus lift a slab but do not select it.
+  const [peek, setPeek] = useState<number | null>(null);
 
+  const active = peek ?? selected;
   const spansAll = active >= layerCount;
 
   const isLit = useCallback(
@@ -29,5 +33,5 @@ export function useLayerFocus(layerCount: number) {
     [active, layerCount, spansAll],
   );
 
-  return { active, setActive, isLit, liftOf };
+  return { active, selected, select, setPeek, isLit, liftOf };
 }

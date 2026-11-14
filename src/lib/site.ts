@@ -18,6 +18,13 @@ function resolveSiteUrl(): URL {
 export const siteUrl = resolveSiteUrl();
 
 /** Static routes for the sitemap and llms.txt. Notes are added from MDX. */
-export const routes = ['/', '/work', '/notes', '/about', '/uses'] as const;
+export const routes = [
+  '/',
+  '/work',
+  '/notes',
+  '/about',
+  '/uses',
+  '/homelab',
+] as const;
 
 export const absoluteUrl = (path: string) => new URL(path, siteUrl).href;

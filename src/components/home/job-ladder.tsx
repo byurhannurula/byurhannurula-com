@@ -27,7 +27,7 @@ export function JobLadder({ roles, stack }: JobLadderProps) {
           {EMPLOYER.period}
         </span>
       </div>
-      <p className="mt-1.5 mb-[1.1rem] max-w-[38rem] text-soft">
+      <p className="mt-1.5 mb-[1.1rem] max-w-[34rem] text-soft">
         {JOB_SECTION.ladderText}
       </p>
       <ol

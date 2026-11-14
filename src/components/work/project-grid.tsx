@@ -2,7 +2,6 @@ import Image from 'next/image';
 
 import { AppIcon } from '@/components/uses/app-icon';
 import { ProjectKind, ProjectLinks } from '@/components/work/project-bits';
-import { shotSize } from '@/components/work/shot-sizes';
 import type { Project } from '@/content/projects';
 
 interface ProjectGridProps {
@@ -19,7 +18,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
             <Image
               src={project.cover}
               alt=""
-              {...shotSize(project.cover)}
+              {...project.coverSize}
               sizes="(min-width: 768px) 32rem, 100vw"
               className="aspect-16/10 w-full object-cover object-top"
             />

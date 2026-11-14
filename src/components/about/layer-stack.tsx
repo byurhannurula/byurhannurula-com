@@ -7,29 +7,39 @@ import { useLayerFocus } from '@/hooks/use-layer-focus';
 import { cn } from '@/lib/utils';
 
 const ROW =
-  'group/row grid w-full grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-1 rounded-md px-1 py-[1.05rem] text-left transition-[padding] duration-400 ease-soft aria-pressed:pl-[0.9rem] md:grid-cols-[auto_9.5rem_1fr]';
+  'group/row grid w-full grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-1 rounded-md px-1 py-[1.05rem] text-left transition-[padding] duration-400 ease-soft data-lifted:pl-[0.9rem] md:grid-cols-[auto_9.5rem_1fr]';
 const ROW_NAME = 'text-lg font-semibold tracking-[-0.015em]';
 const ROW_TEXT =
-  'col-start-2 text-soft transition-colors duration-300 group-aria-pressed/row:text-ink md:col-start-3';
+  'col-start-2 text-soft transition-colors duration-300 group-data-lifted/row:text-ink md:col-start-3';
 const ROW_MARK =
-  'size-[0.7rem] -translate-y-[0.05rem] transition-[scale] duration-400 ease-soft group-aria-pressed/row:scale-150';
+  'size-[0.7rem] -translate-y-[0.05rem] transition-[scale] duration-400 ease-soft group-data-lifted/row:scale-150';
 
 /**
  * The product as a stack of slabs, with one row of text for each layer.
- * Hover, focus or click on a row lifts its slab and the ones above it.
+ * A click or Enter selects a row. Hover and focus only lift its slab and the
+ * ones above it for a look, so `aria-pressed` stays on the selected row.
  */
 export function LayerStack({ className }: { className?: string }) {
-  const { active, setActive, isLit, liftOf } = useLayerFocus(LAYERS.length);
+  const { active, selected, select, setPeek, isLit, liftOf } = useLayerFocus(
+    LAYERS.length,
+  );
 
   const rowEvents = (index: number) => ({
-    'aria-pressed': active === index,
-    onPointerEnter: () => setActive(index),
-    onFocus: () => setActive(index),
-    onClick: () => setActive(index),
+    'aria-pressed': selected === index,
+    'data-lifted': active === index ? '' : undefined,
+    onPointerEnter: () => setPeek(index),
+    onFocus: () => setPeek(index),
+    onBlur: () => setPeek(null),
+    onClick: () => {
+      select(index);
+      // A tap has no pointer leave, so the look must not outlive the choice.
+      setPeek(null);
+    },
   });
 
   return (
     <div
+      onPointerLeave={() => setPeek(null)}
       className={cn(
         'items-center gap-4 md:grid-cols-[24rem_1fr] md:gap-12',
         className,
@@ -42,7 +52,7 @@ export function LayerStack({ className }: { className?: string }) {
         {LAYERS.map((layer, index) => (
           <div
             key={layer.name}
-            onPointerEnter={() => setActive(index)}
+            onPointerEnter={() => setPeek(index)}
             style={
               {
                 '--c': `var(--hue-${layer.hue})`,

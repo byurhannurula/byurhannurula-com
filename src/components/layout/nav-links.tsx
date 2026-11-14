@@ -7,24 +7,27 @@ import { NAV_ITEMS } from '@/content/nav';
 import { useNavIndicator } from '@/hooks/use-nav-indicator';
 import { cn } from '@/lib/utils';
 
-/** Pages without a nav link of their own mark the page they belong to. */
-const PARENT_OF: Record<string, string> = { '/homelab': '/about' };
-
 function activeHref(pathname: string) {
-  const path = PARENT_OF[pathname] ?? pathname;
   return NAV_ITEMS.find(({ href }) =>
-    href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`),
+    href === '/'
+      ? pathname === '/'
+      : pathname === href || pathname.startsWith(`${href}/`),
   )?.href;
 }
 
 /** The page links, with a pill that slides under the current one. */
 export function NavLinks() {
   const active = activeHref(usePathname());
-  const { listRef, box, slides } = useNavIndicator();
+  const { listRef, box, slides } = useNavIndicator(active);
 
   return (
     <nav aria-label="Main" className="max-md:min-w-0 max-md:flex-1">
-      <ul ref={listRef} className="relative flex">
+      {/* Six links fit from 375 px. Below that the row scrolls sideways, and
+          a fade on the right edge says that there is more. */}
+      <ul
+        ref={listRef}
+        className="relative flex max-[374px]:[mask-image:linear-gradient(90deg,#000_calc(100%-1.75rem),transparent)] max-[374px]:pr-6 max-md:[scrollbar-width:none] max-md:overflow-x-auto max-md:overscroll-x-contain max-md:[&::-webkit-scrollbar]:hidden"
+      >
         <li
           aria-hidden
           className={cn(
@@ -40,13 +43,20 @@ export function NavLinks() {
             }
           }
         />
-        {NAV_ITEMS.map(({ label, href }) => (
-          <li key={href} className="max-md:flex-1">
+        {NAV_ITEMS.map(({ label, href, when }) => (
+          <li
+            key={href}
+            className={cn(
+              'max-md:flex-auto',
+              when === 'homelab:on' && 'in-data-[homelab=off]:hidden',
+            )}
+          >
             <Link
               href={href}
               aria-current={href === active ? 'page' : undefined}
-              // On a phone the links share the bar in equal parts, 40 px high.
-              className="relative z-1 flex h-10 items-center justify-center rounded-full text-[0.8125rem] font-medium text-soft no-underline transition-colors duration-200 hover:text-ink aria-[current=page]:text-ink min-[375px]:text-sm md:block md:h-auto md:px-[0.8rem] md:py-[0.45rem] md:text-[0.9375rem]"
+              // On a phone the links share the bar, 40 px high. The focus
+              // ring sits inside there: the scrolling row would cut it.
+              className="relative z-1 flex h-10 items-center justify-center rounded-full px-[0.1rem] text-[0.8125rem] font-medium whitespace-nowrap text-soft no-underline transition-colors duration-200 hover:text-ink aria-[current=page]:text-ink max-md:focus-visible:-outline-offset-2 min-[400px]:text-sm md:block md:h-auto md:px-[0.8rem] md:py-[0.45rem] md:text-[0.9375rem]"
             >
               {label}
             </Link>

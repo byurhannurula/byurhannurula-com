@@ -10,8 +10,9 @@ import {
   type CommandNote,
 } from '@/components/command/command-content';
 import type { CommandIconName } from '@/components/command/command-icon';
-import { EXTRA_PAGES, NAV_ITEMS } from '@/content/nav';
+import { NAV_ITEMS } from '@/content/nav';
 import { SOCIALS } from '@/content/socials';
+import { forgetCommandOpener } from '@/hooks/use-command-menu';
 import { useOptions } from '@/hooks/use-options';
 import { showToast } from '@/hooks/use-toast';
 import { brand } from '@/lib/brand';
@@ -44,10 +45,14 @@ export function useCommandItems(notes: CommandNote[]): CommandEntry[] {
   const { homelab, sound, light } = useOptions();
 
   return useMemo(() => {
-    const pages = [...NAV_ITEMS, ...EXTRA_PAGES].filter(
+    const pages = NAV_ITEMS.filter(
       ({ when }) => when !== 'homelab:on' || homelab === 'on',
     );
     const soundOff = sound === 'off';
+    const goTo = (href: string) => {
+      forgetCommandOpener();
+      router.push(href);
+    };
 
     return [
       ...pages.map(({ label, href, keywords = '' }): CommandEntry => ({
@@ -56,7 +61,7 @@ export function useCommandItems(notes: CommandNote[]): CommandEntry[] {
         keywords,
         icon: 'page',
         hint: 'page',
-        run: () => router.push(href),
+        run: () => goTo(href),
       })),
       ...notes.map(({ slug, title, date, keywords }): CommandEntry => ({
         group: 'Notes',
@@ -64,7 +69,7 @@ export function useCommandItems(notes: CommandNote[]): CommandEntry[] {
         keywords,
         icon: 'note',
         hint: date,
-        run: () => router.push(`/notes/${slug}`),
+        run: () => goTo(`/notes/${slug}`),
       })),
       {
         group: 'Actions',
@@ -86,7 +91,7 @@ export function useCommandItems(notes: CommandNote[]): CommandEntry[] {
       {
         group: 'Actions',
         name: soundOff ? COMMAND_COPY.soundOn : COMMAND_COPY.soundOff,
-        keywords: 'audio click mute',
+        keywords: 'audio mute',
         icon: 'gear',
         hint: '',
         run: () => setOption('sound', soundOff ? 'on' : 'off'),

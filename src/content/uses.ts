@@ -8,7 +8,7 @@ export interface GearItem {
   image: GearImage;
   name: string;
   text: string;
-  /** No longer in use. The name is struck through. */
+  /** No longer in use. The name is struck through and read as "Retired". */
   retired?: boolean;
 }
 
@@ -28,6 +28,10 @@ interface UsesSectionBase {
 export type UsesSection =
   | (UsesSectionBase & { kind: 'gear'; items: GearItem[] })
   | (UsesSectionBase & { kind: 'apps'; items: AppItem[] });
+
+/** The anchor of a section, for the jump row at the top of the page. */
+export const usesSectionId = (section: UsesSection) =>
+  section.title.toLowerCase().replaceAll(' ', '-');
 
 export const gearImage = (
   file: string,

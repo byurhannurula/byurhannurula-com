@@ -70,7 +70,16 @@ export function Mermaid({
 }) {
   return (
     <CodeFrame name="diagram">
-      <pre className="overflow-x-auto p-[1.1rem]">
+      <pre
+        // Focusable, because a long line scrolls sideways.
+        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+        tabIndex={0}
+        // A pre cannot be a section element.
+        // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
+        role="region"
+        aria-label="Diagram source"
+        className="overflow-x-auto p-[1.1rem] -outline-offset-2"
+      >
         <code>{chart ?? children}</code>
       </pre>
     </CodeFrame>

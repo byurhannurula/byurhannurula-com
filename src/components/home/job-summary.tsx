@@ -25,7 +25,7 @@ export function JobSummary({ roles, stack }: JobSummaryProps) {
             {EMPLOYER.name}
           </a>
         </h3>
-        <p className="mt-1.5 mb-[1.1rem] max-w-[38rem] text-soft">
+        <p className="mt-1.5 mb-[1.1rem] max-w-[34rem] text-soft">
           {JOB_SECTION.summary}
         </p>
         <ol

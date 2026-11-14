@@ -29,7 +29,8 @@ export function TechPile({ names, className }: TechPileProps) {
         play(open ? 'close' : 'open');
       }}
       className={cn(
-        'group/pile inline-flex flex-wrap items-center gap-y-2 pl-2 text-left',
+        // min-h: a 40px tap target around the 34px circles.
+        'group/pile inline-flex min-h-10 flex-wrap items-center gap-y-2 pl-2 text-left',
         className,
       )}
     >

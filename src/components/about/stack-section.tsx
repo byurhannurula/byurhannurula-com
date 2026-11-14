@@ -13,7 +13,12 @@ const ROW_LABEL = 'label-mono leading-[1.8] text-faint';
 function StackTech({ name }: { name: string }) {
   const icon = techIconUrl(name);
   return (
-    <span className="group/tech inline-flex items-center gap-[0.45rem] text-[0.9375rem] font-medium transition-shadow duration-200 in-data-[stack=chips]:h-9 in-data-[stack=chips]:gap-0 in-data-[stack=chips]:rounded-[0.65rem] in-data-[stack=chips]:px-[0.65rem] in-data-[stack=chips]:shadow-[0_0_0_1px_var(--line)] in-data-[stack=chips]:hover:shadow-[0_0_0_1px_var(--accent-bright)]">
+    // The title names an icon-only chip for a mouse. The name itself stays in
+    // the page for screen readers, also when the chip clips it to no width.
+    <span
+      title={name}
+      className="group/tech inline-flex items-center gap-[0.45rem] text-[0.9375rem] font-medium transition-shadow duration-200 in-data-[stack=chips]:h-9 in-data-[stack=chips]:gap-0 in-data-[stack=chips]:rounded-[0.65rem] in-data-[stack=chips]:px-[0.65rem] in-data-[stack=chips]:shadow-[0_0_0_1px_var(--line)] in-data-[stack=chips]:hover:shadow-[0_0_0_1px_var(--accent-bright)]"
+    >
       {icon ? (
         // oxlint-disable-next-line nextjs/no-img-element
         <img

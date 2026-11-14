@@ -15,7 +15,8 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
 /** Text link with an arrow that moves on hover. */
 export function ArrowLink({ href, children, className }: ArrowLinkProps) {
   const classes = cn(
-    'group/arrow inline-flex shrink-0 items-center gap-1.5 text-[0.9375rem] font-medium whitespace-nowrap no-underline transition-colors hover:text-hue',
+    // The padding makes the tap target 40px tall; the margin keeps the layout.
+    'group/arrow -my-2 inline-flex shrink-0 py-2 items-center gap-1.5 text-[0.9375rem] font-medium whitespace-nowrap no-underline transition-colors hover:text-hue',
     className,
   );
   const content = (

@@ -53,6 +53,20 @@ export const BIO_COLUMNS = {
   ],
 } as const;
 
+export type BioLength = 'short' | 'long';
+
+/**
+ * Bio, `bio: switch`. The long form is BIO_COLUMNS. The short form is one
+ * paragraph made from the same sentences, with no new facts.
+ */
+export const BIO_SWITCH = {
+  legend: 'Bio length',
+  labels: { short: 'short', long: 'long' } satisfies Record<BioLength, string>,
+  copy: 'Copy bio',
+  short:
+    'I am a full-stack engineer and team lead. I take a web product from the Figma file to the production server: the React and Next.js front end, the Node services behind it, the database and the deployment. I still write a lot of code.',
+} as const;
+
 /** Bio, `bio: inline`. The tools named in the sentence. */
 export const BIO_INLINE_TECH = [
   'React',

@@ -1,6 +1,7 @@
 import { AboutHero } from '@/components/about/about-hero';
 import { AfterHoursSection } from '@/components/about/after-hours-section';
 import { BioSection } from '@/components/about/bio-section';
+import { BookShelf } from '@/components/about/book-shelf';
 import { CapabilitiesSection } from '@/components/about/capabilities-section';
 import { CareerSection } from '@/components/about/career-section';
 import { EarlierSection } from '@/components/about/earlier-section';
@@ -25,6 +26,7 @@ export default function AboutPage() {
       <CapabilitiesSection />
       <WaysSection />
       <StackSection />
+      <BookShelf />
       <AfterHoursSection />
       <TopicsSection />
       <FaqSection />

@@ -1,11 +1,17 @@
 import type { ComponentProps } from 'react';
 
+import { Aside } from '@/components/mdx/aside';
 import { Callout } from '@/components/mdx/callout';
 import { CodeFigure, Mermaid } from '@/components/mdx/code-block';
 import { Figure, GridImage, ImageGrid } from '@/components/mdx/figure';
+import { FileTree } from '@/components/mdx/file-tree';
+import { Kbd } from '@/components/mdx/kbd';
 import { LinkChip, LinkEmbed } from '@/components/mdx/link-embed';
 import { MdxLink } from '@/components/mdx/mdx-link';
 import { Cons, Do, DoDont, Dont, Pros, ProsCons } from '@/components/mdx/pair';
+import { Quote } from '@/components/mdx/quote';
+import { Step, Steps } from '@/components/mdx/steps';
+import { Video } from '@/components/mdx/video';
 import { cn } from '@/lib/utils';
 
 const HEADING = 'scroll-mt-24 font-semibold text-balance';
@@ -20,6 +26,18 @@ const LIST = 'mb-[1.5em] [&_ol]:mb-0 [&_ul]:mb-0';
  */
 export const mdxComponents = {
   p: (props: ComponentProps<'p'>) => <p {...props} className="mb-[1.5em]" />,
+  // The page title is the only h1. A `#` line in a note is a section.
+  h1: ({ children, ...props }: ComponentProps<'h1'>) => (
+    <h2
+      {...props}
+      className={cn(
+        HEADING,
+        'mt-13 mb-4 text-[1.75rem] leading-[1.2] tracking-[-0.025em]',
+      )}
+    >
+      {children}
+    </h2>
+  ),
   h2: ({ children, ...props }: ComponentProps<'h2'>) => (
     <h2
       {...props}
@@ -88,25 +106,52 @@ export const mdxComponents = {
         className="rounded-[0.4em] bg-sunk px-[0.4em] py-[0.15em] font-mono text-[0.875em]"
       />
     ),
-  pre: (props: ComponentProps<'pre'>) => (
-    <pre {...props} className="overflow-x-auto p-[1.1rem]" />
+  // A long line scrolls sideways: the block must take keyboard focus, and
+  // a focusable region needs a name.
+  pre: (props: ComponentProps<'pre'> & { 'data-language'?: string }) => (
+    <pre
+      {...props}
+      // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      tabIndex={0}
+      // A pre cannot be a section element.
+      // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
+      role="region"
+      aria-label={
+        props['data-language'] ? `Code, ${props['data-language']}` : 'Code'
+      }
+      className="overflow-x-auto p-[1.1rem] -outline-offset-2"
+    />
   ),
+  'file-tree': FileTree,
   figure: CodeFigure,
   a: MdxLink,
   hr: () => <hr className="mx-auto my-12 w-16 border-t border-line-strong" />,
   strong: (props: ComponentProps<'strong'>) => (
     <strong {...props} className="font-semibold" />
   ),
-  img: ({ src, alt, title }: ComponentProps<'img'>) =>
+  img: ({ src, alt, title, width, height }: ComponentProps<'img'>) =>
     typeof src === 'string' ? (
-      <Figure src={src} alt={alt} caption={title} />
+      <Figure
+        src={src}
+        alt={alt}
+        caption={title}
+        width={width}
+        height={height}
+      />
     ) : null,
   // Tables stay plain: one line under the head, no cell borders. A wide
   // table scrolls inside its own box.
   table: (props: ComponentProps<'table'>) => (
-    <div data-reveal className="my-9 overflow-x-auto">
+    <section
+      data-reveal
+      // Focusable, because it can scroll sideways.
+      // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      tabIndex={0}
+      aria-label="Table"
+      className="my-9 overflow-x-auto"
+    >
       <table {...props} className="w-full border-collapse text-base" />
-    </div>
+    </section>
   ),
   th: (props: ComponentProps<'th'>) => (
     <th
@@ -121,8 +166,15 @@ export const mdxComponents = {
     <tr {...props} className="transition-colors [tbody>&]:hover:bg-sunk" />
   ),
 
+  Aside,
   Callout,
   Figure,
+  FileTree,
+  Kbd,
+  Quote,
+  Step,
+  Steps,
+  Video,
   MDXImage: Figure,
   ImageGrid,
   GridImage,

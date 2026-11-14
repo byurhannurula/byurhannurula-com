@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
+import { BioSwitch } from '@/components/about/bio-switch';
 import { ExpandBio } from '@/components/about/expand-bio';
 import { RichText } from '@/components/about/rich-text';
 import { Section } from '@/components/shared/section';
@@ -10,9 +11,11 @@ import {
   BIO_COLUMNS,
   BIO_INLINE_TECH,
   BIO_PANELS,
+  BIO_SWITCH,
   type BioPanelKey,
 } from '@/content/about';
 import { EMPLOYER } from '@/content/career';
+import { cn } from '@/lib/utils';
 
 const MARK =
   'mr-[0.12em] ml-[0.08em] inline-block size-[0.95em] rounded-[0.24em] bg-white object-contain align-[-0.12em] shadow-[0_0_0_1px_var(--line)] transition-[rotate,scale] duration-400 ease-soft group-hover/mark:-rotate-8 group-hover/mark:scale-115';
@@ -102,7 +105,30 @@ function panel(key: BioPanelKey) {
   );
 }
 
-/** The bio. The `bio` option picks columns, one sentence or an expanding one. */
+function BioColumns({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        'gap-x-12 gap-y-[1em] text-lg leading-[1.65] text-soft md:grid-cols-2',
+        className,
+      )}
+    >
+      <p className="max-w-[34rem] text-ink">{BIO_COLUMNS.left}</p>
+      <div className="max-w-[34rem] space-y-[1em]">
+        {BIO_COLUMNS.right.map((text, index) => (
+          <p key={text} className={index === 0 ? 'text-ink' : undefined}>
+            {text}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The bio. The `bio` option picks columns, one sentence, an expanding one or
+ * a short and long pair.
+ */
 export function BioSection() {
   return (
     <Section>
@@ -117,16 +143,23 @@ export function BioSection() {
         />
       </div>
       <InlineBio />
-      <div className="hidden gap-12 text-lg leading-[1.65] text-soft in-data-[bio=a]:grid md:grid-cols-2">
-        <p className="text-ink">{BIO_COLUMNS.left}</p>
-        <div className="space-y-[1em]">
-          {BIO_COLUMNS.right.map((text, index) => (
-            <p key={text} className={index === 0 ? 'text-ink' : undefined}>
-              {text}
-            </p>
-          ))}
-        </div>
+      <div className="hidden in-data-[bio=switch]:block">
+        <BioSwitch
+          panels={{
+            short: (
+              <p className="max-w-[34rem] text-lg leading-[1.65] text-pretty">
+                {BIO_SWITCH.short}
+              </p>
+            ),
+            long: <BioColumns className="grid" />,
+          }}
+          texts={{
+            short: BIO_SWITCH.short,
+            long: [BIO_COLUMNS.left, ...BIO_COLUMNS.right].join('\n\n'),
+          }}
+        />
       </div>
+      <BioColumns className="hidden in-data-[bio=a]:grid" />
     </Section>
   );
 }
