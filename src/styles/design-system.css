@@ -1,0 +1,9 @@
+/* design system page: only what Tailwind classes cannot express. */
+
+/* A dot that crosses its track, to show an easing or a duration. The track
+   is an inline-size container, so 100cqw is its width. */
+@keyframes ds-travel {
+  to {
+    translate: calc(100cqw - 100%) 0;
+  }
+}

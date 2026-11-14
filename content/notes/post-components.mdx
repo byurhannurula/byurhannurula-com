@@ -221,7 +221,19 @@ pnpm add next-mdx-remote
 </Cons>
 </ProsCons>
 
-## Link card
+## Links
+
+A link tells you where it goes before you press it. A link that stays on this site is violet, like [the list of notes](/notes). A link that leaves is green and has an arrow, like [the Jotter site](https://jotter.byurhannurula.com). Both have a dashed line that becomes solid when you point at it.
+
+A link with the icon of its site: <SiteLink href="https://recheck.io/" icon="/assets/icons/recheck.png">ReCheck</SiteLink>. The same with a mark that sits at an angle until you point at it: <SiteLink href="https://jotter.byurhannurula.com" icon="/assets/icons/jotter.png" effect="tilt">Jotter</SiteLink>.
+
+A small link inside a sentence: <LinkChip href="https://github.com/byurhannurula" title="GitHub" />.
+
+A link that shows its target before you go: <PreviewLink href="https://jotter.byurhannurula.com" title="Jotter" description="A fast, minimal notepad: a quiet place for quick thoughts." image="/assets/projects/jotter/editor-dark.png">Jotter</PreviewLink>. Point at it, or move to it with the Tab key.
+
+A phrase with a note behind it: the dashed line says that <Annotated note="A note holds the detail that would break the sentence: a number, a source or a date.">there is more here</Annotated>. The note also opens on keyboard focus, and Esc closes it.
+
+A link card with the picture at the side:
 
 <LinkEmbed
   href="https://jotter.byurhannurula.com"
@@ -230,7 +242,50 @@ pnpm add next-mdx-remote
   image="/assets/projects/jotter/editor-dark.png"
 />
 
-A small link inside a sentence: <LinkChip href="https://github.com/byurhannurula" title="GitHub" />.
+With the picture on top:
+
+<LinkEmbed
+  href="https://github.com/byurhannurula/jotter"
+  title="Jotter on GitHub"
+  description="The source, the releases and the issues."
+  image="/assets/projects/jotter/desktop.png"
+  layout="top"
+/>
+
+With no picture, the card starts with the icon of the site. Point at a card to see the full path after the domain.
+
+<LinkEmbed
+  href="https://github.com/byurhannurula/dotfiles"
+  title="Dotfiles"
+  description="My macOS configuration."
+/>
+
+A bar, for a link that needs no title:
+
+<LinkBar href="https://github.com/byurhannurula/dotfiles" />
+
+A row, for a short list of things to read:
+
+<RowLink
+  href="/notes/third-time-is-the-charm"
+  title="Third time is the charm"
+  subtitle="A row has a title, one line of text and a small label at the end of a dotted line."
+  meta="note"
+  className="mb-[1.5em]"
+/>
+
+A large link, for a page that is a list of places to go. The arrow shows when you point at it:
+
+<ListLink
+  href="https://github.com/byurhannurula"
+  title="GitHub"
+  description="Code, projects, and contributions"
+  className="mb-[1.5em]"
+/>
+
+Tags: <TagLink href="/notes">meta</TagLink> <TagLink href="/notes">reference</TagLink>
+
+A word with a circuit trace under it, for a headline: <TraceLink href="/homelab">electronics</TraceLink>.
 
 ## Diagram
 

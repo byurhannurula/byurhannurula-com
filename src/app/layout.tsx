@@ -16,6 +16,7 @@ import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteNav } from '@/components/layout/site-nav';
 import { RevealObserver } from '@/components/shared/reveal-observer';
 import { SoundHover } from '@/components/shared/sound-hover';
+import { TabAwayIcon } from '@/components/shared/tab-away-icon';
 import { RSS_PATH, SOCIALS } from '@/content/socials';
 import { brand } from '@/lib/brand';
 import { fontVariables } from '@/lib/fonts';
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ConfigPanel />
         <RevealObserver />
         <SoundHover />
+        <TabAwayIcon />
         <LightClock />
         <JsonLd data={[person(SOCIALS.map((s) => s.href)), website()]} />
         <Analytics />

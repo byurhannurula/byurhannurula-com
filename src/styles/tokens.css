@@ -56,6 +56,8 @@
   --soft: #554d45;
   --faint: #756c62;
   --faint-large: #8f867b;
+  /* The day red is under 4.5:1 on the warm background. */
+  --danger: #b91c1c;
   --line: rgb(70 45 10 / 0.1);
   --line-strong: rgb(70 45 10 / 0.19);
 }

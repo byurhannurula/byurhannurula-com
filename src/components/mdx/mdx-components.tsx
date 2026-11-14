@@ -6,7 +6,14 @@ import { CodeFigure, Mermaid } from '@/components/mdx/code-block';
 import { Figure, GridImage, ImageGrid } from '@/components/mdx/figure';
 import { FileTree } from '@/components/mdx/file-tree';
 import { Kbd } from '@/components/mdx/kbd';
-import { LinkChip, LinkEmbed } from '@/components/mdx/link-embed';
+import { Annotated } from '@/components/links/annotated';
+import { TagLink } from '@/components/links/icon-link';
+import { ListLink } from '@/components/links/list-link';
+import { PreviewLink } from '@/components/links/preview-link';
+import { RowLink } from '@/components/links/row-link';
+import { SiteLink } from '@/components/links/site-link';
+import { TraceLink } from '@/components/links/trace-link';
+import { LinkBar, LinkChip, LinkEmbed } from '@/components/mdx/link-embed';
 import { MdxLink } from '@/components/mdx/mdx-link';
 import { Cons, Do, DoDont, Dont, Pros, ProsCons } from '@/components/mdx/pair';
 import { Quote } from '@/components/mdx/quote';
@@ -180,6 +187,14 @@ export const mdxComponents = {
   GridImage,
   LinkEmbed,
   LinkChip,
+  LinkBar,
+  SiteLink,
+  PreviewLink,
+  RowLink,
+  ListLink,
+  TagLink,
+  TraceLink,
+  Annotated,
   DoDont,
   Do,
   Dont,
