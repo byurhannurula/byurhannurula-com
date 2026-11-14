@@ -1,0 +1,36 @@
+/*
+ * The line through the five steps and the dot on it. Pseudo-elements,
+ * because an <ol> can hold only <li>. Wide screens only: the narrow list
+ * has no line.
+ */
+@keyframes lab-hop {
+  to {
+    left: calc(80% + 2.1rem);
+  }
+}
+
+@media (min-width: 48rem) {
+  .hops::before {
+    content: '';
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    right: calc(20% - 2.4rem);
+    height: 2px;
+    background: var(--line-strong);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hops::after {
+      content: '';
+      position: absolute;
+      top: calc(1.2rem - 3px);
+      left: 1.2rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-bright);
+      animation: lab-hop 5s linear infinite;
+    }
+  }
+}

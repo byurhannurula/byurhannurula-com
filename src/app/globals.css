@@ -4,14 +4,24 @@
 @import '../styles/tokens.css';
 @import '../styles/options.css';
 @import '../styles/motion.css';
-@import '../styles/shell.css';
-@import '../styles/home.css';
-@import '../styles/about.css';
-@import '../styles/notes.css';
-@import '../styles/work.css';
-@import '../styles/homelab.css';
+
+/*
+ * Only three global stylesheets: tokens, options and motion. CSS that one
+ * component needs sits next to that component (for example
+ * src/components/about/layer-stack.css) and the component imports it.
+ */
 
 @custom-variant dark (&:where([data-theme='dark'] *));
+
+/* `toc: side` applies only on screens wide enough for a side column. One
+   variant keeps the class lists of the note contents readable. */
+@custom-variant toc-side {
+  @media (min-width: 1240px) {
+    :where([data-toc='side']) & {
+      @slot;
+    }
+  }
+}
 
 @theme inline {
   --color-bg: var(--bg);

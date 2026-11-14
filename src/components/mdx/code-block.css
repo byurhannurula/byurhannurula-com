@@ -1,0 +1,10 @@
+/* rehype-pretty-code gives each token both theme colours as variables in an
+   inline style, so only a stylesheet rule can pick one. */
+code[data-theme*=' '],
+code[data-theme*=' '] span {
+  color: var(--shiki-light);
+}
+[data-theme='dark'] code[data-theme*=' '],
+[data-theme='dark'] code[data-theme*=' '] span {
+  color: var(--shiki-dark);
+}

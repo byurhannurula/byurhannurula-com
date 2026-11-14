@@ -9,15 +9,11 @@ import { NowBlock } from '@/components/shared/now-block';
 import { Section } from '@/components/shared/section';
 import { NOTE_SECTION, NOW_SECTION } from '@/content/home';
 import { NOW_DATE } from '@/content/now';
-import { brand } from '@/lib/brand';
 import { getNotes } from '@/lib/notes';
+import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
 
-export const metadata = pageMetadata({
-  path: '/',
-  title: `${brand.name}: ${brand.role}`,
-  description: brand.description,
-});
+export const metadata = pageMetadata(PAGES.home);
 
 export default async function HomePage() {
   const [latest] = await getNotes();

@@ -7,14 +7,10 @@ import { GearTiles } from '@/components/uses/gear-tiles';
 import { SectionJump } from '@/components/uses/section-jump';
 import { UsesArt } from '@/components/uses/uses-art';
 import { USES, USES_UPDATED, usesSectionId } from '@/content/uses';
+import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
 
-export const metadata = pageMetadata({
-  path: '/uses',
-  title: 'Uses',
-  description:
-    'Hardware and software on my desk: the laptop, the editor, the terminal and the small apps I use every day.',
-});
+export const metadata = pageMetadata(PAGES.uses);
 
 export default function UsesPage() {
   return (

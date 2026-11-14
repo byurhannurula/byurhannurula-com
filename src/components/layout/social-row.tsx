@@ -1,5 +1,7 @@
 'use client';
 
+import './social-row.css';
+
 import type { CSSProperties, ReactNode } from 'react';
 
 import { useTravelCard } from '@/hooks/use-travel-card';

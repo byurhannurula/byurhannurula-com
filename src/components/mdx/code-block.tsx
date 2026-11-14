@@ -1,3 +1,5 @@
+import './code-block.css';
+
 import {
   Children,
   type ComponentProps,

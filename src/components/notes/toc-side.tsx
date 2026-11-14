@@ -11,7 +11,7 @@ interface TocSideProps {
 
 /**
  * `toc: side`: the contents as a quiet column beside the text. Only on
- * screens wide enough (the `toc-side:` variant, src/styles/notes.css);
+ * screens wide enough (the `toc-side:` variant, src/app/globals.css);
  * below that the island takes over.
  */
 export function TocSide({ headings, active }: TocSideProps) {

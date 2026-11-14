@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-/** Matches the body swap keyframes in src/styles/shell.css. */
+/** Matches the body swap keyframes in src/components/layout/social-row.css. */
 const SWAP_MS = 300;
 /** Room between a clamped card and the edge of the screen. */
 const SCREEN_MARGIN_PX = 16;

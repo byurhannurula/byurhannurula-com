@@ -1,4 +1,4 @@
-import '@/styles/design-system.css';
+import './motion-section.css';
 
 import type { ReactNode } from 'react';
 
@@ -20,7 +20,7 @@ interface TrackProps {
   easing: string;
 }
 
-/** A dot that crosses a track once (ds-travel, design-system.css). */
+/** A dot that crosses a track once (ds-travel, motion-section.css). */
 function Track({ duration, easing }: TrackProps) {
   return (
     <span

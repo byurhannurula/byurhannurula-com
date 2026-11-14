@@ -1,5 +1,7 @@
 'use client';
 
+import './toc-island.css';
+
 import { X } from 'lucide-react';
 import {
   AnimatePresence,

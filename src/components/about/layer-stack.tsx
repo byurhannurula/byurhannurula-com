@@ -1,5 +1,7 @@
 'use client';
 
+import './layer-stack.css';
+
 import type { CSSProperties } from 'react';
 
 import { ACROSS_LABEL, ACROSS_LAYERS, LAYERS } from '@/content/about';

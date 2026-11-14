@@ -1,0 +1,45 @@
+/*
+ * Picture zoom with view transitions (src/hooks/use-image-zoom.ts): the
+ * picture travels between its place in the text and the centre. Both
+ * snapshots fill the moving box, so a cropped picture does not stretch.
+ * The curve is the same as --ease-island in src/styles/motion.css.
+ */
+::view-transition-group(zoom-picture) {
+  animation-duration: 0.42s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(zoom-picture),
+::view-transition-new(zoom-picture) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Picture zoom without view transitions: fade and scale. `allow-discrete`
+   keeps the dialog in the top layer until the fade out ends. */
+dialog[data-zoom][data-fade],
+dialog[data-zoom][data-fade]::backdrop {
+  opacity: 0;
+  transition:
+    opacity 0.25s var(--ease-out-soft),
+    scale 0.25s var(--ease-out-soft),
+    display 0.25s allow-discrete,
+    overlay 0.25s allow-discrete;
+}
+dialog[data-zoom][data-fade] {
+  scale: 0.96;
+}
+dialog[data-zoom][data-fade][open],
+dialog[data-zoom][data-fade][open]::backdrop {
+  opacity: 1;
+  scale: 1;
+}
+@starting-style {
+  dialog[data-zoom][data-fade][open],
+  dialog[data-zoom][data-fade][open]::backdrop {
+    opacity: 0;
+  }
+  dialog[data-zoom][data-fade][open] {
+    scale: 0.96;
+  }
+}

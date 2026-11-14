@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 import Image from 'next/image';
 
 import { ArrowLink } from '@/components/shared/arrow-link';
+import { CareerTrack } from '@/components/shared/career-track';
 import { Section } from '@/components/shared/section';
 import { TechList } from '@/components/shared/tech';
 import { ACHIEVEMENTS, EMPLOYER, ROLES } from '@/content/career';
@@ -36,24 +37,7 @@ export function CareerSection() {
         </ArrowLink>
       </div>
 
-      <ol
-        data-reveal
-        className="career-track relative mt-8 grid gap-5 md:mt-11 md:grid-cols-4 md:gap-0"
-      >
-        {ROLES.map((role) => (
-          <li
-            key={role.title}
-            data-current={role.current ? '' : undefined}
-            className="group/role relative pl-[1.9rem] md:pt-7 md:pr-6 md:pl-0"
-          >
-            <span className="block label-mono text-faint">{role.period}</span>
-            <b className="mt-[0.15rem] mb-1 block text-[1.0625rem] font-semibold tracking-[-0.01em] group-data-current/role:text-accent">
-              {role.title}
-            </b>
-            <p className="text-[0.9375rem] text-soft">{role.text}</p>
-          </li>
-        ))}
-      </ol>
+      <CareerTrack roles={ROLES} />
 
       <ul className="mt-12 columns-1 gap-x-12 md:columns-2">
         {ACHIEVEMENTS.map((text) => (

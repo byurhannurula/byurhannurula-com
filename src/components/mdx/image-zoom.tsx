@@ -1,5 +1,7 @@
 'use client';
 
+import './image-zoom.css';
+
 import { useImageZoom } from '@/hooks/use-image-zoom';
 
 /**

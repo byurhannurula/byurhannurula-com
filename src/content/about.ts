@@ -11,12 +11,6 @@ interface CopyTones {
   c: string;
 }
 
-export const ABOUT_META = {
-  title: 'About',
-  description:
-    'Byurhan Nurula is a full-stack engineer and team lead. Six years at ReCheck, from intern to team lead, in every layer of the product.',
-} as const;
-
 export const ABOUT_HERO: {
   title: CopyTones;
   titleEnd: CopyTones;

@@ -1,0 +1,12 @@
+/* Motion off and reduced motion cut durations, not delays: without this the
+   island rows would still arrive one by one. */
+[data-motion='off'] [data-island],
+[data-motion='off'] [data-island] * {
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-island] * {
+    transition-delay: 0s !important;
+  }
+}

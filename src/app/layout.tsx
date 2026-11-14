@@ -17,28 +17,27 @@ import { SiteNav } from '@/components/layout/site-nav';
 import { RevealObserver } from '@/components/shared/reveal-observer';
 import { SoundHover } from '@/components/shared/sound-hover';
 import { TabAwayIcon } from '@/components/shared/tab-away-icon';
-import { RSS_PATH, SOCIALS } from '@/content/socials';
+import { SOCIALS } from '@/content/socials';
 import { brand } from '@/lib/brand';
 import { fontVariables } from '@/lib/fonts';
-import { SHARE_VIDEO } from '@/lib/seo';
+import { SITE_SEO } from '@/config/seo';
+import { FEED_ALTERNATES, SHARE_VIDEO } from '@/lib/seo';
 import { siteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
   title: {
-    default: `${brand.name}, full-stack engineer`,
-    template: `%s · ${brand.name}`,
+    default: SITE_SEO.defaultTitle,
+    template: SITE_SEO.titleTemplate,
   },
-  description: brand.description,
+  description: SITE_SEO.description,
   applicationName: brand.name,
   authors: [{ name: brand.name, url: siteUrl }],
-  alternates: {
-    types: { 'application/rss+xml': [{ url: RSS_PATH, title: brand.name }] },
-  },
+  alternates: { types: FEED_ALTERNATES },
   openGraph: {
     type: 'website',
     siteName: brand.name,
-    locale: 'en',
+    locale: SITE_SEO.locale,
     videos: [SHARE_VIDEO],
   },
   twitter: { card: 'summary_large_image' },
@@ -48,8 +47,11 @@ export const metadata: Metadata = {
 // page itself follows its own clock (src/lib/light.ts).
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fafafa' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+    {
+      media: '(prefers-color-scheme: light)',
+      color: SITE_SEO.themeColor.light,
+    },
+    { media: '(prefers-color-scheme: dark)', color: SITE_SEO.themeColor.dark },
   ],
 };
 

@@ -1,0 +1,27 @@
+/*
+ * Layer drawing: one face of the isometric stack. `--c` is the layer hue.
+ * The two offset shadows are the sides of the slab. Plain CSS, because the
+ * colours are mixed from a per-element variable.
+ */
+.layer-slab {
+  transform: rotateX(57deg) rotateZ(45deg);
+  background: color-mix(in srgb, var(--c) 30%, var(--bg));
+  color: color-mix(in srgb, var(--c) 70%, var(--ink));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--c) 45%, var(--bg)),
+    0.35rem 0.35rem 0 color-mix(in srgb, var(--c) 42%, var(--bg)),
+    0.7rem 0.7rem 0 color-mix(in srgb, var(--c) 34%, var(--bg));
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+}
+/* --bg, not white: the hues are light in the dark modes. */
+.layer-slab[data-lit] {
+  background: var(--c);
+  color: var(--bg);
+  box-shadow:
+    0 0 0 1px var(--c),
+    0.35rem 0.35rem 0 color-mix(in srgb, var(--c) 72%, #000),
+    0.7rem 0.7rem 0 color-mix(in srgb, var(--c) 55%, #000);
+}

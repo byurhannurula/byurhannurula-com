@@ -1,3 +1,5 @@
+import './request-hops.css';
+
 import { Smartphone } from 'lucide-react';
 
 import { SampleTag } from '@/components/shared/sample-tag';

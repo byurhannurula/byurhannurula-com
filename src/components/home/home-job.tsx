@@ -1,7 +1,7 @@
 import { AppIcon } from '@/components/home/app-icon';
 import { JobLadder } from '@/components/home/job-ladder';
 import { JobSummary } from '@/components/home/job-summary';
-import { JobTrack } from '@/components/home/job-track';
+import { CareerTrack } from '@/components/shared/career-track';
 import { ArrowLink } from '@/components/shared/arrow-link';
 import { CopyVariant } from '@/components/shared/copy-variant';
 import { Section } from '@/components/shared/section';
@@ -44,7 +44,7 @@ export function HomeJob() {
             />
           </p>
         </div>
-        <JobTrack roles={ROLES} />
+        <CareerTrack roles={ROLES} />
       </div>
       <JobSummary roles={ROLES} stack={WORK_STACK} />
       <JobLadder roles={ROLES} stack={WORK_STACK} />

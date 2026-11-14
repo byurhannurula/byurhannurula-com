@@ -4,14 +4,10 @@ import { RequestHops } from '@/components/homelab/request-hops';
 import { RulesList } from '@/components/homelab/rules-list';
 import { StatusSection } from '@/components/homelab/status-section';
 import { PageHero } from '@/components/shared/page-hero';
+import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
 
-export const metadata = pageMetadata({
-  path: '/homelab',
-  title: 'Homelab',
-  description:
-    'One mini PC, one Raspberry Pi and a 10 inch rack: what runs on them, how a request gets in, and the rules I keep.',
-});
+export const metadata = pageMetadata(PAGES.homelab);
 
 // No `revalidate` export here, on purpose. A segment value must be a literal,
 // so it cannot depend on the environment. The status fetch carries its own

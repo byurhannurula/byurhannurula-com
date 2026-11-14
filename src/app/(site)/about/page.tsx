@@ -10,10 +10,10 @@ import { NowSection } from '@/components/about/now-section';
 import { StackSection } from '@/components/about/stack-section';
 import { TopicsSection } from '@/components/about/topics-section';
 import { WaysSection } from '@/components/about/ways-section';
-import { ABOUT_META } from '@/content/about';
+import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
 
-export const metadata = pageMetadata({ path: '/about', ...ABOUT_META });
+export const metadata = pageMetadata(PAGES.about);
 
 export default function AboutPage() {
   return (

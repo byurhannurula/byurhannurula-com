@@ -13,15 +13,10 @@ import { ImageZoom } from '@/components/mdx/image-zoom';
 import { PageHero } from '@/components/shared/page-hero';
 import { Section } from '@/components/shared/section';
 import { DS_SECTIONS } from '@/config/design-system';
+import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
 
-export const metadata = pageMetadata({
-  path: '/design-system',
-  title: 'Design system',
-  description:
-    'The tokens, type, motion, components and options of this site, drawn from the live stylesheet and one config file.',
-  noindex: true,
-});
+export const metadata = pageMetadata(PAGES.designSystem);
 
 /** The body of each section in DS_SECTIONS, by id. */
 const BODIES: Record<string, ReactNode> = {

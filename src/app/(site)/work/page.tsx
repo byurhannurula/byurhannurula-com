@@ -8,14 +8,10 @@ import { ProjectStrips } from '@/components/work/project-strips';
 import { SmallProjects } from '@/components/work/small-projects';
 import { WorkArt } from '@/components/work/work-art';
 import { PROJECTS, SMALL_PROJECTS } from '@/content/projects';
+import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
 
-export const metadata = pageMetadata({
-  path: '/work',
-  title: 'Work',
-  description:
-    'Small tools that do one job well: Jotter, OGee and FullShot. Open source, built on my own time, with no data collection.',
-});
+export const metadata = pageMetadata(PAGES.work);
 
 export default function WorkPage() {
   return (

@@ -41,7 +41,7 @@ function describe(trigger: HTMLElement, src: string): ZoomedPicture {
  * Open a native dialog with the picture of any clicked `[data-zoom-src]`.
  * With view transitions the picture travels from its place in the text and
  * back. Without them, or when motion is off, the dialog gets `data-fade`
- * and CSS does a plain fade (src/styles/notes.css).
+ * and CSS does a plain fade (src/components/mdx/image-zoom.css).
  */
 export function useImageZoom() {
   const dialogRef = useRef<HTMLDialogElement>(null);

@@ -62,10 +62,57 @@
   }
 }
 
+/* The label swap after a copy ("Copied to clipboard"). */
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+
+/* An answer that opens under its question: it comes down, not up. */
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+    filter: blur(4px);
+  }
+}
+
+/* The heart of the like button. */
+@keyframes like-pop {
+  40% {
+    transform: scale(1.5) rotate(-12deg);
+  }
+}
+
+/* A status dot sends out one ring, then rests. */
+@keyframes pulse-ring {
+  70% {
+    box-shadow: 0 0 0 0.5rem transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+/*
+ * Every animation and curve with a Tailwind name is declared here, because
+ * `@theme` works only in the main stylesheet. Use them as `animate-draw`,
+ * `ease-island` and so on.
+ */
 @theme {
+  /* The contents island's own curve: a long, soft landing. */
+  --ease-island: cubic-bezier(0.22, 1, 0.36, 1);
+
   --animate-draw: draw 1.6s var(--ease-out-soft) both;
+  --animate-redraw: draw 0.9s var(--ease-out-soft);
   --animate-caret: caret 1.1s steps(1) infinite;
   --animate-blink: blink 2.6s steps(1) infinite;
   --animate-pop-in: pop-in 0.2s var(--ease-out-soft);
   --animate-rise-in: rise-in 0.35s var(--ease-out-soft) both;
+  --animate-blur-in: blur-in 0.22s var(--ease-out-soft) both;
+  --animate-faq-in: drop-in 0.4s var(--ease-out-soft);
+  --animate-like-pop: like-pop 0.45s var(--ease-out-soft);
+  --animate-lab-pulse: pulse-ring 2.4s infinite;
 }

@@ -1,0 +1,44 @@
+/*
+ * The filled part of the career track: three of four roles done. It grows
+ * when the track scrolls into view. Tailwind cannot say "start at zero only
+ * with JS, on a different axis for each breakpoint", so it is plain CSS.
+ */
+.track-fill {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  width: 2px;
+  height: calc(75% - 0.6rem);
+  border-radius: 2px;
+  background: linear-gradient(var(--line-strong), var(--accent-bright));
+  transform-origin: top;
+}
+@media (min-width: 48rem) {
+  .track-fill {
+    width: 75%;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--line-strong),
+      var(--accent-bright)
+    );
+    transform-origin: left;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] > .track-fill {
+    transform: scaleY(0);
+    transition: transform 1.2s 0.2s var(--ease-out-soft);
+  }
+  .js [data-reveal][data-in] > .track-fill {
+    transform: none;
+  }
+  @media (min-width: 48rem) {
+    .js [data-reveal]:not([data-in]) > .track-fill {
+      transform: scaleX(0);
+    }
+  }
+}
+[data-motion='off'] .track-fill {
+  transform: none !important;
+}
