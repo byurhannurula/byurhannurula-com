@@ -9,6 +9,7 @@ import {
   type Options,
 } from '@/config/options';
 import { isDarkMode, resolveLight } from '@/lib/light';
+import { transition } from '@/lib/view-transition';
 
 /**
  * Client store for the options. It is a module, not a context, so a server
@@ -85,7 +86,15 @@ export const getServerOptions = (): Options => DEFAULT_OPTIONS;
 
 export function setOption(key: OptionKey, value: string) {
   if (!isValidChoice(key, value)) return;
-  commit({ ...getOptions(), [key]: value });
+  const next = { ...getOptions(), [key]: value };
+  const lightChanges =
+    key === 'light' &&
+    resolveLight(value) !== document.documentElement.dataset.light;
+  if (lightChanges && next.themefx !== 'off') {
+    transition('theme', () => commit(next));
+    return;
+  }
+  commit(next);
 }
 
 export function resetOptions() {

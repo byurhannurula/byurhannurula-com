@@ -32,6 +32,7 @@ export function FooterTools() {
       <LightMenu>
         <button
           type="button"
+          data-light-switch
           className={`${tool} in-data-[fctl=on]:inline-flex`}
         >
           <CommandIcon name="light" />

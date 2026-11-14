@@ -15,6 +15,7 @@ import { JsonLd, person, website } from '@/components/json-ld';
 import { ScrollTop } from '@/components/layout/scroll-top';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteNav } from '@/components/layout/site-nav';
+import { PageTransitions } from '@/components/shared/page-transitions';
 import { PatternLayer } from '@/components/shared/patterns/pattern-layer';
 import { RevealObserver } from '@/components/shared/reveal-observer';
 import { SoundHover } from '@/components/shared/sound-hover';
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <SiteFooter />
         <PatternLayer place="bottom" />
         <ScrollTop />
+        <PageTransitions />
         <CommandMenu />
         {/* Design tool. Delete it, and src/components/config, at launch. */}
         <ConfigPanel />

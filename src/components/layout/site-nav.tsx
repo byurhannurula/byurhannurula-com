@@ -28,6 +28,7 @@ export function SiteNav() {
           <button
             type="button"
             aria-label={LIGHT_MENU_LABEL}
+            data-light-switch
             className={`${iconButton} active:scale-[0.92] active:rotate-40`}
           >
             <Sun aria-hidden className="dark:hidden" />

@@ -37,6 +37,7 @@ export const OPTION_GROUPS = {
     radius: def('corners', ['round'], ['small'], ['large']),
     sound: def('sound', ['off'], ['on', 'hover + panels']),
     homelab: def('homelab page', ['on'], ['off']),
+    nf: def('404 page', ['plain'], ['puzzle', 'dot puzzle']),
     lab: def('homelab layout', ['rack'], ['lists']),
   },
   Look: {
@@ -65,6 +66,7 @@ export const OPTION_GROUPS = {
       ['grain'],
       ['flicker', 'flicker dots'],
       ['connect', 'dots that connect'],
+      ['cursor', 'dots follow cursor'],
     ),
     density: def('spacing', ['normal'], ['compact'], ['roomy']),
     lines: def('divider lines', ['on'], ['off']),
@@ -74,6 +76,19 @@ export const OPTION_GROUPS = {
       ['off'],
       ['button', 'round button'],
       ['ring', 'button with progress ring'],
+    ),
+    themefx: def(
+      'light change',
+      ['off', 'instant'],
+      ['circle', 'circle from button'],
+      ['wipe', 'wipe down'],
+    ),
+    pagefx: def(
+      'page change',
+      ['off', 'instant'],
+      ['fade'],
+      ['slide'],
+      ['rise', 'rise + blur'],
     ),
   },
   Home: {
@@ -128,6 +143,17 @@ export const OPTION_GROUPS = {
     psize: def('text size', ['normal'], ['small'], ['large']),
     related: def('keep reading', ['on'], ['off']),
     notegroup: def('notes list', ['flat'], ['year', 'by year']),
+    zoomnav: def('picture zoom', ['single'], ['browse', 'browse the grid']),
+    imgload: def(
+      'picture loading',
+      ['plain'],
+      ['blur', 'blurred preview'],
+      ['shimmer'],
+    ),
+    linkcard: def('link preview', ['off'], ['on', 'card on hover']),
+    fnote: def('footnotes', ['bottom'], ['side', 'in the margin']),
+    likefx: def('like', ['plain'], ['confetti']),
+    readfx: def('note finished', ['off'], ['confetti']),
   },
   Work: {
     work: def(
