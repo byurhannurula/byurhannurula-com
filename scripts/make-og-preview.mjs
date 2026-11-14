@@ -970,7 +970,457 @@ function designP(page, c = DARK) {
   );
 }
 
+// ---- round three: colour as a surface, and squares that say something ----
+
+const INK = '#0a0a0a';
+
+/** Three colours for each page: the page hue and two that sit well with it. */
+const TRIO = {
+  home: ['#4ade80', '#facc15', '#60a5fa'],
+  about: ['#f472b6', '#fb923c', '#a78bfa'],
+  work: ['#60a5fa', '#22d3ee', '#4ade80'],
+  notes: ['#fb923c', '#facc15', '#f472b6'],
+  note: ['#fb923c', '#facc15', '#f472b6'],
+  uses: ['#a78bfa', '#f472b6', '#60a5fa'],
+  homelab: ['#22d3ee', '#4ade80', '#a78bfa'],
+};
+const SITE_HUES = [
+  '#f472b6',
+  '#fb923c',
+  '#facc15',
+  '#4ade80',
+  '#22d3ee',
+  '#60a5fa',
+  '#a78bfa',
+];
+const pageWord = (page) => (page.eyebrow === 'home' ? 'byurhan' : page.eyebrow);
+
+// 5 by 7 letters, one string per row, for the words the site needs.
+const GLYPH = {
+  A: ['01110', '10001', '10001', '11111', '10001', '10001', '10001'],
+  B: ['11110', '10001', '10001', '11110', '10001', '10001', '11110'],
+  E: ['11111', '10000', '10000', '11110', '10000', '10000', '11111'],
+  H: ['10001', '10001', '10001', '11111', '10001', '10001', '10001'],
+  K: ['10001', '10010', '10100', '11000', '10100', '10010', '10001'],
+  L: ['10000', '10000', '10000', '10000', '10000', '10000', '11111'],
+  M: ['10001', '11011', '10101', '10101', '10001', '10001', '10001'],
+  N: ['10001', '11001', '10101', '10011', '10001', '10001', '10001'],
+  O: ['01110', '10001', '10001', '10001', '10001', '10001', '01110'],
+  R: ['11110', '10001', '10001', '11110', '10100', '10010', '10001'],
+  S: ['01111', '10000', '10000', '01110', '00001', '00001', '11110'],
+  T: ['11111', '00100', '00100', '00100', '00100', '00100', '00100'],
+  U: ['10001', '10001', '10001', '10001', '10001', '10001', '01110'],
+  W: ['10001', '10001', '10001', '10101', '10101', '11011', '10001'],
+  Y: ['10001', '10001', '01010', '00100', '00100', '00100', '00100'],
+};
+
+const MORSE = {
+  A: '.-',
+  B: '-...',
+  E: '.',
+  H: '....',
+  K: '-.-',
+  L: '.-..',
+  M: '--',
+  N: '-.',
+  O: '---',
+  R: '.-.',
+  S: '...',
+  T: '-',
+  U: '..-',
+  W: '.--',
+  Y: '-.--',
+};
+
+// Q: the cut wordmark, with detail. The wordmark stands on a colour floor
+// and is cut by the edge; above it: the address, the title, and the row of
+// page marks with this page lit, like a small map of the site.
+function designQ(page) {
+  const [hue, second] =
+    TRIO[page.key === 'note-long' ? 'note' : page.key] ?? TRIO.home;
+  const c = DARK;
+  const map = PAGES.slice(0, 6).map((p) =>
+    el(
+      'div',
+      {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 44,
+        height: 44,
+        borderRadius: 14,
+        background:
+          p.eyebrow === page.eyebrow || (page.cover && p.key === 'notes')
+            ? hue
+            : c.card,
+      },
+      [
+        mark(
+          p,
+          20,
+          p.eyebrow === page.eyebrow || (page.cover && p.key === 'notes')
+            ? INK
+            : c.faint,
+        ),
+      ],
+    ),
+  );
+  return frameBox(c, [
+    el(
+      'div',
+      {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 22,
+        padding: '52px 64px 0',
+        height: 330,
+      },
+      [
+        row(
+          {
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: 1072,
+          },
+          [
+            row(
+              { fontSize: 24, color: c.soft, letterSpacing: 1 },
+              `byurhannurula.com/${page.path}`,
+            ),
+            row({ gap: 10 }, map),
+          ],
+        ),
+        title(page, 0.7, { maxWidth: 940 }),
+      ],
+    ),
+    el('div', {
+      display: 'flex',
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      height: 300,
+      background: hue,
+    }),
+    el(
+      'div',
+      {
+        display: 'flex',
+        position: 'absolute',
+        right: 64,
+        bottom: 236,
+        padding: '10px 20px',
+        borderRadius: 999,
+        background: INK,
+        color: hue,
+        fontSize: 24,
+      },
+      page.meta,
+    ),
+    el(
+      'div',
+      {
+        display: 'flex',
+        position: 'absolute',
+        left: 64,
+        bottom: 244,
+        fontSize: 24,
+        color: INK,
+      },
+      page.eyebrow,
+    ),
+    row(
+      {
+        position: 'absolute',
+        left: 48,
+        bottom: -70,
+        width: 1400,
+        whiteSpace: 'nowrap',
+        fontSize: 270,
+        fontWeight: 700,
+        letterSpacing: -15,
+        lineHeight: 1,
+        color: INK,
+      },
+      'byurhan',
+    ),
+    el('div', {
+      display: 'flex',
+      position: 'absolute',
+      right: 70,
+      bottom: 34,
+      width: 58,
+      height: 58,
+      borderRadius: 16,
+      background: second,
+    }),
+  ]);
+}
+
+// R: squares that say something. The field is the status and contribution
+// grid of the site, and the lit squares spell the page name.
+function designR(page) {
+  const [hue, second] =
+    TRIO[page.key === 'note-long' ? 'note' : page.key] ?? TRIO.home;
+  const bg = mix(hue, INK, 0.14);
+  const dim = mix(hue, INK, 0.26);
+  const word = pageWord(page).toUpperCase();
+  const cols = 45;
+  const rows = 9;
+  const start = Math.floor((cols - (word.length * 6 - 1)) / 2);
+  let state = word.length * 131;
+  const next = () => {
+    state = (state * 1103515245 + 12345) % 2147483648;
+    return state / 2147483648;
+  };
+  // One flex row for each line: a wrapped list can break one square early
+  // and shift every letter.
+  const lines = [];
+  for (let y = 0; y < rows; y += 1) {
+    const cells = [];
+    lines.push(row({ gap: 4 }, cells));
+    for (let x = 0; x < cols; x += 1) {
+      const offset = x - start;
+      const letter = GLYPH[word[Math.floor(offset / 6)]];
+      const inWord =
+        offset >= 0 &&
+        offset % 6 < 5 &&
+        y >= 1 &&
+        y <= 7 &&
+        letter?.[y - 1][offset % 6] === '1';
+      // a few stray squares, like quiet days in a contribution graph
+      const stray = !inWord && next() < 0.045;
+      cells.push(
+        el('div', {
+          display: 'flex',
+          width: 19.5,
+          height: 19.5,
+          borderRadius: 5,
+          background: inWord ? hue : stray ? second : dim,
+          opacity: stray ? 0.55 : 1,
+        }),
+      );
+    }
+  }
+  return frameBox(
+    { bg, ink: DARK.ink },
+    [
+      row({ alignItems: 'center', justifyContent: 'space-between' }, [
+        wordmark(DARK, 34, hue),
+        row({ fontSize: 24, color: mix(hue, '#ffffff', 0.5) }, page.meta),
+      ]),
+      row(
+        {
+          fontSize: titleSize(page.title, 0.6),
+          fontWeight: 700,
+          letterSpacing: -1.5,
+          lineHeight: 1.1,
+          maxWidth: 960,
+          marginTop: 30,
+        },
+        page.title,
+      ),
+      el(
+        'div',
+        { display: 'flex', flexDirection: 'column', gap: 4, marginTop: 'auto' },
+        lines,
+      ),
+    ],
+    { flexDirection: 'column', padding: '56px 72px 56px' },
+  );
+}
+
+// S: the page name in Morse code. Dots and dashes, a letter under each
+// group, one colour for each letter. A reader who knows Morse gets a gift.
+function designS(page) {
+  const [hue] = TRIO[page.key === 'note-long' ? 'note' : page.key] ?? TRIO.home;
+  const bg = mix(hue, '#ffffff', 0.22);
+  const line = (word, unit, colours) =>
+    row(
+      { alignItems: 'flex-start', gap: unit * 1.5 },
+      [...word.toUpperCase()].map((letter, index) =>
+        el(
+          'div',
+          { display: 'flex', flexDirection: 'column', gap: unit * 0.55 },
+          [
+            row(
+              { gap: unit * 0.4 },
+              [...MORSE[letter]].map((sign) =>
+                el('div', {
+                  display: 'flex',
+                  width: sign === '-' ? unit * 3 : unit,
+                  height: unit,
+                  borderRadius: unit / 2,
+                  background: colours[index % colours.length],
+                }),
+              ),
+            ),
+            row(
+              { fontSize: unit * 0.85, color: mix(INK, bg, 0.6) },
+              letter.toLowerCase(),
+            ),
+          ],
+        ),
+      ),
+    );
+  const dark = SITE_HUES.map((colour) => mix(colour, INK, 0.72));
+  return frameBox(
+    { bg, ink: INK },
+    [
+      row(
+        { alignItems: 'center', justifyContent: 'space-between', fontSize: 26 },
+        [
+          row({ fontWeight: 700 }, 'byurhan.'),
+          row({ color: mix(INK, bg, 0.6) }, 'in Morse code'),
+        ],
+      ),
+      el('div', { display: 'flex', flexDirection: 'column', gap: 34 }, [
+        line('byurhan', 20, dark),
+        line(pageWord(page) === 'byurhan' ? 'home' : pageWord(page), 30, [INK]),
+      ]),
+      row(
+        {
+          fontSize: titleSize(page.title, 0.52),
+          fontWeight: 700,
+          letterSpacing: -1,
+          lineHeight: 1.15,
+          maxWidth: 980,
+        },
+        page.title,
+      ),
+    ],
+    { flexDirection: 'column', justifyContent: 'space-between', padding: 64 },
+  );
+}
+
+// T: three large shapes in three colours, cut by the edges. The shapes are
+// the page mark at poster size; the title sits on the first colour.
+function designT(page) {
+  const [hue, second, third] =
+    TRIO[page.key === 'note-long' ? 'note' : page.key] ?? TRIO.home;
+  return frameBox({ bg: hue, ink: INK }, [
+    el('div', {
+      display: 'flex',
+      position: 'absolute',
+      right: -120,
+      top: -150,
+      width: 520,
+      height: 520,
+      borderRadius: 260,
+      background: second,
+    }),
+    el('div', {
+      display: 'flex',
+      position: 'absolute',
+      right: 150,
+      bottom: -190,
+      width: 420,
+      height: 420,
+      borderRadius: 96,
+      background: third,
+      transform: 'rotate(18deg)',
+    }),
+    el(
+      'div',
+      {
+        display: 'flex',
+        position: 'absolute',
+        right: 96,
+        top: 210,
+        width: 150,
+        height: 150,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 44,
+        background: INK,
+      },
+      [mark(page, 70, hue)],
+    ),
+    el(
+      'div',
+      {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        width: 720,
+        padding: 64,
+      },
+      [
+        row({ fontSize: 34, fontWeight: 700 }, 'byurhan.'),
+        title(page, 0.84),
+        row({ fontSize: 26 }, page.meta),
+      ],
+    ),
+  ]);
+}
+
+// U: seven bars in the seven colours of the site, like a level meter. The
+// bar of this page is the tall one and carries its name.
+function designU(page, c = WARM) {
+  const [hue] = TRIO[page.key === 'note-long' ? 'note' : page.key] ?? TRIO.home;
+  const names = ['about', 'notes', 'now', 'home', 'homelab', 'work', 'uses'];
+  const mine = page.eyebrow === 'note' ? 'notes' : page.eyebrow;
+  const heights = [150, 210, 120, 190, 160, 230, 140];
+  return frameBox(c, [
+    el(
+      'div',
+      {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 22,
+        padding: '60px 72px 0',
+      },
+      [
+        row(
+          {
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: 1056,
+          },
+          [wordmark(c, 34), row({ fontSize: 26, color: c.soft }, page.meta)],
+        ),
+        title(page, 0.7, { maxWidth: 1000 }),
+      ],
+    ),
+    row(
+      {
+        position: 'absolute',
+        left: 72,
+        right: 72,
+        bottom: 0,
+        alignItems: 'flex-end',
+        gap: 18,
+      },
+      SITE_HUES.map((colour, index) => {
+        const on = names[index] === mine;
+        return el(
+          'div',
+          {
+            display: 'flex',
+            flex: 1,
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            height: on ? 290 : heights[index],
+            paddingTop: 18,
+            borderRadius: '26px 26px 0 0',
+            background: on ? hue : mix(colour, c.bg, 0.5),
+            color: INK,
+            fontSize: 24,
+            fontWeight: 700,
+          },
+          on ? mine : '',
+        );
+      }),
+    ),
+  ]);
+}
+
 const DESIGNS = {
+  q: designQ,
+  r: designR,
+  s: designS,
+  t: designT,
+  u: designU,
   k: designK,
   l: designL,
   m: designM,
