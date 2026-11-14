@@ -47,7 +47,7 @@ function Filter() {
             className="sr-only"
           />
           {chip.label}
-          <span className="font-mono text-xs opacity-60">{chip.count}</span>
+          <span className="font-mono text-xs">{chip.count}</span>
         </label>
       ))}
     </fieldset>

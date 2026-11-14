@@ -1,5 +1,6 @@
 import { ColophonArt } from '@/components/colophon/colophon-art';
 import { ColourModes } from '@/components/colophon/colour-modes';
+import { ScoreRing } from '@/components/colophon/score-ring';
 import { TextLink } from '@/components/links/text-link';
 import { CareerTrack } from '@/components/shared/career-track';
 import { PageHero } from '@/components/shared/page-hero';
@@ -14,6 +15,7 @@ import {
   INSPIRATION,
   LINEAGE,
   PROCESS,
+  SITE_SCORES,
   TYPEFACES,
 } from '@/content/colophon';
 import { brand } from '@/lib/brand';
@@ -60,6 +62,17 @@ export default function ColophonPage() {
             </li>
           ))}
         </ol>
+      </Section>
+
+      <Section title="Scores" sub={SITE_SCORES.sub}>
+        <div data-reveal className="flex flex-wrap gap-8">
+          {SITE_SCORES.scores.map((score) => (
+            <ScoreRing key={score.label} {...score} />
+          ))}
+        </div>
+        <p className="mt-6 label-mono text-faint">
+          Last run: {SITE_SCORES.ranOn}
+        </p>
       </Section>
 
       <Section title="Type" sub="Three faces, each with one job.">

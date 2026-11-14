@@ -1,4 +1,4 @@
-import type { Score } from '@/content/home';
+import type { Score } from '@/content/colophon';
 import { cn } from '@/lib/utils';
 
 /** One audit score as a ring that draws itself when it comes into view. */

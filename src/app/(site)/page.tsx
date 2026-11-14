@@ -1,7 +1,6 @@
 import { HomeHero } from '@/components/home/home-hero';
 import { HomeJob } from '@/components/home/home-job';
 import { HomeProjects } from '@/components/home/home-projects';
-import { HomeSite } from '@/components/home/home-site';
 import { HomeTil } from '@/components/home/home-til';
 import { NoteItem } from '@/components/notes/note-item';
 import { ArrowLink } from '@/components/shared/arrow-link';
@@ -42,7 +41,6 @@ export default async function HomePage() {
       >
         <NowBlock />
       </Section>
-      <HomeSite />
     </div>
   );
 }

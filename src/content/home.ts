@@ -120,24 +120,3 @@ export const JOB_SECTION = {
 export const NOTE_SECTION = { title: 'Latest note', action: 'All notes' };
 
 export const NOW_SECTION = { title: 'Now', action: 'More about me' };
-
-export interface Score {
-  label: string;
-  value: number;
-  /** Static stroke class, so Tailwind finds it. */
-  tone: string;
-}
-
-export const SITE_SECTION = {
-  title: 'This site',
-  action: 'Source',
-  text: 'This site is my playground for quality and speed. It is the fourth rebuild, made with Next.js and Tailwind and served from Cloudflare. It has no tracking.',
-  sample: 'sample scores',
-} as const;
-
-export const SITE_SCORES: Score[] = [
-  { label: 'Performance', value: 100, tone: 'stroke-hue-6' },
-  { label: 'Accessibility', value: 100, tone: 'stroke-hue-2' },
-  { label: 'Best practices', value: 100, tone: 'stroke-hue-3' },
-  { label: 'SEO', value: 100, tone: 'stroke-hue-5' },
-];

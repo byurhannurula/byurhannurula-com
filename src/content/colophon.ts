@@ -13,6 +13,29 @@ export const BUILT_WITH = {
   text: 'The pages are server components in Next.js 16 and React 19, written in strict TypeScript and styled with Tailwind CSS 4. Notes are MDX files in the repository. The site is static and runs on Cloudflare Workers.',
 } as const;
 
+export interface Score {
+  label: string;
+  value: number;
+  /** Static stroke class, so Tailwind finds it. */
+  tone: string;
+}
+
+/**
+ * Lighthouse CI on the production build, mobile with simulated slow 4G:
+ * the median of the eight pages in lighthouserc.json. Update after
+ * `pnpm lighthouse`.
+ */
+export const SITE_SCORES = {
+  ranOn: '14 November 2026',
+  sub: 'Lighthouse on a simulated slow phone. The median of eight pages.',
+  scores: [
+    { label: 'Performance', value: 91, tone: 'stroke-hue-6' },
+    { label: 'Accessibility', value: 100, tone: 'stroke-hue-2' },
+    { label: 'Best practices', value: 100, tone: 'stroke-hue-3' },
+    { label: 'SEO', value: 100, tone: 'stroke-hue-5' },
+  ] satisfies Score[],
+} as const;
+
 export interface Decision {
   title: string;
   text: string;
