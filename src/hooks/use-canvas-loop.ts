@@ -12,6 +12,8 @@ export interface CanvasScene {
   frame(ctx: CanvasRenderingContext2D, dt: number): void;
   /** One finished picture, for readers who asked for a still page. */
   still(ctx: CanvasRenderingContext2D): void;
+  /** Remove listeners the scene added. */
+  dispose?(): void;
 }
 
 const isStill = () =>
@@ -113,6 +115,7 @@ export function useCanvasLoop(
       view.disconnect();
       options.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
+      scene.dispose?.();
       el.remove();
     };
   }, [container, createScene, fps]);

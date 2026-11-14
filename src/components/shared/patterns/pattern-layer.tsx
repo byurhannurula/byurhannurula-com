@@ -15,6 +15,16 @@ const ConnectDots = dynamic(
   { ssr: false },
 );
 
+const CursorDots = dynamic(
+  () => import('./cursor-dots').then((m) => m.CursorDots),
+  { ssr: false },
+);
+const LAYERS = {
+  flicker: FlickerDots,
+  connect: ConnectDots,
+  cursor: CursorDots,
+} as const;
+
 const PLACE = {
   // Same band as the CSS `dots` and `grid` backgrounds (options.css).
   top: {
@@ -36,7 +46,8 @@ const PLACE = {
 export function PatternLayer({ place }: { place: keyof typeof PLACE }) {
   const { option, className } = PLACE[place];
   const value = useOption(option);
-  if (value !== 'flicker' && value !== 'connect') return null;
+  if (!(value in LAYERS)) return null;
+  const Layer = LAYERS[value as keyof typeof LAYERS];
 
   return (
     <div
@@ -46,7 +57,7 @@ export function PatternLayer({ place }: { place: keyof typeof PLACE }) {
         className,
       )}
     >
-      {value === 'flicker' ? <FlickerDots /> : <ConnectDots />}
+      <Layer />
     </div>
   );
 }
