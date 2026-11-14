@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+import { ArrowLink } from '@/components/shared/arrow-link';
 import { SampleTag } from '@/components/shared/sample-tag';
 import { Section } from '@/components/shared/section';
 import { BOOKS, SHELF_SECTION } from '@/content/books';
@@ -25,6 +26,7 @@ export function BookShelf() {
     <Section
       title={SHELF_SECTION.title}
       sub={<SampleTag className="mt-1">{SHELF_SECTION.sample}</SampleTag>}
+      action={<ArrowLink href="/shelf">Books, films and shows</ArrowLink>}
       className="hidden in-data-[shelf=on]:block"
     >
       {/* On a phone the row scrolls sideways and bleeds to the screen edges.

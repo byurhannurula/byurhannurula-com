@@ -1,0 +1,9 @@
+/*
+ * The kind filter of the shelf works without JavaScript: a checked radio
+ * hides the items of the other kinds. One rule for each kind.
+ */
+.shelf:has(#shelf-book:checked) [data-kind]:not([data-kind='book']),
+.shelf:has(#shelf-film:checked) [data-kind]:not([data-kind='film']),
+.shelf:has(#shelf-show:checked) [data-kind]:not([data-kind='show']) {
+  display: none;
+}

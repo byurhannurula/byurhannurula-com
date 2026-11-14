@@ -26,6 +26,7 @@ const HUES = {
   note: '#fb923c',
   uses: '#a78bfa',
   homelab: '#22d3ee',
+  shelf: '#f87171',
   colophon: '#facc15',
 } as const;
 

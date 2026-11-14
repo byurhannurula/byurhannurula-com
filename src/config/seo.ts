@@ -32,6 +32,7 @@ export type ShareKind =
   | 'note'
   | 'uses'
   | 'homelab'
+  | 'shelf'
   | 'colophon';
 
 export interface PageSeo {
@@ -131,6 +132,19 @@ export const PAGES = {
       title: 'A small homelab that I run like production.',
       meta: 'A hobby, not my job.',
       alt: `The homelab of ${brand.name}`,
+    },
+  },
+  shelf: {
+    path: '/shelf',
+    title: 'Shelf',
+    description:
+      'Books, films and shows I read and watch, with one line on each and a mark on the ones I went back to a second time.',
+    share: {
+      kind: 'shelf',
+      eyebrow: 'shelf',
+      title: 'Books, films and shows.',
+      meta: 'One line on each.',
+      alt: `The shelf of ${brand.name}`,
     },
   },
   colophon: {

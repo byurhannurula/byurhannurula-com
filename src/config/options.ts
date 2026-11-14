@@ -39,6 +39,7 @@ export const OPTION_GROUPS = {
     homelab: def('homelab page', ['on'], ['off']),
     nf: def('404 page', ['plain'], ['puzzle', 'dot puzzle']),
     lab: def('homelab layout', ['rack'], ['lists']),
+    shelfview: def('shelf layout', ['tiles'], ['list']),
   },
   Look: {
     nav: def('nav bar', ['wide'], ['pill']),
