@@ -105,20 +105,20 @@
 /* spacing */
 :root {
   --section-gap: 5rem;
-  --hero-gap: 4.5rem;
+  --hero-gap: 7rem;
 }
 [data-density='compact'] {
   --section-gap: 3.25rem;
-  --hero-gap: 3rem;
+  --hero-gap: 5rem;
 }
 [data-density='roomy'] {
   --section-gap: 7rem;
-  --hero-gap: 6.5rem;
+  --hero-gap: 9rem;
 }
 @media (max-width: 860px) {
   :root {
     --section-gap: 3.5rem;
-    --hero-gap: 3rem;
+    --hero-gap: 4.5rem;
   }
 }
 

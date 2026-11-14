@@ -13,7 +13,9 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <section className="pt-(--hero-gap) pb-8">
-      <p className="mb-6 label-mono font-medium text-soft">404</p>
+      <p className="mb-5 text-[clamp(5.5rem,18vw,11rem)] leading-[0.85] font-bold tracking-[-0.06em] text-ink">
+        404<span className="text-accent">.</span>
+      </p>
       <PageTitle
         title="This page is not here."
         titleEnd="It moved, or it never existed."

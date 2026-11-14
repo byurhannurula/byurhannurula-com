@@ -11,7 +11,7 @@ export const NOTE_COLUMN =
 /** The top of a note: back link, title, lead, date, reading time and tags. */
 export function NoteHeader({ note }: { note: NoteMeta }) {
   return (
-    <header className={cn(NOTE_COLUMN, 'pt-16 pb-10')}>
+    <header className={cn(NOTE_COLUMN, 'pt-(--hero-gap) pb-10')}>
       <BackLink href="/notes">Notes</BackLink>
       <PageTitle
         title={note.title}

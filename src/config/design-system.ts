@@ -438,7 +438,7 @@ export const GAPS: SpaceToken[] = [
 ];
 
 export const GAP_NOTE =
-  'Below 860 px the normal gaps are 3.5rem and 3rem, so a phone does not scroll through air.';
+  'Below 860 px the normal gaps are 3.5rem and 4.5rem, so a phone does not scroll through air.';
 
 export const WIDTHS: SpaceToken[] = [
   {
@@ -490,9 +490,9 @@ export const OPTION_VARS: Partial<Record<OptionKey, Record<string, CssVars>>> =
       },
     },
     density: {
-      normal: { '--section-gap': '5rem', '--hero-gap': '4.5rem' },
-      compact: { '--section-gap': '3.25rem', '--hero-gap': '3rem' },
-      roomy: { '--section-gap': '7rem', '--hero-gap': '6.5rem' },
+      normal: { '--section-gap': '5rem', '--hero-gap': '7rem' },
+      compact: { '--section-gap': '3.25rem', '--hero-gap': '5rem' },
+      roomy: { '--section-gap': '7rem', '--hero-gap': '9rem' },
     },
     lines: {
       on: { '--rule': 'var(--line)' },
