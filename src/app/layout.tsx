@@ -15,6 +15,7 @@ import { JsonLd, person, website } from '@/components/json-ld';
 import { ScrollTop } from '@/components/layout/scroll-top';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteNav } from '@/components/layout/site-nav';
+import { PatternLayer } from '@/components/shared/patterns/pattern-layer';
 import { RevealObserver } from '@/components/shared/reveal-observer';
 import { SoundHover } from '@/components/shared/sound-hover';
 import { TabAwayIcon } from '@/components/shared/tab-away-icon';
@@ -68,18 +69,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <OptionsScript />
       </head>
-      <body className="min-h-dvh">
+      <body className="flow-root min-h-dvh">
         <a
           href="#main"
           className="sr-only z-50 rounded-full bg-ink px-4 py-2 text-bg focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
         >
           Skip to content
         </a>
+        <PatternLayer place="top" />
         <SiteNav />
         <main id="main" tabIndex={-1} className="wrap outline-none">
           {children}
         </main>
         <SiteFooter />
+        <PatternLayer place="bottom" />
         <ScrollTop />
         <CommandMenu />
         {/* Design tool. Delete it, and src/components/config, at launch. */}

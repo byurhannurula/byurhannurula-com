@@ -57,7 +57,15 @@ export const OPTION_GROUPS = {
       ['large'],
     ),
     colour: def('colour', ['quiet'], ['sections', 'section marks']),
-    bg: def('background', ['plain'], ['dots'], ['grid'], ['grain']),
+    bg: def(
+      'background',
+      ['plain'],
+      ['dots'],
+      ['grid'],
+      ['grain'],
+      ['flicker', 'flicker dots'],
+      ['connect', 'dots that connect'],
+    ),
     density: def('spacing', ['normal'], ['compact'], ['roomy']),
     lines: def('divider lines', ['on'], ['off']),
     motion: def('motion', ['on'], ['off']),
@@ -155,6 +163,12 @@ export const OPTION_GROUPS = {
     fmeta: def('meta line', ['off'], ['on']),
     fctl: def('theme + sound', ['off'], ['on']),
     ftop: def('back to top', ['off'], ['on']),
+    fbg: def(
+      'pattern',
+      ['off'],
+      ['flicker', 'flicker dots'],
+      ['connect', 'dots that connect'],
+    ),
   },
 } as const;
 
