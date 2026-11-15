@@ -28,6 +28,7 @@ export const routes = [
   '/shelf',
   '/cv',
   '/colophon',
+  '/design-system',
 ] as const;
 
 export const absoluteUrl = (path: string) => new URL(path, siteUrl).href;

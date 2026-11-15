@@ -71,6 +71,11 @@ export const DS_SECTIONS: DsSection[] = [
     title: 'Options',
     sub: 'Every open design choice. A click sets it for the whole site.',
   },
+  {
+    id: 'changes',
+    title: 'Changes',
+    sub: 'Every commit that touched the styles, components or options, read from git at each deploy.',
+  },
 ];
 
 /* ------------------------------------------------------------------ */

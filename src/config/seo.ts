@@ -177,8 +177,7 @@ export const PAGES = {
     path: '/design-system',
     title: 'Design system',
     description:
-      'The tokens, type, motion, components and options of this site, drawn from the live stylesheet and one config file.',
-    noindex: true,
+      'The tokens, type, motion, components and options of this site, drawn from the live stylesheet and one config file, with a history of every design change.',
     share: {
       kind: 'home',
       eyebrow: 'design system',

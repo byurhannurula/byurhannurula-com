@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
 
+import { ChangesSection } from '@/components/design-system/changes-section';
 import { ColourSection } from '@/components/design-system/colour-section';
 import { ComponentsSection } from '@/components/design-system/components-section';
+import { DsStats } from '@/components/design-system/ds-stats';
 import { DetachOptions } from '@/components/design-system/detach-options';
 import { LinksSection } from '@/components/design-system/links-section';
 import { MotionSection } from '@/components/design-system/motion-section';
@@ -14,12 +16,16 @@ import { PageHero } from '@/components/shared/page-hero';
 import { Section } from '@/components/shared/section';
 import { DS_SECTIONS } from '@/config/design-system';
 import { PAGES } from '@/config/seo';
+import { getDesignLog } from '@/lib/design-log';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata(PAGES.designSystem);
 
+const log = getDesignLog();
+
 /** The body of each section in DS_SECTIONS, by id. */
 const BODIES: Record<string, ReactNode> = {
+  changes: <ChangesSection log={log} />,
   colour: <ColourSection />,
   type: <TypeSection />,
   shape: <ShapeSection />,
@@ -33,11 +39,12 @@ export default function DesignSystemPage() {
     <>
       <DetachOptions />
       <PageHero
-        eyebrow="A tool, not a page of the site"
+        eyebrow="Built from the live code at every deploy"
         title="Design system,"
         titleEnd="live."
-        lead="What this site is made of: colour, type, shape, motion and components. It is drawn from one config file and the live stylesheet, so a change there shows here."
+        lead="What this site is made of: colour, type, shape, motion and components. It is drawn from one config file and the live stylesheet, so a change there shows here, and the history below grows with each change."
       />
+      <DsStats log={log} />
       <div className="grid gap-x-12 lg:grid-cols-[9rem_minmax(0,1fr)]">
         {/* The index starts level with the first section title. */}
         <div className="hidden pt-(--section-gap) lg:block">

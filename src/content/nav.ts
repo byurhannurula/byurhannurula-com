@@ -33,6 +33,11 @@ export const FOOTER_ITEMS: NavItem[] = [
     keywords: 'books films movies shows reading watching',
   },
   {
+    label: 'Design system',
+    href: '/design-system',
+    keywords: 'tokens colours type components styleguide changes',
+  },
+  {
     label: 'Colophon',
     href: '/colophon',
     keywords: 'how this site is made stack fonts colours credits',
