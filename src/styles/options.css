@@ -203,6 +203,67 @@ body::before {
     linear-gradient(90deg, var(--line) 1px, transparent 1px) 50% 0 / 3rem 100%;
   mask-image: linear-gradient(#000, transparent);
 }
+/* aurora: three soft colour clouds that drift; CSS only */
+@property --aurora-t {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+[data-bg='aurora'] body::before {
+  height: 34rem;
+  background:
+    radial-gradient(
+      40% 60% at calc(20% + var(--aurora-t) * 18%) 20%,
+      color-mix(in oklab, var(--accent) 34%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      35% 55% at calc(78% - var(--aurora-t) * 22%) 10%,
+      color-mix(in oklab, #60a5fa 30%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      30% 50% at 50% calc(40% - var(--aurora-t) * 20%),
+      color-mix(in oklab, #f472b6 22%, transparent),
+      transparent 70%
+    );
+  filter: blur(48px) saturate(1.2);
+  opacity: 0.55;
+  mask-image: linear-gradient(#000 30%, transparent);
+  animation: aurora 22s ease-in-out infinite alternate;
+}
+@keyframes aurora {
+  to {
+    --aurora-t: 1;
+  }
+}
+
+/* beams: soft rays from above the page, swaying a little; CSS only */
+@property --beam-turn {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+[data-bg='beams'] body::before {
+  height: 40rem;
+  background: repeating-conic-gradient(
+    from calc(160deg + var(--beam-turn)) at 50% -30%,
+    transparent 0deg,
+    color-mix(in oklab, var(--ink) 7%, transparent) 2deg,
+    transparent 5deg,
+    transparent 9deg,
+    color-mix(in oklab, var(--accent) 9%, transparent) 10.5deg,
+    transparent 13deg
+  );
+  mask-image: radial-gradient(70% 90% at 50% 0, #000, transparent);
+  animation: beams 16s ease-in-out infinite alternate;
+}
+@keyframes beams {
+  to {
+    --beam-turn: 6deg;
+  }
+}
+
 [data-bg='grain'] body::after {
   content: '';
   position: fixed;

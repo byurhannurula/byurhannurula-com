@@ -19,10 +19,30 @@ const CursorDots = dynamic(
   () => import('./cursor-dots').then((m) => m.CursorDots),
   { ssr: false },
 );
+const ContourLines = dynamic(
+  () => import('./contour-lines').then((m) => m.ContourLines),
+  { ssr: false },
+);
+const HalftoneWave = dynamic(
+  () => import('./halftone-wave').then((m) => m.HalftoneWave),
+  { ssr: false },
+);
+const AsciiField = dynamic(
+  () => import('./ascii-field').then((m) => m.AsciiField),
+  { ssr: false },
+);
+const PointerTrail = dynamic(
+  () => import('./pointer-trail').then((m) => m.PointerTrail),
+  { ssr: false },
+);
 const LAYERS = {
   flicker: FlickerDots,
   connect: ConnectDots,
   cursor: CursorDots,
+  contour: ContourLines,
+  halftone: HalftoneWave,
+  ascii: AsciiField,
+  trail: PointerTrail,
 } as const;
 
 const PLACE = {
