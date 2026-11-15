@@ -1,5 +1,11 @@
 import { formatNoteDate, getNote, getNotes } from '@/lib/notes';
-import { OG_CONTENT_TYPE, OG_SIZE, renderShareImage } from '@/lib/og';
+import {
+  OG_CONTENT_TYPE,
+  OG_NOTE_STYLE,
+  OG_SIZE,
+  OG_STYLE,
+  renderShareImage,
+} from '@/lib/og';
 
 export const alt = 'A note by Byurhan Nurula';
 export const size = OG_SIZE;
@@ -19,12 +25,16 @@ export default async function OpengraphImage({
 }) {
   const { slug } = await params;
   const note = await getNote(slug);
-  return renderShareImage({
-    kind: 'note',
-    eyebrow: 'note',
-    title: note?.title ?? 'Note',
-    meta: note
-      ? `${formatNoteDate(note.date)} · ${note.readingMinutes} min read`
-      : undefined,
-  });
+  return renderShareImage(
+    {
+      kind: 'note',
+      eyebrow: 'note',
+      title: note?.title ?? 'Note',
+      meta: note
+        ? `${formatNoteDate(note.date)} · ${note.readingMinutes} min read`
+        : undefined,
+      cover: note?.cover,
+    },
+    OG_NOTE_STYLE ?? OG_STYLE,
+  );
 }

@@ -23,11 +23,22 @@ export const OG_STYLES = [
   'poster',
   'terminal',
   'stack',
+  'cover',
+  'split',
 ] as const;
 export type OgStyle = (typeof OG_STYLES)[number];
 
 /** The style every page uses. */
 export const OG_STYLE: OgStyle = 'plain';
+
+/**
+ * A note with a cover picture uses this style instead, so its link shows
+ * the picture. `null`: notes use OG_STYLE like every page.
+ */
+export const OG_NOTE_STYLE: OgStyle | null = 'cover';
+
+/** Styles that draw the cover picture. Without one they fall back. */
+const NEEDS_COVER = new Set<OgStyle>(['cover', 'split']);
 
 // Fixed colours: a share image cannot read the CSS tokens. They mirror the
 // `night` mode in src/styles/tokens.css, so a link looks like the site.
@@ -64,6 +75,8 @@ export interface ShareImageInput {
   title: string;
   /** Bottom line, for example a date and reading time. */
   meta?: string;
+  /** A note's cover: a /public path or a full URL. */
+  cover?: string;
 }
 
 // Geist, copied from the `geist` package: the default face of the image
@@ -105,6 +118,30 @@ function titleSize(title: string, scale = 1) {
 
 interface Parts extends ShareImageInput {
   hue: string;
+  /** The cover as a data URL, once loaded. */
+  picture?: string;
+}
+
+/**
+ * The cover as a data URL, or undefined when it cannot be read. Loaded here
+ * and not by the renderer, so a slow or missing picture never fails a build.
+ */
+async function loadCover(src: string) {
+  try {
+    const data = src.startsWith('/')
+      ? await readFile(join(process.cwd(), 'public', src))
+      : Buffer.from(
+          await (
+            await fetch(src, { signal: AbortSignal.timeout(8000) })
+          ).arrayBuffer(),
+        );
+    // The renderer reads PNG and JPEG; anything else falls back.
+    const type =
+      data[0] === 0x89 ? 'image/png' : data[0] === 0xff ? 'image/jpeg' : null;
+    return type ? `data:${type};base64,${data.toString('base64')}` : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 const row: CSSProperties = {
@@ -247,7 +284,86 @@ const Fade = ({ from = 'left' }: { from?: string }) => (
   />
 );
 
+const Picture = ({
+  src,
+  width,
+  height,
+  style,
+}: {
+  src: string;
+  width: number;
+  height: number;
+  style?: CSSProperties;
+}) => (
+  // oxlint-disable-next-line nextjs/no-img-element -- the image renderer needs a plain img
+  <img
+    alt=""
+    src={src}
+    width={width}
+    height={height}
+    style={{ objectFit: 'cover', width, height, ...style }}
+  />
+);
+
 const STYLES: Record<OgStyle, (p: Parts) => ReactNode> = {
+  cover: (p) => (
+    <>
+      <Picture
+        src={p.picture ?? ''}
+        width={1200}
+        height={630}
+        style={{ position: 'absolute', inset: 0 }}
+      />
+      <div
+        style={{
+          ...fill,
+          background:
+            'linear-gradient(to right, rgba(10,10,10,0.94) 30%, rgba(10,10,10,0.55) 70%, rgba(10,10,10,0.3))',
+        }}
+      />
+      <Frame p={p} rule={false} />
+    </>
+  ),
+
+  split: (p) => (
+    <>
+      <div
+        style={{
+          position: 'absolute',
+          top: 40,
+          left: 690,
+          width: 470,
+          height: 550,
+          display: 'flex',
+          overflow: 'hidden',
+          borderRadius: 24,
+          border: `2px solid ${COLORS.line}`,
+        }}
+      >
+        <Picture src={p.picture ?? ''} width={470} height={550} />
+      </div>
+      <div
+        style={{
+          ...fill,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: 72,
+          width: 720,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+          <Wordmark dot={COLORS.accent} />
+          <Eyebrow hue={p.hue} text={p.eyebrow} />
+        </div>
+        <Title text={p.title} scale={0.82} max={580} />
+        <div style={{ display: 'flex', fontSize: 24, color: COLORS.soft }}>
+          {p.meta ?? brand.role}
+        </div>
+      </div>
+    </>
+  ),
+
   plain: (p) => <Frame p={p} />,
 
   dots: (p) => (
@@ -478,7 +594,15 @@ export async function renderShareImage(
   style: OgStyle = OG_STYLE,
 ) {
   fonts ??= loadFonts();
-  const parts = { ...input, hue: HUES[input.kind] };
+  const picture =
+    NEEDS_COVER.has(style) && input.cover
+      ? await loadCover(input.cover)
+      : undefined;
+  // A cover style with no picture to draw uses the site style.
+  if (NEEDS_COVER.has(style) && !picture) {
+    style = OG_STYLE;
+  }
+  const parts = { ...input, hue: HUES[input.kind], picture };
   return new ImageResponse(
     <div
       style={{
