@@ -7,3 +7,67 @@
 .shelf:has(#shelf-show:checked) [data-kind]:not([data-kind='show']) {
   display: none;
 }
+
+/* The popup grows in from a little below; the page under it stays put. */
+.shelf-dialog {
+  opacity: 0;
+  translate: 0 12px;
+  scale: 0.98;
+  transition:
+    opacity 0.22s,
+    translate 0.35s var(--ease-out-soft),
+    scale 0.35s var(--ease-out-soft),
+    overlay 0.35s allow-discrete,
+    display 0.35s allow-discrete;
+}
+.shelf-dialog[open] {
+  opacity: 1;
+  translate: 0;
+  scale: 1;
+}
+.shelf-dialog::backdrop {
+  background: rgb(0 0 0 / 0);
+  backdrop-filter: blur(0);
+  transition:
+    background 0.25s,
+    backdrop-filter 0.25s,
+    overlay 0.25s allow-discrete,
+    display 0.25s allow-discrete;
+}
+.shelf-dialog[open]::backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(4px);
+}
+@starting-style {
+  .shelf-dialog[open] {
+    opacity: 0;
+    translate: 0 12px;
+    scale: 0.98;
+  }
+  .shelf-dialog[open]::backdrop {
+    background: rgb(0 0 0 / 0);
+    backdrop-filter: blur(0);
+  }
+}
+.shelf-dialog-cover {
+  animation: shelf-cover-in 0.45s var(--ease-out-soft);
+}
+@keyframes shelf-cover-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+    rotate: -1.5deg;
+  }
+}
+html:has(.shelf-dialog[open]) {
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shelf-dialog,
+  .shelf-dialog::backdrop {
+    transition: none;
+  }
+  .shelf-dialog-cover {
+    animation: none;
+  }
+}

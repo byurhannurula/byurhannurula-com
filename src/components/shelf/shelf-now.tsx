@@ -2,7 +2,13 @@ import { SHELF, SHELF_COPY } from '@/content/shelf';
 import { Section } from '@/components/shared/section';
 import { cn } from '@/lib/utils';
 
-import { Cover, statusLabel, tinted, toneStyle } from './shelf-parts';
+import {
+  Cover,
+  OpenButton,
+  statusLabel,
+  tinted,
+  toneStyle,
+} from './shelf-parts';
 
 /** Large cards for what is open now, with how far in. */
 export function ShelfNow() {
@@ -23,6 +29,7 @@ export function ShelfNow() {
                 tinted,
               )}
             >
+              <OpenButton item={item} className="rounded-xl" />
               <div className="relative grid h-36 w-28 shrink-0 place-items-center sm:w-36">
                 <Cover item={item} sizes="160px" className="max-h-36" />
               </div>

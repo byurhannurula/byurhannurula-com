@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import {
   Cover,
   KindMark,
+  OpenButton,
   Rating,
   statusLabel,
   tinted,
@@ -57,7 +58,12 @@ function Filter() {
 function Tile({ item }: { item: ShelfItem }) {
   const status = statusLabel(item);
   return (
-    <li data-kind={item.kind} style={toneStyle(item)} className="group/tile">
+    <li
+      data-kind={item.kind}
+      style={toneStyle(item)}
+      className="group/tile relative"
+    >
+      <OpenButton item={item} className="rounded-xl" />
       <div
         className={cn(
           'relative aspect-[4/5] overflow-hidden rounded-xl border border-line',
@@ -98,8 +104,9 @@ function Row({ item }: { item: ShelfItem }) {
     <li
       data-kind={item.kind}
       style={toneStyle(item)}
-      className="flex items-center gap-4 rounded-xl px-2 py-3 transition-colors duration-200 hover:bg-card md:gap-5 md:px-3"
+      className="relative flex items-center gap-4 rounded-xl px-2 py-3 transition-colors duration-200 hover:bg-card md:gap-5 md:px-3"
     >
+      <OpenButton item={item} className="rounded-xl" />
       <div
         className={cn(
           'grid h-16 w-20 shrink-0 place-items-center rounded-lg p-1.5',

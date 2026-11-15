@@ -105,3 +105,29 @@ export function Rating({ value }: { value: number }) {
     </span>
   );
 }
+
+/**
+ * A button over the whole card that opens the popup (shelf-dialog.tsx).
+ * The card itself is server markup; the dialog finds the item by slug.
+ */
+export function OpenButton({
+  item,
+  className,
+}: {
+  item: ShelfItem;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      data-shelf={item.slug}
+      aria-haspopup="dialog"
+      className={cn(
+        'absolute inset-0 z-1 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent',
+        className,
+      )}
+    >
+      <span className="sr-only">{`More about ${item.title}`}</span>
+    </button>
+  );
+}

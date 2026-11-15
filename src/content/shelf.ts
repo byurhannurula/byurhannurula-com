@@ -21,6 +21,10 @@ export interface ShelfItem {
   note: string;
   /** 0 to 1, for `now` items. */
   progress?: number;
+  /** Amazon product id, for a direct link. Unset: a search link. */
+  asin?: string;
+  /** Extra links shown first in the popup, e.g. the author's own page. */
+  links?: { label: string; href: string }[];
 }
 
 export const SHELF_KINDS: { kind: ShelfKind; label: string }[] = [
