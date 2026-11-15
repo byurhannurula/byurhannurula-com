@@ -301,8 +301,8 @@ export interface FaqItem {
 export const FAQ_INTRO =
   'For recruiters and hiring managers. Select a question.';
 
-/** The CV file does not exist yet. Replace when the PDF is in /public. */
-export const CV_HREF = '#';
+/** The CV page. Its print button saves the PDF. */
+export const CV_HREF = '/cv';
 
 const UNKNOWN_ANSWER = 'Your answer goes here. I do not know it.';
 
@@ -344,7 +344,7 @@ export const FAQ: FaqItem[] = [
     question: 'Where is the CV?',
     answer: [
       'The ',
-      { text: 'PDF is here', href: CV_HREF },
+      { text: 'CV is here', href: CV_HREF },
       '. The same data is on ',
       { text: 'LinkedIn', href: ABOUT_LINKS.linkedin },
       '.',

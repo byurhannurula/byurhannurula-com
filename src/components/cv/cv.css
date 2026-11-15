@@ -1,0 +1,53 @@
+/*
+ * The CV is a sheet of paper in light colours in every light mode, so the
+ * screen shows what the PDF will be.
+ */
+.cv-sheet {
+  --cv-ink: #17171a;
+  --cv-soft: #55555c;
+  --cv-faint: #8a8a91;
+  --cv-line: #e4e2dc;
+  --cv-paper: #fdfcf9;
+  --cv-accent: #15803d;
+  color: var(--cv-ink);
+  background: var(--cv-paper);
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  /* Only the sheet: no nav, footer, patterns or toolbar. */
+  body:has(.cv-sheet) > :not(main),
+  body:has(.cv-sheet)::before,
+  body:has(.cv-sheet)::after,
+  .cv-toolbar {
+    display: none !important;
+  }
+  html:has(.cv-sheet),
+  body:has(.cv-sheet),
+  body:has(.cv-sheet) main,
+  .cv-page {
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    background: #fff !important;
+  }
+  .cv-sheet {
+    width: 100%;
+    max-width: none;
+    /* A hair under A4, so rounding never spills onto a blank second page. */
+    height: 296mm;
+    overflow: hidden;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    print-color-adjust: exact;
+  }
+  .cv-sheet a {
+    text-decoration: none;
+  }
+}

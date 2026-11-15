@@ -17,9 +17,8 @@ export function AboutHero() {
       actions={
         <>
           <Button asChild className="group/cv">
-            {/* TODO(byrhn): CV_HREF is "#" until the CV PDF exists. */}
             <a href={CV_HREF}>
-              Download the CV
+              See the CV
               <ArrowRight
                 aria-hidden
                 className="transition-transform duration-250 ease-soft group-hover/cv:translate-x-0.75"

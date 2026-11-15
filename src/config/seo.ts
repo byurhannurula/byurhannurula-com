@@ -147,6 +147,19 @@ export const PAGES = {
       alt: `The shelf of ${brand.name}`,
     },
   },
+  cv: {
+    path: '/cv',
+    title: 'CV',
+    description:
+      'The CV of Byurhan Nurula: six years at ReCheck from intern to team lead, the stack, the side projects and the degree. Print it to save a PDF.',
+    share: {
+      kind: 'about',
+      eyebrow: 'cv',
+      title: 'Six years, one company, every layer of the product.',
+      meta: 'One page. Print it to save a PDF.',
+      alt: `The CV of ${brand.name}`,
+    },
+  },
   colophon: {
     path: '/colophon',
     title: 'Colophon',
