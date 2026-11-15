@@ -141,14 +141,55 @@ function Row({ item }: { item: ShelfItem }) {
   );
 }
 
-/** Every item, filtered by kind. Option `shelfview`: tiles or a list. */
+/** A small number from the slug, so each item keeps its own height and lean. */
+const pick = (slug: string, count: number) =>
+  [...slug].reduce((sum, char) => sum + char.charCodeAt(0), 0) % count;
+
+// Books differ in height like real ones; a poster or a case stands taller.
+const HEIGHT = {
+  book: ['h-36', 'h-38', 'h-40', 'h-42', 'h-35'],
+  film: ['h-44'],
+  show: ['h-40'],
+} as const;
+const LEAN = ['', '', '', '', 'rotate-2', '-rotate-2', '', 'rotate-1'];
+
+/** One cover standing on a board, for `shelfview: shelf`. */
+function Standing({ item }: { item: ShelfItem }) {
+  const heights = HEIGHT[item.kind];
+  return (
+    <li
+      data-kind={item.kind}
+      className={cn(
+        'group/stand relative flex h-(--shelf-row) items-end pb-(--shelf-plank)',
+      )}
+    >
+      <OpenButton item={item} className="rounded-sm" />
+      <span
+        title={item.title}
+        className={cn(
+          'flex origin-bottom transition-[translate,rotate] duration-300 ease-soft group-hover/stand:-translate-y-2 group-hover/stand:rotate-0 motion-reduce:transition-none',
+          heights[pick(item.slug, heights.length)],
+          LEAN[pick(item.slug, LEAN.length)],
+        )}
+      >
+        <Cover
+          item={item}
+          sizes="140px"
+          className="h-full max-h-none w-auto max-w-none"
+        />
+      </span>
+    </li>
+  );
+}
+
+/** Every item, filtered by kind. Option `shelfview`: tiles, a list or a real shelf. */
 export function ShelfGrid() {
   return (
     <div className="shelf pt-(--section-gap)">
       <Filter />
       <ul
         data-reveal
-        className="grid grid-flow-dense grid-cols-2 gap-x-4 gap-y-8 in-data-[shelfview=list]:hidden sm:grid-cols-3 md:gap-x-5 lg:grid-cols-4"
+        className="grid grid-flow-dense grid-cols-2 gap-x-4 gap-y-8 in-data-[shelfview=list]:hidden in-data-[shelfview=shelf]:hidden sm:grid-cols-3 md:gap-x-5 lg:grid-cols-4"
       >
         {ITEMS.map((item) => (
           <Tile key={item.slug} item={item} />
@@ -157,6 +198,11 @@ export function ShelfGrid() {
       <ul className="hidden in-data-[shelfview=list]:block">
         {ITEMS.map((item) => (
           <Row key={item.slug} item={item} />
+        ))}
+      </ul>
+      <ul className="shelf-boards hidden flex-wrap items-end gap-x-2.5 px-3 in-data-[shelfview=shelf]:flex sm:gap-x-3.5 sm:px-5">
+        {ITEMS.map((item) => (
+          <Standing key={item.slug} item={item} />
         ))}
       </ul>
     </div>

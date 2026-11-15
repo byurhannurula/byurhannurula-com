@@ -71,3 +71,37 @@ html:has(.shelf-dialog[open]) {
     animation: none;
   }
 }
+
+/*
+ * `shelfview: shelf`: covers stand on wooden boards. Every row is one
+ * fixed height, so a repeating background draws a board under each row of
+ * the wrapped list, and the kind filter can hide items freely.
+ */
+.shelf-boards {
+  --shelf-row: 13.5rem;
+  --shelf-plank: 0.85rem;
+  --board-top: #e6d3b8;
+  --board-face: #c9a47c;
+  --board-edge: #a47c55;
+  --board-shade: rgb(60 40 20 / 0.16);
+  background:
+    linear-gradient(
+        to bottom,
+        transparent calc(var(--shelf-row) - var(--shelf-plank)),
+        var(--board-top) calc(var(--shelf-row) - var(--shelf-plank)),
+        var(--board-top) calc(var(--shelf-row) - var(--shelf-plank) + 3px),
+        var(--board-face) calc(var(--shelf-row) - var(--shelf-plank) + 3px),
+        var(--board-edge) var(--shelf-row)
+      )
+      0 0 / 100% var(--shelf-row),
+    /* the shadow a board drops on the wall under it */
+    linear-gradient(var(--board-shade), transparent 1.4rem) 0 var(--shelf-row) /
+      100% var(--shelf-row);
+  border-radius: 0.5rem;
+}
+:is([data-light='evening'], [data-light='night']) .shelf-boards {
+  --board-top: #5b4632;
+  --board-face: #45341f;
+  --board-edge: #2f2416;
+  --board-shade: rgb(0 0 0 / 0.45);
+}
