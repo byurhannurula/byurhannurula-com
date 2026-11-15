@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { SampleTag } from '@/components/shared/sample-tag';
 import { FOOTER_ITEMS, NAV_ITEMS } from '@/content/nav';
 import { SOCIALS } from '@/content/socials';
+import { EVENTS, trackAttrs } from '@/lib/track';
 import { brand } from '@/lib/brand';
 
 import { EmailCopy } from './email-copy';
@@ -118,7 +119,11 @@ export async function SiteFooter() {
             <ul className={list}>
               {ELSEWHERE.map(({ name, href }) => (
                 <li key={name}>
-                  <a href={href} className={link}>
+                  <a
+                    href={href}
+                    className={link}
+                    {...(href === RSS_LINK.href ? trackAttrs(EVENTS.rss) : {})}
+                  >
                     {name}
                   </a>
                 </li>

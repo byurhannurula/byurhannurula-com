@@ -12,6 +12,15 @@ const nextConfig: NextConfig = {
     },
   },
   poweredByHeader: false,
+  // Umami through our own domain: ad blockers skip a first-party path.
+  async rewrites() {
+    const host = process.env.UMAMI_HOST;
+    if (!host) return [];
+    return [
+      { source: '/stats/script.js', destination: `${host}/script.js` },
+      { source: '/stats/api/send', destination: `${host}/api/send` },
+    ];
+  },
   async headers() {
     return [
       {

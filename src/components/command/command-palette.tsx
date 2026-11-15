@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { toggleCommandMenu, useCommandMenu } from '@/hooks/use-command-menu';
 import { useHotkey } from '@/hooks/use-hotkey';
 import { playSound } from '@/hooks/use-sound';
+import { EVENTS, track } from '@/lib/track';
 
 import type { CommandNote } from './command-content';
 import { Toast } from './toast';
@@ -31,7 +32,9 @@ export function CommandPalette({ notes }: CommandPaletteProps) {
   useHotkey('/', toggleCommandMenu, { ignoreWhileTyping: true });
 
   useEffect(() => {
-    if (open) playSound('open');
+    if (!open) return;
+    playSound('open');
+    track(EVENTS.commandOpen);
   }, [open]);
 
   return (

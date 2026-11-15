@@ -4,7 +4,9 @@ import './social-row.css';
 
 import type { CSSProperties, ReactNode } from 'react';
 
+import { RSS_PATH } from '@/content/socials';
 import { useTravelCard } from '@/hooks/use-travel-card';
+import { EVENTS, trackAttrs } from '@/lib/track';
 import { cn } from '@/lib/utils';
 
 export interface SocialRowItem {
@@ -78,6 +80,7 @@ export function SocialRow({ items }: SocialRowProps) {
           key={name}
           href={href}
           aria-label={name}
+          {...(href === RSS_PATH ? trackAttrs(EVENTS.rss) : {})}
           onPointerEnter={(event) => {
             // A touch would open a card that the same tap tries to follow.
             if (event.pointerType === 'mouse') point(i, event.currentTarget);
