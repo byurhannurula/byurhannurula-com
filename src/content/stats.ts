@@ -1,0 +1,16 @@
+export const STATS_COPY = {
+  title: 'Numbers,',
+  titleEnd: 'counted at each deploy.',
+  lead: 'What this site holds and how it is used. Most of it is read from the code and the content when the site is built, so it is never out of date for long.',
+  sample: 'some numbers are samples',
+  writing: 'Writing',
+  writingSub: 'Notes by year, from the content folder.',
+  read: 'Most read',
+  readSub: 'Views and likes per note. No cookies: a count, not a profile.',
+  shelf: 'Reading and watching',
+  shelfSub: 'From the shelf: what kind, and how I rated it.',
+  code: 'Code',
+  codeSub: 'A year of GitHub contributions.',
+  site: 'This site',
+  siteSub: 'Lighthouse on a slow phone, and the design work still open.',
+} as const;

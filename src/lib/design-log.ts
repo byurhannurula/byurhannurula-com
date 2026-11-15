@@ -74,3 +74,17 @@ export function countComponents() {
   }) as string[];
   return files.filter((file) => file.endsWith('.tsx')).length;
 }
+
+/** Commits in the site's history, at build time. 0 without git. */
+export function countCommits() {
+  try {
+    return Number(
+      execFileSync('git', ['rev-list', '--count', 'HEAD'], {
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim(),
+    );
+  } catch {
+    return 0;
+  }
+}

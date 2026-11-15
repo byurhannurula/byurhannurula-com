@@ -147,6 +147,19 @@ export const PAGES = {
       alt: `The shelf of ${brand.name}`,
     },
   },
+  stats: {
+    path: '/stats',
+    title: 'Stats',
+    description:
+      'The numbers behind this site: notes and words written, the most read notes, the shelf by kind and rating, a year of code and the Lighthouse scores.',
+    share: {
+      kind: 'colophon',
+      eyebrow: 'stats',
+      title: 'Numbers, counted at each deploy.',
+      meta: 'Notes, reads, shelf, code and scores.',
+      alt: `Stats of the site of ${brand.name}`,
+    },
+  },
   cv: {
     path: '/cv',
     title: 'CV',

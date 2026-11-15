@@ -27,6 +27,7 @@ export const routes = [
   '/homelab',
   '/shelf',
   '/cv',
+  '/stats',
   '/colophon',
   '/design-system',
 ] as const;

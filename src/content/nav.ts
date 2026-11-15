@@ -33,6 +33,11 @@ export const FOOTER_ITEMS: NavItem[] = [
     keywords: 'books films movies shows reading watching',
   },
   {
+    label: 'Stats',
+    href: '/stats',
+    keywords: 'numbers views likes analytics statistics',
+  },
+  {
     label: 'Design system',
     href: '/design-system',
     keywords: 'tokens colours type components styleguide changes',
