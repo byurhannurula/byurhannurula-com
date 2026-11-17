@@ -120,7 +120,7 @@ export function OpenButton({
   return (
     <button
       type="button"
-      data-shelf={item.slug}
+      data-shelf-item={item.slug}
       aria-haspopup="dialog"
       className={cn(
         'absolute inset-0 z-1 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent',

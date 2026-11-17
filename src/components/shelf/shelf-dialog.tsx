@@ -21,9 +21,9 @@ const KIND_NAME = { book: 'Book', film: 'Film', show: 'Show' } as const;
 
 /** Slugs of the open buttons a reader can see now, in page order. */
 function visibleSlugs() {
-  const slugs = [...document.querySelectorAll<HTMLElement>('[data-shelf]')]
+  const slugs = [...document.querySelectorAll<HTMLElement>('[data-shelf-item]')]
     .filter((el) => el.getClientRects().length > 0)
-    .map((el) => el.dataset.shelf ?? '');
+    .map((el) => el.dataset.shelfItem ?? '');
   return [...new Set(slugs)];
 }
 
@@ -31,7 +31,7 @@ const iconButton =
   'grid size-9 cursor-pointer place-items-center rounded-full bg-bg/80 text-soft backdrop-blur-sm transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-accent';
 
 /**
- * One native dialog for the whole shelf. Any `[data-shelf]` button opens it
+ * One native dialog for the whole shelf. Any `[data-shelf-item]` button opens it
  * on its item, so the tiles stay server markup. The hash holds the item,
  * so a link can open it. Arrow keys move through the items in view.
  */
@@ -61,8 +61,9 @@ export function ShelfDialog({ items }: { items: ShelfItem[] }) {
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
       const target = event.target as Element | null;
-      const button = target?.closest<HTMLElement>('[data-shelf]');
-      if (button?.dataset.shelf) show(button.dataset.shelf);
+      const button = target?.closest<HTMLElement>('[data-shelf-item]');
+      const next = button?.dataset.shelfItem;
+      if (next && items.some((entry) => entry.slug === next)) show(next);
     };
     document.addEventListener('click', onClick);
     const hash = decodeURIComponent(location.hash.slice(1));
