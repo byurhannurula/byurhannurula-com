@@ -35,7 +35,7 @@ export function MarkedWord({
       aria-controls={controls}
       onClick={onToggle}
       onKeyDown={onKeyDown}
-      className="cursor-pointer rounded-[0.4em] bg-sunk box-decoration-clone px-[0.35em] py-[0.02em] transition-[background-color,color,box-shadow] duration-200 hover:bg-accent-soft hover:text-accent aria-expanded:bg-transparent aria-expanded:shadow-[inset_0_-2px_0_var(--accent-bright)] aria-expanded:hover:bg-transparent"
+      className="cursor-pointer rounded-[0.4em] bg-sunk box-decoration-clone px-[0.35em] py-[0.02em] decoration-accent-bright decoration-2 underline-offset-[0.22em] transition-[background-color,color] duration-200 hover:bg-accent-soft hover:text-accent aria-expanded:bg-transparent aria-expanded:underline aria-expanded:hover:bg-transparent"
     >
       {children}
     </span>
