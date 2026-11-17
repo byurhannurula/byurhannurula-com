@@ -13,15 +13,15 @@ interface ModeScopeProps {
 }
 
 /**
- * Shows its children in one light mode, whatever the page is in. The accent,
- * heading and lines options stay live: their variables are set again here,
+ * Shows its children in one light mode, whatever the page is in. The heading
+ * and lines options stay live: their variables are set again here,
  * because a variable made from another one is fixed where it is declared.
  */
 export function ModeScope({ mode, className, children }: ModeScopeProps) {
   const options = useOptions();
   const dark = isDarkMode(mode);
   const style = {
-    ...modeVars(mode, options.accent),
+    ...modeVars(mode),
     ...OPTION_VARS.heading?.[options.heading],
     ...OPTION_VARS.lines?.[options.lines],
     colorScheme: dark ? 'dark' : 'light',

@@ -11,7 +11,7 @@
  */
 
 import type { OptionKey } from '@/config/options';
-import { isDarkMode, type LightMode } from '@/lib/light';
+import type { LightMode } from '@/lib/light';
 
 type CssVars = Record<`--${string}`, string>;
 type PerMode = Record<LightMode, string>;
@@ -200,7 +200,7 @@ export const COLOUR_GROUPS: ColourGroup[] = [
     id: 'accent',
     title: 'accent',
     show: 'block',
-    note: 'Set by the accent option. The values here are the green default.',
+    note: 'Green, the one accent of the site.',
     tokens: [
       {
         name: 'accent',
@@ -271,50 +271,6 @@ export const COLOUR_GROUPS: ColourGroup[] = [
       use: `${colour}.`,
       values: perTheme(light ?? '', dark ?? ''),
     })),
-  },
-];
-
-export interface AccentDef {
-  /** A value of the `accent` option. */
-  value: string;
-  light: CssVars;
-  dark: CssVars;
-  /** Only where the evening mode has its own tone. */
-  evening?: CssVars;
-}
-
-const accent = (main: string, bright: string, soft: string): CssVars => ({
-  '--accent': main,
-  '--accent-bright': bright,
-  '--accent-soft': soft,
-});
-
-export const ACCENTS: AccentDef[] = [
-  {
-    value: 'green',
-    light: accent('#15803d', '#22c55e', 'rgb(34 197 94 / 0.13)'),
-    dark: accent('#4ade80', '#4ade80', 'rgb(74 222 128 / 0.13)'),
-    evening: accent('#5ecf8b', '#5ecf8b', 'rgb(94 207 139 / 0.13)'),
-  },
-  {
-    value: 'blue',
-    light: accent('#1d4ed8', '#3b82f6', 'rgb(59 130 246 / 0.13)'),
-    dark: accent('#60a5fa', '#60a5fa', 'rgb(59 130 246 / 0.13)'),
-  },
-  {
-    value: 'orange',
-    light: accent('#c2410c', '#f97316', 'rgb(249 115 22 / 0.14)'),
-    dark: accent('#fb923c', '#fb923c', 'rgb(249 115 22 / 0.14)'),
-  },
-  {
-    value: 'violet',
-    light: accent('#6d28d9', '#8b5cf6', 'rgb(139 92 246 / 0.14)'),
-    dark: accent('#a78bfa', '#a78bfa', 'rgb(139 92 246 / 0.14)'),
-  },
-  {
-    value: 'ink',
-    light: accent('var(--ink)', 'var(--ink)', 'var(--sunk)'),
-    dark: accent('var(--ink)', 'var(--ink)', 'var(--sunk)'),
   },
 ];
 
@@ -505,8 +461,8 @@ export const OPTION_VARS: Partial<Record<OptionKey, Record<string, CssVars>>> =
     },
   };
 
-/** Every colour and shadow variable of one light mode, with one accent. */
-export function modeVars(mode: LightMode, accentValue: string): CssVars {
+/** Every colour and shadow variable of one light mode. */
+export function modeVars(mode: LightMode): CssVars {
   const vars: CssVars = {};
   for (const group of COLOUR_GROUPS) {
     for (const token of group.tokens) vars[token.variable] = token.values[mode];
@@ -515,14 +471,6 @@ export function modeVars(mode: LightMode, accentValue: string): CssVars {
     if (shadow.variable && shadow.values) {
       vars[shadow.variable] = shadow.values[mode];
     }
-  }
-  const picked = ACCENTS.find((a) => a.value === accentValue) ?? ACCENTS[0];
-  if (picked) {
-    const themed = isDarkMode(mode) ? picked.dark : picked.light;
-    Object.assign(
-      vars,
-      mode === 'evening' ? (picked.evening ?? themed) : themed,
-    );
   }
   return vars;
 }

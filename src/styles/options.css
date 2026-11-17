@@ -5,40 +5,6 @@
  * classes. Registry: src/config/options.ts.
  */
 
-/* accent */
-[data-accent='blue'] {
-  --accent: #1d4ed8;
-  --accent-bright: #3b82f6;
-  --accent-soft: rgb(59 130 246 / 0.13);
-}
-[data-accent='orange'] {
-  --accent: #c2410c;
-  --accent-bright: #f97316;
-  --accent-soft: rgb(249 115 22 / 0.14);
-}
-[data-accent='violet'] {
-  --accent: #6d28d9;
-  --accent-bright: #8b5cf6;
-  --accent-soft: rgb(139 92 246 / 0.14);
-}
-[data-accent='ink'] {
-  --accent: var(--ink);
-  --accent-bright: var(--ink);
-  --accent-soft: var(--sunk);
-}
-[data-theme='dark'][data-accent='blue'] {
-  --accent: #60a5fa;
-  --accent-bright: #60a5fa;
-}
-[data-theme='dark'][data-accent='orange'] {
-  --accent: #fb923c;
-  --accent-bright: #fb923c;
-}
-[data-theme='dark'][data-accent='violet'] {
-  --accent: #a78bfa;
-  --accent-bright: #a78bfa;
-}
-
 /* font */
 :root {
   --font-body: var(--font-instrument);

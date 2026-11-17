@@ -106,7 +106,7 @@ export function useCanvasLoop(
     });
     options.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['data-motion', 'data-light', 'data-accent'],
+      attributeFilter: ['data-motion', 'data-light'],
     });
 
     return () => {

@@ -1,5 +1,4 @@
 import {
-  ACCENTS,
   COLOUR_GROUPS,
   MODES,
   type ColourGroup,
@@ -107,31 +106,6 @@ export function ColourSection() {
               <Swatch key={token.variable} token={token} show={group.show} />
             ))}
           </ul>
-          {group.id === 'accent' ? (
-            <div className="mt-8 flex flex-wrap gap-2">
-              {ACCENTS.map((accent) => (
-                <OptionPick
-                  key={accent.value}
-                  optionKey="accent"
-                  value={accent.value}
-                  className="min-h-9"
-                >
-                  {/* The light and the dark tone of this accent. */}
-                  <span aria-hidden className="flex">
-                    <span
-                      style={{ backgroundColor: accent.light['--accent'] }}
-                      className="size-3 rounded-full shadow-[0_0_0_1.5px_var(--sunk)]"
-                    />
-                    <span
-                      style={{ backgroundColor: accent.dark['--accent'] }}
-                      className="-ml-1 size-3 rounded-full shadow-[0_0_0_1.5px_var(--sunk)]"
-                    />
-                  </span>
-                  {accent.value}
-                </OptionPick>
-              ))}
-            </div>
-          ) : null}
         </Group>
       ))}
 

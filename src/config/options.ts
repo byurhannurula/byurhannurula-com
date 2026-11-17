@@ -39,7 +39,6 @@ export const OPTION_GROUPS = {
       ['evening'],
       ['night'],
     ),
-    accent: def('accent', ['green'], ['blue'], ['orange'], ['violet'], ['ink']),
     font: def('font', ['instrument'], ['geist'], ['hanken']),
     heading: def('heading', ['twotone', 'two tone'], ['one'], ['accent']),
     width: def('page width', ['normal'], ['narrow'], ['wide']),
@@ -289,7 +288,6 @@ export const PRESETS: Record<string, Partial<Options>> = {
     density: 'compact',
   },
   playful: {
-    accent: 'violet',
     radius: 'large',
     top: 'art',
     artsize: 'large',
