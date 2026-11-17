@@ -188,7 +188,7 @@ export const SMALL_PROJECTS: SmallProject[] = [
   {
     tag: 'ongoing',
     name: 'dotfiles',
-    text: 'One script takes a blank Mac to a fully configured machine.',
+    text: 'One script that sets up a new Mac with my apps and settings.',
     href: 'https://github.com/byurhannurula/dotfiles',
   },
   {

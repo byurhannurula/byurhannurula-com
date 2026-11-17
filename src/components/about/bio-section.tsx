@@ -49,7 +49,7 @@ function InlineBio() {
         />
         {EMPLOYER.name}
       </a>{' '}
-      from the <Quiet>Figma file to the production server:</Quiet>{' '}
+      <Quiet>with</Quiet>{' '}
       {BIO_INLINE_TECH.map((name, index) => {
         const icon = techIconUrl(name);
         return (

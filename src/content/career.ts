@@ -45,12 +45,12 @@ export const ROLES: Role[] = [
 ];
 
 export const ACHIEVEMENTS = [
-  'Built and released the company web apps, landing pages and marketing sites, from design to deployment.',
-  'Own the front-end architecture and the Node services behind it.',
+  'Built and released web apps, landing pages and marketing sites for the company.',
+  'Look after the front-end architecture and the Node services behind it.',
   'Built a Capacitor and Ionic hybrid app when the product needed one.',
-  'Did the DevOps work when nobody else could: virtual machines, deployments, CI and monitoring.',
-  'Unified the brand without a designer: logos, colours, favicons and a Figma system that the full team uses.',
-  'Onboarded and mentored interns, reviewed code and improved the team process.',
+  'Took on the DevOps work while the team had no DevOps engineer: virtual machines, deployments, CI and monitoring.',
+  'Tidied up the brand while the team had no designer: logos, colours, favicons and a shared Figma file.',
+  'Onboarded and mentored interns, reviewed code and helped improve how the team works.',
 ];
 
 export const EARLIER = [

@@ -52,7 +52,7 @@ export const DECISIONS: Decision[] = [
   },
   {
     title: 'No tracking',
-    text: 'No cookies and no third-party scripts. Visits are counted by Umami on my own server, without personal data.',
+    text: 'No cookies and no ad scripts. Visits are counted with Umami, without personal data.',
     tone: 'text-hue-6',
   },
   {
@@ -62,7 +62,7 @@ export const DECISIONS: Decision[] = [
   },
   {
     title: 'Static first',
-    text: 'Every page is built ahead of time. The server does no work when you open a page.',
+    text: 'Most pages are built ahead of time, so the server has little to do when you open one.',
     tone: 'text-hue-3',
   },
   {

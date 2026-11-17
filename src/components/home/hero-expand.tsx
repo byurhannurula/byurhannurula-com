@@ -17,8 +17,8 @@ const link = 'text-ink underline underline-offset-[0.2em]';
 const PANELS: Record<ExpandKey, ReactNode> = {
   eng: (
     <>
-      Most of my work is web products from start to finish: the front end, the
-      services behind it, the database and the deployment. Daily stack:{' '}
+      Most of my work is web products: the front end, the services behind it,
+      the database and the deployment. Daily stack:{' '}
       {EXPAND_DAILY_STACK.map((name) => (
         <Tech
           key={name}
@@ -49,7 +49,7 @@ const PANELS: Record<ExpandKey, ReactNode> = {
       <Link href="/work" className={link}>
         small tools
       </Link>{' '}
-      for myself. None of it is my job. All of it makes me better at it.
+      for myself. None of it is my job, but a lot of it helps at work.
     </>
   ),
 };

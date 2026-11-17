@@ -17,12 +17,12 @@ export const ABOUT_HERO: {
   lead: CopyTones;
 } = {
   title: {
-    a: 'Six years, one company,',
+    a: 'Six years at one company,',
     b: 'I like software that is small, private',
     c: 'I want to know how it works,',
   },
   titleEnd: {
-    a: 'every layer of the product.',
+    a: 'learning as I go.',
     b: 'and possible to repair.',
     c: 'all the way down.',
   },
@@ -40,9 +40,9 @@ export const ABOUT_LINKS = {
 
 /** Bio, `bio: a`. The first entry is the left column. */
 export const BIO_COLUMNS = {
-  left: 'Most of my work is web products from start to finish: the React and Next.js front end, the Node services behind it, the database and the deployment.',
+  left: 'Most of my work is web products: the React and Next.js front end, the Node services behind it, the database and the deployment.',
   right: [
-    'For a long time my team had no designer and no DevOps engineer. I learned both jobs because someone had to. That is why I am comfortable anywhere between a Figma file and a production server.',
+    'For a long time my team had no designer and no DevOps engineer, so I learned enough of both to get the work done. Now I can help with most steps, from a Figma file to a server.',
     'As team lead I plan the work, review code and mentor new developers. I still write a lot of code, and I want to keep it that way.',
   ],
 } as const;
@@ -58,7 +58,7 @@ export const BIO_SWITCH = {
   labels: { short: 'short', long: 'long' } satisfies Record<BioLength, string>,
   copy: 'Copy bio',
   short:
-    'I am a full-stack engineer and team lead. I take a web product from the Figma file to the production server: the React and Next.js front end, the Node services behind it, the database and the deployment. I still write a lot of code.',
+    'I am a full-stack engineer and team lead. I work on web products: the React and Next.js front end, the Node services behind it, the database and the deployment. I still write a lot of code.',
 } as const;
 
 /** Bio, `bio: inline`. The tools named in the sentence. */
@@ -107,7 +107,7 @@ export const BIO_PANELS: Record<
 > = {
   eng: {
     text: [
-      'Most of my work is web products from start to finish: the front end, the services behind it, the database and the deployment. Daily stack: ',
+      'Most of my work is web products: the front end, the services behind it, the database and the deployment. Daily stack: ',
     ],
     tech: ['TypeScript', 'React', 'Next.js', 'Node', 'PostgreSQL', 'Docker'],
   },
@@ -127,7 +127,7 @@ export const BIO_PANELS: Record<
     text: [
       'A small homelab, a 3D printer and a soldering iron. I also make ',
       { text: 'small tools', href: '/work' },
-      ' for myself. None of it is my job. All of it makes me better at it.',
+      ' for myself. None of it is my job, but a lot of it helps at work.',
     ],
   },
 };
@@ -153,12 +153,12 @@ export const LAYERS: Layer[] = [
   },
   {
     name: 'API',
-    text: 'REST and GraphQL APIs that other teams can build on.',
+    text: 'REST and GraphQL APIs for our apps and for other teams.',
     hue: 3,
   },
   {
     name: 'Data',
-    text: 'Data models, service boundaries and caching that stay easy to understand.',
+    text: 'Data models and caching. I try to keep them simple.',
     hue: 4,
   },
   {
@@ -168,7 +168,7 @@ export const LAYERS: Layer[] = [
   },
 ];
 
-export const ACROSS_LABEL = 'across every layer';
+export const ACROSS_LABEL = 'across the layers';
 
 /** Work that is not one layer: these light up the full stack. */
 export const ACROSS_LAYERS = [
@@ -181,25 +181,25 @@ export type SayPart = string | { text: string; hue: number };
 
 /** What I do, `caps: b`. */
 export const CAPS_SENTENCE: SayPart[] = [
-  'I design the ',
-  { text: 'interface', hue: 1 },
-  ', build the ',
+  'Most days I work on the ',
   { text: 'front end', hue: 2 },
-  ', write the ',
+  ' and the ',
   { text: 'API', hue: 3 },
-  ' behind it, model the ',
+  ' behind it. I also help with the ',
+  { text: 'interface', hue: 1 },
+  ', the ',
   { text: 'data', hue: 4 },
-  ' under that, and run the ',
+  ' and the ',
   { text: 'servers', hue: 5 },
-  ' it lives on. Then I ',
+  ', ',
   { text: 'automate', hue: 6 },
-  ' the boring parts and ',
-  { text: 'lead the team', hue: 7 },
-  ' that does it again.',
+  ' the boring parts, and ',
+  { text: 'lead a small team', hue: 7 },
+  '.',
 ];
 
 export const TOPICS_SENTENCE: SayPart[] = [
-  'Ask me about ',
+  'Happy to talk about ',
   { text: 'system design', hue: 2 },
   ', ',
   { text: 'design engineering', hue: 1 },
@@ -262,7 +262,7 @@ export const WAYS: Way[] = [
   {
     glyph: 'data',
     title: 'Collect no data',
-    text: 'My tools are local first. Sync is optional and tracking does not exist.',
+    text: 'My tools are local first. Sync is optional, and there is no tracking.',
     tone: 'text-hue-1',
   },
   {
@@ -278,7 +278,7 @@ export const AFTER_HOURS = {
   first: {
     a: 'After work I build small tools and publish them. I also run a small homelab and a 3D printer. It is a hobby, but it is also where I practise: a restore drill at home teaches the same lesson as one at work, and it costs less.',
     b: 'My side projects have one rule: small, local-first and no tracking. The same rule applies at home. I run my own services on a small homelab, because I like my data on hardware I can touch.',
-    c: 'At night there is a soldering iron, a 3D printer and one more self-hosted service that nobody asked for. I run a small homelab like production: separate networks, monitoring and backups with restore drills.',
+    c: 'At night there is a soldering iron, a 3D printer and one more self-hosted service that nobody asked for. I try to run my small homelab with care: separate networks, monitoring and backups that I test.',
   } satisfies CopyTones,
   second:
     'This year I study two things that do not meet often: system design, and design engineering (type, spacing, motion). To me they are the same habit. Look at the detail, ask why it is there, then try it.',
@@ -310,7 +310,7 @@ export const FAQ: FaqItem[] = [
   {
     question: 'What do you do, in one line?',
     answer: [
-      'I am a full-stack engineer and team lead. I take a web product from the Figma file to the production server.',
+      'I am a full-stack engineer and team lead. I build web products, mostly with React, Next.js and Node.',
     ],
   },
   {

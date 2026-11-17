@@ -1,7 +1,7 @@
 export const NOTES_HERO = {
   title: 'Notes',
   titleEnd: 'on things I build, fix and run.',
-  lead: 'One idea for each post. I write them after I fix something, because the next person will have the same problem.',
+  lead: 'One idea for each post. I write them after I fix something, in case someone else has the same problem.',
   description:
     'Short notes on things I build, fix and run. One idea for each post.',
 } as const;

@@ -1,6 +1,6 @@
 export const CV_COPY = {
   summary:
-    'Full-stack engineer and team lead. Six years at ReCheck, from intern to lead, on every layer of the product: the Figma file, the React front end, the Node services, and the servers they run on.',
+    'Full-stack engineer and team lead. Six years at ReCheck, from intern to team lead. Mostly React and Node, with some design and DevOps work when the team needed it.',
   experience: 'Experience',
   earlier: 'Earlier',
   education: 'Education',

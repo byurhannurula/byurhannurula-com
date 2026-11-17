@@ -30,7 +30,7 @@ export default function HomelabPage() {
           </>
         }
         title="A small homelab"
-        titleEnd="that I run like production."
+        titleEnd="for fun and for learning."
         lead="One mini PC, one Raspberry Pi and a 10 inch rack. It is where I learn about networks, backups and failure, with my own data as the test."
       />
       <div className="hidden in-data-[lab=lists]:block">

@@ -66,7 +66,7 @@ export const PAGES = {
       kind: 'home',
       eyebrow: 'home',
       title:
-        'Full-stack engineer. I build web products from the first commit to the server.',
+        'Full-stack engineer. I build web products, and I like to know how they run.',
       alt: `${brand.name}, ${brand.role}`,
     },
   },
@@ -78,7 +78,7 @@ export const PAGES = {
     share: {
       kind: 'about',
       eyebrow: 'about',
-      title: 'Six years, one company, every layer of the product.',
+      title: 'Six years at one company, from intern to team lead.',
       alt: `About ${brand.name}`,
     },
   },
@@ -86,11 +86,11 @@ export const PAGES = {
     path: '/work',
     title: 'Work',
     description:
-      'Small tools that do one job well: Jotter, OGee and FullShot. Open source, built on my own time, with no data collection.',
+      'Small tools that each do one job: Jotter, OGee and FullShot. Open source, built on my own time, with no data collection.',
     share: {
       kind: 'work',
       eyebrow: 'work',
-      title: 'Small tools that do one job well.',
+      title: 'Small tools that each do one job.',
       meta: 'Open source. No tracking.',
       alt: `Side projects by ${brand.name}`,
     },
@@ -99,7 +99,7 @@ export const PAGES = {
     path: '/notes',
     title: 'Notes',
     description:
-      'Notes on things I build, fix and run. One idea for each post, written after I fix something, because the next person will have the same problem.',
+      'Notes on things I build, fix and run. One idea for each post, written after I fix something, in case someone else has the same problem.',
     share: {
       kind: 'notes',
       eyebrow: 'notes',
@@ -129,7 +129,7 @@ export const PAGES = {
     share: {
       kind: 'homelab',
       eyebrow: 'homelab',
-      title: 'A small homelab that I run like production.',
+      title: 'A small homelab, run for fun and for learning.',
       meta: 'A hobby, not my job.',
       alt: `The homelab of ${brand.name}`,
     },
@@ -168,7 +168,7 @@ export const PAGES = {
     share: {
       kind: 'about',
       eyebrow: 'cv',
-      title: 'Six years, one company, every layer of the product.',
+      title: 'Six years at one company, from intern to team lead.',
       meta: 'One page. Print it to save a PDF.',
       alt: `The CV of ${brand.name}`,
     },

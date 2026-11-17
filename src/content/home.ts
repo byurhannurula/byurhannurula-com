@@ -10,13 +10,13 @@ export interface CopySet {
 export const HERO_TITLE: Record<keyof CopySet, [start: string, end: string]> = {
   a: [
     'Full-stack engineer.',
-    'I build web products from the first commit to the server they run on.',
+    'I build web products, and I like to know how they run.',
   ],
   b: [
     'I make small software',
     'that does one job and then gets out of the way.',
   ],
-  c: ['I write it, I ship it,', 'I host it.'],
+  c: ['I like to build things,', 'and to run them myself.'],
 };
 
 export const HERO_LEAD: CopySet = {
@@ -97,23 +97,22 @@ export const EXTRA_PROJECT_ROW = {
   name: 'dotfiles',
   kind: 'shell',
   icon: '/assets/icons/ghostty.svg',
-  short: 'One script takes a blank Mac to a fully configured machine.',
+  short: 'One script that sets up a new Mac with my apps and settings.',
 } as const;
 
 export const JOB_SECTION = {
   title: 'Day job',
   action: 'More about me',
   intro: {
-    a: 'I started as an intern and now lead the team. In between I did every job the product needed: front end, back end, deployments and the brand.',
-    b: 'I started as an intern and now lead the team. In between I did every job the product needed: front end, back end, deployments and the brand.',
-    c: 'I started as an intern and now lead the team. The team had no designer and no DevOps person, so I learned both jobs.',
+    a: 'I started as an intern and now lead the team. On the way I worked on most parts of the product: front end, back end, deployments and the brand.',
+    b: 'I started as an intern and now lead the team. On the way I worked on most parts of the product: front end, back end, deployments and the brand.',
+    c: 'I started as an intern and now lead the team. The team had no designer and no DevOps person, so I learned enough of both to get the work done.',
   } satisfies CopySet,
   summary:
-    'I started as an intern and now lead the team. In between I did every job the product needed: front end, back end, deployments and the brand.',
+    'I started as an intern and now lead the team. On the way I worked on most parts of the product: front end, back end, deployments and the brand.',
   years: '6 years',
   ladderTitle: 'Team Lead / Full-Stack Engineer',
-  ladderText:
-    'Six years and every layer of it: from intern to leading the team.',
+  ladderText: 'Six years at one company, from intern to team lead.',
   rolesLabel: 'Roles at ReCheck',
 } as const;
 
