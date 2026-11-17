@@ -13,59 +13,63 @@ export interface Contributions {
   weeks: (ContributionDay | null)[][];
 }
 
-const SAMPLE_WEEKS = 53;
-/** A fixed Saturday, so the sample is the same on every render. */
-const SAMPLE_LAST_DAY = Date.UTC(2026, 10, 7);
-const DAY_MS = 86_400_000;
+/*
+ * A public mirror of GitHub's own graph. GitHub gives this data only
+ * through GraphQL, which needs a token; the mirror needs none.
+ */
+const API = 'https://github-contributions-api.jogruber.de/v4';
+const GITHUB_USER = 'byurhannurula';
+const REVALIDATE_SECONDS = 60 * 60 * 24;
+const TIMEOUT_MS = 5000;
 
-/** Small fixed generator: the same "random" numbers on every run. */
-function sampleNoise(seed: number) {
-  const x = Math.imul(seed + 1, 2_654_435_761) >>> 0;
-  return (((x ^ (x >>> 15)) >>> 0) % 1000) / 1000;
-}
-
-function levelFor(count: number): ContributionDay['level'] {
-  if (count === 0) return 0;
-  if (count < 3) return 1;
-  if (count < 6) return 2;
-  if (count < 9) return 3;
-  return 4;
-}
-
-function sampleContributions(): Contributions {
-  const days = SAMPLE_WEEKS * 7;
-  let total = 0;
-  const weeks = Array.from({ length: SAMPLE_WEEKS }, (_week, w) =>
-    Array.from({ length: 7 }, (_day, d): ContributionDay => {
-      const i = w * 7 + d;
-      const noise = sampleNoise(i);
-      const weekend = d === 0 || d === 6;
-      const quiet = noise < (weekend ? 0.6 : 0.25);
-      const count = quiet ? 0 : Math.ceil(noise * noise * (weekend ? 6 : 13));
-      total += count;
-      return {
-        date: new Date(SAMPLE_LAST_DAY - (days - 1 - i) * DAY_MS)
-          .toISOString()
-          .slice(0, 10),
-        count,
-        level: levelFor(count),
-      };
-    }),
-  );
-  return { total, weeks };
+interface ApiResponse {
+  total: Record<string, number>;
+  contributions: ContributionDay[];
 }
 
 /**
- * SAMPLE DATA: a fixed pattern, not real GitHub contributions.
- *
- * Real data goes here. The old site read a public mirror of the GitHub graph
- * (`github-contributions-api.jogruber.de/v4/<user>?y=last`) with a weekly
- * `revalidate`, and returned null on any failure. Keep that contract: null
- * makes the card show the short fallback and not break the footer.
+ * The first row is a Sunday, so a year that opens mid-week starts with
+ * blanks. Without them every column sits on the wrong weekday.
  */
-export async function getContributions(): Promise<Contributions | null> {
-  return sampleContributions();
+function toWeeks(days: ContributionDay[]) {
+  const weeks: (ContributionDay | null)[][] = [];
+  const leading = new Date(`${days[0].date}T00:00:00Z`).getUTCDay();
+  let week: (ContributionDay | null)[] = Array.from(
+    { length: leading },
+    () => null,
+  );
+  for (const day of days) {
+    week.push(day);
+    if (week.length === 7) {
+      weeks.push(week);
+      week = [];
+    }
+  }
+  if (week.length) {
+    weeks.push([
+      ...week,
+      ...Array.from({ length: 7 - week.length }, () => null),
+    ]);
+  }
+  return weeks;
 }
 
-/** True while `getContributions` returns the sample. The card shows a tag. */
-export const CONTRIBUTIONS_ARE_SAMPLE = true;
+/**
+ * The last year of GitHub contributions. Null on any failure: the footer
+ * card then shows its short fallback and the stats page leaves the graph out.
+ */
+export async function getContributions(): Promise<Contributions | null> {
+  try {
+    const response = await fetch(`${API}/${GITHUB_USER}?y=last`, {
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      next: { revalidate: REVALIDATE_SECONDS },
+    });
+    if (!response.ok) return null;
+    const data = (await response.json()) as ApiResponse;
+    const days = data.contributions;
+    if (!days?.length) return null;
+    return { total: data.total.lastYear ?? 0, weeks: toWeeks(days) };
+  } catch {
+    return null;
+  }
+}

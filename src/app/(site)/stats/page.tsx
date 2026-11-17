@@ -3,10 +3,7 @@ import Link from 'next/link';
 
 import { ScoreRing } from '@/components/colophon/score-ring';
 import { ContributionGraph } from '@/components/layout/contribution-graph';
-import {
-  CONTRIBUTIONS_ARE_SAMPLE,
-  getContributions,
-} from '@/components/layout/social-data';
+import { getContributions } from '@/components/layout/social-data';
 import { PageHero } from '@/components/shared/page-hero';
 import { SampleTag } from '@/components/shared/sample-tag';
 import { Section } from '@/components/shared/section';
@@ -156,19 +153,16 @@ export default async function StatsPage() {
       </Section>
 
       {contributions ? (
-        <Section
-          title={STATS_COPY.code}
-          sub={tagged(CONTRIBUTIONS_ARE_SAMPLE, STATS_COPY.codeSub)}
-        >
+        <Section title={STATS_COPY.code} sub={STATS_COPY.codeSub}>
           <div
             data-reveal
             className="rounded-xl border border-line bg-card p-5"
           >
-            <ContributionGraph weeks={contributions.weeks} />
-            <p className="mt-4 font-mono text-xs text-faint">
-              {contributions.total.toLocaleString('en')} contributions in the
-              last year
-            </p>
+            <ContributionGraph
+              labelled
+              weeks={contributions.weeks}
+              total={contributions.total}
+            />
           </div>
         </Section>
       ) : null}

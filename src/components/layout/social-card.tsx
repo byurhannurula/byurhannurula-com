@@ -1,11 +1,9 @@
 import Image from 'next/image';
 
-import { SampleTag } from '@/components/shared/sample-tag';
-
 import avatar from './avatar.jpeg';
 import { ContributionGraph } from './contribution-graph';
 import type { SocialCard } from './footer-content';
-import { CONTRIBUTIONS_ARE_SAMPLE, type Contributions } from './social-data';
+import type { Contributions } from './social-data';
 
 const name = 'text-sm text-ink';
 const muted = 'text-[0.78125rem] text-soft';
@@ -141,9 +139,6 @@ export function SocialCardBody({
           <span className={name}>{card.handle}</span>
           <span className={muted}>
             {contributions.total.toLocaleString('en')} {card.line}
-            {CONTRIBUTIONS_ARE_SAMPLE ? (
-              <SampleTag className="ml-1.5 px-1.5 py-[0.2rem] text-[0.625rem]" />
-            ) : null}
           </span>
         </div>
       </div>
