@@ -135,8 +135,6 @@ export async function SiteFooter() {
         <div className="col-span-full hidden flex-wrap items-center justify-between gap-x-6 gap-y-4 border-t border-rule pt-5 font-mono text-xs leading-[1.6] text-faint in-data-[fctl=on]:flex in-data-[fmeta=on]:flex in-data-[footer=centre]:w-full in-data-[footer=centre]:justify-center in-data-[ftop=on]:flex">
           <p className="hidden in-data-[fmeta=on]:block">
             {FOOTER_COPY.version} <SampleTag className="px-2 py-[0.2rem]" /> ·{' '}
-            {FOOTER_COPY.updated} ·{' '}
-            <span className="text-accent">{FOOTER_COPY.privacy}</span> ·{' '}
             <a
               href={brand.repository}
               className="text-soft underline underline-offset-[0.25em]"

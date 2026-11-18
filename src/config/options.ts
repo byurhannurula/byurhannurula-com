@@ -241,6 +241,7 @@ const FAVOURITES: Partial<Options> = {
   top: 'wide',
   bg: 'flicker',
   sound: 'on',
+  totop: 'ring',
   hero: 'expand',
   order: 'projects',
   job: 'summary',

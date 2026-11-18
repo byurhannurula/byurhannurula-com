@@ -14,8 +14,6 @@ export const FOOTER_COPY = {
   emailCopied: 'Copied to clipboard',
   emailCopiedShort: 'copied',
   version: 'v4.0',
-  updated: 'Updated November 2026',
-  privacy: 'No cookies, no tracking',
   source: 'Source',
   rss: 'RSS',
   llms: 'llms.txt',
