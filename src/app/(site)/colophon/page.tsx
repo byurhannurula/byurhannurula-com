@@ -1,5 +1,4 @@
 import { ColophonArt } from '@/components/colophon/colophon-art';
-import { ColourModes } from '@/components/colophon/colour-modes';
 import { ScoreRing } from '@/components/colophon/score-ring';
 import { TextLink } from '@/components/links/text-link';
 import { CareerTrack } from '@/components/shared/career-track';
@@ -16,7 +15,6 @@ import {
   LINEAGE,
   PROCESS,
   SITE_SCORES,
-  TYPEFACES,
 } from '@/content/colophon';
 import { brand } from '@/lib/brand';
 import { pageMetadata } from '@/lib/seo';
@@ -73,33 +71,6 @@ export default function ColophonPage() {
         <p className="mt-6 label-mono text-faint">
           Last run: {SITE_SCORES.ranOn}
         </p>
-      </Section>
-
-      <Section title="Type" sub="Three faces, each with one job.">
-        <ul data-reveal className="grid gap-x-12 gap-y-10 sm:grid-cols-3">
-          {TYPEFACES.map(({ name, role, font, sample }) => (
-            <li key={name}>
-              <span
-                aria-hidden
-                className={cn(
-                  'block text-[5.5rem] leading-none font-semibold tracking-[-0.04em]',
-                  font,
-                )}
-              >
-                {sample}
-              </span>
-              <b className="mt-4 block font-semibold">{name}</b>
-              <span className="text-soft">{role}</span>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section
-        title="Colour"
-        sub="The light follows the clock. These are the four modes, side by side."
-      >
-        <ColourModes />
       </Section>
 
       <Section

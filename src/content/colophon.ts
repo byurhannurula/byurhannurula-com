@@ -1,10 +1,9 @@
 import type { Role } from '@/content/career';
-import type { LightMode } from '@/lib/light';
 
 export const COLOPHON_HERO = {
   title: 'How this site is made,',
   titleEnd: 'and why it looks like this.',
-  lead: 'A colophon is the note at the end of a book that says how it was made. This is the one for this site: the tools, the type, the colours and the sites I learned from.',
+  lead: 'A colophon is the note at the end of a book that says how it was made. This is the one for this site: the tools, the scores and the sites I learned from.',
 } as const;
 
 /** The stack as one sentence. `tech` names get their icon from tech.ts. */
@@ -75,46 +74,6 @@ export const DECISIONS: Decision[] = [
     text: 'pnpm with a 48-hour release cooldown, oxlint and oxfmt, and a build that fails loudly.',
     tone: 'text-hue-4',
   },
-];
-
-export interface Typeface {
-  name: string;
-  role: string;
-  /** Tailwind font class for the specimen. */
-  font: string;
-  sample: string;
-}
-
-export const TYPEFACES: Typeface[] = [
-  {
-    name: 'Instrument Sans',
-    role: 'Titles and text',
-    font: 'font-sans',
-    sample: 'Aa',
-  },
-  {
-    name: 'Geist Mono',
-    role: 'Labels, dates and code',
-    font: 'font-mono',
-    sample: 'Aa',
-  },
-  {
-    name: 'Geist Pixel',
-    role: 'The name, in one hero',
-    font: 'font-pixel',
-    sample: 'Aa',
-  },
-];
-
-export const LIGHT_MODES_COPY: {
-  mode: LightMode;
-  hours: string;
-  text: string;
-}[] = [
-  { mode: 'morning', hours: '05 to 11', text: 'Warm white' },
-  { mode: 'day', hours: '11 to 17', text: 'Plain white' },
-  { mode: 'evening', hours: '17 to 21', text: 'Warm dark' },
-  { mode: 'night', hours: '21 to 05', text: 'Black' },
 ];
 
 /**
