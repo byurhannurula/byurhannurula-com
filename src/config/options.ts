@@ -233,8 +233,33 @@ export const OPTIONS = Object.assign(
 
 export const OPTION_KEYS = Object.keys(OPTIONS) as OptionKey[];
 
+/**
+ * The owner's picks, read from screenshots on 2026-11-18. A key not named
+ * here defaults to its first choice.
+ */
+const FAVOURITES: Partial<Options> = {
+  top: 'wide',
+  bg: 'flicker',
+  sound: 'on',
+  hero: 'expand',
+  order: 'projects',
+  job: 'summary',
+  note: 'thumb',
+  caps: 'b',
+  stack: 'pile',
+  notegroup: 'year',
+  work: 'grid',
+  footer: 'sentence',
+  fmeta: 'on',
+  fctl: 'on',
+  ftop: 'on',
+};
+
 export const DEFAULT_OPTIONS = Object.fromEntries(
-  OPTION_KEYS.map((key) => [key, OPTIONS[key].choices[0][0]]),
+  OPTION_KEYS.map((key) => [
+    key,
+    FAVOURITES[key] ?? OPTIONS[key].choices[0][0],
+  ]),
 ) as Options;
 
 export function isValidChoice(key: OptionKey, value: unknown): value is string {

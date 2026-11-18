@@ -136,6 +136,22 @@ export function ConfigPanel() {
         </span>
         <button
           type="button"
+          title="Copy the changed options as JSON, to make them the defaults"
+          onClick={() => {
+            void navigator.clipboard.writeText(
+              JSON.stringify(
+                Object.fromEntries(changed.map((key) => [key, options[key]])),
+                null,
+                2,
+              ),
+            );
+          }}
+          className={cn(pill, 'bg-white/8')}
+        >
+          copy
+        </button>
+        <button
+          type="button"
           onClick={() => {
             setPreset('');
             resetOptions();
