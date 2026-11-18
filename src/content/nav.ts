@@ -25,26 +25,31 @@ export const NAV_ITEMS: NavItem[] = [
   },
 ];
 
+/** Pages that are built but not linked yet. Remove a path to show it again. */
+export const UNLISTED = new Set(['/shelf', '/stats', '/design-system']);
+
 /** In the footer and the command menu, but not in the nav bar. */
-export const FOOTER_ITEMS: NavItem[] = [
-  {
-    label: 'Shelf',
-    href: '/shelf',
-    keywords: 'books films movies shows reading watching',
-  },
-  {
-    label: 'Stats',
-    href: '/stats',
-    keywords: 'numbers views likes analytics statistics',
-  },
-  {
-    label: 'Design system',
-    href: '/design-system',
-    keywords: 'tokens colours type components styleguide changes',
-  },
-  {
-    label: 'Colophon',
-    href: '/colophon',
-    keywords: 'how this site is made stack fonts colours credits',
-  },
-];
+export const FOOTER_ITEMS: NavItem[] = (
+  [
+    {
+      label: 'Shelf',
+      href: '/shelf',
+      keywords: 'books films movies shows reading watching',
+    },
+    {
+      label: 'Stats',
+      href: '/stats',
+      keywords: 'numbers views likes analytics statistics',
+    },
+    {
+      label: 'Design system',
+      href: '/design-system',
+      keywords: 'tokens colours type components styleguide changes',
+    },
+    {
+      label: 'Colophon',
+      href: '/colophon',
+      keywords: 'how this site is made stack fonts colours credits',
+    },
+  ] satisfies NavItem[]
+).filter((item) => !UNLISTED.has(item.href));
