@@ -2,7 +2,13 @@ import './cv.css';
 
 import { brand } from '@/lib/brand';
 import { siteUrl } from '@/lib/site';
-import { ACHIEVEMENTS, EARLIER, EMPLOYER, ROLES } from '@/content/career';
+import {
+  ACHIEVEMENTS,
+  ALONGSIDE,
+  EARLIER,
+  EMPLOYER,
+  ROLES,
+} from '@/content/career';
 import { CV_COPY, CV_PROJECTS } from '@/content/cv';
 import { PROJECTS } from '@/content/projects';
 import { SOCIALS } from '@/content/socials';
@@ -105,6 +111,23 @@ export function CvSheet() {
                 </li>
               ))}
             </ul>
+          </section>
+
+          <section>
+            <Heading>{CV_COPY.alongside}</Heading>
+            {ALONGSIDE.map((item) => (
+              <div key={item.title}>
+                <div className="flex items-baseline justify-between gap-4">
+                  <h3 className="font-semibold">
+                    <a href={item.href}>{item.title}</a>
+                  </h3>
+                  <span className="shrink-0 font-mono text-[0.6875rem] text-(--cv-faint)">
+                    {item.period}
+                  </span>
+                </div>
+                <p className="text-(--cv-soft)">{item.text}</p>
+              </div>
+            ))}
           </section>
 
           <section>

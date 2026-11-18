@@ -4,7 +4,10 @@ import { BioSection } from '@/components/about/bio-section';
 import { BookShelf } from '@/components/about/book-shelf';
 import { CapabilitiesSection } from '@/components/about/capabilities-section';
 import { CareerSection } from '@/components/about/career-section';
-import { EarlierSection } from '@/components/about/earlier-section';
+import {
+  AlongsideSection,
+  EarlierSection,
+} from '@/components/about/earlier-section';
 import { FaqSection } from '@/components/about/faq-section';
 import { NowSection } from '@/components/about/now-section';
 import { StackSection } from '@/components/about/stack-section';
@@ -22,6 +25,7 @@ export default function AboutPage() {
       <BioSection />
       <NowSection />
       <CareerSection />
+      <AlongsideSection />
       <EarlierSection />
       <CapabilitiesSection />
       <WaysSection />

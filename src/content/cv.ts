@@ -2,6 +2,7 @@ export const CV_COPY = {
   summary:
     'Full-stack engineer and team lead. Six years at ReCheck, from intern to team lead. Mostly React and Node, with some design and DevOps work when the team needed it.',
   experience: 'Experience',
+  alongside: 'Alongside',
   earlier: 'Earlier',
   education: 'Education',
   stack: 'Stack',
