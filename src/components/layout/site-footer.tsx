@@ -151,7 +151,8 @@ export async function SiteFooter() {
             >
               {FOOTER_COPY.rss}
             </a>{' '}
-            ·{' '}
+            · {/* A static text file in public/, not a page. */}
+            {/* oxlint-disable-next-line nextjs/no-html-link-for-pages */}
             <a
               href="/llms.txt"
               className="text-soft underline underline-offset-[0.25em]"
