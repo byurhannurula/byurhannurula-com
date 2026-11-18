@@ -1,6 +1,5 @@
 import { LabLists } from '@/components/homelab/lab-lists';
 import { RackSection } from '@/components/homelab/rack-section';
-import { RequestHops } from '@/components/homelab/request-hops';
 import { RulesList } from '@/components/homelab/rules-list';
 import { StatusSection } from '@/components/homelab/status-section';
 import { PageHero } from '@/components/shared/page-hero';
@@ -39,7 +38,6 @@ export default function HomelabPage() {
       <div className="hidden in-data-[lab=rack]:block">
         <RackSection />
         <StatusSection />
-        <RequestHops />
       </div>
       <RulesList />
     </>

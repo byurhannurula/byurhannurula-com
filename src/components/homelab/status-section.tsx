@@ -60,6 +60,7 @@ export async function StatusSection() {
 
   return (
     <Section
+      id="status"
       title="Status"
       sub={
         <>

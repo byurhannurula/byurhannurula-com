@@ -1,4 +1,9 @@
-import { appIcon, gearImage, type GearItem } from '@/content/uses';
+import {
+  appIcon,
+  gearImage,
+  type GearImage,
+  type GearItem,
+} from '@/content/uses';
 
 export interface HomelabService {
   /** Also the name that a status monitor must have to match. */
@@ -111,6 +116,9 @@ export interface Device {
   text: string;
   /** Draft: which service runs where is an assumption, not checked. */
   runs: ServiceName[];
+  photo: GearImage;
+  /** Facts of the model, from the maker. Not measured on this unit. */
+  specs: { value: string; label: string }[];
 }
 
 /** In the order of the drawing, which is also the tab order. */
@@ -121,6 +129,12 @@ export const DEVICES: Device[] = [
     name: 'UniFi UCG Ultra',
     text: 'Router and firewall. Each type of device gets its own network, so a cheap sensor cannot see my laptop.',
     runs: [],
+    photo: gearImage('unifi-ucg-ultra.jpg', 1200, 921),
+    specs: [
+      { value: '2.5 GbE', label: 'internet port' },
+      { value: '4', label: 'network ports' },
+      { value: '1 Gbps', label: 'with IPS on' },
+    ],
   },
   {
     id: 'pi',
@@ -128,6 +142,12 @@ export const DEVICES: Device[] = [
     name: 'Raspberry Pi 3B+',
     text: 'DNS and monitoring. It must stay up when the server is down, so it does not run on the server.',
     runs: ['AdGuard Home', 'Uptime Kuma', 'Beszel'],
+    photo: gearImage('raspberry-pi-3b.jpg', 1500, 965),
+    specs: [
+      { value: '4 cores', label: '1.4 GHz' },
+      { value: '1 GB', label: 'memory' },
+      { value: '2018', label: 'released' },
+    ],
   },
   {
     id: 'server',
@@ -147,6 +167,12 @@ export const DEVICES: Device[] = [
       'Baikal',
       'Papra',
     ],
+    photo: gearImage('hp-elitedesk-800-g3-mini.jpg', 1280, 653),
+    specs: [
+      { value: '1 L', label: 'case' },
+      { value: '35 W', label: 'CPU class' },
+      { value: '2017', label: 'released' },
+    ],
   },
   {
     id: 'free',
@@ -154,6 +180,12 @@ export const DEVICES: Device[] = [
     name: 'Room for one more',
     text: 'One unit of the DeskPi T0 rack is empty. I will find a reason to fill it.',
     runs: [],
+    photo: gearImage('deskpi-rackmate-t0.jpg', 1066, 1066),
+    specs: [
+      { value: '10 inch', label: 'rack width' },
+      { value: '4U', label: 'rack height' },
+      { value: '1U', label: 'still free' },
+    ],
   },
   {
     id: 'ap',
@@ -161,6 +193,12 @@ export const DEVICES: Device[] = [
     name: 'UniFi U6+',
     text: 'One access point. For this home, one is sufficient.',
     runs: [],
+    photo: gearImage('unifi-u6-plus.png', 1200, 1200),
+    specs: [
+      { value: 'Wi-Fi 6', label: 'standard' },
+      { value: '2 x 2', label: 'antennas, both bands' },
+      { value: 'PoE', label: 'one cable' },
+    ],
   },
   {
     id: 'zigbee',
@@ -168,6 +206,11 @@ export const DEVICES: Device[] = [
     name: 'Sonoff Zigbee Dongle',
     text: 'The radio for the home automation sensors. Home Assistant talks to them through it.',
     runs: ['Home Assistant'],
+    photo: gearImage('sonoff-zigbee-dongle.jpg', 1100, 1100),
+    specs: [
+      { value: 'Zigbee 3.0', label: 'radio' },
+      { value: 'USB', label: 'on the server' },
+    ],
   },
 ];
 
@@ -203,41 +246,6 @@ export const MACHINES: GearItem[] = [
     image: gearImage('deskpi-rackmate-t0.jpg', 1066, 1066),
     name: 'DeskPi T0, 4U, 10"',
     text: 'Small rack that keeps the cables in order.',
-  },
-];
-
-export interface Hop {
-  /** A service, or the reader's own device at the start. */
-  from: ServiceName | 'phone';
-  name: string;
-  text: string;
-}
-
-export const HOPS: Hop[] = [
-  {
-    from: 'phone',
-    name: 'My phone',
-    text: 'Outside my home, on any network.',
-  },
-  {
-    from: 'Cloudflare Tunnel',
-    name: 'Cloudflare Tunnel',
-    text: 'The server calls out. Nothing calls in.',
-  },
-  {
-    from: 'Nginx Proxy Manager',
-    name: 'Nginx Proxy Manager',
-    text: 'Finds the right service and adds the certificate.',
-  },
-  {
-    from: 'Pocket ID',
-    name: 'Pocket ID',
-    text: 'Asks for a passkey. There is no password.',
-  },
-  {
-    from: 'Immich',
-    name: 'Immich',
-    text: 'Shows the photo, from a disk that I own.',
   },
 ];
 
