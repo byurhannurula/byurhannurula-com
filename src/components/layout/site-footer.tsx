@@ -142,6 +142,21 @@ export async function SiteFooter() {
               className="text-soft underline underline-offset-[0.25em]"
             >
               {FOOTER_COPY.source}
+            </a>{' '}
+            ·{' '}
+            <a
+              href={RSS_LINK.href}
+              className="text-soft underline underline-offset-[0.25em]"
+              {...trackAttrs(EVENTS.rss)}
+            >
+              {FOOTER_COPY.rss}
+            </a>{' '}
+            ·{' '}
+            <a
+              href="/llms.txt"
+              className="text-soft underline underline-offset-[0.25em]"
+            >
+              {FOOTER_COPY.llms}
             </a>
           </p>
           <FooterTools />

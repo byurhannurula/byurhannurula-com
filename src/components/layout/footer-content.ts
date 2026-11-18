@@ -17,6 +17,8 @@ export const FOOTER_COPY = {
   updated: 'Updated November 2026',
   privacy: 'No cookies, no tracking',
   source: 'Source',
+  rss: 'RSS',
+  llms: 'llms.txt',
   lightFallback: 'light',
   sound: 'sound',
   top: 'top',
