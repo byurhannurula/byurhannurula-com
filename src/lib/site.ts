@@ -1,3 +1,5 @@
+import { UNLISTED } from '@/content/nav';
+
 function resolveSiteUrl(): URL {
   const candidates = [
     process.env.SITE_URL,
@@ -18,18 +20,20 @@ function resolveSiteUrl(): URL {
 export const siteUrl = resolveSiteUrl();
 
 /** Static routes for the sitemap and llms.txt. Notes are added from MDX. */
-export const routes = [
-  '/',
-  '/work',
-  '/notes',
-  '/about',
-  '/uses',
-  '/homelab',
-  '/shelf',
-  '/cv',
-  '/stats',
-  '/colophon',
-  '/design-system',
-] as const;
+export const routes = (
+  [
+    '/',
+    '/work',
+    '/notes',
+    '/about',
+    '/uses',
+    '/homelab',
+    '/shelf',
+    '/cv',
+    '/stats',
+    '/colophon',
+    '/design-system',
+  ] as const
+).filter((path) => !UNLISTED.has(path));
 
 export const absoluteUrl = (path: string) => new URL(path, siteUrl).href;

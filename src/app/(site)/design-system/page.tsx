@@ -18,6 +18,7 @@ import { DS_SECTIONS } from '@/config/design-system';
 import { PAGES } from '@/config/seo';
 import { getDesignLog } from '@/lib/design-log';
 import { pageMetadata } from '@/lib/seo';
+import { hideUnlisted } from '@/lib/unlisted';
 
 export const metadata = pageMetadata(PAGES.designSystem);
 
@@ -35,6 +36,7 @@ const BODIES: Record<string, ReactNode> = {
 };
 
 export default function DesignSystemPage() {
+  hideUnlisted('/design-system');
   return (
     <>
       <DetachOptions />

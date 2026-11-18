@@ -5,6 +5,7 @@ import { StatusSection } from '@/components/homelab/status-section';
 import { PageHero } from '@/components/shared/page-hero';
 import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
+import { hideUnlisted } from '@/lib/unlisted';
 
 export const metadata = pageMetadata(PAGES.homelab);
 
@@ -16,6 +17,7 @@ export const metadata = pageMetadata(PAGES.homelab);
 // binding, and sample data needs neither.
 
 export default function HomelabPage() {
+  hideUnlisted('/homelab');
   return (
     <>
       <PageHero

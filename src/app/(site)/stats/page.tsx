@@ -18,6 +18,7 @@ import { countCommits } from '@/lib/design-log';
 import { getNotes } from '@/lib/notes';
 import { pageMetadata } from '@/lib/seo';
 import { getNoteCounts, STATS_ARE_SAMPLE } from '@/lib/stats';
+import { hideUnlisted } from '@/lib/unlisted';
 
 export const metadata = pageMetadata(PAGES.stats);
 
@@ -43,6 +44,7 @@ const tagged = (on: boolean, text: string) =>
   );
 
 export default async function StatsPage() {
+  hideUnlisted('/stats');
   const notes = await getNotes();
   const counts = await getNoteCounts(notes.map((note) => note.slug));
   const contributions = await getContributions();

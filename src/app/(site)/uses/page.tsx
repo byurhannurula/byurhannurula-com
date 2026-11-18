@@ -9,6 +9,7 @@ import { UsesArt } from '@/components/uses/uses-art';
 import { USES, USES_UPDATED, usesSectionId } from '@/content/uses';
 import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
+import { UNLISTED } from '@/content/nav';
 
 export const metadata = pageMetadata(PAGES.uses);
 
@@ -45,13 +46,15 @@ export default function UsesPage() {
           )}
         </Section>
       ))}
-      <p className="mt-12 text-soft in-data-[homelab=off]:hidden">
-        The servers and self-hosted services have their own page:{' '}
-        <Link href="/homelab" className="font-medium text-ink underline">
-          the homelab
-        </Link>
-        .
-      </p>
+      {UNLISTED.has('/homelab') ? null : (
+        <p className="mt-12 text-soft in-data-[homelab=off]:hidden">
+          The servers and self-hosted services have their own page:{' '}
+          <Link href="/homelab" className="font-medium text-ink underline">
+            the homelab
+          </Link>
+          .
+        </p>
+      )}
     </>
   );
 }

@@ -19,6 +19,7 @@ import {
 import { brand } from '@/lib/brand';
 import { pageMetadata } from '@/lib/seo';
 import { cn } from '@/lib/utils';
+import { hideUnlisted } from '@/lib/unlisted';
 
 export const metadata = pageMetadata(PAGES.colophon);
 
@@ -30,6 +31,7 @@ const BUILT_ON = new Intl.DateTimeFormat('en-GB', {
 }).format(new Date());
 
 export default function ColophonPage() {
+  hideUnlisted('/colophon');
   return (
     <>
       <PageHero

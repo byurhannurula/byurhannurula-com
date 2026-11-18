@@ -53,15 +53,20 @@ export const ACHIEVEMENTS = [
   'Onboarded and mentored interns, reviewed code and helped improve how the team works.',
 ];
 
-/** Work next to the day job. The client work itself lives on the studio site. */
+/**
+ * Work next to the day job. The client work itself lives on the studio site.
+ * `hidden` keeps an entry off the site and the CV until it is ready.
+ */
 export const ALONGSIDE = [
   {
+    // The studio site is not live yet.
+    hidden: true,
     period: '2026 to now',
     title: 'Waaza Studio, freelance',
     href: 'https://waaza.studio',
     text: 'My small web studio in Ruse, next to the day job. Websites and online stores for local businesses, in Bulgarian and English.',
   },
-];
+].filter((item) => !item.hidden);
 
 export const EARLIER = [
   {

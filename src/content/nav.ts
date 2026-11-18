@@ -7,7 +7,7 @@ export interface NavItem {
   when?: 'homelab:on';
 }
 
-export const NAV_ITEMS: NavItem[] = [
+const ALL_NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/', keywords: 'start' },
   {
     label: 'Work',
@@ -25,8 +25,22 @@ export const NAV_ITEMS: NavItem[] = [
   },
 ];
 
-/** Pages that are built but not linked yet. Remove a path to show it again. */
-export const UNLISTED = new Set(['/shelf', '/stats', '/design-system']);
+/**
+ * Pages that are built but not part of the launch. They leave the nav, the
+ * footer, the sitemap and llms.txt, and are a 404 in production. Remove a
+ * path to show it again.
+ */
+export const UNLISTED = new Set([
+  '/homelab',
+  '/colophon',
+  '/shelf',
+  '/stats',
+  '/design-system',
+]);
+
+export const NAV_ITEMS = ALL_NAV_ITEMS.filter(
+  (item) => !UNLISTED.has(item.href),
+);
 
 /** In the footer and the command menu, but not in the nav bar. */
 export const FOOTER_ITEMS: NavItem[] = (

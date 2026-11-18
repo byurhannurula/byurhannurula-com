@@ -7,10 +7,12 @@ import { ShelfNow } from '@/components/shelf/shelf-now';
 import { SHELF, SHELF_COPY } from '@/content/shelf';
 import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
+import { hideUnlisted } from '@/lib/unlisted';
 
 export const metadata = pageMetadata(PAGES.shelf);
 
 export default function ShelfPage() {
+  hideUnlisted('/shelf');
   return (
     <>
       <PageHero

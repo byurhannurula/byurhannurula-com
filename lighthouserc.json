@@ -9,9 +9,7 @@
         "http://localhost:3300/work",
         "http://localhost:3300/notes",
         "http://localhost:3300/notes/third-time-is-the-charm",
-        "http://localhost:3300/uses",
-        "http://localhost:3300/shelf",
-        "http://localhost:3300/colophon"
+        "http://localhost:3300/uses"
       ],
       "numberOfRuns": 1,
       "settings": { "chromeFlags": "--headless=new" }

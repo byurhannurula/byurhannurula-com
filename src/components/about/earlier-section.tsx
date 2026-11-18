@@ -44,6 +44,7 @@ function Rows({ title, items }: { title: string; items: Item[] }) {
 
 /** Work next to the current job. */
 export function AlongsideSection() {
+  if (!ALONGSIDE.length) return null;
   return <Rows title="Alongside" items={ALONGSIDE} />;
 }
 
