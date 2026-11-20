@@ -210,27 +210,4 @@ export const USES: UsesSection[] = [
       },
     ],
   },
-  {
-    title: 'Workshop',
-    sub: 'A hobby.',
-    kind: 'gear',
-    items: [
-      {
-        image: gearImage('bambu-lab-a1-combo.png', 1265, 1024),
-        name: 'Bambu Lab A1 Combo',
-        text: 'Multi-colour 3D printer.',
-      },
-      {
-        image: gearImage('creality-spacepi-plus.jpg', 1000, 1000),
-        name: 'Creality SpacePi Plus',
-        text: 'Keeps two rolls of filament dry.',
-      },
-      {
-        image: gearImage('creality-ender-3-v2.jpg', 750, 750),
-        name: 'Creality Ender 3 V2',
-        text: 'Retired. It taught me patience.',
-        retired: true,
-      },
-    ],
-  },
 ];
