@@ -159,7 +159,10 @@ body::before {
   height: 36rem;
   pointer-events: none;
 }
-[data-bg='dots'] body::before {
+/* `connect` shares this grid: it is in the first paint, so the dots never
+   wait for the canvas script, which only adds the lines. */
+[data-bg='dots'] body::before,
+[data-bg='connect'] body::before {
   background: radial-gradient(var(--line-strong) 1px, transparent 1.5px) 0 0 /
     22px 22px;
   mask-image: linear-gradient(#000, transparent);

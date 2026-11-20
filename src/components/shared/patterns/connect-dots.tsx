@@ -2,17 +2,15 @@
 
 import { useRef } from 'react';
 
-import {
-  type CanvasScene,
-  cssVar,
-  useCanvasLoop,
-} from '@/hooks/use-canvas-loop';
+import { type CanvasScene, useCanvasLoop } from '@/hooks/use-canvas-loop';
 
 import { LINE_COLOURS } from './palette';
 
-/** Same spacing as the `dots` background, so the two read as one family. */
+/**
+ * The spacing of the CSS `dots` grid (options.css), which also draws the
+ * dots under this layer: the lines must land on them.
+ */
 const STEP = 22;
-const DOT = 1;
 const LINE = 2.5;
 const END = 3.5;
 /** Cells a line draws per second. */
@@ -87,7 +85,6 @@ function createScene(): CanvasScene {
   let width = 0;
   let height = 0;
   let most = 3;
-  let dots: HTMLCanvasElement | null = null;
   let flows: Flow[] = [];
   let wait = 0;
 
@@ -149,7 +146,6 @@ function createScene(): CanvasScene {
 
   const draw = (ctx: CanvasRenderingContext2D) => {
     ctx.clearRect(0, 0, width, height);
-    if (dots) ctx.drawImage(dots, 0, 0, width, height);
     ctx.lineWidth = LINE;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -158,7 +154,7 @@ function createScene(): CanvasScene {
   };
 
   return {
-    setup(ctx, w, h) {
+    setup(_ctx, w, h) {
       // Quieter on a light page, where saturated colour shouts.
       strength =
         document.documentElement.dataset.theme === 'dark' ? 0.75 : 0.55;
@@ -171,23 +167,6 @@ function createScene(): CanvasScene {
       most = Math.max(2, Math.min(9, Math.round((w * h) / 40_000)));
       flows = [];
       wait = 0;
-      // The dot grid never changes: paint it once, copy it each frame.
-      const scale = ctx.getTransform().a;
-      dots = document.createElement('canvas');
-      dots.width = Math.round(w * scale);
-      dots.height = Math.round(h * scale);
-      const dctx = dots.getContext('2d');
-      if (dctx) {
-        dctx.scale(scale, scale);
-        dctx.fillStyle = cssVar('--line-strong');
-        for (let x = 0; x < cols; x++) {
-          for (let y = 0; y < rows; y++) {
-            dctx.beginPath();
-            dctx.arc(...centre([x, y]), DOT, 0, Math.PI * 2);
-            dctx.fill();
-          }
-        }
-      }
     },
     frame(ctx, dt) {
       for (const flow of flows) flow.age += dt;
@@ -211,8 +190,8 @@ function createScene(): CanvasScene {
 }
 
 /**
- * A grid of faint dots where coloured lines join two dots at random places,
- * stay a moment, and fade. Several run at once, spread over the area.
+ * Coloured lines that join two dots of the grid at random places, stay a
+ * moment, and fade. Several run at once, spread over the area.
  */
 export function ConnectDots() {
   const box = useRef<HTMLDivElement>(null);
