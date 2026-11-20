@@ -27,6 +27,7 @@ export function NavFrame({ children }: NavFrameProps) {
 
   return (
     <header
+      data-site-nav
       data-size={small ? 'small' : 'full'}
       // A hidden bar can still take keyboard focus, so focus brings it back.
       onFocus={reveal}

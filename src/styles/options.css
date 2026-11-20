@@ -282,8 +282,10 @@ body::before {
   }
 }
 
-/* page change (`pagefx`): the nav stays, the page moves */
-[data-vt='page'] header {
+/* page change (`pagefx`): the nav stays, the page moves. The name must be
+   on one element only: a second one (any page hero is a <header> too) makes
+   the browser abort the transition. */
+[data-vt='page'] [data-site-nav] {
   view-transition-name: site-nav;
 }
 [data-vt='page'][data-pagefx='fade']::view-transition-old(root) {
