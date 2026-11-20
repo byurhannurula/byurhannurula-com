@@ -4,6 +4,7 @@ import { SITE_SEO } from '@/config/seo';
 import { RSS_PATH } from '@/content/socials';
 import { brand } from '@/lib/brand';
 import { absoluteUrl } from '@/lib/site';
+import { NOTES_LIVE } from '@/content/nav';
 
 /**
  * The share video as Open Graph wants it. Few platforms play `og:video`,
@@ -22,9 +23,10 @@ export const SHARE_VIDEO = {
  * The feed link in the page head. A page's own `alternates` replaces the
  * layout's, it does not merge, so every page must carry this again.
  */
-export const FEED_ALTERNATES = {
-  'application/rss+xml': [{ url: RSS_PATH, title: brand.name }],
-};
+export const FEED_ALTERNATES: Record<string, { url: string; title: string }[]> =
+  NOTES_LIVE
+    ? { 'application/rss+xml': [{ url: RSS_PATH, title: brand.name }] }
+    : {};
 
 interface ArticleMeta {
   /** ISO date. */

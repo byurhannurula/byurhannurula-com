@@ -1,6 +1,7 @@
 import { brand } from '@/lib/brand';
-import { getNotes } from '@/lib/notes';
+import { getListedNotes } from '@/lib/notes';
 import { absoluteUrl } from '@/lib/site';
+import { NOTES_LIVE } from '@/content/nav';
 
 export const dynamic = 'force-static';
 
@@ -12,8 +13,9 @@ const escapeXml = (value: string) =>
     .replace(/"/g, '&quot;');
 
 export async function GET() {
+  if (!NOTES_LIVE) return new Response('Not found', { status: 404 });
   // Sample notes are test content: they stay out of the feed.
-  const notes = (await getNotes()).filter((note) => !note.sample);
+  const notes = (await getListedNotes()).filter((note) => !note.sample);
 
   const items = notes.map((note) => {
     const url = absoluteUrl(`/notes/${note.slug}`);

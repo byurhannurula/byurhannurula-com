@@ -31,12 +31,16 @@ const ALL_NAV_ITEMS: NavItem[] = [
  * path to show it again.
  */
 export const UNLISTED = new Set([
+  '/notes',
   '/homelab',
   '/colophon',
   '/shelf',
   '/stats',
   '/design-system',
 ]);
+
+/** False while notes are parked: then no list, feed or link shows them. */
+export const NOTES_LIVE = !UNLISTED.has('/notes');
 
 export const NAV_ITEMS = ALL_NAV_ITEMS.filter(
   (item) => !UNLISTED.has(item.href),

@@ -15,6 +15,7 @@ import {
   HERO_LEAD,
   HERO_TITLE,
 } from '@/content/home';
+import { UNLISTED } from '@/content/nav';
 
 function TitleParts({ parts }: { parts: [start: string, end: string] }) {
   return (
@@ -67,11 +68,13 @@ export function HomeHero() {
             />
           </Link>
         </Button>
-        <Button asChild variant="outline">
-          <Link href={HERO_ACTIONS.secondary.href}>
-            {HERO_ACTIONS.secondary.label}
-          </Link>
-        </Button>
+        {UNLISTED.has(HERO_ACTIONS.secondary.href) ? null : (
+          <Button asChild variant="outline">
+            <Link href={HERO_ACTIONS.secondary.href}>
+              {HERO_ACTIONS.secondary.label}
+            </Link>
+          </Button>
+        )}
       </div>
     </header>
   );

@@ -29,7 +29,7 @@ export const OG_STYLES = [
 export type OgStyle = (typeof OG_STYLES)[number];
 
 /** The style every page uses. */
-export const OG_STYLE: OgStyle = 'plain';
+export const OG_STYLE: OgStyle = 'dots';
 
 /**
  * A note with a cover picture uses this style instead, so its link shows

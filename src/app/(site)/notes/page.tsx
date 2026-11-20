@@ -7,10 +7,12 @@ import { NOTE_QUEUE, NOTE_QUEUE_COPY, NOTES_HERO } from '@/content/notes';
 import { getNotes } from '@/lib/notes';
 import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
+import { hideUnlisted } from '@/lib/unlisted';
 
 export const metadata = pageMetadata(PAGES.notes);
 
 export default async function NotesPage() {
+  hideUnlisted('/notes');
   const notes = await getNotes();
 
   return (

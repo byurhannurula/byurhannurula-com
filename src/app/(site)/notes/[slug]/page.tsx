@@ -17,6 +17,7 @@ import { renderNote } from '@/lib/mdx';
 import { getNote, getNotes } from '@/lib/notes';
 import { pageMetadata } from '@/lib/seo';
 import { cn } from '@/lib/utils';
+import { hideUnlisted } from '@/lib/unlisted';
 
 interface NotePageProps {
   params: Promise<{ slug: string }>;
@@ -51,6 +52,7 @@ export async function generateMetadata({
 const BODY = '[data-note-body]';
 
 export default async function NotePage({ params }: NotePageProps) {
+  hideUnlisted('/notes');
   const { slug } = await params;
   const note = await getNote(slug);
   if (!note) notFound();

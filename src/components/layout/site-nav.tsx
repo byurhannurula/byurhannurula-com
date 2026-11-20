@@ -11,6 +11,12 @@ import { ModeSwitch } from './mode-switch';
 import { NavFrame } from './nav-frame';
 import { NavLinks } from './nav-links';
 
+/**
+ * Off for the first release; the switch and personal mode stay in the code.
+ * True puts the work / personal switch in the nav again.
+ */
+const SHOW_MODE_SWITCH = false;
+
 /** The nav bar: brand, page links, search, the mode switch and the light. */
 export function SiteNav() {
   return (
@@ -25,7 +31,7 @@ export function SiteNav() {
       <NavLinks />
       <div className="flex items-center gap-[0.15rem]">
         <CommandButton />
-        <ModeSwitch />
+        {SHOW_MODE_SWITCH ? <ModeSwitch /> : null}
         <LightMenu>
           <button
             type="button"

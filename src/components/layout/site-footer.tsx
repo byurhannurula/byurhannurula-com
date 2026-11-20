@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { SampleTag } from '@/components/shared/sample-tag';
-import { FOOTER_ITEMS, NAV_ITEMS } from '@/content/nav';
+import { FOOTER_ITEMS, NAV_ITEMS, NOTES_LIVE } from '@/content/nav';
 import { SOCIALS } from '@/content/socials';
 import { EVENTS, trackAttrs } from '@/lib/track';
 import { brand } from '@/lib/brand';
@@ -23,7 +23,7 @@ const SITE_LINKS = [
   ...NAV_ITEMS.filter(({ href }) => href !== '/'),
   ...FOOTER_ITEMS,
 ];
-const ELSEWHERE = [...SOCIALS, RSS_LINK];
+const ELSEWHERE = NOTES_LIVE ? [...SOCIALS, RSS_LINK] : SOCIALS;
 
 const heading =
   'mb-[0.8rem] font-mono text-xs leading-none font-normal text-faint in-data-[footer=centre]:hidden in-data-[footer=line]:hidden in-data-[footer=sentence]:hidden';
@@ -142,14 +142,19 @@ export async function SiteFooter() {
               {FOOTER_COPY.source}
             </a>{' '}
             ·{' '}
-            <a
-              href={RSS_LINK.href}
-              className="text-soft underline underline-offset-[0.25em]"
-              {...trackAttrs(EVENTS.rss)}
-            >
-              {FOOTER_COPY.rss}
-            </a>{' '}
-            · {/* A static text file in public/, not a page. */}
+            {NOTES_LIVE ? (
+              <>
+                <a
+                  href={RSS_LINK.href}
+                  className="text-soft underline underline-offset-[0.25em]"
+                  {...trackAttrs(EVENTS.rss)}
+                >
+                  {FOOTER_COPY.rss}
+                </a>{' '}
+                ·{' '}
+              </>
+            ) : null}
+            {/* A static text file in public/, not a page. */}
             {/* oxlint-disable-next-line nextjs/no-html-link-for-pages */}
             <a
               href="/llms.txt"

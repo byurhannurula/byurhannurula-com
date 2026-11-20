@@ -5,9 +5,18 @@ import path from 'node:path';
 import { cache } from 'react';
 
 import matter from 'gray-matter';
+import { NOTES_LIVE } from '@/content/nav';
 
 const NOTES_DIR = path.join(process.cwd(), 'content', 'notes');
 const WORDS_PER_MINUTE = 220;
+
+/**
+ * The notes the public site lists: none while `/notes` is parked. The note
+ * pages themselves keep `getNotes`, so they still work in dev.
+ */
+export async function getListedNotes() {
+  return NOTES_LIVE ? getNotes() : [];
+}
 
 export interface NoteMeta {
   slug: string;
