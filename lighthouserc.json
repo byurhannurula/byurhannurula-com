@@ -7,9 +7,8 @@
         "http://localhost:3300/",
         "http://localhost:3300/about",
         "http://localhost:3300/work",
-        "http://localhost:3300/notes",
-        "http://localhost:3300/notes/third-time-is-the-charm",
-        "http://localhost:3300/uses"
+        "http://localhost:3300/uses",
+        "http://localhost:3300/cv"
       ],
       "numberOfRuns": 1,
       "settings": { "chromeFlags": "--headless=new" }
