@@ -43,6 +43,10 @@ export function useCanvasLoop(
 
     let frame = 0;
     let last = 0;
+    // CSS can swap a still first-paint copy for the canvas (options.css).
+    const live = () => {
+      if (!('live' in box.dataset)) box.dataset.live = '';
+    };
     let onScreen = false;
     const minStep = 1000 / fps;
 
@@ -53,6 +57,7 @@ export function useCanvasLoop(
       const dt = last ? Math.min(time - last, 100) / 1000 : 0;
       last = time;
       scene.frame(ctx, dt);
+      live();
     };
     const stop = () => {
       cancelAnimationFrame(frame);
@@ -62,6 +67,7 @@ export function useCanvasLoop(
       if (isStill()) {
         stop();
         scene.still(ctx);
+        live();
         return;
       }
       if (frame || !onScreen || document.hidden) return;
@@ -117,6 +123,7 @@ export function useCanvasLoop(
       document.removeEventListener('visibilitychange', onVisibility);
       scene.dispose?.();
       el.remove();
+      delete box.dataset.live;
     };
   }, [container, createScene, fps]);
 }

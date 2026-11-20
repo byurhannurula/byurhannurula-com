@@ -72,6 +72,7 @@ export function PatternLayer({ place }: { place: keyof typeof PLACE }) {
   return (
     <div
       aria-hidden
+      data-place={place}
       className={cn(
         'pointer-events-none absolute inset-x-0 -z-1 overflow-hidden print:hidden',
         className,
