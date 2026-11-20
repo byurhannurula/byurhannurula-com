@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
     },
   },
   poweredByHeader: false,
+  // Next 16 blocks dev assets and HMR from other origins; this lets a phone
+  // test the dev server through an ngrok tunnel.
+  allowedDevOrigins: ['*.ngrok-free.app'],
   // Umami through our own domain: ad blockers skip a first-party path.
   async rewrites() {
     const host = process.env.UMAMI_HOST;
