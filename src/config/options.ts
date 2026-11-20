@@ -30,6 +30,7 @@ const def = (label: string, ...choices: Choice[]): OptionDef => ({
 
 export const OPTION_GROUPS = {
   Global: {
+    mode: def('site mode', ['work'], ['personal']),
     copy: def('copy', ['a', 'job first'], ['b', 'builder'], ['c', 'tinkerer']),
     light: def(
       'light',
@@ -343,6 +344,6 @@ export const PRESETS: Record<string, Partial<Options>> = {
 };
 
 /** A preset changes the look. These are the reader's own and stay. */
-export const PRESET_KEEPS: OptionKey[] = ['light', 'copy', 'homelab'];
+export const PRESET_KEEPS: OptionKey[] = ['light', 'mode', 'copy', 'homelab'];
 
 export const OPTIONS_STORAGE_KEY = 'site-options';

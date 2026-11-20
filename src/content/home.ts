@@ -19,6 +19,9 @@ export const HERO_TITLE: Record<keyof CopySet, [start: string, end: string]> = {
   c: ['I like to build things,', 'and to run them myself.'],
 };
 
+/** The hello above the title in personal mode. */
+export const HERO_HELLO = 'hey, this is the after-hours side of me :)';
+
 export const HERO_LEAD: CopySet = {
   a: 'I am Byurhan. I have worked at ReCheck for six years, from intern to team lead. After work I build small local-first apps and publish them.',
   b: 'I am Byurhan, a full-stack engineer and team lead. At work I build web products. On my own time I make small tools that I use every day.',

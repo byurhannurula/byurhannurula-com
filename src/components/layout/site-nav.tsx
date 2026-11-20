@@ -7,10 +7,11 @@ import { brand } from '@/lib/brand';
 import { LIGHT_MENU_LABEL } from './footer-content';
 import { iconButton } from './icon-button';
 import { LightMenu } from './light-menu';
+import { ModeSwitch } from './mode-switch';
 import { NavFrame } from './nav-frame';
 import { NavLinks } from './nav-links';
 
-/** The nav bar: brand, page links, search and the light switch. */
+/** The nav bar: brand, page links, search, the mode switch and the light. */
 export function SiteNav() {
   return (
     <NavFrame>
@@ -24,6 +25,7 @@ export function SiteNav() {
       <NavLinks />
       <div className="flex items-center gap-[0.15rem]">
         <CommandButton />
+        <ModeSwitch />
         <LightMenu>
           <button
             type="button"

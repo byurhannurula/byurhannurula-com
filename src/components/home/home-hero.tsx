@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import {
   HERO_ACTIONS,
   HERO_HEADING,
+  HERO_HELLO,
   HERO_LEAD,
   HERO_TITLE,
 } from '@/content/home';
@@ -31,6 +32,10 @@ export function HomeHero() {
   return (
     <header className="-order-2 pt-(--hero-gap) pb-4">
       <HeroGreeting />
+      {/* Personal mode only. A note, not a title, so it is a plain line. */}
+      <p className="mb-5 hidden w-fit rounded-2xl rounded-bl-sm bg-accent px-3.5 py-1.5 text-[0.9375rem] font-medium text-bg in-data-[mode=personal]:block motion-safe:in-data-[mode=personal]:animate-rise-in">
+        {HERO_HELLO}
+      </p>
       <PageTitle
         className="hidden max-w-[19ch] text-(length:--title-size) in-data-[hero=text]:block in-data-[top=wide]:max-w-none"
         title={
