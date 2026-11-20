@@ -8,6 +8,6 @@ export const brand = {
   tagline:
     'Full-stack engineer. I build web products at work and small tools after it.',
   description:
-    'Byurhan Nurula is a full-stack engineer and team lead. His work, his small open source tools and the things he uses.',
+    "I'm Byurhan Nurula, a full-stack engineer and team lead. My work, my small open source tools and the things I use.",
   repository: 'https://github.com/byurhannurula/byurhannurula-com',
 } as const;
