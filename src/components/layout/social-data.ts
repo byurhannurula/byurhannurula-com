@@ -54,6 +54,11 @@ function toWeeks(days: ContributionDay[]) {
   return weeks;
 }
 
+/** The newest day in the data, `2026-11-20`, or '' when there is none. */
+export function lastDay(data: Contributions) {
+  return data.weeks.flat().findLast(Boolean)?.date ?? '';
+}
+
 /**
  * The last year of GitHub contributions. Null on any failure: the footer
  * card then shows its short fallback and the stats page leaves the graph out.
@@ -63,6 +68,11 @@ export async function getContributions(): Promise<Contributions | null> {
     const response = await fetch(`${API}/${GITHUB_USER}?y=last`, {
       signal: AbortSignal.timeout(TIMEOUT_MS),
       next: { revalidate: REVALIDATE_SECONDS },
+      // On Workers the edge keeps the answer this long, so a busy day makes
+      // few calls to the mirror. Node ignores `cf`.
+      ...({
+        cf: { cacheTtl: REVALIDATE_SECONDS / 4, cacheEverything: true },
+      } as RequestInit),
     });
     if (!response.ok) return null;
     const data = (await response.json()) as ApiResponse;

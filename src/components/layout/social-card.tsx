@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 import avatar from './avatar.jpeg';
-import { ContributionGraph } from './contribution-graph';
 import type { SocialCard } from './footer-content';
+import { GithubCard } from './github-card';
 import type { Contributions } from './social-data';
 
 const name = 'text-sm text-ink';
@@ -123,26 +123,12 @@ export function SocialCardBody({
     );
   }
 
-  if (!contributions) {
-    return (
-      <div className="w-56 p-3 text-[0.8125rem] text-soft">
-        {card.handle} {card.fallback}
-      </div>
-    );
-  }
-
   return (
-    <div className="flex w-[min(22rem,calc(100vw-4rem))] flex-col gap-3 p-3">
-      <div className="flex items-center gap-3">
-        <Avatar size={40} className="size-10 shrink-0" />
-        <div className="flex flex-col">
-          <span className={name}>{card.handle}</span>
-          <span className={muted}>
-            {contributions.total.toLocaleString('en')} {card.line}
-          </span>
-        </div>
-      </div>
-      <ContributionGraph weeks={contributions.weeks} />
-    </div>
+    <GithubCard
+      handle={card.handle}
+      line={card.line}
+      fallback={card.fallback}
+      initial={contributions ?? null}
+    />
   );
 }
