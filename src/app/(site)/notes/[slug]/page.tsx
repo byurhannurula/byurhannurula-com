@@ -82,7 +82,7 @@ export default async function NotePage({ params }: NotePageProps) {
           'mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6',
         )}
       >
-        <LikeButton />
+        <LikeButton slug={note.slug} />
         <BackLink href="/notes">All notes</BackLink>
       </div>
       <NoteRelated

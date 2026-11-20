@@ -17,7 +17,7 @@ import { STATS_COPY } from '@/content/stats';
 import { countCommits } from '@/lib/design-log';
 import { getNotes } from '@/lib/notes';
 import { pageMetadata } from '@/lib/seo';
-import { getNoteCounts, STATS_ARE_SAMPLE } from '@/lib/stats';
+import { getNoteCounts, statsAreSample } from '@/lib/stats';
 import { hideUnlisted } from '@/lib/unlisted';
 
 export const metadata = pageMetadata(PAGES.stats);
@@ -109,7 +109,7 @@ export default async function StatsPage() {
 
       <Section
         title={STATS_COPY.read}
-        sub={tagged(STATS_ARE_SAMPLE, STATS_COPY.readSub)}
+        sub={tagged(statsAreSample(), STATS_COPY.readSub)}
       >
         <Bars
           bars={byViews.map((row) => ({

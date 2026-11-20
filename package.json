@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@opennextjs/cloudflare": "1.20.17",
+    "@upstash/redis": "^1.41.0",
     "class-variance-authority": "0.7.1",
     "cmdk": "^1.1.1",
     "cn": "0.5.2",
