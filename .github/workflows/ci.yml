@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      # Takes the pnpm version from `packageManager` in package.json.
+      - uses: pnpm/action-setup@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Typecheck, oxlint and the oxfmt format check.
+      - run: pnpm check
+
+      # No secrets: without Upstash the build uses no store, and the GitHub
+      # card falls back if the mirror does not answer.
+      - run: pnpm build
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=high
