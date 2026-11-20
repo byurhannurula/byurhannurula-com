@@ -242,6 +242,7 @@ const FAVOURITES: Partial<Options> = {
   bg: 'flicker',
   sound: 'on',
   totop: 'ring',
+  pagefx: 'fade',
   hero: 'expand',
   order: 'projects',
   job: 'summary',
