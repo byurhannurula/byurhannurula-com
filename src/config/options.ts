@@ -234,27 +234,37 @@ export const OPTIONS = Object.assign(
 export const OPTION_KEYS = Object.keys(OPTIONS) as OptionKey[];
 
 /**
- * The owner's picks, read from screenshots on 2026-11-18. A key not named
- * here defaults to its first choice.
+ * The owner's picks: screenshots on 2026-11-18, then the config the owner
+ * sent on 2026-11-20. A key not named here defaults to its first choice.
  */
 const FAVOURITES: Partial<Options> = {
-  top: 'wide',
-  bg: 'flicker',
+  // Look
+  radius: 'small',
+  density: 'roomy',
+  bg: 'connect',
   sound: 'on',
   totop: 'ring',
+  themefx: 'circle',
   pagefx: 'fade',
-  hero: 'expand',
-  order: 'projects',
+  nf: 'puzzle',
+  // Home and about
   job: 'summary',
-  note: 'thumb',
+  stack: 'chips',
   caps: 'b',
-  stack: 'pile',
-  notegroup: 'year',
-  work: 'grid',
+  // Notes
+  note: 'thumb',
+  notegroup: 'flat',
+  linkcard: 'on',
+  fnote: 'side',
+  likefx: 'confetti',
+  readfx: 'confetti',
+  // Work
+  work: 'accordion',
+  // Footer
   footer: 'sentence',
   fmeta: 'on',
   fctl: 'on',
-  ftop: 'on',
+  fbg: 'flicker',
 };
 
 export const DEFAULT_OPTIONS = Object.fromEntries(
