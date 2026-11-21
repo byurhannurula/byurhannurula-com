@@ -24,10 +24,6 @@ export const pathOf = (href: string) => {
 export const LINK_OUT = '[--lc:var(--accent)]';
 export const LINK_IN = '[--lc:var(--hue-3)]';
 
-/** Transitions end at once when the reader set motion off. */
-export const STILL =
-  'motion-reduce:transition-none in-data-[motion=off]:transition-none';
-
 // Two stacked backgrounds: a dashed rule that stays, and a solid rule that
 // wipes in from the left. A border cannot do this, because border-style
 // does not transition. `box-decoration-clone` gives each wrapped line its

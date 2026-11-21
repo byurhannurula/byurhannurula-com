@@ -104,9 +104,6 @@ export const SERVICES = [
 
 export type ServiceName = (typeof SERVICES)[number]['name'];
 
-export const serviceByName = (name: ServiceName): HomelabService =>
-  SERVICES.find((service) => service.name === name)!;
-
 export type DeviceId = 'router' | 'pi' | 'server' | 'free' | 'ap' | 'zigbee';
 
 export interface Device {

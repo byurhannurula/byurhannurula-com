@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { AppIcon } from '@/components/home/app-icon';
+import { AppIcon } from '@/components/shared/app-icon';
 import type { Project } from '@/content/projects';
 
 interface ProjectPanelsProps {

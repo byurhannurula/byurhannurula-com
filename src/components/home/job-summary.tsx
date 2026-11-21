@@ -1,4 +1,4 @@
-import { AppIcon } from '@/components/home/app-icon';
+import { AppIcon } from '@/components/shared/app-icon';
 import { TechPile } from '@/components/shared/tech-pile';
 import { EMPLOYER, type Role } from '@/content/career';
 import { JOB_SECTION } from '@/content/home';

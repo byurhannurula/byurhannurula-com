@@ -1,6 +1,6 @@
 import { SampleTag } from '@/components/shared/sample-tag';
 import { Section } from '@/components/shared/section';
-import { AppIcon } from '@/components/uses/app-icon';
+import { AppIcon } from '@/components/shared/app-icon';
 import {
   BEAT_COUNT,
   getHomelabStatus,

@@ -702,6 +702,3 @@ export const SHELF: ShelfItem[] = [
     note: 'The sound alone is worth the ticket.',
   }),
 ];
-
-export const shelfCount = (kind: ShelfKind) =>
-  SHELF.filter((item) => item.kind === kind).length;

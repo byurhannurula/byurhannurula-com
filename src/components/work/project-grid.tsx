@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { AppIcon } from '@/components/uses/app-icon';
+import { AppIcon } from '@/components/shared/app-icon';
 import { ProjectKind, ProjectLinks } from '@/components/work/project-bits';
 import type { Project } from '@/content/projects';
 

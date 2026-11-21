@@ -66,7 +66,6 @@ const HUES = {
 } as const;
 
 export type ShareKind = keyof typeof HUES;
-export const SHARE_KINDS = Object.keys(HUES) as ShareKind[];
 
 export interface ShareImageInput {
   kind: ShareKind;

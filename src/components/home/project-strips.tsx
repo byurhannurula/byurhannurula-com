@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { AppIcon } from '@/components/home/app-icon';
+import { AppIcon } from '@/components/shared/app-icon';
 import { PROJECTS } from '@/content/projects';
 
 /** Each project with a strip of its real screens. Option: `projects=b`. */

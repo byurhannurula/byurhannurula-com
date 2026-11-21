@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { AppIcon } from '@/components/home/app-icon';
+import { AppIcon } from '@/components/shared/app-icon';
 import { EXTRA_PROJECT_ROW } from '@/content/home';
 import { PROJECTS } from '@/content/projects';
 

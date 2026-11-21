@@ -1,4 +1,4 @@
-import { AppIcon } from '@/components/uses/app-icon';
+import { AppIcon } from '@/components/shared/app-icon';
 import { FilmStrip } from '@/components/work/film-strip';
 import {
   ProjectKind,

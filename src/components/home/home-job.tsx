@@ -1,4 +1,4 @@
-import { AppIcon } from '@/components/home/app-icon';
+import { AppIcon } from '@/components/shared/app-icon';
 import { JobLadder } from '@/components/home/job-ladder';
 import { JobSummary } from '@/components/home/job-summary';
 import { CareerTrack } from '@/components/shared/career-track';
