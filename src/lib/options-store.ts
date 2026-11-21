@@ -49,15 +49,23 @@ function write(next: Options) {
   }
 }
 
-function paint(next: Options) {
+/**
+ * Writes only changed values: a same-value write still fires
+ * MutationObservers, and the pattern canvases restart on those.
+ */
+function setData(name: string, value: string) {
   const root = document.documentElement;
+  if (root.dataset[name] !== value) root.dataset[name] = value;
+}
+
+function paint(next: Options) {
   for (const key of OPTION_KEYS) {
-    if (key !== 'light') root.dataset[key] = next[key];
+    if (key !== 'light') setData(key, next[key]);
   }
   // `light` holds the resolved mode, not the preference: CSS has no clock.
   const mode = resolveLight(next.light);
-  root.dataset.light = mode;
-  root.dataset.theme = isDarkMode(mode) ? 'dark' : 'light';
+  setData('light', mode);
+  setData('theme', isDarkMode(mode) ? 'dark' : 'light');
 }
 
 function commit(next: Options) {
