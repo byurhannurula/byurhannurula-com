@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 
 import { getOptions } from '@/lib/options-store';
+import { wantsStill } from '@/lib/motion';
 
 interface ZoomedPicture {
   src: string;
@@ -18,9 +19,7 @@ interface ZoomedPicture {
 const TRANSITION_NAME = 'zoom-picture';
 
 const canMorph = () =>
-  typeof document.startViewTransition === 'function' &&
-  getOptions().motion !== 'off' &&
-  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  typeof document.startViewTransition === 'function' && !wantsStill();
 
 function describe(trigger: HTMLElement, src: string): ZoomedPicture {
   const thumb = trigger.querySelector('img');

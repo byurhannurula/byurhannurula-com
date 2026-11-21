@@ -1,6 +1,7 @@
 'use client';
 
 import { type RefObject, useEffect } from 'react';
+import { wantsStill } from '@/lib/motion';
 
 export interface CanvasScene {
   /**
@@ -15,10 +16,6 @@ export interface CanvasScene {
   /** Remove listeners the scene added. */
   dispose?(): void;
 }
-
-const isStill = () =>
-  document.documentElement.dataset.motion === 'off' ||
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
  * Run a canvas animation that fills `container`. It sizes for the screen's
@@ -64,7 +61,7 @@ export function useCanvasLoop(
       frame = 0;
     };
     const start = () => {
-      if (isStill()) {
+      if (wantsStill()) {
         stop();
         scene.still(ctx);
         live();
@@ -86,7 +83,7 @@ export function useCanvasLoop(
       el.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       scene.setup(ctx, width, height);
-      if (isStill()) scene.still(ctx);
+      if (wantsStill()) scene.still(ctx);
     };
 
     setup();

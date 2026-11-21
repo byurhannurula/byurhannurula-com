@@ -1,4 +1,5 @@
 import { LINE_COLOURS } from '@/components/shared/patterns/palette';
+import { wantsStill } from '@/lib/motion';
 
 interface BurstOptions {
   /** Pieces in the burst. */
@@ -12,10 +13,6 @@ interface BurstOptions {
   fall?: number;
   duration?: number;
 }
-
-const still = () =>
-  document.documentElement.dataset.motion === 'off' ||
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
  * Small pieces of colour that fly out from a point on the screen and fade.
@@ -34,7 +31,7 @@ export function confetti(
     duration = 900,
   }: BurstOptions = {},
 ) {
-  if (still()) return;
+  if (wantsStill()) return;
   const layer = document.createElement('div');
   layer.setAttribute('aria-hidden', 'true');
   layer.style.cssText =

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { getOptions } from '@/lib/options-store';
+import { wantsStill } from '@/lib/motion';
 
 const NOISE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@$*';
 const FRAME_MS = 34;
@@ -10,11 +10,6 @@ const FRAME_MS = 34;
 // Texts that finished playing. Module scope outlives a client navigation but
 // not a reload, so going back to the page does not replay the effect.
 const played = new Set<string>();
-
-// Noise in place of a word is the whole effect. There is no softer form.
-const isStill = () =>
-  getOptions().motion === 'off' ||
-  matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** Text that resolves out of noise, left to right. `auto` runs it once when it turns true. */
 export function useScramble(text: string, auto = false) {
@@ -27,7 +22,8 @@ export function useScramble(text: string, auto = false) {
   }, []);
 
   const run = useCallback(() => {
-    if (timer.current || isStill()) return;
+    // Noise in place of a word is the whole effect. There is no softer form.
+    if (timer.current || wantsStill()) return;
     const total = Math.ceil(text.length * 1.6);
     let frame = 0;
     timer.current = setInterval(() => {

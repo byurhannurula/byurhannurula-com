@@ -1,4 +1,4 @@
-import { getOptions } from '@/lib/options-store';
+import { wantsStill } from '@/lib/motion';
 
 /**
  * Scrolls the page to a heading of the note and puts it in the address.
@@ -15,9 +15,7 @@ export function jumpToHeading(id: string) {
   // of the scroll.
   history.replaceState(history.state, '', `#${id}`);
 
-  const calm =
-    getOptions().motion === 'off' ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const calm = wantsStill();
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {

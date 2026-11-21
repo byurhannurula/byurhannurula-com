@@ -1,3 +1,5 @@
+import { wantsStill } from '@/lib/motion';
+
 /**
  * Whole-page view transitions for the `themefx` and `pagefx` options.
  * `data-vt` on <html> names the running kind, so the CSS of one kind never
@@ -29,8 +31,7 @@ export function canTransition() {
   return (
     typeof document !== 'undefined' &&
     typeof document.startViewTransition === 'function' &&
-    document.documentElement.dataset.motion !== 'off' &&
-    !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    !wantsStill()
   );
 }
 
