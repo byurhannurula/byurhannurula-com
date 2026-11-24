@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { AppIcon } from '@/components/shared/app-icon';
@@ -25,16 +25,18 @@ interface ProjectListProps {
 }
 
 const rowClass =
-  'group/row relative flex flex-wrap items-center gap-4 py-[0.95rem] no-underline md:flex-nowrap';
+  'group/row flex flex-wrap items-center gap-4 py-[0.95rem] no-underline md:flex-nowrap';
 
-/** Projects one line each: icon, name, one sentence, kind, and an arrow on hover. */
+/**
+ * Projects one line each: icon, name, one sentence and a round arrow. The
+ * arrow turns to point out for a link that leaves the site.
+ */
 export function ProjectList({ items, href, className }: ProjectListProps) {
   return (
     <ul className={className}>
       {items.map((project) => {
         const to = href ?? project.href;
         const inside = to.startsWith('/');
-        const Arrow = inside ? ArrowRight : ArrowUpRight;
         const row = (
           <>
             <AppIcon
@@ -47,17 +49,12 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
             <span className="order-3 flex-1 basis-full text-soft md:order-none md:basis-0">
               {project.short}
             </span>
-            <em className="font-mono text-[0.8125rem] leading-none whitespace-nowrap text-faint not-italic">
-              {project.kind}
-            </em>
-            {/* In the gutter, so it takes no room from the row. */}
-            <span className="pointer-events-none absolute top-1/2 -right-7 -translate-y-1/2 max-md:hidden">
-              <Arrow
+            <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color,rotate] duration-300 ease-soft group-hover/row:bg-ink group-hover/row:text-bg group-focus-visible/row:bg-ink group-focus-visible/row:text-bg">
+              <ArrowRight
                 aria-hidden
                 className={cn(
-                  'size-4 text-soft opacity-0 transition-[opacity,translate] duration-300 ease-soft group-hover/row:opacity-100 group-focus-visible/row:opacity-100 motion-safe:-translate-x-1 motion-safe:group-hover/row:translate-x-0',
-                  !inside &&
-                    'motion-safe:translate-y-1 motion-safe:group-hover/row:translate-y-0',
+                  'size-[0.9rem] transition-[rotate] duration-300 ease-soft',
+                  !inside && 'group-hover/row:-rotate-45',
                 )}
               />
             </span>
