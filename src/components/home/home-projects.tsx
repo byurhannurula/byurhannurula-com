@@ -1,8 +1,8 @@
 import { ProjectPanels } from '@/components/home/project-panels';
-import { ProjectRows } from '@/components/home/project-rows';
 import { ProjectStrips } from '@/components/home/project-strips';
 import { ProjectTiles } from '@/components/home/project-tiles';
 import { ArrowLink } from '@/components/shared/arrow-link';
+import { ProjectList } from '@/components/shared/project-list';
 import { Section } from '@/components/shared/section';
 import { PROJECTS_SECTION } from '@/content/home';
 import { PROJECTS } from '@/content/projects';
@@ -20,7 +20,10 @@ export function HomeProjects() {
       <ProjectPanels projects={PROJECTS} />
       <ProjectStrips />
       <ProjectTiles />
-      <ProjectRows />
+      <ProjectList
+        href="/work"
+        className="hidden in-data-[projects=rows]:block"
+      />
     </Section>
   );
 }

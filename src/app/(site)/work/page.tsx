@@ -1,4 +1,5 @@
 import { PageHero } from '@/components/shared/page-hero';
+import { ProjectList } from '@/components/shared/project-list';
 import { Section } from '@/components/shared/section';
 import { ProjectAccordion } from '@/components/work/project-accordion';
 import { ProjectGrid } from '@/components/work/project-grid';
@@ -7,6 +8,7 @@ import { ProjectStage } from '@/components/work/project-stage';
 import { ProjectStrips } from '@/components/work/project-strips';
 import { SmallProjects } from '@/components/work/small-projects';
 import { WorkArt } from '@/components/work/work-art';
+import { EXTRA_PROJECT_ROW } from '@/content/home';
 import { PROJECTS, SMALL_PROJECTS } from '@/content/projects';
 import { PAGES } from '@/config/seo';
 import { pageMetadata } from '@/lib/seo';
@@ -25,6 +27,7 @@ export default function WorkPage() {
       <Section id="projects">
         {/* The project names are h3: this keeps the heading order whole. */}
         <h2 className="sr-only">Projects</h2>
+        <ProjectList className="hidden in-data-[work=list]:block" />
         <div className="hidden in-data-[work=strips]:block">
           <ProjectStrips projects={PROJECTS} />
         </div>
@@ -42,7 +45,11 @@ export default function WorkPage() {
         </div>
       </Section>
       <Section title="Also">
-        <SmallProjects projects={SMALL_PROJECTS} />
+        {/* In the list, dotfiles is already a row. */}
+        <SmallProjects
+          projects={SMALL_PROJECTS}
+          listed={EXTRA_PROJECT_ROW.name}
+        />
       </Section>
     </>
   );

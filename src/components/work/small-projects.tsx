@@ -1,19 +1,26 @@
 import { ArrowRight } from 'lucide-react';
 
 import type { SmallProject } from '@/content/projects';
+import { cn } from '@/lib/utils';
 
 interface SmallProjectsProps {
   projects: SmallProject[];
+  /** A name the `work: list` layout already shows; hidden there. */
+  listed?: string;
 }
 
 const rowClass =
   'group/row flex items-center gap-4 border-t border-rule py-[1.05rem] no-underline last:border-b';
 
 /** The "Also" list: smaller things, one row each. A row with no link is plain. */
-export function SmallProjects({ projects }: SmallProjectsProps) {
+export function SmallProjects({ projects, listed }: SmallProjectsProps) {
   return (
     <div>
       {projects.map((project) => {
+        const className = cn(
+          rowClass,
+          project.name === listed && 'in-data-[work=list]:hidden',
+        );
         const content = (
           <>
             <span className="w-22 flex-none label-mono text-faint">
@@ -36,11 +43,11 @@ export function SmallProjects({ projects }: SmallProjectsProps) {
           </>
         );
         return project.href ? (
-          <a key={project.name} href={project.href} className={rowClass}>
+          <a key={project.name} href={project.href} className={className}>
             {content}
           </a>
         ) : (
-          <div key={project.name} className={rowClass}>
+          <div key={project.name} className={className}>
             {content}
           </div>
         );

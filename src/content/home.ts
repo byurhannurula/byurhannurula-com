@@ -100,6 +100,7 @@ export const EXTRA_PROJECT_ROW = {
   name: 'dotfiles',
   kind: 'shell',
   icon: '/assets/icons/ghostty.svg',
+  href: 'https://github.com/byurhannurula/dotfiles',
   short: 'One script that sets up a new Mac with my apps and settings.',
 } as const;
 

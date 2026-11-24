@@ -179,6 +179,7 @@ export const OPTION_GROUPS = {
   Work: {
     work: def(
       'layout',
+      ['list', 'one line each, as on home'],
       ['strips'],
       ['accordion'],
       ['grid'],
@@ -260,7 +261,7 @@ const FAVOURITES: Partial<Options> = {
   likefx: 'confetti',
   readfx: 'confetti',
   // Work
-  work: 'accordion',
+  work: 'list',
   // Footer
   footer: 'sentence',
   fmeta: 'on',
