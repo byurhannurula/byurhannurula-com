@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { DotPuzzleSlot } from '@/components/shared/dot-puzzle-slot';
+import {
+  DotPuzzleSlot,
+  NotFoundNumber,
+} from '@/components/shared/dot-puzzle-slot';
 import { PageTitle } from '@/components/shared/page-hero';
 import { Button } from '@/components/ui/button';
 
@@ -13,7 +16,10 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <section className="pt-(--hero-gap) pb-8">
-      <p className="mb-5 text-[clamp(5.5rem,18vw,11rem)] leading-[0.85] font-bold tracking-[-0.06em] text-ink">
+      <NotFoundNumber />
+      {/* With `nf: dots` the dots draw the number; the text stays for
+          screen readers. */}
+      <p className="mb-5 text-[clamp(5.5rem,18vw,11rem)] leading-[0.85] font-bold tracking-[-0.06em] text-ink in-data-[nf=dots]:sr-only">
         404<span className="text-accent">.</span>
       </p>
       <PageTitle
@@ -27,7 +33,9 @@ export default function NotFound() {
       </p>
       <div className="mt-7 flex flex-wrap gap-2.5">
         <Button asChild>
-          <Link href="/">Go to the home page</Link>
+          <Link href="/" data-home-link>
+            Go to the home page
+          </Link>
         </Button>
       </div>
       <DotPuzzleSlot />

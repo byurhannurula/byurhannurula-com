@@ -46,7 +46,13 @@ export const OPTION_GROUPS = {
     radius: def('corners', ['round'], ['small'], ['large']),
     sound: def('sound', ['off'], ['on', 'hover + panels']),
     homelab: def('homelab page', ['on'], ['off']),
-    nf: def('404 page', ['plain'], ['puzzle', 'dot puzzle']),
+    nf: def(
+      '404 page',
+      ['plain'],
+      ['puzzle', 'dot puzzle'],
+      ['dots', '404 in dots'],
+      ['lines', 'lost lines'],
+    ),
     lab: def('homelab layout', ['rack'], ['lists']),
     shelfview: def(
       'shelf layout',
