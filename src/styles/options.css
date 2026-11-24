@@ -310,19 +310,19 @@ body::before {
   view-transition-name: site-nav;
 }
 [data-vt='page'][data-pagefx='fade']::view-transition-old(root) {
-  animation: vt-out 0.16s ease-in both;
+  animation: vt-out 0.16s var(--ease-out-soft) both;
 }
 [data-vt='page'][data-pagefx='fade']::view-transition-new(root) {
   animation: vt-in 0.26s ease-out both;
 }
 [data-vt='page'][data-pagefx='slide']::view-transition-old(root) {
-  animation: vt-out-left 0.2s ease-in both;
+  animation: vt-out-left 0.2s var(--ease-out-soft) both;
 }
 [data-vt='page'][data-pagefx='slide']::view-transition-new(root) {
   animation: vt-in-right 0.32s var(--ease-out-soft) both;
 }
 [data-vt='page'][data-pagefx='rise']::view-transition-old(root) {
-  animation: vt-out-blur 0.18s ease-in both;
+  animation: vt-out-blur 0.18s var(--ease-out-soft) both;
 }
 [data-vt='page'][data-pagefx='rise']::view-transition-new(root) {
   animation: vt-in-rise 0.4s var(--ease-out-soft) both;

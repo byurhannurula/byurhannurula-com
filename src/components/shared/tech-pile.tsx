@@ -34,17 +34,36 @@ export function TechPile({ names, className }: TechPileProps) {
     ...(box.current?.querySelectorAll<HTMLElement>('[data-pill]') ?? []),
   ];
 
-  const toggle = () => {
+  const busy = useRef(false);
+
+  const toggle = async () => {
+    if (busy.current) return;
     play(open ? 'close' : 'open');
     const el = box.current;
     if (!el || wantsStill()) {
       setOpen(!open);
       return;
     }
+    busy.current = true;
+    // The names fade out first, so the pills do not snap to circles
+    // while their names are still showing.
+    const fades = open
+      ? [...el.querySelectorAll<HTMLElement>('[data-name]')].map((name) =>
+          name.animate([{ opacity: 1 }, { opacity: 0 }], {
+            duration: 120,
+            easing: 'ease-out',
+            fill: 'forwards',
+          }),
+        )
+      : [];
+    await Promise.all(fades.map((fade) => fade.finished));
     const rects = pills().map((pill) => pill.getBoundingClientRect());
     const height = el.offsetHeight;
     // Render the new layout now, so it can be measured in this click.
     flushSync(() => setOpen(!open));
+    // The closed classes hide the names now; a kept fade would hide them
+    // on the next open too.
+    for (const fade of fades) fade.cancel();
     const timing = { duration: DURATION, easing: EASE };
 
     pills().forEach((pill, index) => {
@@ -70,6 +89,7 @@ export function TechPile({ names, className }: TechPileProps) {
       [{ height: `${height}px` }, { height: `${el.offsetHeight}px` }],
       timing,
     );
+    busy.current = false;
   };
 
   return (
@@ -92,7 +112,9 @@ export function TechPile({ names, className }: TechPileProps) {
             key={name}
             data-pill
             className={cn(
-              'inline-flex h-8.5 min-w-8.5 items-center justify-center rounded-full bg-card px-2 shadow-[0_0_0_1px_var(--line-strong)]',
+              // will-change keeps each pill on its own layer, so it does not
+              // shift by a fraction of a pixel when its glide ends.
+              'inline-flex h-8.5 min-w-8.5 items-center justify-center rounded-full bg-card px-2 shadow-[0_0_0_1px_var(--line-strong)] [will-change:translate]',
               open ? 'mr-1.5 px-3' : '-ml-2',
             )}
           >
@@ -105,6 +127,7 @@ export function TechPile({ names, className }: TechPileProps) {
               </span>
             )}
             <span
+              data-name
               className={cn(
                 'overflow-hidden text-sm font-medium whitespace-nowrap',
                 open

@@ -60,7 +60,7 @@ export function TraceLink({
         </svg>
         {/* The pad is HTML: the SVG stretches to the word, and a circle in
             it would stretch into an oval. */}
-        <span className="absolute -right-0.5 bottom-[calc(25%-2.5px)] size-[5px] scale-0 rounded-full bg-accent-bright transition-[scale] duration-200 ease-soft group-hover/link:scale-100 group-hover/link:delay-[350ms] group-focus-visible/link:scale-100 group-focus-visible/link:delay-[350ms] in-data-[motion=off]:transition-none motion-reduce:transition-none" />
+        <span className="absolute -right-0.5 bottom-[calc(25%-2.5px)] size-[5px] scale-50 rounded-full bg-accent-bright opacity-0 transition-[scale,opacity] duration-200 ease-soft group-hover/link:scale-100 group-hover/link:opacity-100 group-hover/link:delay-[350ms] group-focus-visible/link:scale-100 group-focus-visible/link:opacity-100 group-focus-visible/link:delay-[350ms] in-data-[motion=off]:transition-none motion-reduce:transition-none" />
       </span>
     </>
   );

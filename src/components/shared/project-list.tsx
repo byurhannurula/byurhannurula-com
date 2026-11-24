@@ -28,7 +28,7 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
           <>
             <AppIcon
               src={project.icon}
-              className="transition-[scale] duration-400 ease-hover group-hover/row:scale-106 motion-reduce:transition-none"
+              className="transition-[scale] duration-400 ease-hover [will-change:scale] group-hover/row:scale-106 motion-reduce:transition-none"
             />
             <b className="text-[1.0625rem] font-semibold whitespace-nowrap">
               {project.name}
@@ -42,7 +42,7 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
             <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color] delay-150 duration-150 ease-out group-hover/row:bg-ink group-hover/row:text-bg group-hover/row:delay-0 group-focus-visible/row:bg-ink group-focus-visible/row:text-bg group-focus-visible/row:delay-0">
               <ArrowRight
                 aria-hidden
-                className="size-4 -translate-x-px transition-[rotate] duration-200 ease-hover group-hover/row:-rotate-45 group-hover/row:delay-60 group-hover/row:duration-300 group-focus-visible/row:-rotate-45 group-focus-visible/row:delay-60 group-focus-visible/row:duration-300 motion-reduce:transition-none"
+                className="size-4 -translate-x-px transition-[rotate] duration-200 ease-hover [will-change:rotate] group-hover/row:-rotate-45 group-hover/row:delay-60 group-hover/row:duration-300 group-focus-visible/row:-rotate-45 group-focus-visible/row:delay-60 group-focus-visible/row:duration-300 motion-reduce:transition-none"
               />
             </span>
           </>
