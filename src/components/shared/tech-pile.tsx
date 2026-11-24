@@ -15,7 +15,7 @@ interface TechPileProps {
 
 const DURATION = 450;
 /** The same curve as `ease-hover` (tokens.css). */
-const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+const EASE = 'cubic-bezier(0.33, 1, 0.68, 1)';
 
 /**
  * Overlapping icon circles that spread and show their names on click.

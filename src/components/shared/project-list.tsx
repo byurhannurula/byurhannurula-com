@@ -30,7 +30,7 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
               src={project.icon}
               className="transition-[scale] duration-400 ease-hover group-hover/row:scale-106 motion-reduce:transition-none"
             />
-            <b className="text-[1.0625rem] font-semibold whitespace-nowrap transition-[translate] duration-400 ease-hover group-hover/row:translate-x-1 motion-reduce:transition-none">
+            <b className="text-[1.0625rem] font-semibold whitespace-nowrap">
               {project.name}
             </b>
             <span className="order-3 flex-1 basis-full text-soft md:order-none md:basis-0">
