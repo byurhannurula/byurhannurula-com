@@ -49,6 +49,12 @@
   --r-lg: 26px;
   --r-xl: 38px;
 }
+/* Personal mode is softer: rounder shapes whatever the radius option. */
+[data-mode='personal'] {
+  --r-md: 16px;
+  --r-lg: 26px;
+  --r-xl: 38px;
+}
 
 /* title size */
 :root {
