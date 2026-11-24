@@ -9,7 +9,7 @@ import {
 } from '@/content/career';
 import { NOTES_LIVE } from '@/content/nav';
 import { NOW, NOW_DATE } from '@/content/now';
-import { PROJECTS, SMALL_PROJECTS } from '@/content/projects';
+import { MORE_TOOLS, PROJECTS, SMALL_PROJECTS } from '@/content/projects';
 import { SOCIALS } from '@/content/socials';
 import { CORE_STACK, STACK } from '@/content/tech';
 import { brand } from '@/lib/brand';
@@ -98,10 +98,12 @@ export async function GET() {
         ...more.map((link) => `  ${link.label}: ${link.href}`),
       ].join('\n');
     }),
-    ...SMALL_PROJECTS.map((project) =>
-      project.href
-        ? item(project.name, project.href, `${project.text} (${project.tag})`)
-        : `- ${project.name}: ${project.text} (${project.tag})`,
+    ...[...MORE_TOOLS, ...SMALL_PROJECTS].map((project) =>
+      item(
+        project.name,
+        project.href,
+        `${capital(project.kind)}. ${project.short}`,
+      ),
     ),
     '',
     ...(NOTES_LIVE && notes.length

@@ -2,7 +2,7 @@ import { ProjectPanels } from '@/components/home/project-panels';
 import { ProjectStrips } from '@/components/home/project-strips';
 import { ProjectTiles } from '@/components/home/project-tiles';
 import { ArrowLink } from '@/components/shared/arrow-link';
-import { ProjectList } from '@/components/shared/project-list';
+import { PROJECT_LIST, ProjectList } from '@/components/shared/project-list';
 import { Section } from '@/components/shared/section';
 import { PROJECTS_SECTION } from '@/content/home';
 import { PROJECTS } from '@/content/projects';
@@ -21,6 +21,7 @@ export function HomeProjects() {
       <ProjectStrips />
       <ProjectTiles />
       <ProjectList
+        items={PROJECT_LIST}
         href="/work"
         className="hidden in-data-[projects=rows]:block"
       />

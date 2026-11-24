@@ -177,29 +177,43 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-export interface SmallProject {
-  tag: string;
+/** A tool shown only as one line: icon, name, one sentence, kind. */
+export interface ListProject {
   name: string;
-  text: string;
-  href?: string;
+  /** For example "desktop app" or "shell". */
+  kind: string;
+  icon: string;
+  short: string;
+  /** The site if it has one, else the repository. */
+  href: string;
 }
 
-export const SMALL_PROJECTS: SmallProject[] = [
+/** Tools for the one-line list, after PROJECTS. */
+export const MORE_TOOLS: ListProject[] = [
   {
-    tag: 'ongoing',
+    name: 'Whisper Lite',
+    kind: 'desktop app',
+    icon: '/assets/icons/whisper-lite.svg',
+    short:
+      'Hold a key, talk, let go. Local dictation for macOS. Nothing leaves your Mac.',
+    href: 'https://github.com/byurhannurula/whisper-lite',
+  },
+  {
     name: 'dotfiles',
-    text: 'One script that sets up a new Mac with my apps and settings.',
+    kind: 'shell',
+    icon: '/assets/icons/ghostty.svg',
+    short: 'One script that sets up a new Mac with my apps and settings.',
     href: 'https://github.com/byurhannurula/dotfiles',
   },
+];
+
+/** The "Also" list on the work page. */
+export const SMALL_PROJECTS: ListProject[] = [
   {
-    tag: 'this site',
     name: 'byurhannurula.com',
-    text: 'The fourth rebuild. The wordmark survived all of them.',
+    kind: 'this site',
+    icon: '/icon.svg',
+    short: 'The fourth rebuild. The wordmark survived all of them.',
     href: 'https://github.com/byurhannurula/byurhannurula-com',
-  },
-  {
-    tag: '2019',
-    name: 'gatsby-source-gitlab',
-    text: 'A Gatsby source plugin for GitLab data. My first published package.',
   },
 ];

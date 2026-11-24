@@ -95,15 +95,6 @@ export const PROJECTS_SECTION = {
   action: 'All projects',
 } as const;
 
-/** One more line in the `rows` view, after the three projects. */
-export const EXTRA_PROJECT_ROW = {
-  name: 'dotfiles',
-  kind: 'shell',
-  icon: '/assets/icons/ghostty.svg',
-  href: 'https://github.com/byurhannurula/dotfiles',
-  short: 'One script that sets up a new Mac with my apps and settings.',
-} as const;
-
 export const JOB_SECTION = {
   title: 'Day job',
   action: 'More about me',

@@ -1,27 +1,40 @@
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { AppIcon } from '@/components/shared/app-icon';
-import { EXTRA_PROJECT_ROW } from '@/content/home';
-import { PROJECTS } from '@/content/projects';
+import { type ListProject, MORE_TOOLS, PROJECTS } from '@/content/projects';
+import { cn } from '@/lib/utils';
 
-/** The side projects plus dotfiles, one line each, as on the home page. */
-export const PROJECT_LIST = [
-  ...PROJECTS.map((project) => ({ ...project, href: project.links[0].href })),
-  EXTRA_PROJECT_ROW,
+/** The side projects and the smaller tools, as on the home page. */
+export const PROJECT_LIST: ListProject[] = [
+  ...PROJECTS.map(({ name, kind, icon, short, links }) => ({
+    name,
+    kind,
+    icon,
+    short,
+    href: links[0].href,
+  })),
+  ...MORE_TOOLS,
 ];
 
 interface ProjectListProps {
-  /** Every row links here, else each row links to its own project. */
+  items: ListProject[];
+  /** Every row links here, else each row opens its own project. */
   href?: string;
   className?: string;
 }
 
-/** Side projects as one line each: icon, name, one sentence, kind. */
-export function ProjectList({ href, className }: ProjectListProps) {
+const rowClass =
+  'group/row relative flex flex-wrap items-center gap-4 py-[0.95rem] no-underline md:flex-nowrap';
+
+/** Projects one line each: icon, name, one sentence, kind, and an arrow on hover. */
+export function ProjectList({ items, href, className }: ProjectListProps) {
   return (
     <ul className={className}>
-      {PROJECT_LIST.map((project) => {
+      {items.map((project) => {
         const to = href ?? project.href;
+        const inside = to.startsWith('/');
+        const Arrow = inside ? ArrowRight : ArrowUpRight;
         const row = (
           <>
             <AppIcon
@@ -37,19 +50,34 @@ export function ProjectList({ href, className }: ProjectListProps) {
             <em className="font-mono text-[0.8125rem] leading-none whitespace-nowrap text-faint not-italic">
               {project.kind}
             </em>
+            {/* In the gutter, so it takes no room from the row. */}
+            <span className="pointer-events-none absolute top-1/2 -right-7 -translate-y-1/2 max-md:hidden">
+              <Arrow
+                aria-hidden
+                className={cn(
+                  'size-4 text-soft opacity-0 transition-[opacity,translate] duration-300 ease-soft group-hover/row:opacity-100 group-focus-visible/row:opacity-100 motion-safe:-translate-x-1 motion-safe:group-hover/row:translate-x-0',
+                  !inside &&
+                    'motion-safe:translate-y-1 motion-safe:group-hover/row:translate-y-0',
+                )}
+              />
+            </span>
           </>
         );
-        const rowClass =
-          'group/row flex flex-wrap items-center gap-4 py-[0.95rem] no-underline md:flex-nowrap';
         return (
           <li key={project.name} className="border-t border-rule last:border-b">
-            {to.startsWith('/') ? (
+            {inside ? (
               <Link href={to} className={rowClass}>
                 {row}
               </Link>
             ) : (
-              <a href={to} className={rowClass}>
+              <a
+                href={to}
+                target="_blank"
+                rel="noreferrer"
+                className={rowClass}
+              >
                 {row}
+                <span className="sr-only">(opens in a new tab)</span>
               </a>
             )}
           </li>
