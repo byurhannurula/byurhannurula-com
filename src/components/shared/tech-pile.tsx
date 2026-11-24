@@ -41,8 +41,8 @@ export function TechPile({ names, className }: TechPileProps) {
             key={name}
             style={{ transitionDelay: `${index * 18}ms` }}
             className={cn(
-              'inline-flex h-8.5 min-w-8.5 items-center justify-center rounded-full bg-card px-2 shadow-[0_0_0_1px_var(--line-strong)] transition-[margin,padding] duration-450 ease-soft',
-              open ? 'mr-1.5 gap-1.5 px-3' : '-ml-2 group-hover/pile:-ml-1.5',
+              'inline-flex h-8.5 min-w-8.5 items-center justify-center rounded-full bg-card px-2 shadow-[0_0_0_1px_var(--line-strong)] transition-[margin,padding] duration-450 ease-soft motion-reduce:transition-none',
+              open ? 'mr-1.5 px-3' : '-ml-2',
             )}
           >
             {icon ? (
@@ -55,8 +55,10 @@ export function TechPile({ names, className }: TechPileProps) {
             )}
             <span
               className={cn(
-                'overflow-hidden text-sm font-medium whitespace-nowrap transition-[max-width,opacity] duration-450 ease-soft',
-                open ? 'max-w-40 opacity-100' : 'max-w-0 opacity-0',
+                // The gap is a margin here, so it grows with the name instead
+                // of jumping in at once.
+                'overflow-hidden text-sm font-medium whitespace-nowrap transition-[max-width,margin,opacity] duration-450 ease-soft motion-reduce:transition-none',
+                open ? 'ml-1.5 max-w-40 opacity-100' : 'ml-0 max-w-0 opacity-0',
               )}
             >
               {name}
@@ -66,9 +68,9 @@ export function TechPile({ names, className }: TechPileProps) {
       })}
       <span
         className={cn(
-          'label-mono ml-3 text-faint transition-opacity group-hover/pile:text-ink',
+          'label-mono overflow-hidden whitespace-nowrap text-faint transition-[max-width,margin,opacity,color] duration-450 ease-soft group-hover/pile:text-ink motion-reduce:transition-none',
           // No width when open, so the last name does not leave a gap.
-          open && 'ml-0 w-0 overflow-hidden opacity-0',
+          open ? 'ml-0 max-w-0 opacity-0' : 'ml-3 max-w-24 opacity-100',
         )}
       >
         {names.length} {names.length === 1 ? 'tool' : 'tools'}
