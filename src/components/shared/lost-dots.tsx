@@ -12,12 +12,18 @@ import {
 /** Grid step of the dots that make the number, in CSS pixels. */
 const STEP = 9;
 const RADIUS = 3;
-/** How far the pointer pushes dots away. */
-const REACH = 70;
-const PUSH = 1400;
-/** Spring back home, and how fast motion dies down. */
-const PULL = 38;
-const DAMPING = 7;
+/** How far the pointer reaches, and how hard it pushes at its centre. */
+const REACH = 80;
+const PUSH = 3000;
+/** Share of the mouse's own speed that drags dots along: a quick swipe
+    throws them, a slow pass only parts them. */
+const DRAG = 6;
+const MAX_SPEED = 900;
+/** Spring back home, and how fast motion dies down. A little bounce. */
+const PULL = 34;
+const DAMPING = 5.2;
+/** Displacement in px at which a dot is fully lit and fully grown. */
+const LIT = 28;
 
 interface Dot {
   hx: number;
@@ -77,6 +83,8 @@ function createScene(): CanvasScene {
   let canvas: HTMLCanvasElement | null = null;
   const pointer = trackPointer();
   let burst: { x: number; y: number } | null = null;
+  let last: { x: number; y: number } | null = null;
+  const speed = { x: 0, y: 0 };
 
   // A tap has no hover: it scatters the dots around the finger instead.
   const onDown = (event: PointerEvent) => {
@@ -89,11 +97,22 @@ function createScene(): CanvasScene {
   const draw = (ctx: CanvasRenderingContext2D) => {
     ctx.clearRect(0, 0, width, height);
     for (const dot of dots) {
+      // A moved dot grows a little and turns accent, so the trail of the
+      // mouse reads as light passing through the number.
+      const lit = Math.min(1, Math.hypot(dot.x - dot.hx, dot.y - dot.hy) / LIT);
+      const radius = RADIUS + lit * 1.2;
       ctx.fillStyle = dot.accent ? accent : ink;
+      ctx.globalAlpha = 1;
       ctx.beginPath();
-      ctx.arc(dot.x, dot.y, RADIUS, 0, Math.PI * 2);
+      ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
       ctx.fill();
+      if (lit > 0.05 && !dot.accent) {
+        ctx.fillStyle = accent;
+        ctx.globalAlpha = lit;
+        ctx.fill();
+      }
     }
+    ctx.globalAlpha = 1;
   };
 
   return {
@@ -108,18 +127,40 @@ function createScene(): CanvasScene {
     frame(ctx, dt) {
       const local = canvas ? pointer.local(canvas) : { x: -1e4, y: -1e4 };
       const near = pointer.state.present;
+      // The mouse's speed, smoothed, for the drag.
+      if (near && last && dt > 0) {
+        const k = Math.min(1, dt * 12);
+        speed.x += ((local.x - last.x) / dt - speed.x) * k;
+        speed.y += ((local.y - last.y) / dt - speed.y) * k;
+      } else {
+        speed.x = 0;
+        speed.y = 0;
+      }
+      // Capped, so a flick parts the number but never tears it apart.
+      const fast = Math.hypot(speed.x, speed.y);
+      if (fast > MAX_SPEED) {
+        speed.x *= MAX_SPEED / fast;
+        speed.y *= MAX_SPEED / fast;
+      }
+      last = near ? local : null;
       for (const dot of dots) {
         let ax = (dot.hx - dot.x) * PULL;
         let ay = (dot.hy - dot.y) * PULL;
         for (const from of [near ? local : null, burst]) {
           if (!from) continue;
+          const reach = from === burst ? REACH * 1.6 : REACH;
           const dx = dot.x - from.x;
           const dy = dot.y - from.y;
           const distance = Math.hypot(dx, dy) || 1;
-          if (distance < REACH * (from === burst ? 2 : 1)) {
-            const force = (1 - distance / (REACH * 2)) * PUSH;
-            ax += (dx / distance) * force * (from === burst ? 40 : 1);
-            ay += (dy / distance) * force * (from === burst ? 40 : 1);
+          if (distance >= reach) continue;
+          // Smooth falloff: strong at the centre, nothing at the edge.
+          const falloff = (1 - distance / reach) ** 2;
+          const force = falloff * PUSH * (from === burst ? 12 : 1);
+          ax += (dx / distance) * force;
+          ay += (dy / distance) * force;
+          if (from !== burst) {
+            ax += speed.x * DRAG * falloff;
+            ay += speed.y * DRAG * falloff;
           }
         }
         dot.vx = (dot.vx + ax * dt) * Math.exp(-DAMPING * dt);
@@ -145,8 +186,9 @@ function createScene(): CanvasScene {
 }
 
 /**
- * "404." drawn in dots. They gather on load, move away from the mouse and
- * settle back; a tap scatters them. The real heading stays in the page for
+ * "404." drawn in dots. They gather on load, part around the mouse, light
+ * up where it passes, are thrown by a quick swipe, and settle back with a
+ * small bounce; a tap scatters them. The real heading stays in the page for
  * screen readers.
  */
 export function LostDots() {
