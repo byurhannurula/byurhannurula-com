@@ -48,9 +48,10 @@ const subscribeOpen = (listener: () => void) => {
 };
 function readOpen() {
   try {
-    return localStorage.getItem(OPEN_KEY) !== '0';
+    // Closed until opened; then it remembers.
+    return localStorage.getItem(OPEN_KEY) === '1';
   } catch {
-    return true;
+    return false;
   }
 }
 function writeOpen(open: boolean) {
