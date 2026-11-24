@@ -36,14 +36,11 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
             <span className="order-3 flex-1 basis-full text-soft md:order-none md:basis-0">
               {project.short}
             </span>
-            {/* The arrow turns only while the circle is dark: on hover the
-                circle darkens first, on leave it lightens last. The arrow
+            {/* As on the studio site: an outlined circle that turns as one
+                piece with a small spring, and only tints on hover. The arrow
                 sits 1px left: its head makes it look right of centre. */}
-            <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color] delay-150 duration-150 ease-out group-hover/row:bg-ink group-hover/row:text-bg group-hover/row:delay-0 group-focus-visible/row:bg-ink group-focus-visible/row:text-bg group-focus-visible/row:delay-0">
-              <ArrowRight
-                aria-hidden
-                className="size-4 -translate-x-px transition-[rotate] duration-200 ease-hover [will-change:rotate] group-hover/row:-rotate-45 group-hover/row:delay-60 group-hover/row:duration-300 group-focus-visible/row:-rotate-45 group-focus-visible/row:delay-60 group-focus-visible/row:duration-300 motion-reduce:transition-none"
-              />
+            <span className="ml-auto grid size-9 flex-none place-items-center rounded-full border border-line-strong text-soft [will-change:rotate] [transition:rotate_.6s_var(--ease-out-spring),background-color_.3s_ease,color_.3s_ease] group-hover/row:-rotate-45 group-hover/row:bg-sunk group-hover/row:text-ink group-focus-visible/row:-rotate-45 group-focus-visible/row:bg-sunk group-focus-visible/row:text-ink motion-reduce:[transition:background-color_.3s_ease,color_.3s_ease] motion-reduce:group-hover/row:rotate-0">
+              <ArrowRight aria-hidden className="size-4 -translate-x-px" />
             </span>
           </>
         );
