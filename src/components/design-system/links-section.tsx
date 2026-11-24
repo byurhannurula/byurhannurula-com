@@ -78,7 +78,7 @@ export function LinksSection() {
             ReCheck
           </SiteLink>
           . Tilted until you point at it:{' '}
-          <SiteLink href={JOTTER} icon="/assets/icons/jotter.png" effect="tilt">
+          <SiteLink href={JOTTER} icon="/assets/icons/jotter.svg" effect="tilt">
             Jotter
           </SiteLink>
           . No icon: <SiteLink href="/uses">Uses</SiteLink>.

@@ -33,7 +33,7 @@ export const PROJECTS: Project[] = [
     slug: 'jotter',
     name: 'Jotter',
     kind: 'desktop app',
-    icon: '/assets/icons/jotter.png',
+    icon: '/assets/icons/jotter.svg',
     iconSize: { width: 128, height: 128 },
     cover: '/assets/projects/jotter/desktop.png',
     coverSize: { width: 2000, height: 1128 },

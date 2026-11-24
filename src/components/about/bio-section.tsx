@@ -24,7 +24,7 @@ const MARK_LINK =
   'group/mark whitespace-nowrap transition-colors hover:text-accent';
 
 const PROJECT_MARKS = [
-  { name: 'Jotter', icon: '/assets/icons/jotter.png' },
+  { name: 'Jotter', icon: '/assets/icons/jotter.svg' },
   { name: 'OGee', icon: '/assets/projects/ogee/icon.png' },
   { name: 'FullShot', icon: '/assets/projects/fullshot/icon.png' },
 ];

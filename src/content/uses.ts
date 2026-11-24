@@ -133,7 +133,7 @@ export const USES: UsesSection[] = [
     kind: 'apps',
     items: [
       {
-        icon: appIcon('jotter.png'),
+        icon: appIcon('jotter.svg'),
         name: 'Jotter',
         text: 'My own app for quick notes.',
       },
