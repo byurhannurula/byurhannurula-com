@@ -39,9 +39,9 @@ export function NavFrame({ children }: NavFrameProps) {
         className={cn(
           // The bar hides with translate and opacity only. max-width is for
           // the size change; the bar is sticky, so the page does not move.
-          // In a page change the bar is a snapshot, and a snapshot loses the
-          // backdrop blur: it goes solid then, or it looks see-through.
-          'flex items-center gap-1 rounded-full border border-line bg-card/78 in-data-[vt=page]:bg-card p-[0.35rem] shadow-soft backdrop-blur-[14px] backdrop-saturate-[1.4] [transition:max-width_.45s_var(--ease-out-soft),translate_.3s_var(--ease-out-soft),opacity_.2s] max-md:w-full max-md:in-data-[nav=pill]:max-w-[28rem] in-data-[motion=off]:transition-none',
+          // Nearly solid: in a page change the bar is a snapshot without its
+          // backdrop blur, and a thinner background showed the page through.
+          'flex items-center gap-1 rounded-full border border-line bg-card/92 p-[0.35rem] shadow-soft backdrop-blur-[14px] backdrop-saturate-[1.4] [transition:max-width_.45s_var(--ease-out-soft),translate_.3s_var(--ease-out-soft),opacity_.2s] max-md:w-full max-md:in-data-[nav=pill]:max-w-[28rem] in-data-[motion=off]:transition-none',
           'in-data-[nav=wide]:w-full in-data-[nav=wide]:justify-between in-data-[nav=wide]:px-2 in-data-[nav=wide]:py-[0.4rem]',
           small
             ? // Room for the brand, the links and two buttons in the widest font.
