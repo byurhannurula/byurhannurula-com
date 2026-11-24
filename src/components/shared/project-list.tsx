@@ -12,7 +12,7 @@ interface ProjectListProps {
 }
 
 const rowClass =
-  'group/row flex flex-wrap items-center gap-4 py-[0.95rem] no-underline md:flex-nowrap';
+  'group/row flex flex-wrap items-center gap-4 py-4 no-underline md:flex-nowrap';
 
 /**
  * Projects one line each: icon, name, one sentence and a round arrow that
@@ -37,11 +37,12 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
               {project.short}
             </span>
             {/* The arrow turns only while the circle is dark: on hover the
-                circle darkens first, on leave it lightens last. */}
+                circle darkens first, on leave it lightens last. The arrow
+                sits 1px left: its head makes it look right of centre. */}
             <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color] delay-150 duration-150 ease-out group-hover/row:bg-ink group-hover/row:text-bg group-hover/row:delay-0 group-focus-visible/row:bg-ink group-focus-visible/row:text-bg group-focus-visible/row:delay-0">
               <ArrowRight
                 aria-hidden
-                className="size-[0.9rem] transition-[rotate] duration-200 ease-hover group-hover/row:-rotate-45 group-hover/row:delay-60 group-hover/row:duration-300 group-focus-visible/row:-rotate-45 group-focus-visible/row:delay-60 group-focus-visible/row:duration-300 motion-reduce:transition-none"
+                className="size-4 -translate-x-px transition-[rotate] duration-200 ease-hover group-hover/row:-rotate-45 group-hover/row:delay-60 group-hover/row:duration-300 group-focus-visible/row:-rotate-45 group-focus-visible/row:delay-60 group-focus-visible/row:duration-300 motion-reduce:transition-none"
               />
             </span>
           </>
