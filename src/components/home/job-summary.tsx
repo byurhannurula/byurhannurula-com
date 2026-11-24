@@ -1,5 +1,4 @@
 import { AppIcon } from '@/components/shared/app-icon';
-import { Quip } from '@/components/shared/quip';
 import { TechPile } from '@/components/shared/tech-pile';
 import { EMPLOYER, type Role } from '@/content/career';
 import { JOB_SECTION } from '@/content/home';
@@ -16,12 +15,10 @@ export function JobSummary({ roles, stack }: JobSummaryProps) {
   const current = roles.find((role) => role.current) ?? roles.at(-1);
   return (
     // Personal mode: the row becomes a soft yellow card, with a joke on hover.
-    <div className="group/job relative hidden items-start gap-x-5 gap-y-1.5 in-data-[job=summary]:grid in-data-[mode=personal]:rounded-3xl in-data-[mode=personal]:bg-[color-mix(in_oklch,#eab308_14%,transparent)] in-data-[mode=personal]:p-6 min-[23rem]:grid-cols-[auto_1fr] md:grid-cols-[auto_1fr_auto]">
-      <Quip
-        text={QUIPS.job}
-        group="job"
-        className="bottom-[calc(100%-0.75rem)] left-16"
-      />
+    <div
+      data-quip={QUIPS.job}
+      className="hidden items-start gap-x-5 gap-y-1.5 in-data-[job=summary]:grid in-data-[mode=personal]:rounded-3xl in-data-[mode=personal]:bg-[color-mix(in_oklch,#eab308_14%,transparent)] in-data-[mode=personal]:p-6 min-[23rem]:grid-cols-[auto_1fr] md:grid-cols-[auto_1fr_auto] dark:in-data-[mode=personal]:bg-[color-mix(in_oklch,#eab308_6%,var(--card))] dark:in-data-[mode=personal]:shadow-[inset_0_0_0_1px_color-mix(in_oklch,#eab308_40%,transparent)]"
+    >
       <AppIcon src={EMPLOYER.logo} className="size-12 rounded-[0.85rem] p-1" />
       <div>
         <h3 className="text-[1.375rem] leading-[1.3] font-semibold tracking-[-0.025em]">

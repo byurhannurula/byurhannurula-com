@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 
-import { Quip } from '@/components/shared/quip';
 import { techIconUrl } from '@/components/shared/tech';
 import { QUIPS } from '@/content/quips';
 import { useSound } from '@/hooks/use-sound';
@@ -98,20 +97,16 @@ export function TechPile({ names, className }: TechPileProps) {
     <button
       ref={box}
       type="button"
+      data-quip={QUIPS.stack}
       aria-expanded={open}
       aria-label={`${names.length} ${names.length === 1 ? 'tool' : 'tools'}: ${names.join(', ')}`}
       onClick={toggle}
       className={cn(
         // min-h: a 40px tap target around the 34px circles.
-        'group/pile relative inline-flex min-h-10 flex-wrap items-center gap-y-2 pl-2 text-left',
+        'group/pile inline-flex min-h-10 flex-wrap items-center gap-y-2 pl-2 text-left',
         className,
       )}
     >
-      <Quip
-        text={QUIPS.stack}
-        group="pile"
-        className="bottom-[calc(100%+0.25rem)] left-2"
-      />
       {names.map((name) => {
         const icon = techIconUrl(name);
         return (

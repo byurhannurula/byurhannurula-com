@@ -3,7 +3,6 @@ import Link from 'next/link';
 
 import { AppIcon } from '@/components/shared/app-icon';
 import { LINE_COLOURS } from '@/components/shared/patterns/palette';
-import { Quip } from '@/components/shared/quip';
 import type { ListProject } from '@/content/projects';
 import { QUIPS } from '@/content/quips';
 import { cn } from '@/lib/utils';
@@ -19,9 +18,10 @@ const rowClass =
   'group/row relative flex flex-wrap items-center gap-4 py-4 no-underline md:flex-nowrap';
 
 // Personal mode: the lines become rounded tiles, each in its own soft colour
-// from the hero's line palette.
+// from the hero's line palette. A dark page gets near-black tiles with a
+// coloured outline: a filled tint there turns muddy.
 const PERSONAL_TILE =
-  'in-data-[mode=personal]:mb-2 in-data-[mode=personal]:rounded-2xl in-data-[mode=personal]:border-0 in-data-[mode=personal]:bg-[color-mix(in_oklch,var(--tint)_14%,transparent)] in-data-[mode=personal]:px-4 in-data-[mode=personal]:transition-[background-color] in-data-[mode=personal]:duration-300 in-data-[mode=personal]:hover:bg-[color-mix(in_oklch,var(--tint)_24%,transparent)]';
+  'in-data-[mode=personal]:mb-2 in-data-[mode=personal]:rounded-2xl in-data-[mode=personal]:border-0 in-data-[mode=personal]:bg-[color-mix(in_oklch,var(--tint)_14%,transparent)] in-data-[mode=personal]:px-4 in-data-[mode=personal]:transition-[background-color] in-data-[mode=personal]:duration-300 in-data-[mode=personal]:hover:bg-[color-mix(in_oklch,var(--tint)_24%,transparent)] dark:in-data-[mode=personal]:bg-[color-mix(in_oklch,var(--tint)_6%,var(--card))] dark:in-data-[mode=personal]:shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--tint)_40%,transparent)] dark:in-data-[mode=personal]:hover:bg-[color-mix(in_oklch,var(--tint)_12%,var(--card))]';
 
 /**
  * Projects one line each: icon, name, one sentence and a round arrow that
@@ -35,11 +35,6 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
         const inside = to.startsWith('/');
         const row = (
           <>
-            <Quip
-              text={QUIPS[project.name]}
-              group="row"
-              className="bottom-[calc(100%-0.5rem)] left-10"
-            />
             <AppIcon
               src={project.icon}
               className="transition-[scale] duration-400 ease-hover [will-change:scale] group-hover/row:scale-106 motion-reduce:transition-none"
@@ -61,6 +56,7 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
         return (
           <li
             key={project.name}
+            data-quip={QUIPS[project.name]}
             style={
               {
                 '--tint': LINE_COLOURS[(index + 1) % LINE_COLOURS.length],
