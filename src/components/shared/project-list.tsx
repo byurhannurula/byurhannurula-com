@@ -3,7 +3,6 @@ import Link from 'next/link';
 
 import { AppIcon } from '@/components/shared/app-icon';
 import type { ListProject } from '@/content/projects';
-import { cn } from '@/lib/utils';
 
 interface ProjectListProps {
   items: ListProject[];
@@ -16,8 +15,8 @@ const rowClass =
   'group/row flex flex-wrap items-center gap-4 py-[0.95rem] no-underline md:flex-nowrap';
 
 /**
- * Projects one line each: icon, name, one sentence and a round arrow. The
- * arrow turns to point out for a link that leaves the site.
+ * Projects one line each: icon, name, one sentence and a round arrow that
+ * turns on hover.
  */
 export function ProjectList({ items, href, className }: ProjectListProps) {
   return (
@@ -37,14 +36,8 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
             <span className="order-3 flex-1 basis-full text-soft md:order-none md:basis-0">
               {project.short}
             </span>
-            <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color,rotate] duration-300 ease-soft group-hover/row:bg-ink group-hover/row:text-bg group-focus-visible/row:bg-ink group-focus-visible/row:text-bg">
-              <ArrowRight
-                aria-hidden
-                className={cn(
-                  'size-[0.9rem] transition-[rotate] duration-300 ease-soft',
-                  !inside && 'group-hover/row:-rotate-45',
-                )}
-              />
+            <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color,rotate] duration-300 ease-soft group-hover/row:-rotate-45 group-hover/row:bg-ink group-hover/row:text-bg group-focus-visible/row:bg-ink group-focus-visible/row:text-bg">
+              <ArrowRight aria-hidden className="size-[0.9rem]" />
             </span>
           </>
         );
