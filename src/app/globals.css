@@ -76,6 +76,9 @@
   --shadow-lift: var(--shadow-lift);
 
   --ease-soft: var(--ease-out-soft);
+  /* Hover motion: one curve and one speed (400 ms), so every part of a
+     hover moves together. */
+  --ease-hover: var(--ease-out-hover);
 }
 
 /* Page column. Width follows the `width` option through --wrap. */

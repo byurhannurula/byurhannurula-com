@@ -21,7 +21,7 @@ export function AboutHero() {
               See the CV
               <ArrowRight
                 aria-hidden
-                className="transition-transform duration-250 ease-soft group-hover/cv:translate-x-0.75"
+                className="transition-[translate] duration-400 ease-hover group-hover/cv:translate-x-0.75"
               />
             </a>
           </Button>

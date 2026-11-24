@@ -12,7 +12,7 @@ import { FOOTER_COPY } from './footer-content';
 import { LightMenu } from './light-menu';
 
 const tool =
-  'hidden h-10 items-center md:h-8 gap-[0.4rem] rounded-full whitespace-nowrap border border-line-strong bg-card px-[0.7rem] text-soft [transition:color_.2s,translate_.3s_var(--ease-out-soft)] hover:text-ink [&_svg]:size-3.5';
+  'hidden h-10 items-center md:h-8 gap-[0.4rem] rounded-full whitespace-nowrap border border-line-strong bg-card px-[0.7rem] text-soft [transition:color_.4s_var(--ease-out-hover),translate_.4s_var(--ease-out-hover)] hover:text-ink [&_svg]:size-3.5';
 
 /** Footer buttons: light, sound and back to top. Options show or hide each. */
 export function FooterTools() {

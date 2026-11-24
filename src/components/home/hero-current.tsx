@@ -63,7 +63,7 @@ export function HeroCurrent() {
             alt=""
             width={52}
             height={52}
-            className="mr-[0.3em] inline-block size-[1.25em] rounded-[0.3em] bg-white align-[-0.25em] shadow-[0_0_0_1px_var(--line)] transition-[rotate] duration-400 ease-soft group-hover/re:-rotate-8"
+            className="mr-[0.3em] inline-block size-[1.25em] rounded-[0.3em] bg-white align-[-0.25em] shadow-[0_0_0_1px_var(--line)] transition-[rotate] duration-400 ease-hover group-hover/re:-rotate-8"
           />
           {EMPLOYER.name}
         </a>

@@ -18,7 +18,7 @@ import { EMPLOYER } from '@/content/career';
 import { cn } from '@/lib/utils';
 
 const MARK =
-  'mr-[0.12em] ml-[0.08em] inline-block size-[0.95em] rounded-[0.24em] bg-white object-contain align-[-0.12em] shadow-[0_0_0_1px_var(--line)] transition-[rotate,scale] duration-400 ease-soft group-hover/mark:-rotate-8 group-hover/mark:scale-115';
+  'mr-[0.12em] ml-[0.08em] inline-block size-[0.95em] rounded-[0.24em] bg-white object-contain align-[-0.12em] shadow-[0_0_0_1px_var(--line)] transition-[rotate,scale] duration-400 ease-hover group-hover/mark:-rotate-8 group-hover/mark:scale-115';
 
 const MARK_LINK =
   'group/mark whitespace-nowrap transition-colors hover:text-accent';

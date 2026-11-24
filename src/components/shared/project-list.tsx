@@ -28,15 +28,15 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
           <>
             <AppIcon
               src={project.icon}
-              className="transition-[rotate,scale] duration-400 ease-soft group-hover/row:scale-112 group-hover/row:-rotate-6"
+              className="transition-[scale] duration-400 ease-hover group-hover/row:scale-106 motion-reduce:transition-none"
             />
-            <b className="text-[1.0625rem] font-semibold whitespace-nowrap transition-[translate] duration-300 ease-soft group-hover/row:translate-x-1 motion-reduce:transition-none">
+            <b className="text-[1.0625rem] font-semibold whitespace-nowrap transition-[translate] duration-400 ease-hover group-hover/row:translate-x-1 motion-reduce:transition-none">
               {project.name}
             </b>
             <span className="order-3 flex-1 basis-full text-soft md:order-none md:basis-0">
               {project.short}
             </span>
-            <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color,rotate] duration-300 ease-soft group-hover/row:-rotate-45 group-hover/row:bg-ink group-hover/row:text-bg group-focus-visible/row:bg-ink group-focus-visible/row:text-bg">
+            <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color,rotate] duration-400 ease-hover group-hover/row:-rotate-45 group-hover/row:bg-ink group-hover/row:text-bg group-focus-visible/row:bg-ink group-focus-visible/row:text-bg motion-reduce:transition-[background-color,color]">
               <ArrowRight aria-hidden className="size-[0.9rem]" />
             </span>
           </>

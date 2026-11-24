@@ -17,7 +17,7 @@ export function AppList({ items }: AppListProps) {
           <AppIcon
             src={item.icon}
             size={38}
-            className="size-[2.4rem] rounded-[0.7rem] p-[3px] transition-[scale,rotate] duration-300 ease-soft group-hover/app:scale-110 group-hover/app:-rotate-4"
+            className="size-[2.4rem] rounded-[0.7rem] p-[3px] transition-[scale,rotate] duration-400 ease-hover group-hover/app:scale-110 group-hover/app:-rotate-4"
           />
           <div>
             <h3 className="text-lg leading-[1.3] font-semibold tracking-[-0.015em]">

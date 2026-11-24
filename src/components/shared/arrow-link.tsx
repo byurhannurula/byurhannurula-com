@@ -16,7 +16,7 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
 export function ArrowLink({ href, children, className }: ArrowLinkProps) {
   const classes = cn(
     // The padding makes the tap target 40px tall; the margin keeps the layout.
-    'group/arrow -my-2 inline-flex shrink-0 py-2 items-center gap-1.5 text-[0.9375rem] font-medium whitespace-nowrap no-underline transition-colors hover:text-hue',
+    'group/arrow -my-2 inline-flex shrink-0 py-2 items-center gap-1.5 text-[0.9375rem] font-medium whitespace-nowrap no-underline transition-colors duration-400 ease-hover hover:text-hue',
     className,
   );
   const content = (
@@ -24,7 +24,7 @@ export function ArrowLink({ href, children, className }: ArrowLinkProps) {
       {children}
       <ArrowRight
         aria-hidden
-        className="size-4 transition-transform duration-300 ease-soft group-hover/arrow:translate-x-0.75"
+        className="size-4 transition-[translate] duration-400 ease-hover group-hover/arrow:translate-x-0.75 motion-reduce:transition-none"
       />
     </>
   );

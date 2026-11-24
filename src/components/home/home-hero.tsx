@@ -64,7 +64,7 @@ export function HomeHero() {
             {HERO_ACTIONS.primary.label}
             <ArrowRight
               aria-hidden
-              className="transition-transform duration-250 ease-soft group-hover/btn:translate-x-0.75"
+              className="transition-[translate] duration-400 ease-hover group-hover/btn:translate-x-0.75"
             />
           </Link>
         </Button>

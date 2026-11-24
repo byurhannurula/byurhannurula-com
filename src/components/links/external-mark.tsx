@@ -20,7 +20,7 @@ export function ExternalMark({ hideArrow, className }: ExternalMarkProps) {
         <ArrowUpRight
           aria-hidden
           className={cn(
-            'ml-[0.1em] inline size-[0.8em] align-baseline transition-transform duration-200 ease-soft group-hover/link:translate-x-px group-hover/link:-translate-y-px motion-reduce:transition-none in-data-[motion=off]:transition-none',
+            'ml-[0.1em] inline size-[0.8em] align-baseline transition-[translate] duration-400 ease-hover group-hover/link:translate-x-px group-hover/link:-translate-y-px motion-reduce:transition-none in-data-[motion=off]:transition-none',
             className,
           )}
         />

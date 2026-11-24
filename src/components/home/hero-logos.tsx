@@ -20,7 +20,7 @@ export function HeroLogos() {
           alt=""
           width={48}
           height={48}
-          className="mr-[0.12em] ml-[0.08em] inline-block size-[0.95em] rounded-[0.24em] bg-white object-contain align-[-0.12em] shadow-[0_0_0_1px_var(--line)] transition-[rotate,scale] duration-400 ease-soft group-hover/re:scale-115 group-hover/re:-rotate-8"
+          className="mr-[0.12em] ml-[0.08em] inline-block size-[0.95em] rounded-[0.24em] bg-white object-contain align-[-0.12em] shadow-[0_0_0_1px_var(--line)] transition-[rotate,scale] duration-400 ease-hover group-hover/re:scale-115 group-hover/re:-rotate-8"
         />
         {EMPLOYER.name}
       </Link>

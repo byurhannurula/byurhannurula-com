@@ -92,7 +92,7 @@ export function SocialRow({ items }: SocialRowProps) {
             }
           }}
           // Above the bridge at the end of the row.
-          className="relative z-10 grid size-10 place-items-center rounded-[0.8rem] text-soft [transition:background-color_.2s,color_.2s,translate_.3s_var(--ease-out-soft)] hover:-translate-y-0.5 hover:bg-sunk hover:text-ink focus-visible:-translate-y-0.5 focus-visible:bg-sunk focus-visible:text-ink [&_svg]:size-[1.15rem]"
+          className="relative z-10 grid size-10 place-items-center rounded-[0.8rem] text-soft [transition:background-color_.4s_var(--ease-out-hover),color_.4s_var(--ease-out-hover),translate_.4s_var(--ease-out-hover)] hover:-translate-y-0.5 hover:bg-sunk hover:text-ink focus-visible:-translate-y-0.5 focus-visible:bg-sunk focus-visible:text-ink [&_svg]:size-[1.15rem]"
         >
           {icon}
         </a>

@@ -29,7 +29,7 @@ export function CareerTrack({ roles, className }: CareerTrackProps) {
             <span
               aria-hidden
               className={cn(
-                'absolute top-0 left-0 z-1 size-[0.9rem] rounded-full border-2 transition-[border-color,scale] duration-300 ease-soft group-hover/role:scale-120 group-hover/role:border-accent-bright',
+                'absolute top-0 left-0 z-1 size-[0.9rem] rounded-full border-2 transition-[border-color,scale] duration-400 ease-hover group-hover/role:scale-120 group-hover/role:border-accent-bright',
                 role.current
                   ? 'border-accent-bright bg-accent-bright shadow-[0_0_0_5px_var(--accent-soft)]'
                   : 'border-line-strong bg-bg',

@@ -31,7 +31,7 @@ const heading =
 const list =
   'in-data-[footer=centre]:flex in-data-[footer=centre]:flex-wrap in-data-[footer=centre]:justify-center in-data-[footer=centre]:gap-x-5 in-data-[footer=centre]:gap-y-1 in-data-[footer=line]:flex in-data-[footer=line]:gap-5 in-data-[footer=sentence]:flex in-data-[footer=sentence]:flex-wrap in-data-[footer=sentence]:gap-x-5 in-data-[footer=sentence]:gap-y-1';
 const link =
-  'inline-flex items-center text-soft max-md:min-h-10 md:py-[0.2rem] no-underline [transition:color_.2s,translate_.3s_var(--ease-out-soft)] hover:translate-x-[3px] hover:text-ink';
+  'inline-flex items-center text-soft max-md:min-h-10 md:py-[0.2rem] no-underline [transition:color_.4s_var(--ease-out-hover),translate_.4s_var(--ease-out-hover)] hover:translate-x-[3px] hover:text-ink';
 
 const fallbackCard = (name: string): SocialCard => ({
   kind: 'small',
