@@ -36,8 +36,13 @@ export function ProjectList({ items, href, className }: ProjectListProps) {
             <span className="order-3 flex-1 basis-full text-soft md:order-none md:basis-0">
               {project.short}
             </span>
-            <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color,rotate] duration-400 ease-hover group-hover/row:-rotate-45 group-hover/row:bg-ink group-hover/row:text-bg group-focus-visible/row:bg-ink group-focus-visible/row:text-bg motion-reduce:transition-[background-color,color]">
-              <ArrowRight aria-hidden className="size-[0.9rem]" />
+            {/* The arrow turns only while the circle is dark: on hover the
+                circle darkens first, on leave it lightens last. */}
+            <span className="ml-auto grid size-8 flex-none place-items-center rounded-full bg-sunk text-soft transition-[background-color,color] delay-150 duration-150 ease-out group-hover/row:bg-ink group-hover/row:text-bg group-hover/row:delay-0 group-focus-visible/row:bg-ink group-focus-visible/row:text-bg group-focus-visible/row:delay-0">
+              <ArrowRight
+                aria-hidden
+                className="size-[0.9rem] transition-[rotate] duration-200 ease-hover group-hover/row:-rotate-45 group-hover/row:delay-60 group-hover/row:duration-300 group-focus-visible/row:-rotate-45 group-focus-visible/row:delay-60 group-focus-visible/row:duration-300 motion-reduce:transition-none"
+              />
             </span>
           </>
         );
