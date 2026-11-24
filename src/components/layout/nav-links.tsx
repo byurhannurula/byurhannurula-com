@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 import { NAV_ITEMS } from '@/content/nav';
 import { useNavIndicator } from '@/hooks/use-nav-indicator';
@@ -15,10 +16,35 @@ function activeHref(pathname: string) {
   )?.href;
 }
 
-/** The page links, with a pill that slides under the current one. */
+interface HoverBox {
+  left: number;
+  width: number;
+  on: boolean;
+}
+
+/**
+ * The page links, with a pill that slides under the current one and a
+ * lighter one that follows the mouse.
+ */
 export function NavLinks() {
   const active = activeHref(usePathname());
   const { listRef, box, slides } = useNavIndicator(active);
+  const [hover, setHover] = useState<HoverBox>();
+
+  const onPointerOver = (event: React.PointerEvent<HTMLUListElement>) => {
+    if (event.pointerType !== 'mouse') return;
+    const link = (event.target as Element).closest<HTMLElement>('a');
+    if (!link) return;
+    const next = { left: link.offsetLeft, width: link.offsetWidth };
+    if (hover?.on) {
+      setHover({ ...next, on: true });
+      return;
+    }
+    // From hidden it must appear in place, not slide from the last link:
+    // place it first, then show it in the next frame.
+    setHover({ ...next, on: false });
+    requestAnimationFrame(() => setHover({ ...next, on: true }));
+  };
 
   return (
     <nav aria-label="Main" className="max-md:min-w-0 max-md:flex-1">
@@ -26,6 +52,10 @@ export function NavLinks() {
           a fade on the right edge says that there is more. */}
       <ul
         ref={listRef}
+        onPointerOver={onPointerOver}
+        onPointerLeave={() =>
+          setHover((previous) => previous && { ...previous, on: false })
+        }
         className="relative flex max-[374px]:[mask-image:linear-gradient(90deg,#000_calc(100%-1.75rem),transparent)] max-[374px]:pr-6 max-md:[scrollbar-width:none] max-md:overflow-x-auto max-md:overscroll-x-contain max-md:[&::-webkit-scrollbar]:hidden"
       >
         <li
@@ -40,6 +70,23 @@ export function NavLinks() {
             box && {
               width: box.width,
               transform: `translateX(${box.left}px)`,
+            }
+          }
+        />
+        {/* The hover pill: it fades in where the mouse enters, then slides
+            between links, and fades out where the mouse leaves. */}
+        <li
+          aria-hidden
+          className={cn(
+            'pointer-events-none absolute top-0 left-0 h-full rounded-full bg-sunk/55 [transition:opacity_.2s_ease] max-md:hidden',
+            hover?.on
+              ? 'opacity-100 [transition:opacity_.2s_ease,transform_.35s_var(--ease-out-hover),width_.35s_var(--ease-out-hover)]'
+              : 'opacity-0',
+          )}
+          style={
+            hover && {
+              width: hover.width,
+              transform: `translateX(${hover.left}px)`,
             }
           }
         />
