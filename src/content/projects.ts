@@ -207,6 +207,18 @@ export const MORE_TOOLS: ListProject[] = [
   },
 ];
 
+/** The side projects and the smaller tools, as on the home page. */
+export const PROJECT_LIST: ListProject[] = [
+  ...PROJECTS.map(({ name, kind, icon, short, links }) => ({
+    name,
+    kind,
+    icon,
+    short,
+    href: links[0].href,
+  })),
+  ...MORE_TOOLS,
+];
+
 /** The "Also" list on the work page. */
 export const SMALL_PROJECTS: ListProject[] = [
   {

@@ -10,7 +10,7 @@ import {
   ROLES,
 } from '@/content/career';
 import { CV_COPY, CV_PROJECTS } from '@/content/cv';
-import { PROJECTS } from '@/content/projects';
+import { PROJECT_LIST } from '@/content/projects';
 import { SOCIALS } from '@/content/socials';
 import { STACK } from '@/content/tech';
 
@@ -30,8 +30,8 @@ function Heading({ children }: { children: string }) {
   );
 }
 
-const projects = CV_PROJECTS.map((slug) =>
-  PROJECTS.find((project) => project.slug === slug),
+const projects = CV_PROJECTS.map((name) =>
+  PROJECT_LIST.find((project) => project.name === name),
 ).filter((project) => project !== undefined);
 
 const education = EARLIER.filter((item) => item.title.includes('University'));
@@ -181,7 +181,7 @@ export function CvSheet() {
             <Heading>{CV_COPY.projects}</Heading>
             <ul className="grid gap-2.5">
               {projects.map((project) => (
-                <li key={project.slug}>
+                <li key={project.name}>
                   <p className="font-semibold">
                     {project.name}{' '}
                     <span className="font-mono text-[0.6875rem] font-normal text-(--cv-faint)">

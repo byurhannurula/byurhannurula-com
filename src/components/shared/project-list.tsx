@@ -2,20 +2,8 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { AppIcon } from '@/components/shared/app-icon';
-import { type ListProject, MORE_TOOLS, PROJECTS } from '@/content/projects';
+import type { ListProject } from '@/content/projects';
 import { cn } from '@/lib/utils';
-
-/** The side projects and the smaller tools, as on the home page. */
-export const PROJECT_LIST: ListProject[] = [
-  ...PROJECTS.map(({ name, kind, icon, short, links }) => ({
-    name,
-    kind,
-    icon,
-    short,
-    href: links[0].href,
-  })),
-  ...MORE_TOOLS,
-];
 
 interface ProjectListProps {
   items: ListProject[];

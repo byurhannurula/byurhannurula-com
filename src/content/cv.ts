@@ -12,5 +12,5 @@ export const CV_COPY = {
   live: 'Live version',
 } as const;
 
-/** Side projects on the CV, by slug from projects.ts. */
-export const CV_PROJECTS = ['jotter', 'ogee', 'fullshot'];
+/** Side projects on the CV, by name from PROJECT_LIST in projects.ts. */
+export const CV_PROJECTS = ['Jotter', 'OGee', 'FullShot', 'Whisper Lite'];
