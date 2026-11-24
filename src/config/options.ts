@@ -236,22 +236,22 @@ export const OPTION_KEYS = Object.keys(OPTIONS) as OptionKey[];
 
 /**
  * The owner's picks: screenshots on 2026-11-18, then the config the owner
- * sent on 2026-11-20. A key not named here defaults to its first choice.
+ * sent on 2026-11-20 and 2026-11-24. A key not named here defaults to its first choice.
  */
 const FAVOURITES: Partial<Options> = {
   // Look
   radius: 'small',
   density: 'roomy',
-  bg: 'connect',
+  bg: 'flicker',
   sound: 'on',
   totop: 'ring',
   themefx: 'circle',
   pagefx: 'fade',
-  nf: 'puzzle',
   // Home and about
   job: 'summary',
   stack: 'chips',
   caps: 'b',
+  order: 'projects',
   // Notes
   note: 'thumb',
   notegroup: 'flat',

@@ -11,11 +11,8 @@ import { ModeSwitch } from './mode-switch';
 import { NavFrame } from './nav-frame';
 import { NavLinks } from './nav-links';
 
-/**
- * Off for the first release; the switch and personal mode stay in the code.
- * True puts the work / personal switch in the nav again.
- */
-const SHOW_MODE_SWITCH = false;
+/** False takes the work / personal switch out of the nav. */
+const SHOW_MODE_SWITCH = true;
 
 /** The nav bar: brand, page links, search, the mode switch and the light. */
 export function SiteNav() {
