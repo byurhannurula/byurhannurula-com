@@ -12,7 +12,6 @@ export const FOOTER_COPY = {
   sentenceEnd: 'or find me here.',
   copyEmailHint: 'Copy email',
   emailCopied: 'Copied to clipboard',
-  emailCopiedShort: 'copied',
   version: 'v4.0',
   source: 'Source',
   rss: 'RSS',
